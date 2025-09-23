@@ -1,6 +1,0 @@
-syntax = "proto3"
-package messages
-option go_package = "github.com/komadiina/spelltext/proto;proto"
-
-message Ping { string msg = 1; }
-message Pong { string msg = 2; }
