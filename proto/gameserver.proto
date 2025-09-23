@@ -1,0 +1,11 @@
+syntax = "proto3";
+option go_package = "v1/gameserver;proto";
+
+package servers;
+
+message Ping { string msg = 1; }
+message Pong { string msg = 2; }
+
+service Server {
+  rpc ServerPing (Ping) returns (Pong);
+}
