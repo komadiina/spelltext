@@ -1,7 +1,0 @@
-syntax = "proto3"
-package servers
-option go_package = "github.com/komadiina/spelltext/proto;proto"
-
-service Server {
-  rpc Ping (Ping) returns (Pong);
-}
