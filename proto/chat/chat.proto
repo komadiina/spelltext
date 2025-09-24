@@ -2,6 +2,16 @@ syntax = "proto3";
 package chat;
 option go_package = "proto/chat";
 
+message SubscribeRequest {
+  string username = 1;
+}
+
+message ChatMessage {
+  string sender = 1;
+  string message = 2;
+  uint64 timestamp = 3;
+}
+
 message SendChatMessageRequest {
   string sender = 1;
   string message = 2;
@@ -9,7 +19,7 @@ message SendChatMessageRequest {
 
 message SendChatMessageResponse {
   string sender = 1;
-  uint32 timestamp = 2;
+  uint64 timestamp = 2;
   bool success = 3;
 }
 
@@ -34,8 +44,8 @@ message LeaveChatroomMessageResponse {
 
 service ChatService {
   rpc SendChatMessage (SendChatMessageRequest) returns (SendChatMessageResponse);
+  rpc Subscribe (SubscribeRequest) returns (stream ChatMessage);
   
-  
-  rpc JoinChatroomMessage (JoinChatroomMessageRequest) returns (JoinChatroomMessageResponse);
-  rpc LeaveChatroomMessage (LeaveChatroomMessageRequest) returns (LeaveChatroomMessageResponse);
+  rpc JoinChatroom (JoinChatroomMessageRequest) returns (JoinChatroomMessageResponse);
+  rpc LeaveChatroom (LeaveChatroomMessageRequest) returns (LeaveChatroomMessageResponse);
 }

@@ -40,7 +40,7 @@ func main() {
 	}
 
 	s := grpc.NewServer()
-	pb.RegisterChatServiceServer(s, &server.ChatService{})
+	pb.RegisterChatServiceServer(s, &server.ChatService{Hub: server.NewHub((256))})
 
 	logger.Info(fmt.Sprintf("%s v%s listening on %s:%d", *name, version, *addr, *port))
 
