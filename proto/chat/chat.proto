@@ -1,0 +1,18 @@
+syntax = "proto3";
+package chat;
+option go_package = "proto/chat";
+
+message SendChatMessageRequest {
+  string sender = 1;
+  string message = 2;
+}
+
+message SendChatMessageResponse {
+  string sender = 1;
+  uint32 timestamp = 2;
+  bool success = 3;
+}
+
+service ChatService {
+  rpc SendChatMessage (SendChatMessageRequest) returns (SendChatMessageResponse);
+}

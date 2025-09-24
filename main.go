@@ -1,11 +1,18 @@
 package main
 
 import (
-	"fmt"
-
-	"github.com/komadiina/spelltext/utils"
+	pg "github.com/komadiina/spelltext/ui/pages"
+	"github.com/rivo/tview"
 )
 
 func main() {
-	fmt.Println(utils.Paint("Hello world!", utils.Green))
+	app := tview.NewApplication()
+	pages := tview.NewPages()
+
+	pages = pg.GenerateChat(app, pages)
+	pages = pg.GenerateLoginPage(app, pages)
+
+	if err := app.SetRoot(pages, true).EnableMouse(true).Run(); err != nil {
+		panic(err)
+	}
 }
