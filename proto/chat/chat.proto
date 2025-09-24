@@ -13,6 +13,29 @@ message SendChatMessageResponse {
   bool success = 3;
 }
 
+message JoinChatroomMessageRequest {
+  string username = 1;
+}
+
+message JoinChatroomMessageResponse {
+  string username = 1;
+  bool success = 2;
+}
+
+message LeaveChatroomMessageRequest {
+  string username = 1;
+  bool success = 2;
+}
+
+message LeaveChatroomMessageResponse {
+  string username = 1;
+  bool success = 2;
+}
+
 service ChatService {
   rpc SendChatMessage (SendChatMessageRequest) returns (SendChatMessageResponse);
+  
+  
+  rpc JoinChatroomMessage (JoinChatroomMessageRequest) returns (JoinChatroomMessageResponse);
+  rpc LeaveChatroomMessage (LeaveChatroomMessageRequest) returns (LeaveChatroomMessageResponse);
 }

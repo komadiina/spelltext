@@ -19,7 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ChatService_SendChatMessage_FullMethodName = "/chat.ChatService/SendChatMessage"
+	ChatService_SendChatMessage_FullMethodName      = "/chat.ChatService/SendChatMessage"
+	ChatService_JoinChatroomMessage_FullMethodName  = "/chat.ChatService/JoinChatroomMessage"
+	ChatService_LeaveChatroomMessage_FullMethodName = "/chat.ChatService/LeaveChatroomMessage"
 )
 
 // ChatServiceClient is the client API for ChatService service.
@@ -27,6 +29,8 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ChatServiceClient interface {
 	SendChatMessage(ctx context.Context, in *SendChatMessageRequest, opts ...grpc.CallOption) (*SendChatMessageResponse, error)
+	JoinChatroomMessage(ctx context.Context, in *JoinChatroomMessageRequest, opts ...grpc.CallOption) (*JoinChatroomMessageResponse, error)
+	LeaveChatroomMessage(ctx context.Context, in *LeaveChatroomMessageRequest, opts ...grpc.CallOption) (*LeaveChatroomMessageResponse, error)
 }
 
 type chatServiceClient struct {
@@ -47,11 +51,33 @@ func (c *chatServiceClient) SendChatMessage(ctx context.Context, in *SendChatMes
 	return out, nil
 }
 
+func (c *chatServiceClient) JoinChatroomMessage(ctx context.Context, in *JoinChatroomMessageRequest, opts ...grpc.CallOption) (*JoinChatroomMessageResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(JoinChatroomMessageResponse)
+	err := c.cc.Invoke(ctx, ChatService_JoinChatroomMessage_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *chatServiceClient) LeaveChatroomMessage(ctx context.Context, in *LeaveChatroomMessageRequest, opts ...grpc.CallOption) (*LeaveChatroomMessageResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LeaveChatroomMessageResponse)
+	err := c.cc.Invoke(ctx, ChatService_LeaveChatroomMessage_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ChatServiceServer is the server API for ChatService service.
 // All implementations must embed UnimplementedChatServiceServer
 // for forward compatibility.
 type ChatServiceServer interface {
 	SendChatMessage(context.Context, *SendChatMessageRequest) (*SendChatMessageResponse, error)
+	JoinChatroomMessage(context.Context, *JoinChatroomMessageRequest) (*JoinChatroomMessageResponse, error)
+	LeaveChatroomMessage(context.Context, *LeaveChatroomMessageRequest) (*LeaveChatroomMessageResponse, error)
 	mustEmbedUnimplementedChatServiceServer()
 }
 
@@ -64,6 +90,12 @@ type UnimplementedChatServiceServer struct{}
 
 func (UnimplementedChatServiceServer) SendChatMessage(context.Context, *SendChatMessageRequest) (*SendChatMessageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendChatMessage not implemented")
+}
+func (UnimplementedChatServiceServer) JoinChatroomMessage(context.Context, *JoinChatroomMessageRequest) (*JoinChatroomMessageResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method JoinChatroomMessage not implemented")
+}
+func (UnimplementedChatServiceServer) LeaveChatroomMessage(context.Context, *LeaveChatroomMessageRequest) (*LeaveChatroomMessageResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LeaveChatroomMessage not implemented")
 }
 func (UnimplementedChatServiceServer) mustEmbedUnimplementedChatServiceServer() {}
 func (UnimplementedChatServiceServer) testEmbeddedByValue()                     {}
@@ -104,6 +136,42 @@ func _ChatService_SendChatMessage_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ChatService_JoinChatroomMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(JoinChatroomMessageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ChatServiceServer).JoinChatroomMessage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ChatService_JoinChatroomMessage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ChatServiceServer).JoinChatroomMessage(ctx, req.(*JoinChatroomMessageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ChatService_LeaveChatroomMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LeaveChatroomMessageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ChatServiceServer).LeaveChatroomMessage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ChatService_LeaveChatroomMessage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ChatServiceServer).LeaveChatroomMessage(ctx, req.(*LeaveChatroomMessageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ChatService_ServiceDesc is the grpc.ServiceDesc for ChatService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -114,6 +182,14 @@ var ChatService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SendChatMessage",
 			Handler:    _ChatService_SendChatMessage_Handler,
+		},
+		{
+			MethodName: "JoinChatroomMessage",
+			Handler:    _ChatService_JoinChatroomMessage_Handler,
+		},
+		{
+			MethodName: "LeaveChatroomMessage",
+			Handler:    _ChatService_LeaveChatroomMessage_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

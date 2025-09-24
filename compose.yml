@@ -1,0 +1,12 @@
+services:
+  chatserver:
+    build:
+      context: .
+      dockerfile: server/chat/Dockerfile
+    ports:
+      - "50051:50051"
+    networks:
+      - spelltext
+    
+networks:
+  spelltext:

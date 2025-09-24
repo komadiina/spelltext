@@ -7,22 +7,23 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/charmbracelet/log"
 	pb "github.com/komadiina/spelltext/proto/chat"
+	"github.com/komadiina/spelltext/utils/singleton/logging"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-var logger log.Logger
-
 var (
-	addr = flag.String("addr", "127.0.0.1:50051", "server address")
+	addr     = flag.String("addr", "localhost:50051", "server address")
+	username = flag.String("username", "John_Doe", "name to identify sent messages")
 )
 
 func SendMessage(content string, client pb.ChatServiceClient, ctx context.Context) {
-	resp, err := client.SendChatMessage(ctx, &pb.SendChatMessageRequest{Sender: "Bob", Message: content})
+	logger := logging.Get()
+
+	resp, err := client.SendChatMessage(ctx, &pb.SendChatMessageRequest{Sender: *username, Message: content})
 	if err != nil {
 		logger.Error("failed to send message", err)
 		os.Exit(1)
@@ -32,11 +33,9 @@ func SendMessage(content string, client pb.ChatServiceClient, ctx context.Contex
 }
 
 func main() {
-	logger = *log.NewWithOptions(os.Stdout, log.Options{
-		ReportCaller:    true,
-		ReportTimestamp: true,
-		TimeFormat:      time.DateTime,
-	})
+	logging.Init(log.InfoLevel)
+	logger := logging.Get()
+
 	flag.Parse()
 
 	conn, err := grpc.NewClient(*addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
