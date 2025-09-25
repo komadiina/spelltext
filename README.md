@@ -7,25 +7,132 @@ command-line interface based mmorpg (derives *spell* from mmorpg **spells**, *te
 
 ## usage
 requirements:
-- go `1.25.0` toolchain
+- go `1.25.0` toolchain (possibly compatible with `1.24.x`)
 - docker `28.3.2` (tested on build rev. `578ccf6`)
-- minikube `1.35.0` (compatible with `1.33.0`)
+- (opt) minikube `1.35.0` (compatible with `1.33.0`)
+- (opt) helm `3.19.0` (goVersion: `1.24.7`)
 
 ### client
 (*as of 25th sept.*): to run a single client, simply run:
 ```sh
-$ go run client/client.go --username=$YOUR_USERNAME
+$ set CLIENT_USERNAME=john_doe
+
+$ cd $PROJECT_DIR/client
+$ go run client.go --username=$USERNAME
 ```
 
 ### server
-1. `docker compose`:
-using the [composefile](./compose.yml) you can seamlessly deploy a simple service composition
+1. `docker`:
+using the [composefile](./compose.yml) you can seamlessly deploy a simple service composition:
+```sh
+# navigate to project root dir
+$ cd $PROJECT_ROOT
+
+# start up docker compose
+$ docker compose up --detached 
+
+# ...
+# make sure to docker compose down (can cause duplicated stdout if not done)
+$ docker compose down -v --remove-orphans
+```
   
-2. `minikube`:
+2. `kubernetes`: using the [charts][./charts/]
+```sh
+# start up minikube (or k3s, microk8s, gke, ...)
+$ minikube start
+
+# navigate to project root dir
+$ cd $PROJECT_ROOT
+
+# create the 'spelltext' kube namespace
+$ kubectl create ns spelltext
+
+# install pre-generated helm charts
+$ helm install spelltext charts/ -n spelltext
+
+# output should look something like this:
+> NAME: spelltext
+> LAST DEPLOYED: Thu Sep 25 20:48:01 2025
+> NAMESPACE: spelltext
+> STATUS: deployed
+> REVISION: 1
+> TEST SUITE: None
+
+# (confirm) set current kubectl namespace to 'spelltext'
+$ kubectl config set-context --current --namespace=spelltext
+```
+
+if you wish to access the deployment replicas via `ClusterIP` from the host, you can do so:
+- a) with the `kubectl port-forward` command (per-pod):
+```sh
+# from the 'spelltext' namespace
+$ kubectl get pods
+> NAME                          READY   STATUS    RESTARTS   AGE
+> chatserver-67bfcfdbd5-mlp7j   1/1     Running   0          4m
+> chatserver-67bfcfdbd5-t7qvj   1/1     Running   0          4m
+
+$ kubectl get svc
+> NAME         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)     AGE
+> chatserver   ClusterIP   10.106.245.161   <none>        50051/TCP   4m17s
+
+# this isn't daemon-ized, unless you multiplex your terminal (smth like tmux)
+$ kubectl port-forward pods/chatserver-67bfcfdbd5-mlp7j 50051:50051
+> Forwarding from 127.0.0.1:50051 -> 50051
+> Forwarding from [::1]:50051 -> 50051
+
+$ |
+```
+
+- b) via exposing service external-ip and minikube tunnel:
+```sh
+# start the tunnel
+$ minikube tunnel
+
+# select the service you want to dial 
+# use chart/templates/TEMPLATE.yaml:.spec.selector.matchLabels.app, e.g. 'chatserver'
+$ export SERVICE_NAME=chatserver
+
+$ kubectl get deployments $SERVICE_NAME
+> NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+> chatserver   2/2     2            2           7m54s
+
+# expose the deployment via a loadbalancer
+$ kubectl expose deployment chatserver --type=LoadBalancer --name=chatserver-lb
+
+# external-ip is displayed now, with the help of 'minikube tunnel' command
+$ kubectl get svc
+> NAME            TYPE           CLUSTER-IP       EXTERNAL-IP     PORT(S)           AGE
+> chatserver      ClusterIP      10.106.245.161   <none>          50051/TCP         16m
+> chatserver-lb   LoadBalancer   10.108.13.46     10.96.184.178   50051:32671/TCP   4m33s
+```
 
 ## components
 
 ![screenshot](./docs/spelltext_diagram.jpg)
+
+```bash
+# directory structure (sep 25th)
+.
+├── charts # kubernetes deployment charts
+├── client # where spelltext-client is located
+├── docs # documentation
+│   ├── chat
+│   └── inventory
+├── proto # protobuf specifications for gRPC client-server comms
+│   ├── chat
+│   └── inventory
+├── server # main server directory
+│   ├── chat
+│   │   ├── cmd
+│   │   │   └── chatserver
+│   │   └── server
+│   └── registry
+├── ui # tview primitive wrappers
+│   └── pages
+└── utils # random utilities/necessities
+    └── singleton
+        └── logging
+```
 
 - `chatserver`:
   - **global**: uses fanout MQ (built upon NATS JetStream durable streams)

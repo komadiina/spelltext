@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: chatserver
+  namespace: spelltext
+  labels: 
+    app: chatserver
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: chatserver
+  template:
+    metadata:
+      labels:
+        app: chatserver
+    spec:
+      containers:
+      - name: chatserver
+        image: {{ .Values.chatserver.image | toString }}
+        ports:
+          - containerPort: {{ .Values.chatserver.containerPort }}
+            name: {{ .Values.chatserver.portName }}
+            protocol: {{ .Values.chatserver.protocol }}
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.chatserver.containerPort }}
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.chatserver.containerPort }}
+          initialDelaySeconds: 15
+          periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chatserver
+  namespace: spelltext
+  labels:
+    app: chatserver
+spec:
+  type: ClusterIP
+  selector:
+    app: chatserver
+  ports:
+    - name: {{ .Values.chatserver.portName }}
+      port: {{ .Values.chatserver.port }}
+      targetPort: {{ .Values.chatserver.targetPort }}
+      protocol: {{ .Values.chatserver.protocol }}

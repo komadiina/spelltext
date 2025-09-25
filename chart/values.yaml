@@ -1,0 +1,17 @@
+namespace:
+  name: spelltext
+  environment: dev
+
+# core services
+nats:
+  enabled: true
+  
+# spelltext service
+chatserver:
+  enabled: true
+  image: "ghcr.io/komadiina/spelltext/chatserver:latest"
+  port: 50051
+  portName: "grpc"
+  containerPort: 50051
+  targetPort: 50051
+  protocol: "TCP"
