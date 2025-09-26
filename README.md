@@ -4,7 +4,18 @@
 
 command-line interface based mmorpg (derives *spell* from mmorpg **spells**, *text* because it's, well, *text-based*). uses [tview](https://github.com/rivo/tview) as the graphical interface. started as a [bachelor's thesis/project](https://efee.etf.unibl.org/vector/zavrsni-radovi/2520) of mine, relying on the Kubernetes orchestration & containerization concepts, as well as high-availability and consistency-related prerequisites.
 
-
+## contents
+- [spelltext](#spelltext)
+  - [contents](#contents)
+  - [usage](#usage)
+    - [client](#client)
+    - [server](#server)
+      - [`docker`](#docker)
+      - [`kubernetes`](#kubernetes)
+      - [example - accessing pods/servers](#example---accessing-podsservers)
+      - [example - cleaning up](#example---cleaning-up)
+  - [components](#components)
+  - [todo:](#todo)
 ## usage
 requirements:
 - go `1.25.0` toolchain (possibly compatible with `1.24.x`)
@@ -22,7 +33,7 @@ $ go run client.go --username=$USERNAME
 ```
 
 ### server
-1. `docker`:
+#### `docker`
 using the [composefile](./compose.yml) you can seamlessly deploy a simple service composition:
 ```sh
 # navigate to project root dir
@@ -37,7 +48,8 @@ $ docker compose up --watch --force-recreate --build
 $ docker compose down -v --remove-orphans
 ```
   
-2. `kubernetes`: using the [charts][./charts/]
+#### `kubernetes`
+deployed using the [provided charts](https://github.com/komadiina/spelltext/tree/main/chart) in the repo and [hosted packages](https://github.com/komadiina/spelltext/pkgs/container/spelltext%2Fchatserver).
 ```sh
 # start up minikube (or k3s, microk8s, gke, ...)
 $ minikube start
@@ -66,6 +78,7 @@ $ helm install spelltext charts/ -n spelltext --create-namespace
 $ kubectl config set-context --current --namespace=spelltext
 ```
 
+#### example - accessing pods/servers
 if you wish to access the deployment replicas via `ClusterIP` CRD from the host, you can do so:
 - a) with the `kubectl port-forward` command (per-pod) (this is useful when testing `nats (nats://spelltext-nats:4222)` locally, against host):
 ```sh
@@ -110,6 +123,7 @@ $ kubectl get svc
 > chatserver-lb   LoadBalancer   10.108.13.46     10.96.184.178   50051:32671/TCP   4m33s
 ```
 
+#### example - cleaning up
 cleanup:
 ```sh
 $ helm uninstall spelltext
