@@ -8,13 +8,14 @@ import (
 
 	"github.com/charmbracelet/log"
 	pb "github.com/komadiina/spelltext/proto/chat"
+	"github.com/komadiina/spelltext/server/chat/config"
 	"github.com/komadiina/spelltext/server/chat/server"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 	"google.golang.org/grpc"
 )
 
 const (
-	version = "0.0.1"
+	version = "0.2.0"
 )
 
 var (
@@ -24,13 +25,18 @@ var (
 )
 
 func main() {
-	fmt.Println("Starting server...")
+	logging.Init(log.InfoLevel, "chatserver")
+	logger := logging.Get("chatserver")
 
-	logging.Init(log.InfoLevel)
-	logger := logging.Get()
+	logger.Info("initializing nats..")
+	nc, err := server.InitNats()
+	defer nc.Drain()
+
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	logger.Info(fmt.Sprintf("Starting %s v%s...", *name, version))
-
 	flag.Parse()
 
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
@@ -40,7 +46,11 @@ func main() {
 	}
 
 	s := grpc.NewServer()
-	pb.RegisterChatServiceServer(s, &server.ChatService{Hub: server.NewHub((256))})
+	cfg, err := config.LoadConfig()
+	if err != nil {
+		logger.Fatal(err)
+	}
+	pb.RegisterChatServiceServer(s, &server.ChatService{Nats: nc, Config: cfg})
 
 	logger.Info(fmt.Sprintf("%s v%s listening on %s:%d", *name, version, *addr, *port))
 

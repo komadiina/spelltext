@@ -5,11 +5,22 @@ namespace:
 # core services
 nats:
   enabled: true
+  config:
+    replicaCount: 3
+    jetstream:
+      enabled: true
+      fileStore: 
+        dir: /data/jetstream
+        maxSize: 10Gi
+    auth:
+      enabled: false
+    persistence:
+      enabled: true
   
 # spelltext service
 chatserver:
   enabled: true
-  image: "ghcr.io/komadiina/spelltext/chatserver:latest"
+  image: "ghcr.io/komadiina/spelltext/chatserver:0.2.0"
   port: 50051
   portName: "grpc"
   containerPort: 50051

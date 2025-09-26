@@ -3,10 +3,27 @@ services:
     build:
       context: .
       dockerfile: server/chat/Dockerfile
+    volumes:
+      - ./var/log/chatserver:/var/log
     ports:
       - "50051:50051"
     networks:
       - spelltext
+    develop:
+      watch:
+        - action: "restart"
+          path: "./server/chat" 
+    depends_on:
+      - nats
+  
+  nats:
+    image: nats
+    command: ["-js"]
+    ports:
+      - "4222:4222"
+    networks:
+      - spelltext  
     
+  
 networks:
   spelltext:

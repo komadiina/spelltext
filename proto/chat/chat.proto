@@ -2,10 +2,6 @@ syntax = "proto3";
 package chat;
 option go_package = "proto/chat";
 
-message SubscribeRequest {
-  string username = 1;
-}
-
 message ChatMessage {
   string sender = 1;
   string message = 2;
@@ -44,8 +40,6 @@ message LeaveChatroomMessageResponse {
 
 service ChatService {
   rpc SendChatMessage (SendChatMessageRequest) returns (SendChatMessageResponse);
-  rpc Subscribe (SubscribeRequest) returns (stream ChatMessage);
-  
   rpc JoinChatroom (JoinChatroomMessageRequest) returns (JoinChatroomMessageResponse);
   rpc LeaveChatroom (LeaveChatroomMessageRequest) returns (LeaveChatroomMessageResponse);
 }

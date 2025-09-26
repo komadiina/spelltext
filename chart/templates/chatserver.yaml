@@ -8,7 +8,7 @@ metadata:
     app: chatserver
 
 spec:
-  replicas: 2
+  replicas: 4
   selector:
     matchLabels:
       app: chatserver
@@ -20,6 +20,7 @@ spec:
       containers:
       - name: chatserver
         image: {{ .Values.chatserver.image | toString }}
+        imagePullPolicy: Always
         ports:
           - containerPort: {{ .Values.chatserver.containerPort }}
             name: {{ .Values.chatserver.portName }}
@@ -44,6 +45,23 @@ metadata:
     app: chatserver
 spec:
   type: ClusterIP
+  selector:
+    app: chatserver
+  ports:
+    - name: {{ .Values.chatserver.portName }}
+      port: {{ .Values.chatserver.port }}
+      targetPort: {{ .Values.chatserver.targetPort }}
+      protocol: {{ .Values.chatserver.protocol }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chatserver-ingress
+  namespace: spelltext
+  labels:
+    app: chatserver
+spec:
+  type: LoadBalancer
   selector:
     app: chatserver
   ports:

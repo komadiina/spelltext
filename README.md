@@ -28,10 +28,11 @@ using the [composefile](./compose.yml) you can seamlessly deploy a simple servic
 # navigate to project root dir
 $ cd $PROJECT_ROOT
 
-# start up docker compose
-$ docker compose up --detached 
+# start up `docker compose`
+$ docker compose up --watch --force-recreate --build 
 
 # ...
+
 # make sure to docker compose down (can cause duplicated stdout if not done)
 $ docker compose down -v --remove-orphans
 ```
@@ -50,6 +51,9 @@ $ kubectl create ns spelltext
 # install pre-generated helm charts
 $ helm install spelltext charts/ -n spelltext
 
+# ... or alternatively:
+$ helm install spelltext charts/ -n spelltext --create-namespace
+
 # output should look something like this:
 > NAME: spelltext
 > LAST DEPLOYED: Thu Sep 25 20:48:01 2025
@@ -62,8 +66,8 @@ $ helm install spelltext charts/ -n spelltext
 $ kubectl config set-context --current --namespace=spelltext
 ```
 
-if you wish to access the deployment replicas via `ClusterIP` from the host, you can do so:
-- a) with the `kubectl port-forward` command (per-pod):
+if you wish to access the deployment replicas via `ClusterIP` CRD from the host, you can do so:
+- a) with the `kubectl port-forward` command (per-pod) (this is useful when testing `nats (nats://spelltext-nats:4222)` locally, against host):
 ```sh
 # from the 'spelltext' namespace
 $ kubectl get pods
@@ -104,6 +108,12 @@ $ kubectl get svc
 > NAME            TYPE           CLUSTER-IP       EXTERNAL-IP     PORT(S)           AGE
 > chatserver      ClusterIP      10.106.245.161   <none>          50051/TCP         16m
 > chatserver-lb   LoadBalancer   10.108.13.46     10.96.184.178   50051:32671/TCP   4m33s
+```
+
+cleanup:
+```sh
+$ helm uninstall spelltext
+$ kubectl delete ns spelltext
 ```
 
 ## components
