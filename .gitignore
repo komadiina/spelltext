@@ -1,2 +1,3 @@
 ./.vscode
 var/log
+*.pb.go

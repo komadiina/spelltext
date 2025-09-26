@@ -9,6 +9,7 @@ command-line interface based mmorpg (derives *spell* from mmorpg **spells**, *te
   - [contents](#contents)
   - [usage](#usage)
     - [client](#client)
+      - [visual examples](#visual-examples)
     - [server](#server)
       - [`docker`](#docker)
       - [`kubernetes`](#kubernetes)
@@ -31,6 +32,9 @@ $ set CLIENT_USERNAME=john_doe
 $ cd $PROJECT_DIR/client
 $ go run client.go --username=$USERNAME
 ```
+
+#### visual examples
+![loginpage](./docs/page-login.png)
 
 ### server
 #### `docker`
