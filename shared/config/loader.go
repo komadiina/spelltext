@@ -67,7 +67,7 @@ func LoadConfig(cfg interface{}) error {
 }
 
 func parseArgsForConfigFile(cfg interface{}) (path string, err error) {
-	f := flag.NewFlagSet("ToCloud9 server", flag.ContinueOnError)
+	f := flag.NewFlagSet("spelltext server", flag.ContinueOnError)
 	f.StringVar(&path, ConfigPathFlagName, "", "Path to configuration file")
 
 	fu := f.Usage

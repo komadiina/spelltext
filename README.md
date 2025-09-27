@@ -30,7 +30,7 @@ requirements:
 $ set CLIENT_USERNAME=john_doe
 
 $ cd $PROJECT_DIR/client
-$ go run client.go --username=$USERNAME
+$ go run client.go --username=$CLIENT_USERNAME
 ```
 
 #### visual examples

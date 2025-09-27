@@ -26,5 +26,5 @@ func AddLoginPage(c *types.SpelltextClient) {
 			})
 
 		return form
-	}, nil)
+	}, nil, func() { /* noop */ })
 }

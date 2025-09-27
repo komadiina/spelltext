@@ -1,6 +1,8 @@
 package factory
 
 import (
+	"fmt"
+
 	"github.com/rivo/tview"
 )
 
@@ -10,11 +12,15 @@ type PageFactory func() tview.Primitive
 // Refresher updates an existing primitive when shown
 type Refresher func(p tview.Primitive)
 
+// gets called when the page[pageKey] is closed (out of view)
+type OnClose func()
+
 // PageManager holds factories, optional (!!!) cache, and a navigation stack
 type PageManager struct {
 	App       *tview.Application
 	Pages     *tview.Pages
 	factories map[string]PageFactory
+	closers   map[string]OnClose
 	refresh   map[string]Refresher
 	cache     map[string]tview.Primitive
 	stack     []string
@@ -26,6 +32,7 @@ func NewPageManager(app *tview.Application) *PageManager {
 		App:       app,
 		Pages:     tview.NewPages(),
 		factories: make(map[string]PageFactory),
+		closers:   make(map[string]OnClose),
 		refresh:   make(map[string]Refresher),
 		cache:     make(map[string]tview.Primitive),
 		stack:     []string{},
@@ -34,8 +41,9 @@ func NewPageManager(app *tview.Application) *PageManager {
 
 // RegisterFactory registers how to construct a page and an optional refresher
 // if refresher is present, it will be called when page is shown
-func (pm *PageManager) RegisterFactory(name string, factory PageFactory, refresher Refresher) {
+func (pm *PageManager) RegisterFactory(name string, factory PageFactory, refresher Refresher, onClose OnClose) {
 	pm.factories[name] = factory
+	pm.closers[name] = onClose
 	if refresher != nil {
 		pm.refresh[name] = refresher
 	}
@@ -67,6 +75,7 @@ func (pm *PageManager) showFresh(name string, keepCached bool) {
 func (pm *PageManager) Push(pageName string, keepCached bool) {
 	if len(pm.stack) > 0 {
 		cur := pm.stack[len(pm.stack)-1]
+		pm.closers[cur]()
 		pm.Pages.HidePage(cur)
 	}
 
@@ -90,13 +99,15 @@ func (pm *PageManager) Pop() {
 	}
 
 	top := pm.stack[len(pm.stack)-1]
+	fmt.Println(top)
+	pm.closers[top]()
 	pm.stack = pm.stack[:len(pm.stack)-1]
 	pm.Pages.HidePage(top)
 	prev := pm.stack[len(pm.stack)-1]
 
 	if p, ok := pm.cache[prev]; ok {
-		if r, ok2 := pm.refresh[prev]; ok2 && r != nil {
-			r(p)
+		if refr, ok2 := pm.refresh[prev]; ok2 && refr != nil {
+			refr(p)
 		}
 	}
 

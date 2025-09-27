@@ -13,7 +13,7 @@ func AddMainmenuPage(c *types.SpelltextClient) {
 
 		banner := tview.NewTextView().
 			SetDynamicColors(true).
-			SetText(fmt.Sprintf("> welcome back, [blue]%s", c.User.Username))
+			SetText(fmt.Sprintf(`> welcome back, adventurer! [blue]%s[""] - isn't it?`, c.User.Username))
 
 		navlist := tview.NewList().
 			AddItem("characters", "", 'c', func() { c.PageManager.Push(CHARACTERS_PAGE, false) }).
@@ -32,5 +32,5 @@ func AddMainmenuPage(c *types.SpelltextClient) {
 			AddItem(navlist, 0, 2, true)
 
 		return flex
-	}, nil)
+	}, nil, func() { /* noop */ })
 }

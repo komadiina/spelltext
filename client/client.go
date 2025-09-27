@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 
+	"github.com/charmbracelet/log"
 	"github.com/gdamore/tcell/v2"
 	"github.com/komadiina/spelltext/client/config"
 	"github.com/komadiina/spelltext/client/factory"
@@ -36,16 +37,24 @@ func InitializePages(client *types.SpelltextClient) {
 	client.PageManager.Pages.
 		SetBorder(true).
 		SetTitle(`[blueviolet]╝[""] [white]spelltext[""] [blueviolet]╚[""]`).
-		SetBorderPadding(2, 10, 2, 10).
+		SetBorderPadding(2, 2, 10, 10).
 		SetBorderStyle(tcell.StyleDefault.Foreground(tcell.ColorBlueViolet))
 
 	views.AddLoginPage(client)
 	views.AddMainmenuPage(client)
+	views.AddChatPage(client)
+	views.AddCharactersPage(client)
+	views.AddStorePage(client)
+	views.AddProgressPage(client)
+	views.AddGambaPage(client)
+	views.AddCombatPage(client)
+	views.AddInventoryPage(client)
 }
 
 func main() {
 	flag.Parse()
 	logger := logging.Get("client")
+	logger.SetLevel(log.ErrorLevel)
 
 	cfg, err := config.LoadConfig()
 	if err != nil {
@@ -79,7 +88,18 @@ func main() {
 
 	client.NavigateTo(views.LOGIN_PAGE)
 
+	client.App.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+		if event.Key() == tcell.KeyEscape {
+			client.PageManager.Pop()
+		}
+
+		return event
+	})
+
 	if err := client.App.SetRoot(client.PageManager.Pages, true).EnableMouse(true).Run(); err != nil {
 		logger.Fatal(err)
 	}
+
+	// cleanup
+	client.Nats.Drain()
 }
