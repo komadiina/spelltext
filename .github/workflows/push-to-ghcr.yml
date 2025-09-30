@@ -13,6 +13,9 @@ on:
 jobs:
   docker_publish:
     runs-on: "ubuntu-latest"
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - uses: actions/checkout@v2
@@ -30,5 +33,5 @@ jobs:
         with:
           image_name: ${{ github.repository }}/flyway
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          context: .
+          context: scripts/db
           dockerfile: scripts/db/Dockerfile
