@@ -22,8 +22,8 @@ flyway:
   image: "ghcr.io/komadiina/spelltext/flyway:0.2.0"
   database:
     url: "jdbc:postgresql://spelltext-postgresql-ha-pgpool:5432/spelltext"
-    user: "user"
-    password: "changeme"
+    user: postgres
+    password: changeme
   
 primary:
   extraVolumeMounts:

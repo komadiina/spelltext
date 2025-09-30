@@ -466,26 +466,26 @@ postgresql:
   ## @param postgresql.password PostgreSQL password
   ## @param postgresql.database PostgreSQL database
   ##
-  username: postgres
-  password: ""
-  database: ""
+  username: superuser
+  password: changeme
+  database: spelltext
   ## @param postgresql.existingSecret PostgreSQL password using existing secret
   ##
   existingSecret: ""
   ## @param postgresql.postgresPassword PostgreSQL password for the `postgres` user when `username` is not `postgres`
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#creating-a-database-user-on-first-run (see note!)
   ##
-  postgresPassword: ""
+  postgresPassword: changeme
   ## @param postgresql.usePasswordFiles Set to `true` to mount PostgreSQL secret as a file instead of passing environment variable
   ##
-  usePasswordFiles: true 
+  usePasswordFiles: false 
   ## @param postgresql.pgHbaTrustAll Configures PostgreSQL HBA to trust every user
   ##
-  pgHbaTrustAll: false
+  pgHbaTrustAll: true
   ## @param postgresql.syncReplication Enable synchronous replication synchronous, waiting until data is synchronized in every replica before other queries can be run
   ## This ensures the data availability at the expenses of speed
   ##
-  syncReplication: false
+  syncReplication: true
   ## @param postgresql.syncReplicationMode This specifies the method to choose synchronous standbys from the listed servers. Valid values: empty, FIRST, ANY.
   ## ref: https://www.postgresql.org/docs/current/runtime-config-replication.html#GUC-SYNCHRONOUS-STANDBY-NAMES
   ##
@@ -636,10 +636,11 @@ postgresql:
   ##   max_locks_per_transaction = 64
   ##   ...
   ##
-  extendedConf: |
-    wal_level = 'logical'
-    max_wal_senders = 10
-    max_replication_slots = 10
+  extendedConf: ""
+  # extendedConf: |
+  #   wal_level = 'logical'
+  #   max_wal_senders = 10
+  #   max_replication_slots = 10
   ## @param postgresql.extendedConfCM ConfigMap with PostgreSQL extended configuration (requires `volumePermissions.enabled` to be `true`)
   ## NOTE: This will override postgresql.extendedConf
   ##
@@ -1232,7 +1233,7 @@ pgpool:
   sidecars: []
   ## @param pgpool.replicaCount The number of replicas to deploy
   ##
-  replicaCount: 1
+  replicaCount: 0
   ## @param pgpool.podAnnotations Additional pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
@@ -1979,7 +1980,7 @@ metrics:
 volumePermissions:
   ## @param volumePermissions.enabled Enable init container to adapt volume permissions
   ##
-  enabled: true
+  enabled: false
   ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
   ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
   ## @skip volumePermissions.image.tag Init container volume-permissions image tag

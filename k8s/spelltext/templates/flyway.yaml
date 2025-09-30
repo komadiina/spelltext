@@ -19,6 +19,32 @@ spec:
   template:
     spec:
       restartPolicy: OnFailure
+      initContainers:
+        - name: wait-for-postgres
+          image: postgres:17
+          env:
+          - name: PG_HOST
+            value: "spelltext-postgresql-ha-pgpool"
+          - name: PG_PORT
+            value: "5432"
+          - name: PG_USER
+            valueFrom:
+              secretKeyRef:
+                name: flyway-creds
+                key: FLYWAY_USER
+          - name: PG_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: flyway-creds
+                key: FLYWAY_PASSWORD
+          command: ["/bin/bash", "-c"]
+          args:
+          - |
+            set -euo pipefail
+            until pg_isready -h "$PG_HOST" -p "$PG_PORT" -U "$PG_USER" > /dev/null 2>&1; do
+              echo "waiting for postgres at $PG_HOST:$PG_PORT"
+              sleep 5
+            done
       containers:
         - name: flyway
           image: {{ .Values.flyway.image | toString }}
