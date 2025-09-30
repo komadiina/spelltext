@@ -53,7 +53,7 @@ $ docker compose down -v --remove-orphans
 ```
   
 #### `kubernetes`
-deployed using the [provided charts](https://github.com/komadiina/spelltext/tree/main/chart) in the repo and [hosted packages](https://github.com/komadiina/spelltext/pkgs/container/spelltext%2Fchatserver).
+deployed using the [provided charts](https://github.com/komadiina/spelltext/tree/main/k8s/) in the repo and [hosted packages](https://github.com/komadiina/spelltext/pkgs/container/spelltext%2Fchatserver).
 ```sh
 # start up minikube (or k3s, microk8s, gke, ...)
 $ minikube start
@@ -64,11 +64,13 @@ $ cd $PROJECT_ROOT
 # create the 'spelltext' kube namespace
 $ kubectl create ns spelltext
 
-# install pre-generated helm charts
-$ helm install spelltext charts/ -n spelltext
+# a) install pre-generated helm charts
+$ helm install spelltext k8s/postgresql-ha/ -n spelltext
+$ helm upgrade spelltext k8s/spelltext/
 
-# ... or alternatively:
-$ helm install spelltext charts/ -n spelltext --create-namespace
+# b) or alternatively:
+$ helm install spelltext k8s/postgresql-ha/ -n spelltext --create-namespace
+$ helm upgrade spelltext k8s/spelltext/
 
 # output should look something like this:
 > NAME: spelltext
@@ -141,25 +143,54 @@ $ kubectl delete ns spelltext
 ```bash
 # directory structure (sep 25th)
 .
-├── charts # kubernetes deployment charts
-├── client # where spelltext-client is located
-├── docs # documentation
-│   ├── chat
-│   └── inventory
-├── proto # protobuf specifications for gRPC client-server comms
-│   ├── chat
-│   └── inventory
-├── server # main server directory
-│   ├── chat
-│   │   ├── cmd
-│   │   │   └── chatserver
-│   │   └── server
-│   └── registry
-├── ui # tview primitive wrappers
-│   └── pages
-└── utils # random utilities/necessities
-    └── singleton
-        └── logging
+├───client
+│   ├───config
+│   ├───factory
+│   ├───functions
+│   ├───registry
+│   ├───types
+│   └───views
+├───docs
+│   ├───chat
+│   └───inventory
+├───k8s
+│   ├───postgresql-ha
+│   │   ├───charts
+│   │   │   └───common
+│   │   │       └───templates
+│   │   │           └───validations
+│   │   └───templates
+│   │       ├───backup
+│   │       ├───pgpool
+│   │       └───postgresql
+│   └───spelltext
+│       ├───charts
+│       └───templates
+├───proto
+│   ├───chat
+│   └───inventory
+├───scripts
+│   ├───db
+│   │   └───sql
+│   └───deploy
+├───server
+│   ├───character
+│   ├───chat
+│   │   ├───cmd
+│   │   │   └───chatserver
+│   │   ├───config
+│   │   └───server
+│   ├───gamba
+│   ├───inventory
+│   ├───item
+│   ├───prog
+│   ├───registry
+│   └───store
+├───shared
+│   └───config
+└───utils
+    └───singleton
+        └───logging
 ```
 
 - `chatserver`:

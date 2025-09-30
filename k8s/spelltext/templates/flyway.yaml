@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: flyway-creds
+  namespace: {{ .Values.namespace.name }}
+type: Opaque
+stringData:
+  FLYWAY_URL: {{ .Values.flyway.database.url | toString }}
+  FLYWAY_USER: {{ .Values.flyway.database.user | toString }}
+  FLYWAY_PASSWORD: {{ .Values.flyway.database.password | toString }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: flyway-migration
+  namespace: {{ .Values.namespace.name }}
+spec:
+  backoffLimit: 3
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: flyway
+          image: {{ .Values.flyway.image | toString }}
+          imagePullPolicy: Always
+          env:
+            - name: FLYWAY_USER
+              valueFrom:
+                secretKeyRef:
+                  name: flyway-creds
+                  key: FLYWAY_USER
+            - name: FLYWAY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: flyway-creds
+                  key: FLYWAY_PASSWORD
+            - name: FLYWAY_URL
+              valueFrom:
+                secretKeyRef:
+                  name: flyway-creds
+                  key: FLYWAY_URL
+          volumeMounts:
+            - name: flyway-conf
+              mountPath: /flyway/conf
+          command:
+            - sh
+            - -c
+            - |
+              set -e
+              mkdir -p /flyway/conf
+              cat > /flyway/conf/flyway.conf <<EOF
+              flyway.url=${FLYWAY_URL}
+              flyway.user=${FLYWAY_USER}
+              flyway.password=${FLYWAY_PASSWORD}
+              flyway.locations=filesystem:/flyway/sql
+              EOF
+              echo "=== flyway.conf ==="
+              sed -n '1,200p' /flyway/conf/flyway.conf
+              echo "Running flyway migrate..."
+              exec flyway migrate
+      volumes:
+        - name: flyway-conf
+          emptyDir: 

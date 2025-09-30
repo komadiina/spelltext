@@ -24,6 +24,29 @@ services:
     networks:
       - spelltext  
     
+  flyway:
+    build:
+      context: scripts/db
+      dockerfile: Dockerfile
+    volumes:
+      - ./scripts/db/sql:/flyway/sql
+    networks:
+      - spelltext
+    command: ["-url=jdbc:postgresql://postgres:5432/spelltext", "-user=user", "-password=changeme"  ,"-baselineOnMigrate=true", "-connectRetries=15", "-X",  "migrate"]
+    depends_on:
+      - postgres
+  
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=changeme
+      - POSTGRES_USER=user
+      - POSTGRES_DB=spelltext
+    ports:
+      - "5432:5432"
+    networks:
+      - spelltext
+    restart: always
   
 networks:
   spelltext:

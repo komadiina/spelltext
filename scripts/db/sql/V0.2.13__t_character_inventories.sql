@@ -1,0 +1,9 @@
+create table character_inventories (
+  character_id int not null,
+  gold int not null,
+  boss_tokens int not null,
+  base_inventory_size int not null,
+  expanded_inventory_size int not null,
+  foreign key (character_id) references characters (character_id),
+  primary key(character_id)
+);
