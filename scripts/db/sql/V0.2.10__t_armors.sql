@@ -1,6 +1,8 @@
 CREATE TABLE armors (
   item_template_id INT NOT NULL,
   equip_slot_id smallint not null,
+  prefix varchar(64) not null,
+  suffix varchar(64) not null,
   armor int not null,
   health int not null,
   power int not null,

@@ -532,10 +532,10 @@ postgresql:
     logHostname: true
     ## @param postgresql.audit.logConnections Add client log-in operations to the log file
     ##
-    logConnections: false
+    logConnections: true
     ## @param postgresql.audit.logDisconnections Add client log-outs operations to the log file
     ##
-    logDisconnections: false
+    logDisconnections: true
     ## @param postgresql.audit.pgAuditLog Add operations to log using the pgAudit extension
     ##
     pgAuditLog: ""
@@ -1080,7 +1080,9 @@ witness:
   ##   host     repmgr         repmgr    0.0.0.0/0    md
   ##   ...
   ##
-  pgHbaConfiguration: ""
+  pgHbaConfiguration: |-
+    host     all            repmgr    0.0.0.0/0    trust
+    host     repmgr         repmgr    0.0.0.0/0    trust
   ## @param witness.configurationCM Name of existing ConfigMap with configuration files
   ## NOTE: This will override witness.repmgrConfiguration, witness.configuration and witness.pgHbaConfiguration
   ##
@@ -1161,8 +1163,8 @@ pgpool:
   ##      usernames: "user01;user02"
   ##      passwords: "pass01;pass02"
   customUsers:
-    usernames: ""
-    passwords: ""
+    usernames: "user;superuser"
+    passwords: "changeme;changeme"
   ## @param pgpool.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
@@ -1233,7 +1235,7 @@ pgpool:
   sidecars: []
   ## @param pgpool.replicaCount The number of replicas to deploy
   ##
-  replicaCount: 0
+  replicaCount: 1
   ## @param pgpool.podAnnotations Additional pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
