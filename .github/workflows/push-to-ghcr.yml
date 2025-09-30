@@ -23,7 +23,7 @@ jobs:
         with:
           image_name: ${{ github.repository }}/chatserver
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          context: server/chat
+          context: .
           dockerfile: server/chat/Dockerfile
 
       - name: build & push scripts/db (flyway)
@@ -31,5 +31,5 @@ jobs:
         with:
           image_name: ${{ github.repository }}/flyway
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          context: scripts/db
+          context: .
           dockerfile: scripts/db/Dockerfile
