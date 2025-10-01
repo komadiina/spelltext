@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 
 	"github.com/charmbracelet/log"
@@ -13,9 +14,14 @@ import (
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 	"github.com/nats-io/nats.go"
 	"github.com/rivo/tview"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+
+	pbChat "github.com/komadiina/spelltext/proto/chat"
+	pbStore "github.com/komadiina/spelltext/proto/store"
 )
 
-func InitNats(cfg *config.Config) (*nats.Conn, nats.JetStream, error) {
+func InitializeNats(cfg *config.Config) (*nats.Conn, nats.JetStream, error) {
 	conn, err := nats.Connect(cfg.NatsURL)
 	if err != nil {
 		return nil, nil, err
@@ -51,6 +57,25 @@ func InitializePages(client *types.SpelltextClient) {
 	views.AddInventoryPage(client)
 }
 
+func InitializeClients(c *types.SpelltextClient) {
+	c.Clients = &types.Clients{}
+
+	// init chat client
+	conn, err := grpc.NewClient("localhost:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		c.Logger.Error("failed to init chat client", "reason", err)
+	} else {
+		c.Clients.ChatClient = pbChat.NewChatClient(conn)
+	}
+
+	conn, err = grpc.NewClient("localhost:50052", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		c.Logger.Error("failed to init store client", "reason", err)
+	} else {
+		c.Clients.StoreClient = pbStore.NewStoreClient(conn)
+	}
+}
+
 func main() {
 	flag.Parse()
 	logger := logging.Get("client")
@@ -61,14 +86,18 @@ func main() {
 		logger.Fatal("failed to load config", "reason", err)
 	}
 
-	client := types.SpelltextClient{
-		Config: cfg,
-		Logger: logger,
-		App:    tview.NewApplication(),
-		User:   &types.SpelltextUser{},
-	}
+	ctx, cancel := context.WithCancel(context.Background())
 
-	nc, _, err := InitNats(cfg)
+	client := types.SpelltextClient{
+		Config:  cfg,
+		Logger:  logger,
+		App:     tview.NewApplication(),
+		User:    &types.SpelltextUser{},
+		Context: &ctx,
+	}
+	InitializeClients(&client)
+
+	nc, _, err := InitializeNats(cfg)
 	if err != nil {
 		logger.Fatal("failed to init nats/jetstream", "reason", err)
 	}
@@ -102,4 +131,5 @@ func main() {
 
 	// cleanup
 	client.Nats.Drain()
+	defer cancel()
 }

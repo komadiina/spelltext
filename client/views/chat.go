@@ -16,7 +16,7 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-func SendMessage(content string, client pb.ChatServiceClient, ctx context.Context, c *types.SpelltextClient) {
+func SendMessage(content string, client pb.ChatClient, ctx context.Context, c *types.SpelltextClient) {
 	resp, err := client.SendChatMessage(
 		ctx, &pb.SendChatMessageRequest{
 			Sender:  c.User.Username,
@@ -31,11 +31,11 @@ func SendMessage(content string, client pb.ChatServiceClient, ctx context.Contex
 	c.Logger.Info(fmt.Sprintf("Received response from %s.", resp.GetSender()), "success", resp.GetSuccess())
 }
 
-func JoinChatroom(ctx context.Context, client pb.ChatServiceClient, c *types.SpelltextClient) {
+func JoinChatroom(ctx context.Context, client pb.ChatClient, c *types.SpelltextClient) {
 	client.JoinChatroom(ctx, &pb.JoinChatroomMessageRequest{Username: c.User.Username})
 }
 
-func LeaveChatroom(ctx context.Context, client pb.ChatServiceClient, c *types.SpelltextClient) {
+func LeaveChatroom(ctx context.Context, client pb.ChatClient, c *types.SpelltextClient) {
 	client.LeaveChatroom(ctx, &pb.LeaveChatroomMessageRequest{Username: c.User.Username})
 }
 
@@ -81,7 +81,7 @@ func AddChatPage(c *types.SpelltextClient) {
 		c.Logger.Info("connected to server!", "addr", conn.Target())
 		c.Logger.Info("initializing nats jetstream subscription...")
 
-		client := pb.NewChatServiceClient(conn)
+		client := pb.NewChatClient(conn)
 		ctx, cancelFunc := context.WithCancel(context.Background())
 		JoinChatroom(ctx, client, c)
 

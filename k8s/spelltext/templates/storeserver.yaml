@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: storeserver
+  namespace: spelltext
+  labels: 
+    app: storeserver
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: storeserver
+  template:
+    metadata:
+      labels:
+        app: storeserver
+    spec:
+      containers:
+      - name: storeserver
+        image: {{ .Values.storeserver.image | toString }}
+        imagePullPolicy: Always
+        ports:
+          - containerPort: {{ .Values.storeserver.containerPort }}
+            name: {{ .Values.storeserver.portName }}
+            protocol: {{ .Values.storeserver.protocol }}
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.storeserver.containerPort }}
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.storeserver.containerPort }}
+          initialDelaySeconds: 15
+          periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: storeserver
+  namespace: spelltext
+  labels:
+    app: storeserver
+spec:
+  type: ClusterIP
+  selector:
+    app: storeserver
+  ports:
+    - name: {{ .Values.storeserver.portName }}
+      port: {{ .Values.storeserver.port }}
+      targetPort: {{ .Values.storeserver.targetPort }}
+      protocol: {{ .Values.storeserver.protocol }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: storeserver-ingress
+  namespace: spelltext
+  labels:
+    app: storeserver
+spec:
+  type: LoadBalancer
+  selector:
+    app: storeserver
+  ports:
+    - name: {{ .Values.storeserver.portName }}
+      port: {{ .Values.storeserver.port }}
+      targetPort: {{ .Values.storeserver.targetPort }}
+      protocol: {{ .Values.storeserver.protocol }}

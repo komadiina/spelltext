@@ -2,6 +2,7 @@ package factory
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/rivo/tview"
 )
@@ -95,7 +96,7 @@ func (pm *PageManager) Push(pageName string, keepCached bool) {
 // navigate backwards once
 func (pm *PageManager) Pop() {
 	if len(pm.stack) <= 1 {
-		return
+		os.Exit(1)
 	}
 
 	top := pm.stack[len(pm.stack)-1]

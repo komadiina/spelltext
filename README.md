@@ -66,11 +66,11 @@ $ kubectl create ns spelltext
 
 # a) install pre-generated helm charts
 $ helm install spelltext k8s/postgresql-ha/ -n spelltext
-$ helm upgrade spelltext k8s/spelltext/
+$ helm upgrade spelltext k8s/spelltext/ -n spelltext
 
 # b) or alternatively:
 $ helm install spelltext k8s/postgresql-ha/ -n spelltext --create-namespace
-$ helm upgrade spelltext k8s/spelltext/
+$ helm upgrade spelltext k8s/spelltext/ -n spelltext
 
 # output should look something like this:
 > NAME: spelltext
@@ -203,6 +203,5 @@ $ kubectl delete ns spelltext
 - `gambaserver`: lets players open chests of various tiers by spending currency - contacts `inventoryserver` upon ChestOpenEvent 
 
 ## todo:
-`9th sep, 2025`:
-- charts for k8s deployment
-- implement FO MQ for `chatserver::global`
+`1st oct, 2025`:
+- fix pgpool `pool_passwd` not using `values.yaml:.pgpool.customUsers[.usernames, .passwords]` field 

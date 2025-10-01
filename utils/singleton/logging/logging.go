@@ -32,7 +32,12 @@ func Init(level log.Level, name string) {
 			os.Mkdir("var/log", 0755)
 		}
 
-		fd, _ := os.OpenFile(fmt.Sprintf("var/log/%s-%s.log", name, time.Now().Format(time.RFC3339)), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		fd, _ := os.OpenFile(
+			fmt.Sprintf(
+				"var/log/%s-%s.log", name, time.Now().Format(time.RFC3339)),
+			os.O_APPEND|os.O_CREATE|os.O_WRONLY,
+			0644,
+		)
 		l.SetOutput(io.MultiWriter(os.Stdout, bufio.NewWriter(fd)))
 		l.SetLevel(level)
 

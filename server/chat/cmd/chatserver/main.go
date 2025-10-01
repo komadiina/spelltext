@@ -50,12 +50,12 @@ func main() {
 	if err != nil {
 		logger.Fatal(err)
 	}
-	pb.RegisterChatServiceServer(s, &server.ChatService{Nats: nc, Config: cfg})
+	pb.RegisterChatServer(s, &server.ChatService{Nats: nc, Config: cfg})
 
 	logger.Info(fmt.Sprintf("%s v%s listening on %s:%d", *name, version, *addr, *port))
 
 	if err := s.Serve(lis); err != nil {
-		logger.Error("failed to serve", err)
+		logger.Error("failed to serve", "reason", err)
 		os.Exit(1)
 	}
 }

@@ -39,9 +39,18 @@ extraVolumes:
 # spelltext service
 chatserver:
   enabled: true
-  image: "ghcr.io/komadiina/spelltext/chatserver:0.2.0"
+  image: "ghcr.io/komadiina/spelltext/chatserver:latest"
   port: 50051
   portName: "grpc"
   containerPort: 50051
   targetPort: 50051
+  protocol: "TCP"
+  
+storeserver:
+  enabled: true
+  image: "ghcr.io/komadiina/spelltext/storeserver:latest"
+  port: 50052
+  portName: "grpc"
+  containerPort: 50052
+  targetPort: 50052
   protocol: "TCP"

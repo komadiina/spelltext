@@ -16,6 +16,23 @@ services:
     depends_on:
       - nats
   
+  storeserver:
+    build:
+      context: .
+      dockerfile: server/store/Dockerfile
+    volumes:
+      - ./var/log/storeserver:/var/log
+    ports:
+      - "50052:50052"
+    networks:
+      - spelltext
+    develop:
+      watch:
+        - action: "restart"
+          path: "./server/store"
+    depends_on:
+      - postgres
+  
   nats:
     image: nats
     command: ["-js"]

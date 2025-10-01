@@ -14,7 +14,7 @@ import (
 )
 
 type ChatService struct {
-	pb.UnimplementedChatServiceServer
+	pb.UnimplementedChatServer
 	sentMessages int
 	Nats         *nats.Conn
 	Config       *config.Config
