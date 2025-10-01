@@ -753,7 +753,7 @@ insert into armors
 values (
     24,
     9,
-    "Hunter\'s",
+    'Hunter''s',
     null,
     0,
     0,
@@ -818,7 +818,7 @@ insert into armors
 values (
     2,
     7,
-    "Mage's",
+    'Mage''s',
     'of the Lost',
     -50,
     -20,
@@ -831,7 +831,7 @@ insert into armors
 values (
     3,
     6,
-    "Farmer's",
+    'Farmer''s',
     null,
     10,
     5,
@@ -844,7 +844,7 @@ insert into armors
 values (
     3,
     6,
-    "Conjurer's",
+    'Conjurer''s',
     null,
     -5,
     5,
@@ -896,7 +896,7 @@ insert into armors
 values (
     28,
     2,
-    "Sage's",
+    'Sage''s',
     null,
     0,
     30,
@@ -1194,7 +1194,7 @@ values (
 insert into item_templates
 values (
     DEFAULT,
-    "Hunter's Token",
+    'Hunter''s token',
     7,
     2,
     0,
