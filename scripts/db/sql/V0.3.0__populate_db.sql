@@ -989,9 +989,7 @@ values (
     'Rusted',
     'Dagger',
     20,
-    0,
     10,
-    5,
     0
   );
 
@@ -1002,9 +1000,7 @@ values (
     'Dirk',
     20,
     0,
-    20,
-    12,
-    0
+    20
   );
 
 insert into weapons
@@ -1014,9 +1010,7 @@ values (
     'Longsword',
     25,
     0,
-    15,
-    25,
-    0
+    15
   );
 
 insert into weapons
@@ -1026,9 +1020,7 @@ values (
     'Staff',
     20,
     0,
-    10,
-    0,
-    40
+    10
   );
 
 insert into consumables
@@ -1091,6 +1083,14 @@ values (
     0
   );
 
+insert into users
+values (
+    DEFAULT,
+    'oggnjen',
+    'changeme',
+    'oggnjen@gmail.com'
+  );
+
 insert into characters
 values (DEFAULT, 1, 'Oggnjen', 2, 1, 1, 0, 25, 0, 25);
 
@@ -1099,7 +1099,7 @@ values (
     DEFAULT,
     1,
     'Thorin',
-    15,
+    2,
     3,
     500,
     50,
@@ -1113,7 +1113,7 @@ values (
     DEFAULT,
     1,
     'Mira',
-    20,
+    1,
     1,
     750,
     80,
@@ -1127,7 +1127,7 @@ values (
     DEFAULT,
     1,
     'Selene',
-    6,
+    3,
     2,
     1200,
     40,
@@ -1141,7 +1141,7 @@ values (
     DEFAULT,
     1,
     'Borin',
-    56,
+    1,
     3,
     300,
     35,
@@ -1155,7 +1155,7 @@ values (
     DEFAULT,
     1,
     'Lysa',
-    15,
+    2,
     1,
     950,
     70,
@@ -1169,7 +1169,7 @@ values (
     DEFAULT,
     1,
     'Keth',
-    500,
+    3,
     2,
     2000,
     60,
@@ -1203,9 +1203,6 @@ values (
     'tdrop',
     '{}'
   );
-
-insert into armors
-values (48, 9, 'Bundle', null, 0, 0, 0, 0, 0);
 
 insert into armors
 values (

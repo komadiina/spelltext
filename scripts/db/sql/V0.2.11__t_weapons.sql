@@ -5,6 +5,7 @@ create table weapons (
   base_damage int not null,
   strength int not null,
   spellpower int not null,
+  
   PRIMARY KEY (item_template_id),
   FOREIGN KEY (item_template_id) REFERENCES item_templates (id)
 );

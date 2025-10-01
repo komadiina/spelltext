@@ -1,6 +1,6 @@
 CREATE TABLE consumables (
   item_template_id INT NOT NULL,
-  uses smallint  not null,
+  uses smallint not null,
   prefix varchar(64),
   suffix varchar(64),
   healing INT NOT NULL,
