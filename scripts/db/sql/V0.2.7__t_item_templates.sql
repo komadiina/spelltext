@@ -1,7 +1,7 @@
 create table item_templates (
   id SERIAL,
   name varchar(255) not null,
-  item_type_id smallint  not null,
+  item_type_id smallint not null,
   rarity smallint  not null default 0,
   stackable smallint not null default 0,
   stack_size integer  not null default 1,
