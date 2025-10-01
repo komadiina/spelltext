@@ -8,12 +8,8 @@ WORKDIR /
 COPY go.mod go.sum ./
 RUN go mod download
 
-RUN mkdir -p /server/chat /utils /proto /shared
-COPY config.yml .
-COPY ./server/chat /server/chat
-COPY ./utils /utils
-COPY ./proto/store /proto/store
-COPY ./shared /shared
+# TODO: break this down into smaller pieces
+COPY . .
 RUN go build /server/chat/cmd/chatserver/main.go
 
 FROM alpine:3.22.1

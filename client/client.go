@@ -40,12 +40,6 @@ func InitRegistry(cfg *config.Config) *registry.Registry {
 }
 
 func InitializePages(client *types.SpelltextClient) {
-	client.PageManager.Pages.
-		SetBorder(true).
-		SetTitle(`[blueviolet]╝[""] [white]spelltext[""] [blueviolet]╚[""]`).
-		SetBorderPadding(2, 2, 10, 10).
-		SetBorderStyle(tcell.StyleDefault.Foreground(tcell.ColorBlueViolet))
-
 	views.AddLoginPage(client)
 	views.AddMainmenuPage(client)
 	views.AddChatPage(client)

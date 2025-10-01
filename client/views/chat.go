@@ -47,6 +47,7 @@ func AddChatPage(c *types.SpelltextClient) {
 			SetTextAlign(tview.AlignLeft).
 			SetRegions(false).
 			ScrollToEnd()
+
 		js, err := c.Nats.JetStream()
 		if err != nil {
 			c.Logger.Error("failed to get jetstream", "reason", err)

@@ -9,6 +9,8 @@ func AddCombatPage(c *types.SpelltextClient) {
 	onClose := func() {}
 
 	c.PageManager.RegisterFactory(COMBAT_PAGE, func() tview.Primitive {
-		return tview.NewTextView()
+		flex := tview.NewFlex().SetDirection(tview.FlexRow).SetFullScreen(true)
+		flex.SetBorder(true).SetBorderPadding(1, 1, 5, 5).SetTitle(" combat ")
+		return flex
 	}, nil, onClose)
 }

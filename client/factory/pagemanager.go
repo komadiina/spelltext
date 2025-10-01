@@ -1,7 +1,6 @@
 package factory
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/rivo/tview"
@@ -70,50 +69,63 @@ func (pm *PageManager) showFresh(name string, keepCached bool) {
 	}
 }
 
-// navigates to pageName. if cached primitive exists, it will be refreshed (if refresher present)
-// elif no cached primitive, creates it via corresponding factory
-// keepCached controls whether to keep instance
 func (pm *PageManager) Push(pageName string, keepCached bool) {
 	if len(pm.stack) > 0 {
 		cur := pm.stack[len(pm.stack)-1]
-		pm.closers[cur]()
+		if closer, ok := pm.closers[cur]; ok && closer != nil {
+			closer()
+		}
 		pm.Pages.HidePage(cur)
 	}
 
 	if _, exists := pm.cache[pageName]; !exists {
 		pm.showFresh(pageName, keepCached)
-	}
-
-	if p, exists := pm.cache[pageName]; exists {
-		if r, ok := pm.refresh[pageName]; ok && r != nil {
-			r(p)
+	} else {
+		if _, hasRef := pm.refresh[pageName]; !hasRef {
+			pm.showFresh(pageName, keepCached)
+		} else {
+			if p := pm.cache[pageName]; p != nil {
+				if r, ok := pm.refresh[pageName]; ok && r != nil {
+					r(p)
+				}
+			}
 		}
 	}
+
 	pm.Pages.ShowPage(pageName)
 	pm.stack = append(pm.stack, pageName)
 }
 
-// navigate backwards once
+// navigate backward
 func (pm *PageManager) Pop() {
 	if len(pm.stack) <= 1 {
 		os.Exit(1)
 	}
 
 	top := pm.stack[len(pm.stack)-1]
-	fmt.Println(top)
-	pm.closers[top]()
+	if closer, ok := pm.closers[top]; ok && closer != nil {
+		closer()
+	}
 	pm.stack = pm.stack[:len(pm.stack)-1]
 	pm.Pages.HidePage(top)
+
 	prev := pm.stack[len(pm.stack)-1]
 
-	if p, ok := pm.cache[prev]; ok {
-		if refr, ok2 := pm.refresh[prev]; ok2 && refr != nil {
-			refr(p)
+	if _, ok := pm.cache[prev]; ok {
+		if _, hasRef := pm.refresh[prev]; !hasRef {
+			pm.showFresh(prev, true)
+		} else {
+			if r, ok := pm.refresh[prev]; ok && r != nil {
+				r(pm.cache[prev])
+			}
 		}
+	} else {
+		pm.showFresh(prev, true)
 	}
 
 	pm.Pages.ShowPage(prev)
 }
+
 
 // check if page exists (is factory for pageKey registered)
 func (pm *PageManager) HasPage(pageKey string) bool {

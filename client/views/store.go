@@ -22,9 +22,12 @@ func AddStorePage(c *types.SpelltextClient) {
 			}
 		}
 
-		flex.
+		flex = flex.
 			SetDirection(tview.FlexRow).
-			AddItem(list, 0, 1, true)
+			AddItem(list, 0, 1, true).
+			SetFullScreen(true)
+
+		flex.SetBorder(true).SetBorderPadding(1, 1, 5, 5).SetTitle(" store ")
 
 		return flex
 	}, nil, onClose)

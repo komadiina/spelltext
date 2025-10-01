@@ -29,7 +29,10 @@ func AddMainmenuPage(c *types.SpelltextClient) {
 			SetDirection(tview.FlexRow).
 			AddItem(banner, 1, 1, false).
 			AddItem(empty, 1, 1, false).
-			AddItem(navlist, 0, 2, true)
+			AddItem(navlist, 0, 2, true).
+			SetFullScreen(true)
+
+		flex.SetBorder(true).SetBorderPadding(1, 1, 5, 5).SetTitle(" menu ")
 
 		return flex
 	}, nil, func() { /* noop */ })

@@ -9,6 +9,8 @@ func AddProgressPage(c *types.SpelltextClient) {
 	onClose := func() {}
 
 	c.PageManager.RegisterFactory(PROGRESS_PAGE, func() tview.Primitive {
-		return tview.NewTextView()
+		flex := tview.NewFlex().SetDirection(tview.FlexRow).SetFullScreen(true)
+		flex.SetBorder(true).SetBorderPadding(1, 1, 5, 5).SetTitle(" progress ")
+		return flex
 	}, nil, onClose)
 }
