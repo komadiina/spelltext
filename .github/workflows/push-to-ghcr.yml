@@ -20,13 +20,19 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # https://github.com/marketplace/actions/push-to-ghcr
       - name: build & push server/chat
         uses: macbre/push-to-ghcr@master
         with:
           image_name: ${{ github.repository }}/chatserver
           github_token: ${{ secrets.GITHUB_TOKEN }}
           dockerfile: server/chat/Dockerfile
+
+      - name: build & push server/store
+        uses: macbre/push-to-ghcr@master
+        with:
+          image_name: ${{ github.repository }}/storeserver
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          dockerfile: server/store/Dockerfile
 
       - name: build & push scripts/db (flyway)
         uses: macbre/push-to-ghcr@master
