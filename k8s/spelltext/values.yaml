@@ -19,9 +19,9 @@ nats:
 
 flyway:
   enabled: true
-  image: "ghcr.io/komadiina/spelltext/flyway:0.2.0"
+  image: "ghcr.io/komadiina/spelltext/flyway:latest"
   database:
-    url: "jdbc:postgresql://spelltext-postgresql-ha-pgpool:5432/spelltext"
+    url: "jdbc:postgresql://spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local:5432/spelltext"
     user: postgres
     password: changeme
   

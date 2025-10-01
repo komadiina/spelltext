@@ -713,7 +713,7 @@ witness:
   podLabels: {}
   ## @param witness.replicaCount Number of replicas to deploy.
   ##
-  replicaCount: 1
+  replicaCount: 0
   ## @param witness.updateStrategy.type Postgresql StatefulSet strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ## e.g:
@@ -1163,8 +1163,8 @@ pgpool:
   ##      usernames: "user01;user02"
   ##      passwords: "pass01;pass02"
   customUsers:
-    usernames: "user;superuser"
-    passwords: "changeme;changeme"
+    usernames: user;superuser
+    passwords: changeme;changeme
   ## @param pgpool.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
@@ -1175,7 +1175,7 @@ pgpool:
   ## @param pgpool.customUsersSecret Name of a secret containing the usernames and passwords of accounts that will be added to pgpool_passwd
   ## The secret must contain the keys "usernames" and "passwords" respectively.
   ##
-  customUsersSecret: ""
+  customUsersSecret: "pgpool-custom-users"
   ## @param pgpool.existingSecret Pgpool-II admin password using existing secret
   ##
   existingSecret: ""
@@ -1235,7 +1235,7 @@ pgpool:
   sidecars: []
   ## @param pgpool.replicaCount The number of replicas to deploy
   ##
-  replicaCount: 1
+  replicaCount: 0
   ## @param pgpool.podAnnotations Additional pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##

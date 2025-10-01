@@ -1,5 +1,3 @@
-use spelltext;
-
 -- heroes
 insert into `heroes`
 values (
