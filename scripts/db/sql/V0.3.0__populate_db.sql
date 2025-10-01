@@ -1,7 +1,6 @@
--- heroes
-insert into `heroes`
+insert into heroes
 values (
-    null,
+    DEFAULT,
     'Druid',
     100,
     100,
@@ -13,10 +12,9 @@ values (
     20
   );
 
--- id=1
-insert into `heroes`
+insert into heroes
 values (
-    null,
+    DEFAULT,
     'Mage',
     50,
     200,
@@ -28,10 +26,9 @@ values (
     30
   );
 
--- id=2
-insert into `heroes`
+insert into heroes
 values (
-    null,
+    DEFAULT,
     'Warrior',
     150,
     50,
@@ -43,110 +40,81 @@ values (
     5
   );
 
--- id=3
--- stat types
-insert into `stat_types`
-VALUES (null, 'ST01', 'Strength');
+insert into stat_types
+VALUES (DEFAULT, 'ST01', 'Strength');
 
--- id=1
-insert into `stat_types`
-VALUES (null, 'ST02', 'Spellpower');
+insert into stat_types
+VALUES (DEFAULT, 'ST02', 'Spellpower');
 
--- id=2
-insert into `stat_types`
-VALUES (null, 'ST03', 'Health');
+insert into stat_types
+VALUES (DEFAULT, 'ST03', 'Health');
 
--- id=3
-insert into `stat_types`
-values (null, 'ST04', 'Power');
+insert into stat_types
+values (DEFAULT, 'ST04', 'Power');
 
--- id=4
--- item types
-insert into `item_types`
-values (null, 'IT01', 'Armor');
+insert into item_types
+values (DEFAULT, 'IT01', 'Armor');
 
--- id=1
-insert into `item_types`
-values (null, 'IT02', 'Consumable');
+insert into item_types
+values (DEFAULT, 'IT02', 'Consumable');
 
--- id=2
-insert into `item_types`
-values (null, 'IT03', 'Weapon');
+insert into item_types
+values (DEFAULT, 'IT03', 'Weapon');
 
--- id=3
-insert into `item_types`
-values (null, 'IT04', 'Vanity');
+insert into item_types
+values (DEFAULT, 'IT04', 'Vanity');
 
--- id=4
-insert into `item_types`
-values (null, 'IT05', 'Wearable vanity');
+insert into item_types
+values (DEFAULT, 'IT05', 'Wearable vanity');
 
--- id=5
-insert into `item_types`
-values (null, 'IT06', 'Gold drop');
+insert into item_types
+values (DEFAULT, 'IT06', 'Gold drop');
 
--- id=6
-insert into `item_types`
-values (null, 'IT07', 'Token drop');
+insert into item_types
+values (DEFAULT, 'IT07', 'Token drop');
 
--- id=7
--- equip slots
-insert into `equip_slots`
-values (null, 'ES01', 'Head');
+insert into equip_slots
+values (DEFAULT, 'ES01', 'Head');
 
--- id=1
-insert into `equip_slots`
-values (null, 'ES02', 'Neck');
+insert into equip_slots
+values (DEFAULT, 'ES02', 'Neck');
 
--- id=2
-insert into `equip_slots`
-values (null, 'ES03', 'Shoulders');
+insert into equip_slots
+values (DEFAULT, 'ES03', 'Shoulders');
 
--- id=3
-insert into `equip_slots`
-values (null, 'ES04', 'Gloves');
+insert into equip_slots
+values (DEFAULT, 'ES04', 'Gloves');
 
--- id=4
-insert into `equip_slots`
-values (null, 'ES05', 'Ring');
+insert into equip_slots
+values (DEFAULT, 'ES05', 'Ring');
 
--- id=5
-insert into `equip_slots`
-values (null, 'ES06', 'Ring');
+insert into equip_slots
+values (DEFAULT, 'ES06', 'Ring');
 
--- id=6
-insert into `equip_slots`
-values (null, 'ES07', 'Chest');
+insert into equip_slots
+values (DEFAULT, 'ES07', 'Chest');
 
--- id=7
-insert into `equip_slots`
-values (null, 'ES08', 'Waist');
+insert into equip_slots
+values (DEFAULT, 'ES08', 'Waist');
 
--- id=8
-insert into `equip_slots`
-values (null, 'ES09', 'Backpocket');
+insert into equip_slots
+values (DEFAULT, 'ES09', 'Backpocket');
 
--- id=9
-insert into `equip_slots`
-values (null, 'ES10', 'Back');
+insert into equip_slots
+values (DEFAULT, 'ES10', 'Back');
 
--- id=10
-insert into `equip_slots`
-values (null, 'ES11', 'Legs');
+insert into equip_slots
+values (DEFAULT, 'ES11', 'Legs');
 
--- id=12
-insert into `equip_slots`
-values (null, 'ES12', 'Shins');
+insert into equip_slots
+values (DEFAULT, 'ES12', 'Shins');
 
--- id=13
-insert into `equip_slots`
-values (null, 'ES13', 'Feet');
+insert into equip_slots
+values (DEFAULT, 'ES13', 'Feet');
 
--- id=14
--- item templates
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Peasant Helmet',
     1,
     1,
@@ -157,10 +125,9 @@ values (
     '{}'
   );
 
--- id=1
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Peasant Vest',
     1,
     1,
@@ -171,10 +138,9 @@ values (
     '{}'
   );
 
--- id=2
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Wedding ring',
     1,
     1,
@@ -185,10 +151,9 @@ values (
     '{}'
   );
 
--- id=3
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Health Potion',
     2,
     1,
@@ -199,10 +164,9 @@ values (
     '{}'
   );
 
--- id=4
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Power Potion',
     2,
     1,
@@ -213,10 +177,9 @@ values (
     '{}'
   );
 
--- id=5
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Strength Potion',
     2,
     2,
@@ -227,10 +190,9 @@ values (
     '{}'
   );
 
--- id=6
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Spellpower Potion',
     2,
     2,
@@ -241,10 +203,9 @@ values (
     '{}'
   );
 
--- id=7
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Stoneblade',
     3,
     1,
@@ -255,10 +216,9 @@ values (
     '{}'
   );
 
--- id=8
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Warstaff',
     3,
     1,
@@ -269,10 +229,9 @@ values (
     '{}'
   );
 
--- id=9
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Sturdy shovel',
     3,
     1,
@@ -283,10 +242,9 @@ values (
     '{}'
   );
 
--- id=10
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Ygmirs head',
     4,
     2,
@@ -297,9 +255,9 @@ values (
     '{}'
   );
 
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Lucky? charm',
     5,
     1,
@@ -310,10 +268,9 @@ values (
     '{}'
   );
 
--- id=12
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Honest gold bag',
     6,
     1,
@@ -324,10 +281,9 @@ values (
     '{}'
   );
 
--- id=13
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Thief sack',
     6,
     2,
@@ -338,10 +294,9 @@ values (
     '{}'
   );
 
--- id=14
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Bankrobber sack',
     6,
     3,
@@ -352,10 +307,9 @@ values (
     '{}'
   );
 
--- id=15
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Gold bar',
     6,
     4,
@@ -366,10 +320,9 @@ values (
     '{}'
   );
 
--- id=16
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Rugged token',
     7,
     1,
@@ -380,10 +333,9 @@ values (
     '{}'
   );
 
--- id=17
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Polished token',
     7,
     2,
@@ -394,10 +346,9 @@ values (
     '{}'
   );
 
--- id=18
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Headhunter token',
     7,
     3,
@@ -408,10 +359,9 @@ values (
     '{}'
   );
 
--- id=19
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Worldslayer token',
     7,
     4,
@@ -422,10 +372,9 @@ values (
     '{}'
   );
 
--- id=20
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Traveler Cloak',
     1,
     1,
@@ -436,9 +385,9 @@ values (
     '{}'
   );
 
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Cloak of Ember',
     1,
     2,
@@ -449,9 +398,9 @@ values (
     '{}'
   );
 
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Moonlit Shawl',
     1,
     3,
@@ -462,9 +411,9 @@ values (
     '{}'
   );
 
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Hunters Quiver',
     1,
     1,
@@ -475,9 +424,9 @@ values (
     '{}'
   );
 
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Druidic Talisman',
     1,
     2,
@@ -488,9 +437,9 @@ values (
     '{}'
   );
 
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Mage Focus',
     1,
     2,
@@ -501,9 +450,9 @@ values (
     '{}'
   );
 
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Adventurer Necklace',
     1,
     1,
@@ -514,9 +463,9 @@ values (
     '{}'
   );
 
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Sage Locket',
     1,
     3,
@@ -527,9 +476,9 @@ values (
     '{}'
   );
 
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Lucky Rabbit Foot',
     5,
     1,
@@ -540,9 +489,9 @@ values (
     '{}'
   );
 
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Iron Boots',
     1,
     1,
@@ -553,9 +502,9 @@ values (
     '{}'
   );
 
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Plate Greaves',
     1,
     2,
@@ -566,9 +515,9 @@ values (
     '{}'
   );
 
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Silken Gloves',
     1,
     2,
@@ -579,9 +528,9 @@ values (
     '{}'
   );
 
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Band of Fortitude',
     1,
     3,
@@ -592,9 +541,9 @@ values (
     '{}'
   );
 
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Ring of Arcana',
     1,
     3,
@@ -605,9 +554,9 @@ values (
     '{}'
   );
 
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Lesser Healing Potion',
     2,
     1,
@@ -618,9 +567,9 @@ values (
     '{}'
   );
 
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Greater Healing Potion',
     2,
     2,
@@ -631,9 +580,9 @@ values (
     '{}'
   );
 
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Greater Power Potion',
     2,
     2,
@@ -644,9 +593,9 @@ values (
     '{}'
   );
 
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Mana Crystal',
     2,
     2,
@@ -657,9 +606,9 @@ values (
     '{}'
   );
 
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Bandage',
     2,
     1,
@@ -670,9 +619,9 @@ values (
     '{}'
   );
 
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Rusted Dagger',
     3,
     1,
@@ -683,9 +632,9 @@ values (
     '{}'
   );
 
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Wicked Dirk',
     3,
     2,
@@ -696,9 +645,9 @@ values (
     '{}'
   );
 
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Ancient Longsword',
     3,
     3,
@@ -709,9 +658,9 @@ values (
     '{}'
   );
 
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Runed Staff',
     3,
     3,
@@ -722,9 +671,9 @@ values (
     '{}'
   );
 
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Shadow Cloak (Vanity)',
     4,
     1,
@@ -735,9 +684,9 @@ values (
     '{}'
   );
 
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Bronze Token',
     7,
     1,
@@ -748,9 +697,9 @@ values (
     '{}'
   );
 
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Emerald Token',
     7,
     3,
@@ -761,10 +710,7 @@ values (
     '{}'
   );
 
--- armors
--- 							template		equip_slot	prefix	suffix			armor	health	power	strength	spellpower
--- cloaks / backs
-insert into `armors`
+insert into armors
 values (
     21,
     10,
@@ -777,11 +723,11 @@ values (
     5
   );
 
-insert into `armors`
+insert into armors
 values (
     22,
     10,
-    null,
+    DEFAULT,
     'of Ember',
     8,
     10,
@@ -790,7 +736,7 @@ values (
     10
   );
 
-insert into `armors`
+insert into armors
 values (
     23,
     10,
@@ -803,7 +749,7 @@ values (
     12
   );
 
-insert into `armors`
+insert into armors
 values (
     24,
     9,
@@ -816,9 +762,7 @@ values (
     0
   );
 
--- quiver in backpocket gives power/str
--- helmets
-insert into `armors`
+insert into armors
 values (
     1,
     1,
@@ -831,7 +775,7 @@ values (
     20
   );
 
-insert into `armors`
+insert into armors
 values (
     1,
     1,
@@ -844,7 +788,7 @@ values (
     5
   );
 
-insert into `armors`
+insert into armors
 values (
     1,
     1,
@@ -857,8 +801,7 @@ values (
     0
   );
 
--- chests
-insert into `armors`
+insert into armors
 values (
     2,
     7,
@@ -871,7 +814,7 @@ values (
     -5
   );
 
-insert into `armors`
+insert into armors
 values (
     2,
     7,
@@ -884,8 +827,7 @@ values (
     50
   );
 
--- ring
-insert into `armors`
+insert into armors
 values (
     3,
     6,
@@ -898,7 +840,7 @@ values (
     0
   );
 
-insert into `armors`
+insert into armors
 values (
     3,
     6,
@@ -911,8 +853,7 @@ values (
     10
   );
 
--- neck / trinkets / rings
-insert into `armors`
+insert into armors
 values (
     25,
     9,
@@ -925,8 +866,7 @@ values (
     10
   );
 
--- talisman in backpocket
-insert into `armors`
+insert into armors
 values (
     26,
     2,
@@ -939,8 +879,7 @@ values (
     15
   );
 
--- mage's focus equipped in neck
-insert into `armors`
+insert into armors
 values (
     27,
     2,
@@ -953,7 +892,7 @@ values (
     0
   );
 
-insert into `armors`
+insert into armors
 values (
     28,
     2,
@@ -966,7 +905,7 @@ values (
     20
   );
 
-insert into `armors`
+insert into armors
 values (
     29,
     9,
@@ -979,7 +918,7 @@ values (
     0
   );
 
-insert into `armors`
+insert into armors
 values (
     33,
     5,
@@ -992,7 +931,7 @@ values (
     0
   );
 
-insert into `armors`
+insert into armors
 values (
     34,
     6,
@@ -1005,8 +944,7 @@ values (
     25
   );
 
--- feet / shins / gloves
-insert into `armors`
+insert into armors
 values (
     30,
     13,
@@ -1019,8 +957,7 @@ values (
     0
   );
 
--- Iron Boots -> feet slot
-insert into `armors`
+insert into armors
 values (
     31,
     12,
@@ -1033,8 +970,7 @@ values (
     0
   );
 
--- Plate Greaves -> shins
-insert into `armors`
+insert into armors
 values (
     32,
     4,
@@ -1047,9 +983,7 @@ values (
     10
   );
 
--- gloves
--- weapons
-insert into `weapons`
+insert into weapons
 values (
     40,
     'Rusted',
@@ -1061,7 +995,7 @@ values (
     0
   );
 
-insert into `weapons`
+insert into weapons
 values (
     41,
     'Wicked',
@@ -1073,7 +1007,7 @@ values (
     0
   );
 
-insert into `weapons`
+insert into weapons
 values (
     42,
     'Ancient',
@@ -1085,7 +1019,7 @@ values (
     0
   );
 
-insert into `weapons`
+insert into weapons
 values (
     43,
     'Runed',
@@ -1097,10 +1031,7 @@ values (
     40
   );
 
--- consumables
--- ex. (Greater/Lesser) Healing Potion, (Powerful/Stunning) Power Potion, Slumpkin Strength Potion, Arcana Spellpower Potion
--- (simple stats stored on armors table when consumables give direct effects as templates)
-insert into `consumables`
+insert into consumables
 values (
     35,
     1,
@@ -1112,7 +1043,7 @@ values (
     0
   );
 
-insert into `consumables`
+insert into consumables
 values (
     36,
     2,
@@ -1124,7 +1055,7 @@ values (
     0
   );
 
-insert into `consumables`
+insert into consumables
 values (
     37,
     2,
@@ -1136,7 +1067,7 @@ values (
     0
   );
 
-insert into `consumables`
+insert into consumables
 values (
     38,
     2,
@@ -1148,7 +1079,7 @@ values (
     30
   );
 
-insert into `consumables`
+insert into consumables
 values (
     39,
     1,
@@ -1160,13 +1091,12 @@ values (
     0
   );
 
--- characters
-insert into `characters`
-values (null, 1, 'Oggnjen', 2, 1, 1, 0, 25, 0, 25);
+insert into characters
+values (DEFAULT, 1, 'Oggnjen', 2, 1, 1, 0, 25, 0, 25);
 
-insert into `characters`
+insert into characters
 values (
-    null,
+    DEFAULT,
     1,
     'Thorin',
     15,
@@ -1178,9 +1108,9 @@ values (
     0
   );
 
-insert into `characters`
+insert into characters
 values (
-    null,
+    DEFAULT,
     1,
     'Mira',
     20,
@@ -1192,9 +1122,9 @@ values (
     20
   );
 
-insert into `characters`
+insert into characters
 values (
-    null,
+    DEFAULT,
     1,
     'Selene',
     6,
@@ -1206,9 +1136,9 @@ values (
     40
   );
 
-insert into `characters`
+insert into characters
 values (
-    null,
+    DEFAULT,
     1,
     'Borin',
     56,
@@ -1220,9 +1150,9 @@ values (
     0
   );
 
-insert into `characters`
+insert into characters
 values (
-    null,
+    DEFAULT,
     1,
     'Lysa',
     15,
@@ -1234,9 +1164,9 @@ values (
     30
   );
 
-insert into `characters`
+insert into characters
 values (
-    null,
+    DEFAULT,
     1,
     'Keth',
     500,
@@ -1248,10 +1178,9 @@ values (
     80
   );
 
--- stackable vendor goods and class-useful trinkets
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     'Arrow Bundle',
     6,
     1,
@@ -1262,9 +1191,9 @@ values (
     '{}'
   );
 
-insert into `item_templates`
+insert into item_templates
 values (
-    null,
+    DEFAULT,
     "Hunter's Token",
     7,
     2,
@@ -1275,11 +1204,10 @@ values (
     '{}'
   );
 
-insert into `armors`
+insert into armors
 values (48, 9, 'Bundle', null, 0, 0, 0, 0, 0);
 
--- sample vendor variants for existing templates 
-insert into `armors`
+insert into armors
 values (
     1,
     1,
@@ -1292,7 +1220,7 @@ values (
     25
   );
 
-insert into `armors`
+insert into armors
 values (
     2,
     7,
@@ -1305,7 +1233,7 @@ values (
     5
   );
 
-insert into `armors`
+insert into armors
 values (
     3,
     6,
