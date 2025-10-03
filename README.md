@@ -140,58 +140,6 @@ $ kubectl delete ns spelltext
 
 ![screenshot](./docs/spelltext_diagram.jpg)
 
-```bash
-# directory structure (sep 25th)
-.
-├───client
-│   ├───config
-│   ├───factory
-│   ├───functions
-│   ├───registry
-│   ├───types
-│   └───views
-├───docs
-│   ├───chat
-│   └───inventory
-├───k8s
-│   ├───postgresql-ha
-│   │   ├───charts
-│   │   │   └───common
-│   │   │       └───templates
-│   │   │           └───validations
-│   │   └───templates
-│   │       ├───backup
-│   │       ├───pgpool
-│   │       └───postgresql
-│   └───spelltext
-│       ├───charts
-│       └───templates
-├───proto
-│   ├───chat
-│   └───inventory
-├───scripts
-│   ├───db
-│   │   └───sql
-│   └───deploy
-├───server
-│   ├───character
-│   ├───chat
-│   │   ├───cmd
-│   │   │   └───chatserver
-│   │   ├───config
-│   │   └───server
-│   ├───gamba
-│   ├───inventory
-│   ├───item
-│   ├───prog
-│   ├───registry
-│   └───store
-├───shared
-│   └───config
-└───utils
-    └───singleton
-        └───logging
-```
 
 - `chatserver`:
   - **global**: uses fanout MQ (built upon NATS JetStream durable streams)
@@ -199,6 +147,7 @@ $ kubectl delete ns spelltext
 - `inventoryserver`: contains a **pgsql** database (will be sharded, to support high-availability and balanced load), detailing player inventory status, currency (coins, boss tokens, etc.)
 - `progserver`: progre**sss**erver is a bit too much, no? keeps track of player story progression
 - `toonserver`: servers as a primary character build service - specializations, talents
+- `storeserver`: a vendor-based marketplace service
 - `combatserver`: instances a isolated '1v1' environment for two entities (players, NPCs)
 - `gambaserver`: lets players open chests of various tiers by spending currency - contacts `inventoryserver` upon ChestOpenEvent 
 

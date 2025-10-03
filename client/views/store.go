@@ -9,16 +9,19 @@ import (
 func AddStorePage(c *types.SpelltextClient) {
 	onClose := func() {}
 
-	c.PageManager.RegisterFactory(STORE_PAGE, func() tview.Primitive {
+	c.PageManager.RegisterFactory(PAGE_STORE, func() tview.Primitive {
 		flex := tview.NewFlex()
 		list := tview.NewList()
 
-		resp, err := c.Clients.StoreClient.ListItems(*c.Context, &pb.StoreListItemRequest{ItemType: 1})
-		if err != nil {
+		resp, err := c.Clients.StoreClient.ListVendors(*c.Context, &pb.StoreListVendorRequest{})
+		if err != nil || len(resp.Vendors) == 0 {
 			list.AddItem("no items fetched :(", "check storeserver logs", 'e', func() { onClose() })
 		} else {
-			for idx, item := range resp.Items {
-				list.AddItem(item.GetName(), item.GetDescription(), rune(idx), func() {})
+			for idx, vendor := range resp.Vendors {
+				list.AddItem(vendor.GetVendorName(), vendor.GetVendorWareDescription(), rune(idx), func() {
+					c.AppStorage[SELECTED_VENDOR_ID] = vendor.GetVendorId()
+					c.NavigateTo(PAGE_VENDOR)
+				})
 			}
 		}
 

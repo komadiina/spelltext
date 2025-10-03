@@ -126,7 +126,6 @@ func (pm *PageManager) Pop() {
 	pm.Pages.ShowPage(prev)
 }
 
-
 // check if page exists (is factory for pageKey registered)
 func (pm *PageManager) HasPage(pageKey string) bool {
 	_, ok := pm.factories[pageKey]

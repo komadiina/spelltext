@@ -3,8 +3,10 @@ package server
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
+	sq "github.com/Masterminds/squirrel"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	pb "github.com/komadiina/spelltext/proto/store"
@@ -67,26 +69,93 @@ func (s *StoreService) GetConn(ctx context.Context) *pgx.Conn {
 	return &conn
 }
 
-func (s *StoreService) ListItems(ctx context.Context, req *pb.StoreListItemRequest) (*pb.ItemListResponse, error) {
-	sql := "SELECT * FROM item_templates"
+func (s *StoreService) ListVendors(ctx context.Context, req *pb.StoreListVendorRequest) (*pb.StoreListVendorResponse, error) {
+	q := sq.Select("*").From("vendors")
+	sql, _, err := q.ToSql()
+	if err != nil {
+		s.Logger.Error("failed to build query", "err", err)
+		return nil, err
+	}
+
+	s.Logger.Info("running query", "query", sql)
 	rows, err := s.DbPool.Query(ctx, sql)
 	if err != nil {
-		logging.Get("store").Error("failed to query", "reason", err)
+		s.Logger.Error("failed to run query", "err", err)
+		return nil, err
+	}
+
+	var vendors []*pb.Vendor
+	for rows.Next() {
+		v := &pb.Vendor{}
+		err := rows.Scan(&v.VendorId, &v.VendorName, &v.VendorWareDescription)
+
+		if err != nil {
+			s.Logger.Error("failed to scan", "err", err)
+			return nil, err
+		}
+
+		vendors = append(vendors, v)
+	}
+
+	return &pb.StoreListVendorResponse{Vendors: vendors}, nil
+}
+
+func (s *StoreService) ListVendorItems(ctx context.Context, req *pb.StoreListVendorItemRequest) (*pb.ListVendorItemResponse, error) {
+	s.Logger.Infof("StoreListVendorItemRequest{%d}", req.GetVendorId())
+	cte := sq.Select("v.id AS id, vw.item_type_id AS item_type_id").
+		From("vendors AS v").
+		InnerJoin("vendor_wares AS vw ON vw.vendor_id = v.id").
+		Where("v.id = $1")
+
+	cteSql, _, err := cte.ToSql()
+	if err != nil {
+		s.Logger.Error("failed to build cte", "err", err)
+		return nil, err
+	}
+	prefix := fmt.Sprintf("WITH v_filt AS (%s)", cteSql)
+
+	query := sq.
+		Select("templ.*").
+		From("item_templates AS templ").
+		InnerJoin("v_filt ON v_filt.item_type_id = templ.item_type_id")
+
+	sql, _, err := query.ToSql()
+	if err != nil {
+		s.Logger.Error("failed to build query", "err", err)
+		return nil, err
+	}
+
+	sql = fmt.Sprintf("%s %s", prefix, sql)
+	s.Logger.Info("running query", "query", strings.ReplaceAll(sql, "$1", fmt.Sprint(req.VendorId)))
+	
+	rows, err := s.DbPool.Query(ctx, sql, req.VendorId)
+	if err != nil {
+		s.Logger.Error("failed to query", "err", err)
 		return nil, err
 	}
 
 	var items []*pb.Item
 	for rows.Next() {
 		it := &pb.Item{}
-		err := rows.Scan(&it.Id, &it.Name, &it.ItemTypeId, &it.Rarity, &it.Stackable, &it.StackSize, &it.BindOnPickup, &it.Description, &it.Metadata)
+		err := rows.Scan(
+			&it.Id,
+			&it.Name,
+			&it.ItemTypeId,
+			&it.Rarity,
+			&it.Stackable,
+			&it.StackSize,
+			&it.BindOnPickup,
+			&it.Description,
+			&it.Metadata,
+		)
 		if err != nil {
-			logging.Get("store").Error("failed to scan", "reason", err)
+			s.Logger.Error("failed to scan", "err", err)
 			return nil, err
 		}
 		items = append(items, it)
 	}
 
-	return &pb.ItemListResponse{Items: items, TotalCount: 0}, nil
+	return &pb.ListVendorItemResponse{Items: items, TotalCount: -1}, nil
 }
 
 func (s *StoreService) AddItem(ctx context.Context, req *pb.AddItemRequest) (*pb.AddItemResponse, error) {

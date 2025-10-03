@@ -8,7 +8,7 @@ import (
 )
 
 func AddMainmenuPage(c *types.SpelltextClient) {
-	c.PageManager.RegisterFactory(MAINMENU_PAGE, func() tview.Primitive {
+	c.PageManager.RegisterFactory(PAGE_MAINMENU, func() tview.Primitive {
 		empty := tview.NewTextView()
 
 		banner := tview.NewTextView().
@@ -16,13 +16,13 @@ func AddMainmenuPage(c *types.SpelltextClient) {
 			SetText(fmt.Sprintf(`> welcome back, adventurer! [blue]%s[""] - isn't it?`, c.User.Username))
 
 		navlist := tview.NewList().
-			AddItem("characters", "", 'c', func() { c.PageManager.Push(CHARACTERS_PAGE, false) }).
-			AddItem("inventory", "", 'i', func() { c.PageManager.Push(INVENTORY_PAGE, false) }).
-			AddItem("progress", "", 'p', func() { c.PageManager.Push(PROGRESS_PAGE, false) }).
-			AddItem("combat", "", 'b', func() { c.PageManager.Push(COMBAT_PAGE, false) }).
-			AddItem("store", "", 's', func() { c.PageManager.Push(STORE_PAGE, false) }).
-			AddItem("gamba", "", 'g', func() { c.PageManager.Push(GAMBA_PAGE, false) }).
-			AddItem("chat", "", 'y', func() { c.PageManager.Push(CHAT_PAGE, false) }).
+			AddItem("characters", "", 'c', func() { c.PageManager.Push(PAGE_CHARACTERS, false) }).
+			AddItem("inventory", "", 'i', func() { c.PageManager.Push(PAGE_INVENTORY, false) }).
+			AddItem("progress", "", 'p', func() { c.PageManager.Push(PAGE_PROGRESS, false) }).
+			AddItem("combat", "", 'b', func() { c.PageManager.Push(PAGE_COMBAT, false) }).
+			AddItem("store", "", 's', func() { c.PageManager.Push(PAGE_STORE, false) }).
+			AddItem("gamba", "", 'g', func() { c.PageManager.Push(PAGE_GAMBA, false) }).
+			AddItem("chat", "", 'y', func() { c.PageManager.Push(PAGE_CHAT, false) }).
 			AddItem("quit :(", "", 'q', func() { c.App.Stop() })
 
 		flex := tview.NewFlex().

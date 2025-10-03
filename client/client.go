@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
+	"os"
 
 	"github.com/charmbracelet/log"
 	"github.com/gdamore/tcell/v2"
@@ -49,6 +51,7 @@ func InitializePages(client *types.SpelltextClient) {
 	views.AddGambaPage(client)
 	views.AddCombatPage(client)
 	views.AddInventoryPage(client)
+	views.AddVendorPage(client)
 }
 
 func InitializeClients(c *types.SpelltextClient) {
@@ -72,8 +75,8 @@ func InitializeClients(c *types.SpelltextClient) {
 
 func main() {
 	flag.Parse()
-	logger := logging.Get("client")
-	logger.SetLevel(log.ErrorLevel)
+	logging.Init(log.InfoLevel, "client", true)
+	logger := logging.Get("client", true)
 
 	cfg, err := config.LoadConfig()
 	if err != nil {
@@ -83,11 +86,12 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	client := types.SpelltextClient{
-		Config:  cfg,
-		Logger:  logger,
-		App:     tview.NewApplication(),
-		User:    &types.SpelltextUser{},
-		Context: &ctx,
+		Config:     cfg,
+		Logger:     logger,
+		App:        tview.NewApplication(),
+		User:       &types.SpelltextUser{},
+		Context:    &ctx,
+		AppStorage: make(map[string]any),
 	}
 	InitializeClients(&client)
 
@@ -109,7 +113,7 @@ func main() {
 		client.PageManager.Push(pageKey, false)
 	}
 
-	client.NavigateTo(views.LOGIN_PAGE)
+	client.NavigateTo(views.PAGE_LOGIN)
 
 	client.App.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		if event.Key() == tcell.KeyEscape {
@@ -120,8 +124,14 @@ func main() {
 	})
 
 	if err := client.App.SetRoot(client.PageManager.Pages, true).EnableMouse(true).Run(); err != nil {
-		logger.Fatal(err)
+		client.App.Stop()
+		client.Logger.Error(err)
+		panic(err)
 	}
+
+	fmt.Fprint(os.Stderr, "\x1b[?1049l") // switch back to main screen
+	// then print error or call external `reset` if needed
+	fmt.Fprintln(os.Stderr, "app.Run error:", err)
 
 	// cleanup
 	client.Nats.Drain()

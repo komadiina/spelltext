@@ -4,17 +4,22 @@ option go_package = "proto/store;store";
 
 import "google/protobuf/struct.proto";
 
-enum ItemType {
-  ITEM_TYPE_UNSPECIFIED = 0;
-  ITEM_TYPE_GENERIC     = 1;
-  ITEM_TYPE_CONSUMABLE  = 2;
-  ITEM_TYPE_ARMOR       = 3;
-  ITEM_TYPE_WEAPON      = 4;
-  ITEM_TYPE_OTHER       = 99;
+message StoreListVendorRequest {
+  string noop = 1;
 }
 
-message StoreListItemRequest {
-  ItemType item_type = 1;                      // 0 = any
+message Vendor {
+  uint64 vendor_id = 1;
+  string vendor_name = 2;
+  string vendor_ware_description = 3;
+}
+
+message StoreListVendorResponse {
+  repeated Vendor vendors = 1;
+}
+
+message StoreListVendorItemRequest {
+  uint64 vendor_id = 1;                      // 0 = any
   int32 rarity_min = 2;
   int32 rarity_max = 3;
   uint32 stackable = 4;                          
@@ -25,9 +30,9 @@ message StoreListItemRequest {
   bool sort_desc = 13;
 }
 
-message ItemListResponse {
+message ListVendorItemResponse {
   repeated Item items = 1;
-  int64 total_count = 2;                       // opt, 0 if expensive to compute
+  int64 total_count = 2;
 }
 
 message Item {
@@ -40,6 +45,10 @@ message Item {
   uint32 bind_on_pickup = 7;
   string description = 8;
   google.protobuf.Struct metadata = 9;        
+  uint64 health_points = 11;
+  uint64 power_points = 12;
+  uint64 strength_points = 13;
+  uint64 spellpower_points = 14;
   
   oneof type_details {
     ConsumableDetails consumable = 20;
@@ -83,7 +92,6 @@ message GenericDetails {
   string note = 1;
 }
 
-
 /// id must be empty. storeserver sets id, created_at, updated_at
 message AddItemRequest {
   Item item = 1;
@@ -106,7 +114,8 @@ message BuyItemResponse {
 }
 
 service Store {
-  rpc ListItems(StoreListItemRequest) returns (ItemListResponse);
+  rpc ListVendors(StoreListVendorRequest) returns (StoreListVendorResponse);
+  rpc ListVendorItems(StoreListVendorItemRequest) returns (ListVendorItemResponse);
   rpc AddItem(AddItemRequest) returns (AddItemResponse);
   rpc BuyItem(BuyItemRequest) returns (BuyItemResponse);
 }

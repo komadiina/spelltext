@@ -62,8 +62,8 @@ func InitializePool(s *server.StoreService, context context.Context, conninfo st
 func main() {
 	ctx := context.Background()
 
-	logging.Init(log.InfoLevel, "storeserver")
-	logger := logging.Get("storeserver")
+	logging.Init(log.InfoLevel, "storeserver", false)
+	logger := logging.Get("storeserver", false)
 	cfg, err := config.LoadConfig()
 	if err != nil {
 		logger.Fatal(err)
