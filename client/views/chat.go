@@ -42,7 +42,7 @@ func LeaveChatroom(ctx context.Context, client pb.ChatClient, c *types.Spelltext
 func AddChatPage(c *types.SpelltextClient) {
 	onClose := func() {}
 
-	c.PageManager.RegisterFactory(CHAT_PAGE, func() tview.Primitive {
+	c.PageManager.RegisterFactory(PAGE_CHAT, func() tview.Primitive {
 		chat := tview.NewTextView().
 			SetTextAlign(tview.AlignLeft).
 			SetRegions(false).

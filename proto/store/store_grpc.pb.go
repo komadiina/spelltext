@@ -19,16 +19,18 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Store_ListItems_FullMethodName = "/store.Store/ListItems"
-	Store_AddItem_FullMethodName   = "/store.Store/AddItem"
-	Store_BuyItem_FullMethodName   = "/store.Store/BuyItem"
+	Store_ListVendors_FullMethodName     = "/store.Store/ListVendors"
+	Store_ListVendorItems_FullMethodName = "/store.Store/ListVendorItems"
+	Store_AddItem_FullMethodName         = "/store.Store/AddItem"
+	Store_BuyItem_FullMethodName         = "/store.Store/BuyItem"
 )
 
 // StoreClient is the client API for Store service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type StoreClient interface {
-	ListItems(ctx context.Context, in *StoreListItemRequest, opts ...grpc.CallOption) (*ItemListResponse, error)
+	ListVendors(ctx context.Context, in *StoreListVendorRequest, opts ...grpc.CallOption) (*StoreListVendorResponse, error)
+	ListVendorItems(ctx context.Context, in *StoreListVendorItemRequest, opts ...grpc.CallOption) (*ListVendorItemResponse, error)
 	AddItem(ctx context.Context, in *AddItemRequest, opts ...grpc.CallOption) (*AddItemResponse, error)
 	BuyItem(ctx context.Context, in *BuyItemRequest, opts ...grpc.CallOption) (*BuyItemResponse, error)
 }
@@ -41,10 +43,20 @@ func NewStoreClient(cc grpc.ClientConnInterface) StoreClient {
 	return &storeClient{cc}
 }
 
-func (c *storeClient) ListItems(ctx context.Context, in *StoreListItemRequest, opts ...grpc.CallOption) (*ItemListResponse, error) {
+func (c *storeClient) ListVendors(ctx context.Context, in *StoreListVendorRequest, opts ...grpc.CallOption) (*StoreListVendorResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ItemListResponse)
-	err := c.cc.Invoke(ctx, Store_ListItems_FullMethodName, in, out, cOpts...)
+	out := new(StoreListVendorResponse)
+	err := c.cc.Invoke(ctx, Store_ListVendors_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *storeClient) ListVendorItems(ctx context.Context, in *StoreListVendorItemRequest, opts ...grpc.CallOption) (*ListVendorItemResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListVendorItemResponse)
+	err := c.cc.Invoke(ctx, Store_ListVendorItems_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +87,8 @@ func (c *storeClient) BuyItem(ctx context.Context, in *BuyItemRequest, opts ...g
 // All implementations must embed UnimplementedStoreServer
 // for forward compatibility.
 type StoreServer interface {
-	ListItems(context.Context, *StoreListItemRequest) (*ItemListResponse, error)
+	ListVendors(context.Context, *StoreListVendorRequest) (*StoreListVendorResponse, error)
+	ListVendorItems(context.Context, *StoreListVendorItemRequest) (*ListVendorItemResponse, error)
 	AddItem(context.Context, *AddItemRequest) (*AddItemResponse, error)
 	BuyItem(context.Context, *BuyItemRequest) (*BuyItemResponse, error)
 	mustEmbedUnimplementedStoreServer()
@@ -88,8 +101,11 @@ type StoreServer interface {
 // pointer dereference when methods are called.
 type UnimplementedStoreServer struct{}
 
-func (UnimplementedStoreServer) ListItems(context.Context, *StoreListItemRequest) (*ItemListResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListItems not implemented")
+func (UnimplementedStoreServer) ListVendors(context.Context, *StoreListVendorRequest) (*StoreListVendorResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListVendors not implemented")
+}
+func (UnimplementedStoreServer) ListVendorItems(context.Context, *StoreListVendorItemRequest) (*ListVendorItemResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListVendorItems not implemented")
 }
 func (UnimplementedStoreServer) AddItem(context.Context, *AddItemRequest) (*AddItemResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddItem not implemented")
@@ -118,20 +134,38 @@ func RegisterStoreServer(s grpc.ServiceRegistrar, srv StoreServer) {
 	s.RegisterService(&Store_ServiceDesc, srv)
 }
 
-func _Store_ListItems_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StoreListItemRequest)
+func _Store_ListVendors_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StoreListVendorRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(StoreServer).ListItems(ctx, in)
+		return srv.(StoreServer).ListVendors(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Store_ListItems_FullMethodName,
+		FullMethod: Store_ListVendors_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StoreServer).ListItems(ctx, req.(*StoreListItemRequest))
+		return srv.(StoreServer).ListVendors(ctx, req.(*StoreListVendorRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Store_ListVendorItems_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StoreListVendorItemRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StoreServer).ListVendorItems(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Store_ListVendorItems_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StoreServer).ListVendorItems(ctx, req.(*StoreListVendorItemRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -180,8 +214,12 @@ var Store_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*StoreServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "ListItems",
-			Handler:    _Store_ListItems_Handler,
+			MethodName: "ListVendors",
+			Handler:    _Store_ListVendors_Handler,
+		},
+		{
+			MethodName: "ListVendorItems",
+			Handler:    _Store_ListVendorItems_Handler,
 		},
 		{
 			MethodName: "AddItem",

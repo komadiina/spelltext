@@ -8,9 +8,9 @@ import (
 func AddGambaPage(c *types.SpelltextClient) {
 	onClose := func() {}
 
-	c.PageManager.RegisterFactory(GAMBA_PAGE, func() tview.Primitive {
+	c.PageManager.RegisterFactory(PAGE_GAMBA, func() tview.Primitive {
 		dummy := tview.NewTextView()
-		dummy.SetText(GAMBA_PAGE)
+		dummy.SetText(PAGE_GAMBA)
 
 		flex := tview.NewFlex().
 			SetDirection(tview.FlexRow).

@@ -8,7 +8,7 @@ import (
 func AddInventoryPage(c *types.SpelltextClient) {
 	onClose := func() {}
 
-	c.PageManager.RegisterFactory(INVENTORY_PAGE, func() tview.Primitive {
+	c.PageManager.RegisterFactory(PAGE_INVENTORY, func() tview.Primitive {
 		flex := tview.NewFlex().SetDirection(tview.FlexRow).SetFullScreen(true)
 		flex.SetBorder(true).SetBorderPadding(1, 1, 5, 5).SetTitle(" inventory ")
 		return flex

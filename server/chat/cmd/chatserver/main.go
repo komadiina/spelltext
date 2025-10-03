@@ -25,8 +25,8 @@ var (
 )
 
 func main() {
-	logging.Init(log.InfoLevel, "chatserver")
-	logger := logging.Get("chatserver")
+	logging.Init(log.InfoLevel, "chatserver", false)
+	logger := logging.Get("chatserver", false)
 
 	logger.Info("initializing nats..")
 	nc, err := server.InitNats()
@@ -50,7 +50,7 @@ func main() {
 	if err != nil {
 		logger.Fatal(err)
 	}
-	pb.RegisterChatServer(s, &server.ChatService{Nats: nc, Config: cfg})
+	pb.RegisterChatServer(s, &server.ChatService{Nats: nc, Config: cfg, Logger: logger})
 
 	logger.Info(fmt.Sprintf("%s v%s listening on %s:%d", *name, version, *addr, *port))
 

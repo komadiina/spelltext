@@ -9,7 +9,7 @@ import (
 )
 
 func AddLoginPage(c *types.SpelltextClient) {
-	c.PageManager.RegisterFactory(LOGIN_PAGE, func() tview.Primitive {
+	c.PageManager.RegisterFactory(PAGE_LOGIN, func() tview.Primitive {
 		header1 := "> spelltext v0.2.0"
 		header2 := "> https://github.com/komadiina/spelltext"
 
@@ -22,7 +22,7 @@ func AddLoginPage(c *types.SpelltextClient) {
 			}).
 			AddPasswordField("Password: ", "", len(header2), '*', func(text string) {}).
 			AddButton("Login", func() {
-				c.PageManager.Push(MAINMENU_PAGE, false)
+				c.PageManager.Push(PAGE_MAINMENU, false)
 			})
 
 		return form

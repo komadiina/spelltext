@@ -18,6 +18,7 @@ type ChatService struct {
 	sentMessages int
 	Nats         *nats.Conn
 	Config       *config.Config
+	Logger       *logging.Logger
 }
 
 func publishMessage(s *ChatService, msg *pb.ChatMessage) error {
@@ -49,7 +50,7 @@ func publishMessage(s *ChatService, msg *pb.ChatMessage) error {
 
 // Should broadcast to all users
 func (s *ChatService) JoinChatroom(ctx context.Context, req *pb.JoinChatroomMessageRequest) (*pb.JoinChatroomMessageResponse, error) {
-	logging.Get("chatserver").Info(fmt.Sprintf("%s joined the chatroom.", req.GetUsername()))
+	s.Logger.Info(fmt.Sprintf("%s joined the chatroom.", req.GetUsername()))
 	err := publishMessage(s, &pb.ChatMessage{Sender: "chatserver", Message: fmt.Sprintf("%s joined the chatroom.", req.GetUsername())})
 
 	if err != nil {
@@ -78,17 +79,16 @@ func (s *ChatService) LeaveChatroom(ctx context.Context, req *pb.LeaveChatroomMe
 }
 
 func (s *ChatService) SendChatMessage(ctx context.Context, req *pb.SendChatMessageRequest) (*pb.SendChatMessageResponse, error) {
-	logger := logging.Get("chatserver")
-	logger.Info(fmt.Sprintf(fmt.Sprintf("[#%d] Received message from %s: %s", s.sentMessages, req.Sender, req.Message)))
+	s.Logger.Info(fmt.Sprintf(fmt.Sprintf("[#%d] Received message from %s: %s", s.sentMessages, req.Sender, req.Message)))
 
 	msg := &pb.ChatMessage{Sender: req.Sender, Message: req.Message, Timestamp: uint64(time.Now().Unix())}
 	err := publishMessage(s, msg)
 
 	if err != nil {
-		logger.Error("failed to publish message", err)
+		s.Logger.Error("failed to publish message", err)
 		return &pb.SendChatMessageResponse{Sender: msg.Sender, Timestamp: msg.Timestamp, Success: false}, nil
 	} else {
-		logger.Info(fmt.Sprintf("[#%d] (jetstream) Published message to [chat.global]: %s", s.sentMessages+1, req.Message))
+		s.Logger.Info(fmt.Sprintf("[#%d] (jetstream) Published message to [chat.global]: %s", s.sentMessages+1, req.Message))
 	}
 
 	s.sentMessages++
@@ -97,7 +97,7 @@ func (s *ChatService) SendChatMessage(ctx context.Context, req *pb.SendChatMessa
 
 func InitNats() (*nats.Conn, error) {
 	// nats
-	logger := logging.Get("chatserver")
+	logger := logging.Get("chatserver", false)
 	cfg, err := config.LoadConfig()
 	logger.Info("loaded config", "nats_url", cfg.NatsURL, "max_async_publish", cfg.MaxAsyncPublish)
 

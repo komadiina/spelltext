@@ -17,10 +17,11 @@ type SpelltextClient struct {
 	Logger      *logging.Logger
 	Nats        *nats.Conn
 	App         *tview.Application
+	AppStorage  map[string]any
 	PageManager *factory.PageManager
 	User        *SpelltextUser
 	Clients     *Clients
-	Context 		*context.Context
+	Context     *context.Context
 
 	NavigateTo func(pageKey string)
 }
