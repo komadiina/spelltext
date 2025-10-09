@@ -1,15 +1,15 @@
 chatserver:
   port: 50051
-  # natsUrl: nats://spelltext-nats:4222
-  natsUrl: nats://nats:4222
+  natsUrl: nats://spelltext-nats:4222
+  # natsUrl: nats://nats:4222
   maxAsyncPublish: 512
 
 storeserver:
   port: 50052
   pgUser: postgres
   pgPass: changeme
-  # pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
-  pgHost: postgres
+  pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
+  # pgHost: postgres
   pgPort: 5432
   pgDbName: spelltext
   pgSslMode: disable
