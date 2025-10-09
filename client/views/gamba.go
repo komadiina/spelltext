@@ -1,6 +1,7 @@
 package views
 
 import (
+	"github.com/komadiina/spelltext/client/constants"
 	types "github.com/komadiina/spelltext/client/types"
 	"github.com/rivo/tview"
 )
@@ -8,9 +9,9 @@ import (
 func AddGambaPage(c *types.SpelltextClient) {
 	onClose := func() {}
 
-	c.PageManager.RegisterFactory(PAGE_GAMBA, func() tview.Primitive {
+	c.PageManager.RegisterFactory(constants.PAGE_GAMBA, func() tview.Primitive {
 		dummy := tview.NewTextView()
-		dummy.SetText(PAGE_GAMBA)
+		dummy.SetText(constants.PAGE_GAMBA)
 
 		flex := tview.NewFlex().
 			SetDirection(tview.FlexRow).

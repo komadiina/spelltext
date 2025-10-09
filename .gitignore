@@ -1,2 +1,6 @@
 ./.vscode
 var/log
+**/logs/
+logs/
+*.exe
+*.log

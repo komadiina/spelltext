@@ -102,9 +102,10 @@ func (s *StoreService) ListVendors(ctx context.Context, req *pb.StoreListVendorR
 
 func (s *StoreService) ListVendorItems(ctx context.Context, req *pb.StoreListVendorItemRequest) (*pb.ListVendorItemResponse, error) {
 	s.Logger.Infof("StoreListVendorItemRequest{%d}", req.GetVendorId())
-	cte := sq.Select("v.id AS id, vw.item_type_id AS item_type_id").
+	cte := sq.Select("v.id AS id, vw.item_type_id AS item_type_id, it.code AS code").
 		From("vendors AS v").
 		InnerJoin("vendor_wares AS vw ON vw.vendor_id = v.id").
+		InnerJoin("item_types AS it ON it.id = vw.item_type_id").
 		Where("v.id = $1")
 
 	cteSql, _, err := cte.ToSql()
@@ -115,9 +116,15 @@ func (s *StoreService) ListVendorItems(ctx context.Context, req *pb.StoreListVen
 	prefix := fmt.Sprintf("WITH v_filt AS (%s)", cteSql)
 
 	query := sq.
-		Select("templ.*").
+		Select("templ.*," +
+			"coalesce(a.prefix, w.prefix, c.prefix, '') as prefix," +
+			"coalesce(a.suffix, w.suffix, c.suffix, '') as suffix," +
+			"v_filt.code").
 		From("item_templates AS templ").
-		InnerJoin("v_filt ON v_filt.item_type_id = templ.item_type_id")
+		InnerJoin("v_filt ON v_filt.item_type_id = templ.item_type_id").
+		LeftJoin("weapons AS w ON w.item_template_id = templ.id").
+		LeftJoin("armors AS a ON a.item_template_id = templ.id").
+		LeftJoin("consumables AS c ON c.item_template_id = templ.id")
 
 	sql, _, err := query.ToSql()
 	if err != nil {
@@ -127,7 +134,7 @@ func (s *StoreService) ListVendorItems(ctx context.Context, req *pb.StoreListVen
 
 	sql = fmt.Sprintf("%s %s", prefix, sql)
 	s.Logger.Info("running query", "query", strings.ReplaceAll(sql, "$1", fmt.Sprint(req.VendorId)))
-	
+
 	rows, err := s.DbPool.Query(ctx, sql, req.VendorId)
 	if err != nil {
 		s.Logger.Error("failed to query", "err", err)
@@ -147,6 +154,9 @@ func (s *StoreService) ListVendorItems(ctx context.Context, req *pb.StoreListVen
 			&it.BindOnPickup,
 			&it.Description,
 			&it.Metadata,
+			&it.Prefix,
+			&it.Suffix,
+			&it.ItemTypeCode,
 		)
 		if err != nil {
 			s.Logger.Error("failed to scan", "err", err)

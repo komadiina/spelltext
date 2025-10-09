@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/gdamore/tcell/v2"
+	"github.com/komadiina/spelltext/client/constants"
 	types "github.com/komadiina/spelltext/client/types"
 	pb "github.com/komadiina/spelltext/proto/chat"
 	"github.com/nats-io/nats.go"
@@ -42,7 +43,7 @@ func LeaveChatroom(ctx context.Context, client pb.ChatClient, c *types.Spelltext
 func AddChatPage(c *types.SpelltextClient) {
 	onClose := func() {}
 
-	c.PageManager.RegisterFactory(PAGE_CHAT, func() tview.Primitive {
+	c.PageManager.RegisterFactory(constants.PAGE_CHAT, func() tview.Primitive {
 		chat := tview.NewTextView().
 			SetTextAlign(tview.AlignLeft).
 			SetRegions(false).

@@ -1,8 +1,7 @@
 package factory
 
 import (
-	"os"
-
+	"github.com/komadiina/spelltext/utils/singleton/logging"
 	"github.com/rivo/tview"
 )
 
@@ -19,6 +18,7 @@ type OnClose func()
 type PageManager struct {
 	App       *tview.Application
 	Pages     *tview.Pages
+	Logger    *logging.Logger
 	factories map[string]PageFactory
 	closers   map[string]OnClose
 	refresh   map[string]Refresher
@@ -27,10 +27,11 @@ type PageManager struct {
 }
 
 // creates a new pagemanager instance
-func NewPageManager(app *tview.Application) *PageManager {
+func NewPageManager(logger *logging.Logger, app *tview.Application) *PageManager {
 	return &PageManager{
 		App:       app,
 		Pages:     tview.NewPages(),
+		Logger:    logger,
 		factories: make(map[string]PageFactory),
 		closers:   make(map[string]OnClose),
 		refresh:   make(map[string]Refresher),
@@ -97,9 +98,11 @@ func (pm *PageManager) Push(pageName string, keepCached bool) {
 }
 
 // navigate backward
-func (pm *PageManager) Pop() {
-	if len(pm.stack) <= 1 {
-		os.Exit(1)
+func (pm *PageManager) Pop() int {
+	pm.Logger.Infof("navigating backward from: %v", pm.stack[len(pm.stack)-1])
+
+	if len(pm.stack) <= 2 {
+		return -1
 	}
 
 	top := pm.stack[len(pm.stack)-1]
@@ -124,6 +127,7 @@ func (pm *PageManager) Pop() {
 	}
 
 	pm.Pages.ShowPage(prev)
+	return 0
 }
 
 // check if page exists (is factory for pageKey registered)
