@@ -91,6 +91,11 @@ func main() {
 		return bo + time.Second*5
 	})
 
+	defer func() {
+		ss.Logger.Info("closing pgx dbconn pool...")
+		ss.DbPool.Close()
+	}()
+
 	if err != nil {
 		ss.Logger.Fatal("failed to connect to database/initialize pgxpool, not serving.", "reason", err)
 	}

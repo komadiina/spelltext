@@ -39,54 +39,50 @@ message Item {
   uint64 id = 1;                                
   string name = 2;
   uint32 item_type_id = 3;
-  uint32 rarity = 4;
-  uint32 stackable = 5;
-  uint32 stack_size = 6;
-  uint32 bind_on_pickup = 7;
-  string description = 8;
-  google.protobuf.Struct metadata = 9;        
+  string item_type_code = 4;
+  uint32 rarity = 5;
+  uint32 stackable = 6;
+  uint32 stack_size = 7;
+  uint32 bind_on_pickup = 8;
+  string description = 9;
+  google.protobuf.Struct metadata = 10;        
   uint64 health_points = 11;
   uint64 power_points = 12;
   uint64 strength_points = 13;
   uint64 spellpower_points = 14;
-  
-  oneof type_details {
-    ConsumableDetails consumable = 20;
-    ArmorDetails armor = 21;
-    WeaponDetails weapon = 22;
-    GenericDetails generic = 23;
-  }
+  string prefix = 15;
+  string suffix = 16;
 }
 
-// manual orm
-message ConsumableDetails {
-  int32 uses = 1;
-  string prefix = 2;
-  string suffix = 3;
-  int32 healing = 4;
-  int32 power = 5;
-  int32 strength = 6;
-  int32 spellpower = 7;
-}
+// // manual orm
+// message ConsumableDetails {
+//   int32 uses = 1;
+//   string prefix = 2;
+//   string suffix = 3;
+//   int32 healing = 4;
+//   int32 power = 5;
+//   int32 strength = 6;
+//   int32 spellpower = 7;
+// }
 
-message ArmorDetails {
-  int32 equip_slot_id = 1;
-  string prefix = 2;
-  string suffix = 3;
-  int32 armor = 4;
-  int32 health = 5;
-  int32 power = 6;
-  int32 strength = 7;
-  int32 spellpower = 8;
-}
+// message ArmorDetails {
+//   int32 equip_slot_id = 1;
+//   string prefix = 2;
+//   string suffix = 3;
+//   int32 armor = 4;
+//   int32 health = 5;
+//   int32 power = 6;
+//   int32 strength = 7;
+//   int32 spellpower = 8;
+// }
 
-message WeaponDetails {
-  int32 base_damage = 1;
-  string prefix = 2;
-  string suffix = 3;
-  int32 strength = 4;
-  int32 spellpower = 5;
-}
+// message WeaponDetails {
+//   int32 base_damage = 1;
+//   string prefix = 2;
+//   string suffix = 3;
+//   int32 strength = 4;
+//   int32 spellpower = 5;
+// }
 
 message GenericDetails {
   string note = 1;
@@ -113,9 +109,20 @@ message BuyItemResponse {
   string message = 2;
 }
 
+message SellItemRequest {
+  uint64 character_id = 1;
+  int64 item_instance_id = 2;
+}
+
+message SellItemResponse {
+  bool success = 1;
+  string message = 2;
+}
+
 service Store {
   rpc ListVendors(StoreListVendorRequest) returns (StoreListVendorResponse);
   rpc ListVendorItems(StoreListVendorItemRequest) returns (ListVendorItemResponse);
   rpc AddItem(AddItemRequest) returns (AddItemResponse);
   rpc BuyItem(BuyItemRequest) returns (BuyItemResponse);
+  rpc SellItem(SellItemRequest) returns (SellItemResponse);
 }

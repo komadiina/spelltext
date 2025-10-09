@@ -1,9 +1,9 @@
 package logging
 
 import (
-	"bufio"
 	"fmt"
 	"os"
+	"strings"
 	"sync"
 	"time"
 
@@ -13,34 +13,49 @@ import (
 var (
 	once sync.Once
 	inst map[string]*log.Logger
+	fd   map[string]*os.File
 )
 
 type Logger = log.Logger
 
 func Init(level log.Level, name string, toFile bool) {
 	inst = make(map[string]*log.Logger)
+	fd = make(map[string]*os.File)
 
 	once.Do(func() {
 		l := *log.NewWithOptions(os.Stdout, log.Options{
 			ReportCaller:    true,
 			ReportTimestamp: true,
 			TimeFormat:      time.DateTime,
-			Prefix:          name,
 		})
 
 		if toFile {
-			_, err := os.Stat("var/log")
+			_, err := os.Stat("logs")
 			if os.IsNotExist(err) {
-				os.Mkdir("var/log", 0755)
+				os.MkdirAll("logs", 0755)
 			}
 
-			fd, _ := os.OpenFile(
-				fmt.Sprintf(
-					"var/log/%s-%s.log", name, time.Now().Format(time.RFC3339)),
-				os.O_APPEND|os.O_CREATE|os.O_WRONLY,
+			t := time.Now().Format(time.DateTime)
+			t = strings.ReplaceAll(t, ":", "-")
+			t = strings.ReplaceAll(t, " ", "_")
+			filename := fmt.Sprintf("logs/%s-%s.log", name, t)
+
+			f, err := os.Create(filename)
+			if err != nil {
+				log.Fatalf("failed to create file: %v", err)
+			}
+
+			f, err = os.OpenFile(
+				filename,
+				os.O_CREATE|os.O_APPEND|os.O_WRONLY,
 				0644,
 			)
-			l.SetOutput(bufio.NewWriter(fd))
+			if err != nil {
+				log.Fatalf("error opening file: %v", err)
+			}
+
+			fd[name] = f
+			l.SetOutput(f)
 		} else {
 			l.SetOutput(os.Stdout)
 		}
@@ -57,4 +72,8 @@ func Get(name string, toFile bool) *log.Logger {
 	}
 
 	return inst[name]
+}
+
+func Close(name string) {
+	fd[name].Close()
 }

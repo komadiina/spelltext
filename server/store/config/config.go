@@ -3,6 +3,8 @@ package config
 import "github.com/komadiina/spelltext/shared/config"
 
 type Config struct {
+	// PgUser string `yaml:"pgUser" env:"PG_USER" env-default:"user"`
+	// PgHost    string `yaml:"pgHost" env:"PG_HOST" env-default:"postgres"`
 	ServicePort int    `yaml:"port" env:"PORT" env-default:"50052"`
 	PgUser      string `yaml:"pgUser" env:"PG_USER" env-default:"postgres"`
 	PgPass      string `yaml:"pgPass" env:"PG_PASS" env-default:"changeme"`

@@ -23,6 +23,7 @@ const (
 	Store_ListVendorItems_FullMethodName = "/store.Store/ListVendorItems"
 	Store_AddItem_FullMethodName         = "/store.Store/AddItem"
 	Store_BuyItem_FullMethodName         = "/store.Store/BuyItem"
+	Store_SellItem_FullMethodName        = "/store.Store/SellItem"
 )
 
 // StoreClient is the client API for Store service.
@@ -33,6 +34,7 @@ type StoreClient interface {
 	ListVendorItems(ctx context.Context, in *StoreListVendorItemRequest, opts ...grpc.CallOption) (*ListVendorItemResponse, error)
 	AddItem(ctx context.Context, in *AddItemRequest, opts ...grpc.CallOption) (*AddItemResponse, error)
 	BuyItem(ctx context.Context, in *BuyItemRequest, opts ...grpc.CallOption) (*BuyItemResponse, error)
+	SellItem(ctx context.Context, in *SellItemRequest, opts ...grpc.CallOption) (*SellItemResponse, error)
 }
 
 type storeClient struct {
@@ -83,6 +85,16 @@ func (c *storeClient) BuyItem(ctx context.Context, in *BuyItemRequest, opts ...g
 	return out, nil
 }
 
+func (c *storeClient) SellItem(ctx context.Context, in *SellItemRequest, opts ...grpc.CallOption) (*SellItemResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SellItemResponse)
+	err := c.cc.Invoke(ctx, Store_SellItem_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // StoreServer is the server API for Store service.
 // All implementations must embed UnimplementedStoreServer
 // for forward compatibility.
@@ -91,6 +103,7 @@ type StoreServer interface {
 	ListVendorItems(context.Context, *StoreListVendorItemRequest) (*ListVendorItemResponse, error)
 	AddItem(context.Context, *AddItemRequest) (*AddItemResponse, error)
 	BuyItem(context.Context, *BuyItemRequest) (*BuyItemResponse, error)
+	SellItem(context.Context, *SellItemRequest) (*SellItemResponse, error)
 	mustEmbedUnimplementedStoreServer()
 }
 
@@ -112,6 +125,9 @@ func (UnimplementedStoreServer) AddItem(context.Context, *AddItemRequest) (*AddI
 }
 func (UnimplementedStoreServer) BuyItem(context.Context, *BuyItemRequest) (*BuyItemResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BuyItem not implemented")
+}
+func (UnimplementedStoreServer) SellItem(context.Context, *SellItemRequest) (*SellItemResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SellItem not implemented")
 }
 func (UnimplementedStoreServer) mustEmbedUnimplementedStoreServer() {}
 func (UnimplementedStoreServer) testEmbeddedByValue()               {}
@@ -206,6 +222,24 @@ func _Store_BuyItem_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Store_SellItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SellItemRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StoreServer).SellItem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Store_SellItem_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StoreServer).SellItem(ctx, req.(*SellItemRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Store_ServiceDesc is the grpc.ServiceDesc for Store service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -228,6 +262,10 @@ var Store_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "BuyItem",
 			Handler:    _Store_BuyItem_Handler,
+		},
+		{
+			MethodName: "SellItem",
+			Handler:    _Store_SellItem_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

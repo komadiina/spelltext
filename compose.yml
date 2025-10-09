@@ -67,5 +67,18 @@ services:
       - spelltext
     restart: always
   
+  pgadmin:
+    container_name: core-pgadmin
+    image: dpage/pgadmin4
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: test@mail.com
+      PGADMIN_DEFAULT_PASSWORD: changeme
+    networks:
+      - spelltext
+    ports:
+      - "5434:80"
+    
+  
 networks:
   spelltext:

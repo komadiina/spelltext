@@ -3,12 +3,12 @@ package main
 import (
 	"context"
 	"flag"
-	"fmt"
 	"os"
 
 	"github.com/charmbracelet/log"
 	"github.com/gdamore/tcell/v2"
 	"github.com/komadiina/spelltext/client/config"
+	"github.com/komadiina/spelltext/client/constants"
 	"github.com/komadiina/spelltext/client/factory"
 	"github.com/komadiina/spelltext/client/registry"
 	"github.com/komadiina/spelltext/client/types"
@@ -93,16 +93,24 @@ func main() {
 		Context:    &ctx,
 		AppStorage: make(map[string]any),
 	}
-	InitializeClients(&client)
 
+	logger.Info("initializing client...")
+	InitializeClients(&client)
+	logger.Info("client initialized.")
+
+	logger.Info("initializng nats...")
 	nc, _, err := InitializeNats(cfg)
 	if err != nil {
 		logger.Fatal("failed to init nats/jetstream", "reason", err)
 	}
 
 	client.Nats = nc
-	client.PageManager = factory.NewPageManager(client.App)
+	logger.Info("nats/js initialized.")
+
+	logger.Info("initializing PageManager factory...")
+	client.PageManager = factory.NewPageManager(client.Logger, client.App)
 	InitializePages(&client)
+	logger.Info("PageManager factory initialized.")
 
 	client.NavigateTo = func(pageKey string) {
 		if client.PageManager.HasPage(pageKey) == false {
@@ -113,27 +121,26 @@ func main() {
 		client.PageManager.Push(pageKey, false)
 	}
 
-	client.NavigateTo(views.PAGE_LOGIN)
+	client.NavigateTo(constants.PAGE_LOGIN)
 
 	client.App.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		if event.Key() == tcell.KeyEscape {
-			client.PageManager.Pop()
+			if client.PageManager.Pop() == -1 {
+				os.Exit(0)
+				return nil
+			}
 		}
 
 		return event
 	})
 
 	if err := client.App.SetRoot(client.PageManager.Pages, true).EnableMouse(true).Run(); err != nil {
-		client.App.Stop()
 		client.Logger.Error(err)
-		panic(err)
 	}
-
-	fmt.Fprint(os.Stderr, "\x1b[?1049l") // switch back to main screen
-	// then print error or call external `reset` if needed
-	fmt.Fprintln(os.Stderr, "app.Run error:", err)
 
 	// cleanup
 	client.Nats.Drain()
 	defer cancel()
+
+	logger.Info("client shutdown.")
 }
