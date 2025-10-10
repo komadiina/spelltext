@@ -41,3 +41,10 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           context: scripts/db
           dockerfile: scripts/db/Dockerfile
+
+      - name: build & push server/inventory
+        uses: macbre/push-to-ghcr@master
+        with:
+          image_name: ${{ github.repository }}/inventoryserver
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          dockerfile: server/inventory/Dockerfile
