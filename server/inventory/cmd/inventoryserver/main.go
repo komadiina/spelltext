@@ -10,14 +10,14 @@ import (
 	"github.com/charmbracelet/log"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
-	pb "github.com/komadiina/spelltext/proto/store"
-	"github.com/komadiina/spelltext/server/store/config"
-	"github.com/komadiina/spelltext/server/store/server"
+	pb "github.com/komadiina/spelltext/proto/inventory"
+	"github.com/komadiina/spelltext/server/inventory/config"
+	"github.com/komadiina/spelltext/server/inventory/server"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 	"google.golang.org/grpc"
 )
 
-func InitializePool(s *server.StoreService, context context.Context, conninfo string, backoff time.Duration, maxRetries int, boFormula func(time.Duration) time.Duration) error {
+func InitializePool(s *server.InventoryService, context context.Context, conninfo string, backoff time.Duration, maxRetries int, boFormula func(time.Duration) time.Duration) error {
 	try := 1
 	for {
 		conn, err := pgx.Connect(context, conninfo)
@@ -64,21 +64,21 @@ var version = os.Getenv("VERSION")
 func main() {
 	ctx := context.Background()
 
-	logging.Init(log.InfoLevel, "storeserver", false)
-	logger := logging.Get("storeserver", false)
+	logging.Init(log.InfoLevel, "inventoryserver", false)
+	logger := logging.Get("inventoryserver", false)
 
 	logger.Infof(`
-		// ------------------- //
-		// --- storeserver --- //
-		// ---   %v    --- //
-		// ------------------- //`, version)
+		// ----------------------- //
+		// --- inventoryserver --- //
+		// -----   %v    ----- //
+		// ----------------------- //`, version)
 
 	logger.Info("loading config...", "CONFIG_FILE", os.Getenv("CONFIG_FILE"))
 	cfg, err := config.LoadConfig()
 	if err != nil {
 		logger.Fatal(err)
 	} else {
-		logger.Info("storeserver config loaded.")
+		logger.Info("inventoryserver config loaded.")
 		logger.Infof("conninfo=%v:%v@%v:%v/%v?sslMode=%v, port=%d",
 			cfg.PgUser, cfg.PgPass, cfg.PgHost, cfg.PgPort, cfg.PgDbName, cfg.PgSSLMode, cfg.ServicePort)
 	}
@@ -90,7 +90,7 @@ func main() {
 	}
 
 	s := grpc.NewServer()
-	ss := server.StoreService{Config: cfg, Logger: logger}
+	ss := server.InventoryService{Config: cfg, Logger: logger}
 
 	conninfo := fmt.Sprintf(
 		"postgres://%s:%s@%s:%d/%s?sslmode=%s",
@@ -114,8 +114,8 @@ func main() {
 		ss.Logger.Fatal("failed to connect to database/initialize pgxpool, not serving.", "reason", err)
 	}
 
-	pb.RegisterStoreServer(s, &ss)
-	logger.Info(fmt.Sprintf("%s v%s listening on %s:%d", "storeserver", "0.3.0", "127.0.0.1", ss.Config.ServicePort))
+	pb.RegisterInventoryServer(s, &ss)
+	logger.Info(fmt.Sprintf("%s v%s listening on %s:%d", "inventoryserver", "0.3.0", "127.0.0.1", ss.Config.ServicePort))
 
 	if err := s.Serve(lis); err != nil {
 		logger.Error("failed to serve", "reason", err)

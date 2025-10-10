@@ -1,0 +1,29 @@
+syntax = "proto3";
+package inventory;
+option go_package = "proto/inventory;inventory";
+
+message InventoryBalanceRequest {
+  string username = 1;
+  string character = 2;
+}
+
+message InventoryBalanceResponse {
+  uint64 gold = 1;
+  uint64 tokens = 2;
+}
+
+message SellItemRequest {
+  string username = 1;
+  string character = 2;
+  uint64 item_id = 3;
+}
+
+message SellItemResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+service Inventory {
+  rpc GetBalance(InventoryBalanceRequest) returns (InventoryBalanceResponse);
+  rpc SellItem(SellItemRequest) returns (SellItemResponse);
+}

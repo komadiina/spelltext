@@ -3,7 +3,7 @@ package config
 import "github.com/komadiina/spelltext/shared/config"
 
 type Config struct {
-	ServicePort int    `yaml:"port" env:"PORT" env-default:"50052"`
+	ServicePort int    `yaml:"port" env:"PORT" env-default:"50053"`
 	PgUser      string `yaml:"pgUser" env:"PG_USER" env-default:"postgres"`
 	PgPass      string `yaml:"pgPass" env:"PG_PASS" env-default:"changeme"`
 	PgHost      string `yaml:"pgHost" env:"PG_HOST" env-default:"spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local"`
@@ -14,7 +14,7 @@ type Config struct {
 
 func LoadConfig() (*Config, error) {
 	var cfg struct {
-		Root Config `yaml:"storeserver"`
+		Root Config `yaml:"inventoryserver"`
 	}
 
 	err := config.LoadConfig(&cfg)

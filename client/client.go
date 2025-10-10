@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"os"
 
 	"github.com/charmbracelet/log"
@@ -78,9 +79,12 @@ func main() {
 	logging.Init(log.InfoLevel, "client", true)
 	logger := logging.Get("client", true)
 
+	logger.Infof("loading client config...", "CONFIG_FILE", os.Getenv("CONFIG_FILE"))
 	cfg, err := config.LoadConfig()
 	if err != nil {
-		logger.Fatal("failed to load config", "reason", err)
+		logger.Error("failed to load config, using default values.", "reason", err)
+	} else {
+
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -126,7 +130,7 @@ func main() {
 	client.App.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		if event.Key() == tcell.KeyEscape {
 			if client.PageManager.Pop() == -1 {
-				os.Exit(0)
+				client.App.Stop()
 				return nil
 			}
 		}
@@ -143,4 +147,5 @@ func main() {
 	defer cancel()
 
 	logger.Info("client shutdown.")
+	fmt.Println("bye")
 }

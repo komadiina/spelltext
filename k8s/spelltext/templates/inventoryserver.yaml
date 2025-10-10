@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: inventoryserver
+  namespace: spelltext
+  labels: 
+    app: inventoryserver
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: inventoryserver
+  template:
+    metadata:
+      labels:
+        app: inventoryserver
+    spec:
+      containers:
+      - name: inventoryserver
+        image: {{ .Values.inventoryserver.image | toString }}
+        imagePullPolicy: Always
+        ports:
+          - containerPort: {{ .Values.inventoryserver.containerPort }}
+            name: {{ .Values.inventoryserver.portName }}
+            protocol: {{ .Values.inventoryserver.protocol }}
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.inventoryserver.containerPort }}
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.inventoryserver.containerPort }}
+          initialDelaySeconds: 15
+          periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventoryserver
+  namespace: spelltext
+  labels:
+    app: inventoryserver
+spec:
+  type: ClusterIP
+  selector:
+    app: inventoryserver
+  ports:
+    - name: {{ .Values.inventoryserver.portName }}
+      port: {{ .Values.inventoryserver.port }}
+      targetPort: {{ .Values.inventoryserver.targetPort }}
+      protocol: {{ .Values.inventoryserver.protocol }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventoryserver-ingress
+  namespace: spelltext
+  labels:
+    app: inventoryserver
+spec:
+  type: LoadBalancer
+  selector:
+    app: inventoryserver
+  ports:
+    - name: {{ .Values.inventoryserver.portName }}
+      port: {{ .Values.inventoryserver.port }}
+      targetPort: {{ .Values.inventoryserver.targetPort }}
+      protocol: {{ .Values.inventoryserver.protocol }}

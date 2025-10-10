@@ -54,36 +54,6 @@ message Item {
   string suffix = 16;
 }
 
-// // manual orm
-// message ConsumableDetails {
-//   int32 uses = 1;
-//   string prefix = 2;
-//   string suffix = 3;
-//   int32 healing = 4;
-//   int32 power = 5;
-//   int32 strength = 6;
-//   int32 spellpower = 7;
-// }
-
-// message ArmorDetails {
-//   int32 equip_slot_id = 1;
-//   string prefix = 2;
-//   string suffix = 3;
-//   int32 armor = 4;
-//   int32 health = 5;
-//   int32 power = 6;
-//   int32 strength = 7;
-//   int32 spellpower = 8;
-// }
-
-// message WeaponDetails {
-//   int32 base_damage = 1;
-//   string prefix = 2;
-//   string suffix = 3;
-//   int32 strength = 4;
-//   int32 spellpower = 5;
-// }
-
 message GenericDetails {
   string note = 1;
 }
@@ -124,5 +94,5 @@ service Store {
   rpc ListVendorItems(StoreListVendorItemRequest) returns (ListVendorItemResponse);
   rpc AddItem(AddItemRequest) returns (AddItemResponse);
   rpc BuyItem(BuyItemRequest) returns (BuyItemResponse);
-  rpc SellItem(SellItemRequest) returns (SellItemResponse);
+  rpc SellItem(SellItemRequest) returns (SellItemResponse); // deprecated: moved to inventoryserver (client sells from character inventory directly)
 }

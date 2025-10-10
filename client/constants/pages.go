@@ -1,16 +1,18 @@
 package constants
 
+import "github.com/gdamore/tcell/v2"
+
 const (
-	PAGE_MAINMENU   = "pg-mainmenu"
-	PAGE_CHARACTERS = "pg-characters"
-	PAGE_INVENTORY  = "pg-inventory"
-	PAGE_PROGRESS   = "pg-progress"
-	PAGE_COMBAT     = "pg-combat"
-	PAGE_STORE      = "pg-store"
-	PAGE_VENDOR     = "pg-vendor"
-	PAGE_GAMBA      = "pg-gamba"
-	PAGE_CHAT       = "pg-chat"
-	PAGE_LOGIN      = "pg-login"
+	PAGE_MAINMENU  = "pg-mainmenu"
+	PAGE_ARMORY    = "pg-characters"
+	PAGE_INVENTORY = "pg-inventory"
+	PAGE_PROGRESS  = "pg-progress"
+	PAGE_COMBAT    = "pg-combat"
+	PAGE_STORE     = "pg-store"
+	PAGE_VENDOR    = "pg-vendor"
+	PAGE_GAMBA     = "pg-gamba"
+	PAGE_CHAT      = "pg-chat"
+	PAGE_LOGIN     = "pg-login"
 )
 
 const (
@@ -24,3 +26,13 @@ const (
 	ITEM_TYPE_TOKEN_DROP      = "IT07"
 	ITEM_TYPE_OTHER           = "IT99"
 )
+
+var SHORTCUTS = map[tcell.Key]string{
+	tcell.KeyCtrlA: PAGE_ARMORY,
+	tcell.KeyCtrlI: PAGE_INVENTORY,
+	tcell.KeyCtrlP: PAGE_PROGRESS,
+	tcell.KeyCtrlC: PAGE_COMBAT,
+	tcell.KeyCtrlS: PAGE_STORE,
+	tcell.KeyCtrlG: PAGE_GAMBA,
+	tcell.KeyCtrlY: PAGE_CHAT,
+}
