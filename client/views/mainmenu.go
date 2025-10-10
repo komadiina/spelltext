@@ -3,6 +3,7 @@ package views
 import (
 	"fmt"
 
+	"github.com/gdamore/tcell/v2"
 	"github.com/komadiina/spelltext/client/constants"
 	types "github.com/komadiina/spelltext/client/types"
 	"github.com/komadiina/spelltext/client/utils"
@@ -11,27 +12,30 @@ import (
 
 func AddMainmenuPage(c *types.SpelltextClient) {
 	c.PageManager.RegisterFactory(constants.PAGE_MAINMENU, func() tview.Primitive {
-		empty := tview.NewTextView()
-
 		banner := tview.NewTextView().
 			SetDynamicColors(true).
 			SetText(fmt.Sprintf(`> welcome back, adventurer! [blue]%s[""] - isn't it?`, c.User.Username))
 
-		navlist := tview.NewList().
-			AddItem("characters", "", 'c', func() { c.PageManager.Push(constants.PAGE_CHARACTERS, false) }).
-			AddItem("inventory", "", 'i', func() { c.PageManager.Push(constants.PAGE_INVENTORY, false) }).
-			AddItem("progress", "", 'p', func() { c.PageManager.Push(constants.PAGE_PROGRESS, false) }).
-			AddItem("combat", "", 'b', func() { c.PageManager.Push(constants.PAGE_COMBAT, false) }).
-			AddItem("store", "", 's', func() { c.PageManager.Push(constants.PAGE_STORE, false) }).
-			AddItem("gamba", "", 'g', func() { c.PageManager.Push(constants.PAGE_GAMBA, false) }).
-			AddItem("chat", "", 'y', func() { c.PageManager.Push(constants.PAGE_CHAT, false) }).
-			AddItem("quit :(", "", 'q', func() { c.App.Stop() })
+		list := tview.NewList().
+			AddItem("- armory", "preview your characters", 'a', func() { c.NavigateTo(constants.PAGE_ARMORY) }).
+			AddItem("- inventory", "peek at what's in your bags", 'i', func() { c.NavigateTo(constants.PAGE_INVENTORY) }).
+			AddItem("- progress", "see what you've accomplished", 'p', func() { c.NavigateTo(constants.PAGE_PROGRESS) }).
+			AddItem("- combat", "THE proving grounds", 'c', func() { c.NavigateTo(constants.PAGE_COMBAT) }).
+			AddItem("- store", "buy some mighty goods", 's', func() { c.NavigateTo(constants.PAGE_STORE) }).
+			AddItem("- gamba", "test your luck. you should stack some.", 'g', func() { c.NavigateTo(constants.PAGE_GAMBA) }).
+			AddItem("- chat", "talk to some peeps", 'y', func() { c.NavigateTo(constants.PAGE_CHAT) }).
+			AddItem("- quit", "done for today?", 'q', func() { c.App.Stop() })
+
+		list = list.SetShortcutStyle(tcell.StyleDefault.Foreground(tcell.ColorDarkSlateBlue)).SetWrapAround(true)
+
+		list.SetBorder(true).SetBorderPadding(1, 1, 5, 5)
+
+		updates := tview.NewBox().SetTitle(" updates ").SetBorder(true).SetBorderPadding(1, 1, 5, 5)
 
 		guide := tview.NewFlex().
 			SetDirection(tview.FlexColumn)
-		guide.SetBorder(true)
 
-		characters, len := utils.AddNavGuide("c", "characters")
+		characters, len := utils.AddNavGuide("a", "armory")
 		guide.AddItem(characters, len, 1, false)
 
 		inventory, len := utils.AddNavGuide("i", "inventory")
@@ -52,11 +56,17 @@ func AddMainmenuPage(c *types.SpelltextClient) {
 		chat, len := utils.AddNavGuide("y", "chat")
 		guide.AddItem(chat, len, 1, false)
 
+		guide.SetBorder(true)
+
 		flex := tview.NewFlex().
 			SetDirection(tview.FlexRow).
 			AddItem(banner, 1, 1, false).
-			AddItem(empty, 1, 1, false).
-			AddItem(navlist, 0, 2, true).
+			AddItem(tview.NewTextView(), 1, 1, false).
+			AddItem(
+				tview.NewFlex().SetDirection(tview.FlexColumn).
+					AddItem(list, 0, 1, true).
+					AddItem(updates, 0, 1, false),
+				0, 1, true).
 			AddItem(guide, 3, 1, false).
 			SetFullScreen(true)
 

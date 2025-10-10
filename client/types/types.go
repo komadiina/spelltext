@@ -39,3 +39,16 @@ type Clients struct {
 	ChatClient  pbChat.ChatClient
 	StoreClient pbStore.StoreClient
 }
+
+type NavigableForm struct {
+	tview.Form
+}
+
+type NavigableFormButton struct {
+	tview.Button
+
+	LeftNbr   *tview.Button
+	TopNbr    *tview.Button
+	RightNbr  *tview.Button
+	BottomNbr *tview.Button
+}

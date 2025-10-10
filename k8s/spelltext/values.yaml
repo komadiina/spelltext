@@ -54,3 +54,12 @@ storeserver:
   containerPort: 50052
   targetPort: 50052
   protocol: "TCP"
+
+inventoryserver:
+  enabled: true
+  image: "ghcr.io/komadiina/spelltext/inventoryserver:latest"
+  port: 50053
+  portName: "grpc"
+  containerPort: 50053
+  targetPort: 50053
+  protocol: "TCP"

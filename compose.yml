@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: server/chat/Dockerfile
     volumes:
-      - ./var/log/chatserver:/var/log
+      - ./logs/chatserver:/logs
     ports:
       - "50051:50051"
     networks:
@@ -21,7 +21,7 @@ services:
       context: .
       dockerfile: server/store/Dockerfile
     volumes:
-      - ./var/log/storeserver:/var/log
+      - ./logs/storeserver:/logs
     ports:
       - "50052:50052"
     networks:
@@ -30,6 +30,23 @@ services:
       watch:
         - action: "restart"
           path: "./server/store"
+    depends_on:
+      - postgres
+      
+  inventoryserver:
+    build:
+      context: .
+      dockerfile: server/inventory/Dockerfile
+    volumes:
+      - ./logs/inventoryserver:/logs
+    ports:
+      - "50053:50053"
+    networks:
+      - spelltext
+    develop:
+      watch:
+        - action: "restart"
+          path: "./server/inventory"
     depends_on:
       - postgres
   

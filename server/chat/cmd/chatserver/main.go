@@ -14,19 +14,27 @@ import (
 	"google.golang.org/grpc"
 )
 
-const (
-	version = "0.2.0"
-)
-
-var (
-	port = flag.Int("port", 50051, "port to listen on")
-	name = flag.String("name", "chatserver", "server name")
-	addr = flag.String("addr", "localhost", "server address")
-)
+var version = os.Getenv("VERSION")
 
 func main() {
 	logging.Init(log.InfoLevel, "chatserver", false)
 	logger := logging.Get("chatserver", false)
+
+	logger.Infof(`
+		// -------------------- //
+		// ---- chatserver ---- //
+		// ----   %v   ---- //
+		// -------------------- //`, version)
+
+	logger.Info("loading config...", "CONFIG_FILE", os.Getenv("CONFIG_FILE"))
+	cfg, err := config.LoadConfig()
+	if err != nil {
+		logger.Fatal(err)
+	} else {
+		logger.Info("chatserver config loaded.")
+		logger.Infof("nats_url=%v, port=%v, max_async_publish=%v",
+			cfg.NatsURL, cfg.Port, cfg.MaxAsyncPublish)
+	}
 
 	logger.Info("initializing nats..")
 	nc, err := server.InitNats()
@@ -36,23 +44,19 @@ func main() {
 		log.Fatal(err)
 	}
 
-	logger.Info(fmt.Sprintf("Starting %s v%s...", *name, version))
+	logger.Info(fmt.Sprintf("Starting %s v%s...", "chatserver", version))
 	flag.Parse()
 
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", cfg.Port))
 	if err != nil {
 		logger.Error("failed to listen", err)
 		os.Exit(1)
 	}
 
 	s := grpc.NewServer()
-	cfg, err := config.LoadConfig()
-	if err != nil {
-		logger.Fatal(err)
-	}
 	pb.RegisterChatServer(s, &server.ChatService{Nats: nc, Config: cfg, Logger: logger})
 
-	logger.Info(fmt.Sprintf("%s v%s listening on %s:%d", *name, version, *addr, *port))
+	logger.Infof("chatserver v%s listening on localhost:%d", version, cfg.Port)
 
 	if err := s.Serve(lis); err != nil {
 		logger.Error("failed to serve", "reason", err)
