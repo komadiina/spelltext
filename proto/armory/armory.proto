@@ -1,0 +1,57 @@
+syntax = "proto3";
+package armory;
+option go_package = "proto/armory;armory";
+
+message TCharacter {
+    uint64 id       = 1;
+    string name     = 2;
+    string class    = 3;
+    uint32 level    = 4;
+    uint64 gold     = 5;
+    uint64 tokens   = 6;
+}
+
+message THero {
+    string name     = 1;
+    uint64 id       = 2;
+}
+
+message ListHeroesRequest {}
+
+message ListHeroesResponse {
+    repeated THero heroes = 1;
+}
+
+message ListCharactersRequest {
+    string username = 1;
+}
+
+message ListCharactersResponse {
+    repeated TCharacter characters = 1;
+}
+
+message CreateCharacterRequest {
+    THero hero  = 1;
+    string name = 2;
+}
+
+message CreateCharacterResponse {
+    bool success    = 1;
+    string message  = 2;
+}
+
+message DeleteCharacterRequest {
+    uint64 character_id = 1;
+}
+
+message DeleteCharacterResponse {
+    bool success    = 1;
+    string message  = 2;
+}
+
+service Character {
+    rpc ListHeroes      (ListHeroesRequest)         returns (ListHeroesResponse);
+    rpc ListCharacters  (ListCharactersRequest)     returns (ListCharactersResponse);
+    rpc CreateCharacter (CreateCharacterRequest)    returns (CreateCharacterResponse);
+    rpc DeleteCharacter (DeleteCharacterRequest)    returns (DeleteCharacterResponse);
+}

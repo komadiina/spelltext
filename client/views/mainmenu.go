@@ -3,7 +3,6 @@ package views
 import (
 	"fmt"
 
-	"github.com/gdamore/tcell/v2"
 	"github.com/komadiina/spelltext/client/constants"
 	types "github.com/komadiina/spelltext/client/types"
 	"github.com/komadiina/spelltext/client/utils"
@@ -16,24 +15,25 @@ func AddMainmenuPage(c *types.SpelltextClient) {
 			SetDynamicColors(true).
 			SetText(fmt.Sprintf(`> welcome back, adventurer! [blue]%s[""] - isn't it?`, c.User.Username))
 
-		list := tview.NewList().
+		list := tview.NewList()
+		list.
+			SetHighlightFullLine(true).
 			AddItem("- armory", "preview your characters", 'a', func() { c.NavigateTo(constants.PAGE_ARMORY) }).
 			AddItem("- inventory", "peek at what's in your bags", 'i', func() { c.NavigateTo(constants.PAGE_INVENTORY) }).
 			AddItem("- progress", "see what you've accomplished", 'p', func() { c.NavigateTo(constants.PAGE_PROGRESS) }).
 			AddItem("- combat", "THE proving grounds", 'c', func() { c.NavigateTo(constants.PAGE_COMBAT) }).
 			AddItem("- store", "buy some mighty goods", 's', func() { c.NavigateTo(constants.PAGE_STORE) }).
-			AddItem("- gamba", "test your luck. you should stack some.", 'g', func() { c.NavigateTo(constants.PAGE_GAMBA) }).
+			AddItem("- gamba", "gold gold gold\n\n\n", 'g', func() { c.NavigateTo(constants.PAGE_GAMBA) }).
 			AddItem("- chat", "talk to some peeps", 'y', func() { c.NavigateTo(constants.PAGE_CHAT) }).
 			AddItem("- quit", "done for today?", 'q', func() { c.App.Stop() })
-
-		list = list.SetShortcutStyle(tcell.StyleDefault.Foreground(tcell.ColorDarkSlateBlue)).SetWrapAround(true)
 
 		list.SetBorder(true).SetBorderPadding(1, 1, 5, 5)
 
 		updates := tview.NewBox().SetTitle(" updates ").SetBorder(true).SetBorderPadding(1, 1, 5, 5)
 
 		guide := tview.NewFlex().
-			SetDirection(tview.FlexColumn)
+			SetDirection(tview.FlexColumn).
+			AddItem(tview.NewTextView().SetText(" keymap legend: "), 0, 1, false)
 
 		characters, len := utils.AddNavGuide("a", "armory")
 		guide.AddItem(characters, len, 1, false)

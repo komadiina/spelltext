@@ -1,6 +1,7 @@
 package views
 
 import (
+	"container/list"
 	"fmt"
 
 	"github.com/gdamore/tcell/v2"
@@ -17,11 +18,22 @@ func AddVendorPage(c *types.SpelltextClient) {
 	c.PageManager.RegisterFactory(constants.PAGE_VENDOR, func() tview.Primitive {
 		c.Logger.Info("loading vendor page...")
 
+		basket := list.New()
+
 		vendor := tview.NewTextView().
 			SetDynamicColors(true).
-			SetText(fmt.Sprintf(`[blue]%v[""]'s wares`, c.AppStorage[SELECTED_VENDOR_NAME]))
+			SetText(fmt.Sprintf(`[blue]%v[""]'s wares`, c.AppStorage[constants.SELECTED_VENDOR_NAME]))
 
 		flex := STNewFlex().AddItem(vendor, 1, 1, false).SetDirection(tview.FlexRow)
+		flex.SetBorder(true).SetTitle(" vendor ")
+		flex.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+			if event.Key() == tcell.KeyCtrlB {
+				c.Logger.Info("cashing out", "basket", basket)
+				// functions.BuyItems(basket, SELECTED_CHARACTER_ID)
+			}
+
+			return event
+		})
 
 		table := tview.NewTable().SetSeparator('|')
 		table.SetBorder(true)
@@ -32,7 +44,7 @@ func AddVendorPage(c *types.SpelltextClient) {
 		resp, err := c.Clients.StoreClient.ListVendorItems(
 			*c.Context,
 			&pb.StoreListVendorItemRequest{
-				VendorId: c.AppStorage[SELECTED_VENDOR_ID].(uint64),
+				VendorId: c.AppStorage[constants.SELECTED_VENDOR_ID].(uint64),
 			},
 		)
 

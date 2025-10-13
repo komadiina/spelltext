@@ -5,7 +5,9 @@ import (
 
 	"github.com/komadiina/spelltext/client/config"
 	"github.com/komadiina/spelltext/client/factory"
+	pbArmory "github.com/komadiina/spelltext/proto/armory"
 	pbChat "github.com/komadiina/spelltext/proto/chat"
+	pbInventory "github.com/komadiina/spelltext/proto/inventory"
 	pbStore "github.com/komadiina/spelltext/proto/store"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 	"github.com/nats-io/nats.go"
@@ -36,8 +38,10 @@ type ContextDef struct {
 }
 
 type Clients struct {
-	ChatClient  pbChat.ChatClient
-	StoreClient pbStore.StoreClient
+	ChatClient      pbChat.ChatClient
+	StoreClient     pbStore.StoreClient
+	CharacterClient pbArmory.CharacterClient
+	InventoryClient pbInventory.InventoryClient
 }
 
 type NavigableForm struct {

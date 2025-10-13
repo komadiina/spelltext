@@ -2,7 +2,6 @@ syntax = "proto3";
 package store;
 option go_package = "proto/store;store";
 
-import "google/protobuf/struct.proto";
 
 message StoreListVendorRequest {
   string noop = 1;
@@ -45,13 +44,15 @@ message Item {
   uint32 stack_size = 7;
   uint32 bind_on_pickup = 8;
   string description = 9;
-  google.protobuf.Struct metadata = 10;        
   uint64 health_points = 11;
   uint64 power_points = 12;
   uint64 strength_points = 13;
   uint64 spellpower_points = 14;
   string prefix = 15;
   string suffix = 16;
+  uint64 gold_price = 17;
+  int32 buyable_with_tokens = 18;
+  uint64 token_price = 19;
 }
 
 message GenericDetails {

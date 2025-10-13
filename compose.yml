@@ -49,6 +49,23 @@ services:
           path: "./server/inventory"
     depends_on:
       - postgres
+
+  charserver:
+    build:
+      context: .
+      dockerfile: server/character/Dockerfile
+    volumes:
+      - ./logs/charserver:/logs
+    ports:
+      - "50054:50054"
+    networks:
+      - spelltext
+    develop:
+      watch:
+        - action: "restart"
+          path: "./server/character"
+    depends_on:
+      - postgres
   
   nats:
     image: nats
