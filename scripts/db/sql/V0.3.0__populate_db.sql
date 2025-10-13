@@ -11,7 +11,6 @@ values (
     10,
     20
   );
-
 insert into heroes
 values (
     DEFAULT,
@@ -25,7 +24,6 @@ values (
     5,
     30
   );
-
 insert into heroes
 values (
     DEFAULT,
@@ -39,79 +37,54 @@ values (
     25,
     5
   );
-
 insert into stat_types
 VALUES (DEFAULT, 'ST01', 'Strength');
-
 insert into stat_types
 VALUES (DEFAULT, 'ST02', 'Spellpower');
-
 insert into stat_types
 VALUES (DEFAULT, 'ST03', 'Health');
-
 insert into stat_types
 values (DEFAULT, 'ST04', 'Power');
-
 insert into item_types
 values (DEFAULT, 'IT01', 'Armor');
-
 insert into item_types
 values (DEFAULT, 'IT02', 'Consumable');
-
 insert into item_types
 values (DEFAULT, 'IT03', 'Weapon');
-
 insert into item_types
 values (DEFAULT, 'IT04', 'Vanity');
-
 insert into item_types
 values (DEFAULT, 'IT05', 'Wearable vanity');
-
 insert into item_types
 values (DEFAULT, 'IT06', 'Gold drop');
-
 insert into item_types
 values (DEFAULT, 'IT07', 'Token drop');
-
 insert into equip_slots
 values (DEFAULT, 'ES01', 'Head');
-
 insert into equip_slots
 values (DEFAULT, 'ES02', 'Neck');
-
 insert into equip_slots
 values (DEFAULT, 'ES03', 'Shoulders');
-
 insert into equip_slots
 values (DEFAULT, 'ES04', 'Gloves');
-
 insert into equip_slots
 values (DEFAULT, 'ES05', 'Ring');
-
 insert into equip_slots
 values (DEFAULT, 'ES06', 'Ring');
-
 insert into equip_slots
 values (DEFAULT, 'ES07', 'Chest');
-
 insert into equip_slots
 values (DEFAULT, 'ES08', 'Waist');
-
 insert into equip_slots
 values (DEFAULT, 'ES09', 'Backpocket');
-
 insert into equip_slots
 values (DEFAULT, 'ES10', 'Back');
-
 insert into equip_slots
 values (DEFAULT, 'ES11', 'Legs');
-
 insert into equip_slots
 values (DEFAULT, 'ES12', 'Shins');
-
 insert into equip_slots
 values (DEFAULT, 'ES13', 'Feet');
-
 insert into item_templates
 values (
     DEFAULT,
@@ -122,9 +95,11 @@ values (
     1,
     1,
     'helmet',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -135,9 +110,11 @@ values (
     1,
     1,
     'vest',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -148,9 +125,11 @@ values (
     1,
     1,
     'ring',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -161,9 +140,11 @@ values (
     5,
     1,
     'hpot',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -174,9 +155,11 @@ values (
     5,
     1,
     'ppot',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -187,9 +170,11 @@ values (
     5,
     1,
     'spot',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -200,9 +185,11 @@ values (
     5,
     1,
     'sppot',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -213,9 +200,11 @@ values (
     1,
     1,
     'weapon',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -226,9 +215,11 @@ values (
     1,
     1,
     'weapon',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -239,9 +230,11 @@ values (
     1,
     1,
     'weapon',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -252,9 +245,11 @@ values (
     1,
     1,
     'vanity',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -265,9 +260,11 @@ values (
     1,
     1,
     'wvanity',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -278,9 +275,11 @@ values (
     1,
     1,
     'gdrop',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -291,9 +290,11 @@ values (
     1,
     1,
     'gdrop',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -304,9 +305,11 @@ values (
     1,
     1,
     'gdrop',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -317,9 +320,11 @@ values (
     1,
     1,
     'gdrop',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -330,9 +335,11 @@ values (
     1,
     1,
     'tdrop',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -343,9 +350,11 @@ values (
     1,
     1,
     'tdrop',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -356,9 +365,11 @@ values (
     1,
     1,
     'tdrop',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -369,9 +380,11 @@ values (
     1,
     1,
     'tdrop',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -382,9 +395,11 @@ values (
     1,
     1,
     'cloak',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -395,9 +410,11 @@ values (
     1,
     1,
     'cloak',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -408,9 +425,11 @@ values (
     1,
     1,
     'cloak',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -421,9 +440,11 @@ values (
     1,
     1,
     'backpocket',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -434,9 +455,11 @@ values (
     1,
     1,
     'trinket',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -447,9 +470,11 @@ values (
     1,
     1,
     'trinket',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -460,9 +485,11 @@ values (
     1,
     1,
     'necklace',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -473,9 +500,11 @@ values (
     1,
     1,
     'necklace',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -486,9 +515,11 @@ values (
     1,
     1,
     'wvanity',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -499,9 +530,11 @@ values (
     1,
     1,
     'boots',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -512,9 +545,11 @@ values (
     1,
     1,
     'shins',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -525,9 +560,11 @@ values (
     1,
     1,
     'gloves',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -538,9 +575,11 @@ values (
     1,
     1,
     'ring',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -551,9 +590,11 @@ values (
     1,
     1,
     'ring',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -564,9 +605,11 @@ values (
     5,
     1,
     'hpot',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -577,9 +620,11 @@ values (
     3,
     1,
     'hpot',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -590,9 +635,11 @@ values (
     3,
     1,
     'ppot',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -603,9 +650,11 @@ values (
     5,
     1,
     'mcrystal',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -616,9 +665,11 @@ values (
     10,
     1,
     'bandage',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -629,9 +680,11 @@ values (
     1,
     1,
     'weapon',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -642,9 +695,11 @@ values (
     1,
     1,
     'weapon',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -655,9 +710,11 @@ values (
     1,
     1,
     'weapon',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -668,9 +725,11 @@ values (
     1,
     1,
     'weapon',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -681,9 +740,11 @@ values (
     1,
     1,
     'vanity',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -694,9 +755,11 @@ values (
     1,
     1,
     'tdrop',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -707,9 +770,11 @@ values (
     1,
     1,
     'tdrop',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into armors
 values (
     21,
@@ -722,7 +787,6 @@ values (
     0,
     5
   );
-
 insert into armors
 values (
     22,
@@ -735,7 +799,6 @@ values (
     0,
     10
   );
-
 insert into armors
 values (
     23,
@@ -748,7 +811,6 @@ values (
     0,
     12
   );
-
 insert into armors
 values (
     24,
@@ -761,7 +823,6 @@ values (
     3,
     0
   );
-
 insert into armors
 values (
     1,
@@ -774,7 +835,6 @@ values (
     0,
     20
   );
-
 insert into armors
 values (
     1,
@@ -787,7 +847,6 @@ values (
     5,
     5
   );
-
 insert into armors
 values (
     1,
@@ -800,7 +859,6 @@ values (
     20,
     0
   );
-
 insert into armors
 values (
     2,
@@ -813,7 +871,6 @@ values (
     -5,
     -5
   );
-
 insert into armors
 values (
     2,
@@ -826,7 +883,6 @@ values (
     0,
     50
   );
-
 insert into armors
 values (
     3,
@@ -839,7 +895,6 @@ values (
     0,
     0
   );
-
 insert into armors
 values (
     3,
@@ -852,7 +907,6 @@ values (
     0,
     10
   );
-
 insert into armors
 values (
     25,
@@ -865,7 +919,6 @@ values (
     5,
     10
   );
-
 insert into armors
 values (
     26,
@@ -878,7 +931,6 @@ values (
     0,
     15
   );
-
 insert into armors
 values (
     27,
@@ -891,7 +943,6 @@ values (
     2,
     0
   );
-
 insert into armors
 values (
     28,
@@ -904,7 +955,6 @@ values (
     0,
     20
   );
-
 insert into armors
 values (
     29,
@@ -917,7 +967,6 @@ values (
     0,
     0
   );
-
 insert into armors
 values (
     33,
@@ -930,7 +979,6 @@ values (
     10,
     0
   );
-
 insert into armors
 values (
     34,
@@ -943,7 +991,6 @@ values (
     0,
     25
   );
-
 insert into armors
 values (
     30,
@@ -956,7 +1003,6 @@ values (
     5,
     0
   );
-
 insert into armors
 values (
     31,
@@ -969,7 +1015,6 @@ values (
     10,
     0
   );
-
 insert into armors
 values (
     32,
@@ -982,7 +1027,6 @@ values (
     0,
     10
   );
-
 insert into weapons
 values (
     40,
@@ -992,7 +1036,6 @@ values (
     10,
     0
   );
-
 insert into weapons
 values (
     41,
@@ -1002,7 +1045,6 @@ values (
     0,
     20
   );
-
 insert into weapons
 values (
     42,
@@ -1012,7 +1054,6 @@ values (
     0,
     15
   );
-
 insert into weapons
 values (
     43,
@@ -1022,7 +1063,6 @@ values (
     0,
     10
   );
-
 insert into consumables
 values (
     35,
@@ -1034,7 +1074,6 @@ values (
     0,
     0
   );
-
 insert into consumables
 values (
     36,
@@ -1046,7 +1085,6 @@ values (
     0,
     0
   );
-
 insert into consumables
 values (
     37,
@@ -1058,7 +1096,6 @@ values (
     0,
     0
   );
-
 insert into consumables
 values (
     38,
@@ -1070,7 +1107,6 @@ values (
     0,
     30
   );
-
 insert into consumables
 values (
     39,
@@ -1082,7 +1118,6 @@ values (
     0,
     0
   );
-
 insert into users
 values (
     DEFAULT,
@@ -1090,10 +1125,21 @@ values (
     'changeme',
     'oggnjen@gmail.com'
   );
-
 insert into characters
-values (DEFAULT, 1, 'Oggnjen', 2, 1, 1, 0, 25, 0, 25);
-
+values (
+    DEFAULT,
+    1,
+    'Oggnjen',
+    2,
+    3,
+    500,
+    5000,
+    5000,
+    50,
+    20,
+    30,
+    0
+  );
 insert into characters
 values (
     DEFAULT,
@@ -1102,12 +1148,13 @@ values (
     2,
     3,
     500,
+    5000,
+    5000,
     50,
     20,
     30,
     0
   );
-
 insert into characters
 values (
     DEFAULT,
@@ -1115,27 +1162,29 @@ values (
     'Mira',
     1,
     1,
-    750,
-    80,
+    500,
+    5000,
+    5000,
+    50,
+    20,
     30,
-    10,
-    20
+    0
   );
-
 insert into characters
 values (
     DEFAULT,
     1,
     'Selene',
+    1,
     3,
-    2,
-    1200,
-    40,
-    60,
-    0,
-    40
+    500,
+    5000,
+    5000,
+    50,
+    20,
+    30,
+    0
   );
-
 insert into characters
 values (
     DEFAULT,
@@ -1143,13 +1192,14 @@ values (
     'Borin',
     1,
     3,
-    300,
-    35,
-    10,
-    25,
+    500,
+    5000,
+    5000,
+    50,
+    20,
+    30,
     0
   );
-
 insert into characters
 values (
     DEFAULT,
@@ -1157,13 +1207,14 @@ values (
     'Lysa',
     2,
     1,
-    950,
-    70,
-    25,
-    5,
-    30
+    500,
+    5000,
+    5000,
+    50,
+    20,
+    30,
+    0
   );
-
 insert into characters
 values (
     DEFAULT,
@@ -1171,13 +1222,14 @@ values (
     'Keth',
     3,
     2,
-    2000,
-    60,
-    80,
-    0,
-    80
+    500,
+    5000,
+    5000,
+    50,
+    20,
+    30,
+    0
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -1188,9 +1240,11 @@ values (
     20,
     1,
     'gdrop',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into item_templates
 values (
     DEFAULT,
@@ -1201,9 +1255,11 @@ values (
     1,
     1,
     'tdrop',
+    50,
+    0,
+    null,
     '{}'
   );
-
 insert into armors
 values (
     1,
@@ -1216,7 +1272,6 @@ values (
     2,
     25
   );
-
 insert into armors
 values (
     2,
@@ -1229,7 +1284,6 @@ values (
     0,
     5
   );
-
 insert into armors
 values (
     3,

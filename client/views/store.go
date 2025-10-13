@@ -24,13 +24,18 @@ func AddStorePage(c *types.SpelltextClient) {
 		} else {
 			for _, vendor := range resp.Vendors {
 				list.AddItem("- "+vendor.GetVendorName(), vendor.GetVendorWareDescription()+"\r\n", 0, func() {
-					c.AppStorage[SELECTED_VENDOR_ID] = vendor.GetVendorId()
-					c.AppStorage[SELECTED_VENDOR_NAME] = vendor.GetVendorName()
+					c.AppStorage[constants.SELECTED_VENDOR_ID] = vendor.GetVendorId()
+					c.AppStorage[constants.SELECTED_VENDOR_NAME] = vendor.GetVendorName()
 					c.NavigateTo(constants.PAGE_VENDOR)
-				})
+				}).AddItem("", "", 0, func() {})
 			}
 		}
 
+		list.SetChangedFunc(func(index int, mainText, secondaryText string, shortcut rune) {
+			if index%2 != 0 {
+				list = list.SetCurrentItem(list.GetCurrentItem() + 1)
+			}
+		})
 		list = list.SetWrapAround(true)
 
 		flex = flex.

@@ -20,7 +20,9 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
+	pbArmory "github.com/komadiina/spelltext/proto/armory"
 	pbChat "github.com/komadiina/spelltext/proto/chat"
+	pbInventory "github.com/komadiina/spelltext/proto/inventory"
 	pbStore "github.com/komadiina/spelltext/proto/store"
 )
 
@@ -46,7 +48,7 @@ func InitializePages(client *types.SpelltextClient) {
 	views.AddLoginPage(client)
 	views.AddMainmenuPage(client)
 	views.AddChatPage(client)
-	views.AddCharactersPage(client)
+	views.AddArmoryPage(client)
 	views.AddStorePage(client)
 	views.AddProgressPage(client)
 	views.AddGambaPage(client)
@@ -58,7 +60,7 @@ func InitializePages(client *types.SpelltextClient) {
 func InitializeClients(c *types.SpelltextClient) {
 	c.Clients = &types.Clients{}
 
-	// init chat client
+	// chat
 	conn, err := grpc.NewClient("localhost:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		c.Logger.Error("failed to init chat client", "reason", err)
@@ -66,11 +68,28 @@ func InitializeClients(c *types.SpelltextClient) {
 		c.Clients.ChatClient = pbChat.NewChatClient(conn)
 	}
 
+	// store
 	conn, err = grpc.NewClient("localhost:50052", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		c.Logger.Error("failed to init store client", "reason", err)
 	} else {
 		c.Clients.StoreClient = pbStore.NewStoreClient(conn)
+	}
+
+	// inventory
+	conn, err = grpc.NewClient("localhost:50053", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		c.Logger.Error("failed to init inventory client", "reason", err)
+	} else {
+		c.Clients.InventoryClient = pbInventory.NewInventoryClient(conn)
+	}
+
+	// armory
+	conn, err = grpc.NewClient("localhost:50054", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		c.Logger.Error("failed to init armory client", "reason", err)
+	} else {
+		c.Clients.CharacterClient = pbArmory.NewCharacterClient(conn)
 	}
 }
 
@@ -79,7 +98,7 @@ func main() {
 	logging.Init(log.InfoLevel, "client", true)
 	logger := logging.Get("client", true)
 
-	logger.Infof("loading client config...", "CONFIG_FILE", os.Getenv("CONFIG_FILE"))
+	logger.Info("loading client config...", "CONFIG_FILE", os.Getenv("CONFIG_FILE"))
 	cfg, err := config.LoadConfig()
 	if err != nil {
 		logger.Error("failed to load config, using default values.", "reason", err)
@@ -98,9 +117,9 @@ func main() {
 		AppStorage: make(map[string]any),
 	}
 
-	logger.Info("initializing client...")
+	logger.Info("initializing clients...")
 	InitializeClients(&client)
-	logger.Info("client initialized.")
+	logger.Info("clients initialized.")
 
 	logger.Info("initializng nats...")
 	nc, _, err := InitializeNats(cfg)

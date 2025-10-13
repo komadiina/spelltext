@@ -34,6 +34,22 @@ inventoryserver:
   pgPort: 5432
   pgDbName: spelltext
   pgSslMode: disable
+
+charserver:
+  port: 50054
+
+  # k8s
+  # pgUser: postgres
+  # pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
+  
+  # docker
+  pgUser: user
+  pgHost: postgres
+
+  pgPass: changeme
+  pgPort: 5432
+  pgDbName: spelltext
+  pgSslMode: disable
   
 client:
   nats_url: nats://127.0.0.1:4222

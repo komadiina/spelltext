@@ -4,7 +4,7 @@ import "github.com/gdamore/tcell/v2"
 
 const (
 	PAGE_MAINMENU  = "pg-mainmenu"
-	PAGE_ARMORY    = "pg-characters"
+	PAGE_ARMORY    = "pg-armory"
 	PAGE_INVENTORY = "pg-inventory"
 	PAGE_PROGRESS  = "pg-progress"
 	PAGE_COMBAT    = "pg-combat"
@@ -25,6 +25,14 @@ const (
 	ITEM_TYPE_GOLD_DROP       = "IT06"
 	ITEM_TYPE_TOKEN_DROP      = "IT07"
 	ITEM_TYPE_OTHER           = "IT99"
+)
+
+const (
+	CURRENT_USER_ID      = "currentUserId"
+	CURRENT_USER_NAME    = "currentUserName"
+	SELECTED_CHARACTER   = "selectedCharacter"
+	SELECTED_VENDOR_ID   = "selectedVendorID"
+	SELECTED_VENDOR_NAME = "selectedVendorName"
 )
 
 var SHORTCUTS = map[tcell.Key]string{
