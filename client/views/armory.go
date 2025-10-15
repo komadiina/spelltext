@@ -7,6 +7,7 @@ import (
 	"github.com/komadiina/spelltext/client/constants"
 	"github.com/komadiina/spelltext/client/functions"
 	types "github.com/komadiina/spelltext/client/types"
+	"github.com/komadiina/spelltext/client/utils"
 	pb "github.com/komadiina/spelltext/proto/armory"
 	"github.com/rivo/tview"
 )
@@ -103,7 +104,29 @@ func AddArmoryPage(c *types.SpelltextClient) {
 			details.Update(stored[index])
 		})
 
+		characters.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+			if event.Key() == tcell.KeyCtrlA {
+				c.Logger.Info("create character command pressed.")
+			}
+
+			return event
+		})
+
 		characters.SetBorder(true).SetTitle(" characters ").SetTitleAlign(tview.AlignLeft).SetBorderPadding(1, 1, 2, 2)
+
+		guide := tview.NewFlex().
+			SetDirection(tview.FlexColumn).
+			AddItem(tview.NewTextView().SetText(" keymap legend: "), 0, 1, false)
+		guide.SetBorder(true)
+
+		back, len := utils.AddNavGuide("esc", "back")
+		guide.AddItem(back, len, 1, false)
+
+		add, len := utils.AddNavGuide("ctrl+a", "create new character")
+		guide.AddItem(add, len, 1, false)
+
+		enter, len := utils.AddNavGuide("enter", "character menu")
+		guide.AddItem(enter, len, 1, false)
 
 		flex.
 			AddItem(panel, 6, 1, false).
@@ -112,7 +135,8 @@ func AddArmoryPage(c *types.SpelltextClient) {
 			AddItem(header, 1, 1, false).
 			AddItem(tview.NewTextView(), 1, 1, false).
 			AddItem(characters, 0, 1, true).
-			AddItem(tview.NewTextView(), 0, 3, false)
+			AddItem(tview.NewTextView(), 0, 3, false).
+			AddItem(guide, 3, 1, false)
 
 		return flex
 	}, nil, onClose)

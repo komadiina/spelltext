@@ -8,6 +8,7 @@ CREATE TABLE armors (
   power int not null,
   strength int not null,
   spellpower int not null,
+  bonus_damage int not null,
   foreign key (item_template_id) references item_templates (id) on delete cascade,
   foreign key (equip_slot_id) references equip_slots (id)
 );

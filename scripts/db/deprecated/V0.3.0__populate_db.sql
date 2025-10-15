@@ -785,7 +785,8 @@ values (
     20,
     0,
     0,
-    5
+    5,
+    10
   );
 insert into armors
 values (
@@ -797,6 +798,7 @@ values (
     10,
     0,
     0,
+    10,
     10
   );
 insert into armors
@@ -809,7 +811,8 @@ values (
     15,
     0,
     0,
-    12
+    10,
+    10
   );
 insert into armors
 values (
@@ -821,7 +824,8 @@ values (
     0,
     5,
     3,
-    0
+    10,
+    10
   );
 insert into armors
 values (
@@ -833,7 +837,8 @@ values (
     5,
     5,
     0,
-    20
+    10,
+    10
   );
 insert into armors
 values (
@@ -845,7 +850,8 @@ values (
     10,
     10,
     5,
-    5
+    10,
+    10
   );
 insert into armors
 values (
@@ -857,7 +863,8 @@ values (
     50,
     10,
     20,
-    0
+    10,
+    10
   );
 insert into armors
 values (
@@ -869,7 +876,8 @@ values (
     5,
     -25,
     -5,
-    -5
+    -5,
+    10
   );
 insert into armors
 values (
@@ -881,7 +889,8 @@ values (
     -20,
     50,
     0,
-    50
+    10,
+    10
   );
 insert into armors
 values (
@@ -893,7 +902,8 @@ values (
     5,
     0,
     0,
-    0
+    10,
+    10
   );
 insert into armors
 values (
@@ -905,6 +915,7 @@ values (
     5,
     5,
     0,
+    10,
     10
   );
 insert into armors
@@ -917,6 +928,7 @@ values (
     25,
     0,
     5,
+    10,
     10
   );
 insert into armors
@@ -929,7 +941,8 @@ values (
     0,
     10,
     0,
-    15
+    10,
+    10
   );
 insert into armors
 values (
@@ -941,7 +954,8 @@ values (
     10,
     5,
     2,
-    0
+    10,
+    10
   );
 insert into armors
 values (
@@ -953,7 +967,8 @@ values (
     30,
     0,
     0,
-    20
+    10,
+    10
   );
 insert into armors
 values (
@@ -965,7 +980,8 @@ values (
     5,
     0,
     0,
-    0
+    10,
+    10
   );
 insert into armors
 values (
@@ -977,7 +993,8 @@ values (
     50,
     0,
     10,
-    0
+    10,
+    10
   );
 insert into armors
 values (
@@ -989,7 +1006,8 @@ values (
     10,
     0,
     0,
-    25
+    10,
+    10
   );
 insert into armors
 values (
@@ -1001,7 +1019,8 @@ values (
     20,
     0,
     5,
-    0
+    10,
+    10
   );
 insert into armors
 values (
@@ -1013,7 +1032,8 @@ values (
     40,
     0,
     10,
-    0
+    0,
+    15
   );
 insert into armors
 values (
@@ -1025,43 +1045,56 @@ values (
     5,
     0,
     0,
+    10,
     10
   );
 insert into weapons
 values (
     40,
-    'Rusted',
-    'Dagger',
+    'Mighty',
+    null,
+    10,
+    10,
     20,
     10,
-    0
+    0,
+    10
   );
 insert into weapons
 values (
     41,
-    'Wicked',
-    'Dirk',
+    'Blatant',
+    null,
+    10,
+    10,
     20,
     0,
-    20
-  );
-insert into weapons
-values (
-    42,
-    'Ancient',
-    'Longsword',
-    25,
-    0,
+    20,
     15
   );
 insert into weapons
 values (
+    42,
+    null,
+    null,
+    10,
+    10,
+    25,
+    0,
+    15,
+    9
+  );
+insert into weapons
+values (
     43,
-    'Runed',
-    'Staff',
+    'Wizard''s',
+    null,
+    10,
+    10,
     20,
     0,
-    10
+    10,
+    0
   );
 insert into consumables
 values (
@@ -1070,6 +1103,7 @@ values (
     null,
     'Lesser',
     25,
+    0,
     0,
     0,
     0
@@ -1083,6 +1117,7 @@ values (
     75,
     0,
     0,
+    0,
     0
   );
 insert into consumables
@@ -1093,6 +1128,7 @@ values (
     'Potent',
     0,
     50,
+    0,
     0,
     0
   );
@@ -1105,7 +1141,8 @@ values (
     0,
     30,
     0,
-    30
+    30,
+    0
   );
 insert into consumables
 values (
@@ -1116,7 +1153,8 @@ values (
     10,
     0,
     0,
-    0
+    0,
+    1
   );
 insert into users
 values (
@@ -1259,40 +1297,4 @@ values (
     0,
     null,
     '{}'
-  );
-insert into armors
-values (
-    1,
-    1,
-    'Reinforced',
-    'of the Owl',
-    18,
-    12,
-    8,
-    2,
-    25
-  );
-insert into armors
-values (
-    2,
-    7,
-    'Woolen',
-    'of Comfort',
-    10,
-    18,
-    0,
-    0,
-    5
-  );
-insert into armors
-values (
-    3,
-    6,
-    'Gleaming',
-    'of Clarity',
-    2,
-    8,
-    0,
-    0,
-    12
   );

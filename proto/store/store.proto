@@ -1,6 +1,6 @@
 syntax = "proto3";
 package store;
-option go_package = "proto/store;store";
+option go_package = "github.com/komadiina/spelltext/proto/store;store";
 
 
 message StoreListVendorRequest {
@@ -34,25 +34,29 @@ message ListVendorItemResponse {
   int64 total_count = 2;
 }
 
-message Item {
+message Item { // Item = dbItem || dbConsumable
   uint64 id = 1;                                
   string name = 2;
   uint32 item_type_id = 3;
   string item_type_code = 4;
-  uint32 rarity = 5;
-  uint32 stackable = 6;
-  uint32 stack_size = 7;
-  uint32 bind_on_pickup = 8;
+  uint64 item_template_id = 5;
   string description = 9;
-  uint64 health_points = 11;
-  uint64 power_points = 12;
-  uint64 strength_points = 13;
-  uint64 spellpower_points = 14;
-  string prefix = 15;
-  string suffix = 16;
-  uint64 gold_price = 17;
-  int32 buyable_with_tokens = 18;
-  uint64 token_price = 19;
+  uint64 gold_price = 10;
+  int32 buyable_with_tokens = 11;
+  uint64 token_price = 12;
+  
+  // uint32 stackable = 6; // TODO: when impl dbConsumable
+  // uint32 uses = 7
+  // uint32 stack_size = 8;
+  // uint32 bind_on_pickup = 9;
+  string prefix = 13;
+  string suffix = 14;
+  int64 health = 15;
+  int64 power = 16;
+  int64 strength = 17;
+  int64 spellpower = 18;
+  int64 bonus_damage = 19;
+  int64 bonus_armor = 20;
 }
 
 message GenericDetails {
@@ -71,7 +75,7 @@ message AddItemResponse {
 
 message BuyItemRequest {
   uint64 character_id = 1;
-  int64 item_template_id = 2;
+  repeated uint64 item_ids = 2;
   int32 quantity = 3;
 }
 
@@ -94,6 +98,6 @@ service Store {
   rpc ListVendors(StoreListVendorRequest) returns (StoreListVendorResponse);
   rpc ListVendorItems(StoreListVendorItemRequest) returns (ListVendorItemResponse);
   rpc AddItem(AddItemRequest) returns (AddItemResponse);
-  rpc BuyItem(BuyItemRequest) returns (BuyItemResponse);
+  rpc BuyItems(BuyItemRequest) returns (BuyItemResponse);
   rpc SellItem(SellItemRequest) returns (SellItemResponse); // deprecated: moved to inventoryserver (client sells from character inventory directly)
 }

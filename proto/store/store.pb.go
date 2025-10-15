@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.9
 // 	protoc        v6.32.1
-// source: store.proto
+// source: store/store.proto
 
 package store
 
@@ -30,7 +30,7 @@ type StoreListVendorRequest struct {
 
 func (x *StoreListVendorRequest) Reset() {
 	*x = StoreListVendorRequest{}
-	mi := &file_store_proto_msgTypes[0]
+	mi := &file_store_store_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -42,7 +42,7 @@ func (x *StoreListVendorRequest) String() string {
 func (*StoreListVendorRequest) ProtoMessage() {}
 
 func (x *StoreListVendorRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_store_proto_msgTypes[0]
+	mi := &file_store_store_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -55,7 +55,7 @@ func (x *StoreListVendorRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StoreListVendorRequest.ProtoReflect.Descriptor instead.
 func (*StoreListVendorRequest) Descriptor() ([]byte, []int) {
-	return file_store_proto_rawDescGZIP(), []int{0}
+	return file_store_store_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *StoreListVendorRequest) GetNoop() string {
@@ -76,7 +76,7 @@ type Vendor struct {
 
 func (x *Vendor) Reset() {
 	*x = Vendor{}
-	mi := &file_store_proto_msgTypes[1]
+	mi := &file_store_store_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -88,7 +88,7 @@ func (x *Vendor) String() string {
 func (*Vendor) ProtoMessage() {}
 
 func (x *Vendor) ProtoReflect() protoreflect.Message {
-	mi := &file_store_proto_msgTypes[1]
+	mi := &file_store_store_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -101,7 +101,7 @@ func (x *Vendor) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Vendor.ProtoReflect.Descriptor instead.
 func (*Vendor) Descriptor() ([]byte, []int) {
-	return file_store_proto_rawDescGZIP(), []int{1}
+	return file_store_store_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *Vendor) GetVendorId() uint64 {
@@ -134,7 +134,7 @@ type StoreListVendorResponse struct {
 
 func (x *StoreListVendorResponse) Reset() {
 	*x = StoreListVendorResponse{}
-	mi := &file_store_proto_msgTypes[2]
+	mi := &file_store_store_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -146,7 +146,7 @@ func (x *StoreListVendorResponse) String() string {
 func (*StoreListVendorResponse) ProtoMessage() {}
 
 func (x *StoreListVendorResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_store_proto_msgTypes[2]
+	mi := &file_store_store_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -159,7 +159,7 @@ func (x *StoreListVendorResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StoreListVendorResponse.ProtoReflect.Descriptor instead.
 func (*StoreListVendorResponse) Descriptor() ([]byte, []int) {
-	return file_store_proto_rawDescGZIP(), []int{2}
+	return file_store_store_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *StoreListVendorResponse) GetVendors() []*Vendor {
@@ -186,7 +186,7 @@ type StoreListVendorItemRequest struct {
 
 func (x *StoreListVendorItemRequest) Reset() {
 	*x = StoreListVendorItemRequest{}
-	mi := &file_store_proto_msgTypes[3]
+	mi := &file_store_store_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -198,7 +198,7 @@ func (x *StoreListVendorItemRequest) String() string {
 func (*StoreListVendorItemRequest) ProtoMessage() {}
 
 func (x *StoreListVendorItemRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_store_proto_msgTypes[3]
+	mi := &file_store_store_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -211,7 +211,7 @@ func (x *StoreListVendorItemRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StoreListVendorItemRequest.ProtoReflect.Descriptor instead.
 func (*StoreListVendorItemRequest) Descriptor() ([]byte, []int) {
-	return file_store_proto_rawDescGZIP(), []int{3}
+	return file_store_store_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *StoreListVendorItemRequest) GetVendorId() uint64 {
@@ -287,7 +287,7 @@ type ListVendorItemResponse struct {
 
 func (x *ListVendorItemResponse) Reset() {
 	*x = ListVendorItemResponse{}
-	mi := &file_store_proto_msgTypes[4]
+	mi := &file_store_store_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -299,7 +299,7 @@ func (x *ListVendorItemResponse) String() string {
 func (*ListVendorItemResponse) ProtoMessage() {}
 
 func (x *ListVendorItemResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_store_proto_msgTypes[4]
+	mi := &file_store_store_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -312,7 +312,7 @@ func (x *ListVendorItemResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListVendorItemResponse.ProtoReflect.Descriptor instead.
 func (*ListVendorItemResponse) Descriptor() ([]byte, []int) {
-	return file_store_proto_rawDescGZIP(), []int{4}
+	return file_store_store_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *ListVendorItemResponse) GetItems() []*Item {
@@ -335,27 +335,30 @@ type Item struct {
 	Name              string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	ItemTypeId        uint32                 `protobuf:"varint,3,opt,name=item_type_id,json=itemTypeId,proto3" json:"item_type_id,omitempty"`
 	ItemTypeCode      string                 `protobuf:"bytes,4,opt,name=item_type_code,json=itemTypeCode,proto3" json:"item_type_code,omitempty"`
-	Rarity            uint32                 `protobuf:"varint,5,opt,name=rarity,proto3" json:"rarity,omitempty"`
-	Stackable         uint32                 `protobuf:"varint,6,opt,name=stackable,proto3" json:"stackable,omitempty"`
-	StackSize         uint32                 `protobuf:"varint,7,opt,name=stack_size,json=stackSize,proto3" json:"stack_size,omitempty"`
-	BindOnPickup      uint32                 `protobuf:"varint,8,opt,name=bind_on_pickup,json=bindOnPickup,proto3" json:"bind_on_pickup,omitempty"`
+	ItemTemplateId    uint64                 `protobuf:"varint,5,opt,name=item_template_id,json=itemTemplateId,proto3" json:"item_template_id,omitempty"`
 	Description       string                 `protobuf:"bytes,9,opt,name=description,proto3" json:"description,omitempty"`
-	HealthPoints      uint64                 `protobuf:"varint,11,opt,name=health_points,json=healthPoints,proto3" json:"health_points,omitempty"`
-	PowerPoints       uint64                 `protobuf:"varint,12,opt,name=power_points,json=powerPoints,proto3" json:"power_points,omitempty"`
-	StrengthPoints    uint64                 `protobuf:"varint,13,opt,name=strength_points,json=strengthPoints,proto3" json:"strength_points,omitempty"`
-	SpellpowerPoints  uint64                 `protobuf:"varint,14,opt,name=spellpower_points,json=spellpowerPoints,proto3" json:"spellpower_points,omitempty"`
-	Prefix            string                 `protobuf:"bytes,15,opt,name=prefix,proto3" json:"prefix,omitempty"`
-	Suffix            string                 `protobuf:"bytes,16,opt,name=suffix,proto3" json:"suffix,omitempty"`
-	GoldPrice         uint64                 `protobuf:"varint,17,opt,name=gold_price,json=goldPrice,proto3" json:"gold_price,omitempty"`
-	BuyableWithTokens int32                  `protobuf:"varint,18,opt,name=buyable_with_tokens,json=buyableWithTokens,proto3" json:"buyable_with_tokens,omitempty"`
-	TokenPrice        uint64                 `protobuf:"varint,19,opt,name=token_price,json=tokenPrice,proto3" json:"token_price,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	GoldPrice         uint64                 `protobuf:"varint,10,opt,name=gold_price,json=goldPrice,proto3" json:"gold_price,omitempty"`
+	BuyableWithTokens int32                  `protobuf:"varint,11,opt,name=buyable_with_tokens,json=buyableWithTokens,proto3" json:"buyable_with_tokens,omitempty"`
+	TokenPrice        uint64                 `protobuf:"varint,12,opt,name=token_price,json=tokenPrice,proto3" json:"token_price,omitempty"`
+	// uint32 stackable = 6; // TODO: when impl dbConsumable
+	// uint32 uses = 7
+	// uint32 stack_size = 8;
+	// uint32 bind_on_pickup = 9;
+	Prefix        string `protobuf:"bytes,13,opt,name=prefix,proto3" json:"prefix,omitempty"`
+	Suffix        string `protobuf:"bytes,14,opt,name=suffix,proto3" json:"suffix,omitempty"`
+	Health        int64  `protobuf:"varint,15,opt,name=health,proto3" json:"health,omitempty"`
+	Power         int64  `protobuf:"varint,16,opt,name=power,proto3" json:"power,omitempty"`
+	Strength      int64  `protobuf:"varint,17,opt,name=strength,proto3" json:"strength,omitempty"`
+	Spellpower    int64  `protobuf:"varint,18,opt,name=spellpower,proto3" json:"spellpower,omitempty"`
+	BonusDamage   int64  `protobuf:"varint,19,opt,name=bonus_damage,json=bonusDamage,proto3" json:"bonus_damage,omitempty"`
+	BonusArmor    int64  `protobuf:"varint,20,opt,name=bonus_armor,json=bonusArmor,proto3" json:"bonus_armor,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Item) Reset() {
 	*x = Item{}
-	mi := &file_store_proto_msgTypes[5]
+	mi := &file_store_store_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -367,7 +370,7 @@ func (x *Item) String() string {
 func (*Item) ProtoMessage() {}
 
 func (x *Item) ProtoReflect() protoreflect.Message {
-	mi := &file_store_proto_msgTypes[5]
+	mi := &file_store_store_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -380,7 +383,7 @@ func (x *Item) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Item.ProtoReflect.Descriptor instead.
 func (*Item) Descriptor() ([]byte, []int) {
-	return file_store_proto_rawDescGZIP(), []int{5}
+	return file_store_store_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *Item) GetId() uint64 {
@@ -411,30 +414,9 @@ func (x *Item) GetItemTypeCode() string {
 	return ""
 }
 
-func (x *Item) GetRarity() uint32 {
+func (x *Item) GetItemTemplateId() uint64 {
 	if x != nil {
-		return x.Rarity
-	}
-	return 0
-}
-
-func (x *Item) GetStackable() uint32 {
-	if x != nil {
-		return x.Stackable
-	}
-	return 0
-}
-
-func (x *Item) GetStackSize() uint32 {
-	if x != nil {
-		return x.StackSize
-	}
-	return 0
-}
-
-func (x *Item) GetBindOnPickup() uint32 {
-	if x != nil {
-		return x.BindOnPickup
+		return x.ItemTemplateId
 	}
 	return 0
 }
@@ -442,48 +424,6 @@ func (x *Item) GetBindOnPickup() uint32 {
 func (x *Item) GetDescription() string {
 	if x != nil {
 		return x.Description
-	}
-	return ""
-}
-
-func (x *Item) GetHealthPoints() uint64 {
-	if x != nil {
-		return x.HealthPoints
-	}
-	return 0
-}
-
-func (x *Item) GetPowerPoints() uint64 {
-	if x != nil {
-		return x.PowerPoints
-	}
-	return 0
-}
-
-func (x *Item) GetStrengthPoints() uint64 {
-	if x != nil {
-		return x.StrengthPoints
-	}
-	return 0
-}
-
-func (x *Item) GetSpellpowerPoints() uint64 {
-	if x != nil {
-		return x.SpellpowerPoints
-	}
-	return 0
-}
-
-func (x *Item) GetPrefix() string {
-	if x != nil {
-		return x.Prefix
-	}
-	return ""
-}
-
-func (x *Item) GetSuffix() string {
-	if x != nil {
-		return x.Suffix
 	}
 	return ""
 }
@@ -509,6 +449,62 @@ func (x *Item) GetTokenPrice() uint64 {
 	return 0
 }
 
+func (x *Item) GetPrefix() string {
+	if x != nil {
+		return x.Prefix
+	}
+	return ""
+}
+
+func (x *Item) GetSuffix() string {
+	if x != nil {
+		return x.Suffix
+	}
+	return ""
+}
+
+func (x *Item) GetHealth() int64 {
+	if x != nil {
+		return x.Health
+	}
+	return 0
+}
+
+func (x *Item) GetPower() int64 {
+	if x != nil {
+		return x.Power
+	}
+	return 0
+}
+
+func (x *Item) GetStrength() int64 {
+	if x != nil {
+		return x.Strength
+	}
+	return 0
+}
+
+func (x *Item) GetSpellpower() int64 {
+	if x != nil {
+		return x.Spellpower
+	}
+	return 0
+}
+
+func (x *Item) GetBonusDamage() int64 {
+	if x != nil {
+		return x.BonusDamage
+	}
+	return 0
+}
+
+func (x *Item) GetBonusArmor() int64 {
+	if x != nil {
+		return x.BonusArmor
+	}
+	return 0
+}
+
 type GenericDetails struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Note          string                 `protobuf:"bytes,1,opt,name=note,proto3" json:"note,omitempty"`
@@ -518,7 +514,7 @@ type GenericDetails struct {
 
 func (x *GenericDetails) Reset() {
 	*x = GenericDetails{}
-	mi := &file_store_proto_msgTypes[6]
+	mi := &file_store_store_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -530,7 +526,7 @@ func (x *GenericDetails) String() string {
 func (*GenericDetails) ProtoMessage() {}
 
 func (x *GenericDetails) ProtoReflect() protoreflect.Message {
-	mi := &file_store_proto_msgTypes[6]
+	mi := &file_store_store_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -543,7 +539,7 @@ func (x *GenericDetails) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GenericDetails.ProtoReflect.Descriptor instead.
 func (*GenericDetails) Descriptor() ([]byte, []int) {
-	return file_store_proto_rawDescGZIP(), []int{6}
+	return file_store_store_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *GenericDetails) GetNote() string {
@@ -563,7 +559,7 @@ type AddItemRequest struct {
 
 func (x *AddItemRequest) Reset() {
 	*x = AddItemRequest{}
-	mi := &file_store_proto_msgTypes[7]
+	mi := &file_store_store_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -575,7 +571,7 @@ func (x *AddItemRequest) String() string {
 func (*AddItemRequest) ProtoMessage() {}
 
 func (x *AddItemRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_store_proto_msgTypes[7]
+	mi := &file_store_store_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -588,7 +584,7 @@ func (x *AddItemRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AddItemRequest.ProtoReflect.Descriptor instead.
 func (*AddItemRequest) Descriptor() ([]byte, []int) {
-	return file_store_proto_rawDescGZIP(), []int{7}
+	return file_store_store_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *AddItemRequest) GetItem() *Item {
@@ -608,7 +604,7 @@ type AddItemResponse struct {
 
 func (x *AddItemResponse) Reset() {
 	*x = AddItemResponse{}
-	mi := &file_store_proto_msgTypes[8]
+	mi := &file_store_store_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -620,7 +616,7 @@ func (x *AddItemResponse) String() string {
 func (*AddItemResponse) ProtoMessage() {}
 
 func (x *AddItemResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_store_proto_msgTypes[8]
+	mi := &file_store_store_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -633,7 +629,7 @@ func (x *AddItemResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AddItemResponse.ProtoReflect.Descriptor instead.
 func (*AddItemResponse) Descriptor() ([]byte, []int) {
-	return file_store_proto_rawDescGZIP(), []int{8}
+	return file_store_store_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *AddItemResponse) GetId() int64 {
@@ -651,17 +647,17 @@ func (x *AddItemResponse) GetCreated() *Item {
 }
 
 type BuyItemRequest struct {
-	state          protoimpl.MessageState `protogen:"open.v1"`
-	CharacterId    uint64                 `protobuf:"varint,1,opt,name=character_id,json=characterId,proto3" json:"character_id,omitempty"`
-	ItemTemplateId int64                  `protobuf:"varint,2,opt,name=item_template_id,json=itemTemplateId,proto3" json:"item_template_id,omitempty"`
-	Quantity       int32                  `protobuf:"varint,3,opt,name=quantity,proto3" json:"quantity,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	CharacterId   uint64                 `protobuf:"varint,1,opt,name=character_id,json=characterId,proto3" json:"character_id,omitempty"`
+	ItemIds       []uint64               `protobuf:"varint,2,rep,packed,name=item_ids,json=itemIds,proto3" json:"item_ids,omitempty"`
+	Quantity      int32                  `protobuf:"varint,3,opt,name=quantity,proto3" json:"quantity,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *BuyItemRequest) Reset() {
 	*x = BuyItemRequest{}
-	mi := &file_store_proto_msgTypes[9]
+	mi := &file_store_store_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -673,7 +669,7 @@ func (x *BuyItemRequest) String() string {
 func (*BuyItemRequest) ProtoMessage() {}
 
 func (x *BuyItemRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_store_proto_msgTypes[9]
+	mi := &file_store_store_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -686,7 +682,7 @@ func (x *BuyItemRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BuyItemRequest.ProtoReflect.Descriptor instead.
 func (*BuyItemRequest) Descriptor() ([]byte, []int) {
-	return file_store_proto_rawDescGZIP(), []int{9}
+	return file_store_store_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *BuyItemRequest) GetCharacterId() uint64 {
@@ -696,11 +692,11 @@ func (x *BuyItemRequest) GetCharacterId() uint64 {
 	return 0
 }
 
-func (x *BuyItemRequest) GetItemTemplateId() int64 {
+func (x *BuyItemRequest) GetItemIds() []uint64 {
 	if x != nil {
-		return x.ItemTemplateId
+		return x.ItemIds
 	}
-	return 0
+	return nil
 }
 
 func (x *BuyItemRequest) GetQuantity() int32 {
@@ -720,7 +716,7 @@ type BuyItemResponse struct {
 
 func (x *BuyItemResponse) Reset() {
 	*x = BuyItemResponse{}
-	mi := &file_store_proto_msgTypes[10]
+	mi := &file_store_store_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -732,7 +728,7 @@ func (x *BuyItemResponse) String() string {
 func (*BuyItemResponse) ProtoMessage() {}
 
 func (x *BuyItemResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_store_proto_msgTypes[10]
+	mi := &file_store_store_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -745,7 +741,7 @@ func (x *BuyItemResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BuyItemResponse.ProtoReflect.Descriptor instead.
 func (*BuyItemResponse) Descriptor() ([]byte, []int) {
-	return file_store_proto_rawDescGZIP(), []int{10}
+	return file_store_store_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *BuyItemResponse) GetSuccess() bool {
@@ -772,7 +768,7 @@ type SellItemRequest struct {
 
 func (x *SellItemRequest) Reset() {
 	*x = SellItemRequest{}
-	mi := &file_store_proto_msgTypes[11]
+	mi := &file_store_store_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -784,7 +780,7 @@ func (x *SellItemRequest) String() string {
 func (*SellItemRequest) ProtoMessage() {}
 
 func (x *SellItemRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_store_proto_msgTypes[11]
+	mi := &file_store_store_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -797,7 +793,7 @@ func (x *SellItemRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SellItemRequest.ProtoReflect.Descriptor instead.
 func (*SellItemRequest) Descriptor() ([]byte, []int) {
-	return file_store_proto_rawDescGZIP(), []int{11}
+	return file_store_store_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *SellItemRequest) GetCharacterId() uint64 {
@@ -824,7 +820,7 @@ type SellItemResponse struct {
 
 func (x *SellItemResponse) Reset() {
 	*x = SellItemResponse{}
-	mi := &file_store_proto_msgTypes[12]
+	mi := &file_store_store_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -836,7 +832,7 @@ func (x *SellItemResponse) String() string {
 func (*SellItemResponse) ProtoMessage() {}
 
 func (x *SellItemResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_store_proto_msgTypes[12]
+	mi := &file_store_store_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -849,7 +845,7 @@ func (x *SellItemResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SellItemResponse.ProtoReflect.Descriptor instead.
 func (*SellItemResponse) Descriptor() ([]byte, []int) {
-	return file_store_proto_rawDescGZIP(), []int{12}
+	return file_store_store_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *SellItemResponse) GetSuccess() bool {
@@ -866,11 +862,11 @@ func (x *SellItemResponse) GetMessage() string {
 	return ""
 }
 
-var File_store_proto protoreflect.FileDescriptor
+var File_store_store_proto protoreflect.FileDescriptor
 
-const file_store_proto_rawDesc = "" +
+const file_store_store_proto_rawDesc = "" +
 	"\n" +
-	"\vstore.proto\x12\x05store\",\n" +
+	"\x11store/store.proto\x12\x05store\",\n" +
 	"\x16StoreListVendorRequest\x12\x12\n" +
 	"\x04noop\x18\x01 \x01(\tR\x04noop\"~\n" +
 	"\x06Vendor\x12\x1b\n" +
@@ -897,40 +893,42 @@ const file_store_proto_rawDesc = "" +
 	"\x16ListVendorItemResponse\x12!\n" +
 	"\x05items\x18\x01 \x03(\v2\v.store.ItemR\x05items\x12\x1f\n" +
 	"\vtotal_count\x18\x02 \x01(\x03R\n" +
-	"totalCount\"\xcd\x04\n" +
+	"totalCount\"\x8c\x04\n" +
 	"\x04Item\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
 	"\fitem_type_id\x18\x03 \x01(\rR\n" +
 	"itemTypeId\x12$\n" +
-	"\x0eitem_type_code\x18\x04 \x01(\tR\fitemTypeCode\x12\x16\n" +
-	"\x06rarity\x18\x05 \x01(\rR\x06rarity\x12\x1c\n" +
-	"\tstackable\x18\x06 \x01(\rR\tstackable\x12\x1d\n" +
+	"\x0eitem_type_code\x18\x04 \x01(\tR\fitemTypeCode\x12(\n" +
+	"\x10item_template_id\x18\x05 \x01(\x04R\x0eitemTemplateId\x12 \n" +
+	"\vdescription\x18\t \x01(\tR\vdescription\x12\x1d\n" +
 	"\n" +
-	"stack_size\x18\a \x01(\rR\tstackSize\x12$\n" +
-	"\x0ebind_on_pickup\x18\b \x01(\rR\fbindOnPickup\x12 \n" +
-	"\vdescription\x18\t \x01(\tR\vdescription\x12#\n" +
-	"\rhealth_points\x18\v \x01(\x04R\fhealthPoints\x12!\n" +
-	"\fpower_points\x18\f \x01(\x04R\vpowerPoints\x12'\n" +
-	"\x0fstrength_points\x18\r \x01(\x04R\x0estrengthPoints\x12+\n" +
-	"\x11spellpower_points\x18\x0e \x01(\x04R\x10spellpowerPoints\x12\x16\n" +
-	"\x06prefix\x18\x0f \x01(\tR\x06prefix\x12\x16\n" +
-	"\x06suffix\x18\x10 \x01(\tR\x06suffix\x12\x1d\n" +
+	"gold_price\x18\n" +
+	" \x01(\x04R\tgoldPrice\x12.\n" +
+	"\x13buyable_with_tokens\x18\v \x01(\x05R\x11buyableWithTokens\x12\x1f\n" +
+	"\vtoken_price\x18\f \x01(\x04R\n" +
+	"tokenPrice\x12\x16\n" +
+	"\x06prefix\x18\r \x01(\tR\x06prefix\x12\x16\n" +
+	"\x06suffix\x18\x0e \x01(\tR\x06suffix\x12\x16\n" +
+	"\x06health\x18\x0f \x01(\x03R\x06health\x12\x14\n" +
+	"\x05power\x18\x10 \x01(\x03R\x05power\x12\x1a\n" +
+	"\bstrength\x18\x11 \x01(\x03R\bstrength\x12\x1e\n" +
 	"\n" +
-	"gold_price\x18\x11 \x01(\x04R\tgoldPrice\x12.\n" +
-	"\x13buyable_with_tokens\x18\x12 \x01(\x05R\x11buyableWithTokens\x12\x1f\n" +
-	"\vtoken_price\x18\x13 \x01(\x04R\n" +
-	"tokenPrice\"$\n" +
+	"spellpower\x18\x12 \x01(\x03R\n" +
+	"spellpower\x12!\n" +
+	"\fbonus_damage\x18\x13 \x01(\x03R\vbonusDamage\x12\x1f\n" +
+	"\vbonus_armor\x18\x14 \x01(\x03R\n" +
+	"bonusArmor\"$\n" +
 	"\x0eGenericDetails\x12\x12\n" +
 	"\x04note\x18\x01 \x01(\tR\x04note\"1\n" +
 	"\x0eAddItemRequest\x12\x1f\n" +
 	"\x04item\x18\x01 \x01(\v2\v.store.ItemR\x04item\"H\n" +
 	"\x0fAddItemResponse\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12%\n" +
-	"\acreated\x18\x02 \x01(\v2\v.store.ItemR\acreated\"y\n" +
+	"\acreated\x18\x02 \x01(\v2\v.store.ItemR\acreated\"j\n" +
 	"\x0eBuyItemRequest\x12!\n" +
-	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\x12(\n" +
-	"\x10item_template_id\x18\x02 \x01(\x03R\x0eitemTemplateId\x12\x1a\n" +
+	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\x12\x19\n" +
+	"\bitem_ids\x18\x02 \x03(\x04R\aitemIds\x12\x1a\n" +
 	"\bquantity\x18\x03 \x01(\x05R\bquantity\"E\n" +
 	"\x0fBuyItemResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
@@ -940,28 +938,28 @@ const file_store_proto_rawDesc = "" +
 	"\x10item_instance_id\x18\x02 \x01(\x03R\x0eitemInstanceId\"F\n" +
 	"\x10SellItemResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage2\xdb\x02\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage2\xdc\x02\n" +
 	"\x05Store\x12L\n" +
 	"\vListVendors\x12\x1d.store.StoreListVendorRequest\x1a\x1e.store.StoreListVendorResponse\x12S\n" +
 	"\x0fListVendorItems\x12!.store.StoreListVendorItemRequest\x1a\x1d.store.ListVendorItemResponse\x128\n" +
-	"\aAddItem\x12\x15.store.AddItemRequest\x1a\x16.store.AddItemResponse\x128\n" +
-	"\aBuyItem\x12\x15.store.BuyItemRequest\x1a\x16.store.BuyItemResponse\x12;\n" +
-	"\bSellItem\x12\x16.store.SellItemRequest\x1a\x17.store.SellItemResponseB\x13Z\x11proto/store;storeb\x06proto3"
+	"\aAddItem\x12\x15.store.AddItemRequest\x1a\x16.store.AddItemResponse\x129\n" +
+	"\bBuyItems\x12\x15.store.BuyItemRequest\x1a\x16.store.BuyItemResponse\x12;\n" +
+	"\bSellItem\x12\x16.store.SellItemRequest\x1a\x17.store.SellItemResponseB2Z0github.com/komadiina/spelltext/proto/store;storeb\x06proto3"
 
 var (
-	file_store_proto_rawDescOnce sync.Once
-	file_store_proto_rawDescData []byte
+	file_store_store_proto_rawDescOnce sync.Once
+	file_store_store_proto_rawDescData []byte
 )
 
-func file_store_proto_rawDescGZIP() []byte {
-	file_store_proto_rawDescOnce.Do(func() {
-		file_store_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_store_proto_rawDesc), len(file_store_proto_rawDesc)))
+func file_store_store_proto_rawDescGZIP() []byte {
+	file_store_store_proto_rawDescOnce.Do(func() {
+		file_store_store_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_store_store_proto_rawDesc), len(file_store_store_proto_rawDesc)))
 	})
-	return file_store_proto_rawDescData
+	return file_store_store_proto_rawDescData
 }
 
-var file_store_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
-var file_store_proto_goTypes = []any{
+var file_store_store_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_store_store_proto_goTypes = []any{
 	(*StoreListVendorRequest)(nil),     // 0: store.StoreListVendorRequest
 	(*Vendor)(nil),                     // 1: store.Vendor
 	(*StoreListVendorResponse)(nil),    // 2: store.StoreListVendorResponse
@@ -976,7 +974,7 @@ var file_store_proto_goTypes = []any{
 	(*SellItemRequest)(nil),            // 11: store.SellItemRequest
 	(*SellItemResponse)(nil),           // 12: store.SellItemResponse
 }
-var file_store_proto_depIdxs = []int32{
+var file_store_store_proto_depIdxs = []int32{
 	1,  // 0: store.StoreListVendorResponse.vendors:type_name -> store.Vendor
 	5,  // 1: store.ListVendorItemResponse.items:type_name -> store.Item
 	5,  // 2: store.AddItemRequest.item:type_name -> store.Item
@@ -984,12 +982,12 @@ var file_store_proto_depIdxs = []int32{
 	0,  // 4: store.Store.ListVendors:input_type -> store.StoreListVendorRequest
 	3,  // 5: store.Store.ListVendorItems:input_type -> store.StoreListVendorItemRequest
 	7,  // 6: store.Store.AddItem:input_type -> store.AddItemRequest
-	9,  // 7: store.Store.BuyItem:input_type -> store.BuyItemRequest
+	9,  // 7: store.Store.BuyItems:input_type -> store.BuyItemRequest
 	11, // 8: store.Store.SellItem:input_type -> store.SellItemRequest
 	2,  // 9: store.Store.ListVendors:output_type -> store.StoreListVendorResponse
 	4,  // 10: store.Store.ListVendorItems:output_type -> store.ListVendorItemResponse
 	8,  // 11: store.Store.AddItem:output_type -> store.AddItemResponse
-	10, // 12: store.Store.BuyItem:output_type -> store.BuyItemResponse
+	10, // 12: store.Store.BuyItems:output_type -> store.BuyItemResponse
 	12, // 13: store.Store.SellItem:output_type -> store.SellItemResponse
 	9,  // [9:14] is the sub-list for method output_type
 	4,  // [4:9] is the sub-list for method input_type
@@ -998,26 +996,26 @@ var file_store_proto_depIdxs = []int32{
 	0,  // [0:4] is the sub-list for field type_name
 }
 
-func init() { file_store_proto_init() }
-func file_store_proto_init() {
-	if File_store_proto != nil {
+func init() { file_store_store_proto_init() }
+func file_store_store_proto_init() {
+	if File_store_store_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_store_proto_rawDesc), len(file_store_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_store_store_proto_rawDesc), len(file_store_store_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_store_proto_goTypes,
-		DependencyIndexes: file_store_proto_depIdxs,
-		MessageInfos:      file_store_proto_msgTypes,
+		GoTypes:           file_store_store_proto_goTypes,
+		DependencyIndexes: file_store_store_proto_depIdxs,
+		MessageInfos:      file_store_store_proto_msgTypes,
 	}.Build()
-	File_store_proto = out.File
-	file_store_proto_goTypes = nil
-	file_store_proto_depIdxs = nil
+	File_store_store_proto = out.File
+	file_store_store_proto_goTypes = nil
+	file_store_store_proto_depIdxs = nil
 }

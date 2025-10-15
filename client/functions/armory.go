@@ -34,3 +34,15 @@ func DeleteCharacter(char *pb.TCharacter, c *types.SpelltextClient) error {
 		return nil
 	}
 }
+
+func RefreshCharacter(char *pb.TCharacter, c *types.SpelltextClient) error {
+	resp, err := GetCharacters(c.AppStorage[constants.CURRENT_USER_ID].(uint64), c)
+
+	for _, character := range resp.Characters {
+		if character.GetId() == char.GetId() {
+			return SetSelectedCharacter(character, c)
+		}
+	}
+
+	return err
+}

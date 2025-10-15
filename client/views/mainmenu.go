@@ -6,6 +6,7 @@ import (
 	"github.com/komadiina/spelltext/client/constants"
 	types "github.com/komadiina/spelltext/client/types"
 	"github.com/komadiina/spelltext/client/utils"
+	pb "github.com/komadiina/spelltext/proto/armory"
 	"github.com/rivo/tview"
 )
 
@@ -26,7 +27,6 @@ func AddMainmenuPage(c *types.SpelltextClient) {
 			AddItem("- gamba", "gold gold gold\n\n\n", 'g', func() { c.NavigateTo(constants.PAGE_GAMBA) }).
 			AddItem("- chat", "talk to some peeps", 'y', func() { c.NavigateTo(constants.PAGE_CHAT) }).
 			AddItem("- quit", "done for today?", 'q', func() { c.App.Stop() })
-
 		list.SetBorder(true).SetBorderPadding(1, 1, 5, 5)
 
 		updates := tview.NewBox().SetTitle(" updates ").SetBorder(true).SetBorderPadding(1, 1, 5, 5)
@@ -58,15 +58,36 @@ func AddMainmenuPage(c *types.SpelltextClient) {
 
 		guide.SetBorder(true)
 
+		f2 := tview.NewFlex().
+			SetDirection(tview.FlexRow).
+			AddItem(list, 0, 1, true)
+
+		tv := tview.NewTextView().
+			SetDynamicColors(true).SetWrap(true).SetWordWrap(true)
+		tv.SetBorder(true).SetBorderPadding(0, 0, 1, 1)
+
+		if char, ok := c.AppStorage[constants.SELECTED_CHARACTER]; ok {
+			char := char.(*pb.TCharacter)
+			tv.SetText(fmt.Sprintf(`[selected character]%s> %s[""] - %s`, "\n", char.Name, char.Class))
+		} else {
+			tv.SetText(`no character selected -- select one from the [blue]armory[""] page`)
+		}
+
+		c.Logger.Info(c.AppStorage[constants.SELECTED_CHARACTER] != nil)
+
+		f2.AddItem(
+			tv,
+			4, 1, false,
+		)
+
 		flex := tview.NewFlex().
 			SetDirection(tview.FlexRow).
 			AddItem(banner, 1, 1, false).
 			AddItem(tview.NewTextView(), 1, 1, false).
 			AddItem(
 				tview.NewFlex().SetDirection(tview.FlexColumn).
-					AddItem(list, 0, 1, true).
-					AddItem(updates, 0, 1, false),
-				0, 1, true).
+					AddItem(f2, 0, 1, true).
+					AddItem(updates, 0, 1, false), 0, 1, true).
 			AddItem(guide, 3, 1, false).
 			SetFullScreen(true)
 

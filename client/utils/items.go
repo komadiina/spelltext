@@ -2,10 +2,9 @@ package utils
 
 import (
 	"fmt"
+
 	pb "github.com/komadiina/spelltext/proto/store"
 )
-
-func BuyItem() {}
 
 func GetItemName(item *pb.Item) string {
 	var prefix string = ""

@@ -3,9 +3,11 @@ create table weapons (
   prefix varchar(64),
   suffix varchar(64),
   base_damage int not null,
+  health int not null,
+  power int not null,
   strength int not null,
   spellpower int not null,
-  
+  bonus_damage int not null,
   PRIMARY KEY (item_template_id),
   FOREIGN KEY (item_template_id) REFERENCES item_templates (id)
 );
