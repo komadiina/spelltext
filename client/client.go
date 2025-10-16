@@ -8,6 +8,7 @@ import (
 
 	"github.com/charmbracelet/log"
 	"github.com/gdamore/tcell/v2"
+	"github.com/komadiina/spelltext/client/audio"
 	"github.com/komadiina/spelltext/client/config"
 	"github.com/komadiina/spelltext/client/constants"
 	"github.com/komadiina/spelltext/client/factory"
@@ -102,19 +103,26 @@ func main() {
 	cfg, err := config.LoadConfig()
 	if err != nil {
 		logger.Error("failed to load config, using default values.", "reason", err)
-	} else {
-
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
 
+	// init audio manager
+	am := audio.NewManager(44000)
+	err = am.Preload(constants.PRELOAD)
+
+	if err != nil {
+		logger.Fatal("failed to preload audio files", "reason", err)
+	}
+
 	client := types.SpelltextClient{
-		Config:     cfg,
-		Logger:     logger,
-		App:        tview.NewApplication(),
-		User:       &types.SpelltextUser{},
-		Context:    &ctx,
-		AppStorage: make(map[string]any),
+		Config:       cfg,
+		Logger:       logger,
+		App:          tview.NewApplication(),
+		User:         &types.SpelltextUser{},
+		Context:      &ctx,
+		AppStorage:   make(map[string]any),
+		AudioManager: am,
 	}
 
 	logger.Info("initializing clients...")
@@ -148,10 +156,16 @@ func main() {
 
 	client.App.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		if event.Key() == tcell.KeyEscape {
+			client.AudioManager.Play(constants.BLIP_TINY, client.Logger)
+
 			if client.PageManager.Pop() == -1 {
 				client.App.Stop()
 				return nil
 			}
+		} else if event.Key() == tcell.KeyEnter {
+			client.AudioManager.Play(constants.BLIP_NOTIFICATION, client.Logger)
+		} else {
+			client.AudioManager.Play(constants.BLIP_NAVIGATE, client.Logger)
 		}
 
 		return event
