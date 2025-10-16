@@ -39,17 +39,6 @@ func AddInventoryPage(c *types.SpelltextClient) {
 			table = functions.MakeVendorTableHeader(table)
 
 			for idx, item := range items {
-				// tv := tview.NewTextView().SetWrap(true).SetWordWrap(true).SetDynamicColors(true)
-				// name := item.Prefix + " " + item.ItemTemplate.Name + " " + item.Suffix
-				// tv.SetBorder(true).SetBorderPadding(0, 0, 2, 2).SetTitle(" " + strings.Trim(name, " ") + " ")
-				// tv.SetText(
-				// 	fmt.Sprintf(
-				// 		"HP:\t\t%d\nPWR:\t%d\nSTR:\t%d\nSP:\t\t%d\nDMG:\t%d\nARMOR:\t%d\n%s",
-				// 		item.Health, item.Power, item.Strength, item.Spellpower, item.BonusDamage, item.BonusArmor, item.ItemTemplate.Description,
-				// 	),
-				// )
-
-				// flex.AddItem(tv, 9, 1, false)
 				table.
 					Select(1, 0).
 					SetFixed(1, 0).
@@ -59,7 +48,6 @@ func AddInventoryPage(c *types.SpelltextClient) {
 							c.PageManager.Pop() // todo: move focus to flex
 						case tcell.KeyEnter:
 							table.SetSelectable(true, false)
-							// TODO: display item detailed stats (in modal)
 						}
 					}).
 					SetSelectedFunc(func(row, column int) {

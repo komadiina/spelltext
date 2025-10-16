@@ -2,6 +2,7 @@ package functions
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/komadiina/spelltext/client/constants"
 	"github.com/komadiina/spelltext/client/types"
@@ -24,7 +25,7 @@ func GetBackpackItems(c *types.SpelltextClient) *pbInventory.ListBackpackItemsRe
 }
 
 func GetRepoItemName(item *pbRepo.Item) string {
-	return fmt.Sprintf("%s%s%s", item.GetPrefix(), item.GetItemTemplate().GetName(), item.GetSuffix())
+	return strings.Trim(fmt.Sprintf("%s%s%s", item.GetPrefix()+" ", item.GetItemTemplate().GetName(), " "+item.GetSuffix()), " ")
 }
 
 func MakeInventoryTableRow(row int, item *pbRepo.Item, c *types.SpelltextClient, t *tview.Table) *tview.Table {

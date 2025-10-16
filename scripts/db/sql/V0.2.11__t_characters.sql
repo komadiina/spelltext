@@ -17,3 +17,7 @@ create table characters (
   foreign key (user_id) references users (id),
   primary key(character_id)
 );
+
+
+create unique index idx_characters_id on characters (character_id);
+create index idx_characters_user_id on characters (user_id);

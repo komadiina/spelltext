@@ -4,4 +4,3 @@ var/log
 logs/
 *.exe
 *.log
-docs/demo.mp4

@@ -7,3 +7,5 @@ create table character_inventories (
   foreign key (character_id) references characters (character_id),
   primary key(character_id)
 );
+
+create unique index idx_character_inventories_id on character_inventories (character_id);

@@ -10,4 +10,7 @@ create table items (
     bonus_damage int not null,
     bonus_armor int not null,
     foreign key (item_template_id) references item_templates (id)
-)
+);
+
+create unique index idx_items_id on items (id);
+create index idx_items_id_item_template_id on items (id, item_template_id);
