@@ -5,7 +5,9 @@ import (
 	"strings"
 
 	"github.com/gdamore/tcell/v2"
+	"github.com/komadiina/spelltext/client/constants"
 	"github.com/komadiina/spelltext/client/types"
+	pbArmory "github.com/komadiina/spelltext/proto/armory"
 	"github.com/rivo/tview"
 )
 
@@ -33,4 +35,13 @@ func CreateModal(title string, message string, c *types.SpelltextClient, onClose
 	modal.SetTitle(title)
 
 	return modal
+}
+
+func UpdateGold(tv *tview.TextView, format string, delta int64, c *types.SpelltextClient) *tview.TextView {
+	char := c.AppStorage[constants.SELECTED_CHARACTER].(*pbArmory.TCharacter)
+
+	char.Gold = uint64(int64(char.Gold) + delta)
+	c.AppStorage[constants.SELECTED_CHARACTER] = char
+
+	return tv.SetText(fmt.Sprintf(format, char.Gold))
 }

@@ -17,6 +17,18 @@ import (
 	"google.golang.org/grpc"
 )
 
+const banner = `
+                _ _ _            _   
+               | | | |          | |  
+ ___ _ __   ___| | | |_ _____  _| |_ 
+/ __| '_ \ / _ \ | | __/ _ \ \/ / __|
+\__ \ |_) |  __/ | | ||  __/>  <| |_ 
+|___/ .__/ \___|_|_|\__\___/_/\_\\__|
+    | |                              
+    |_|                              
+
+`
+
 func InitializePool(s *server.InventoryService, context context.Context, conninfo string, backoff time.Duration, maxRetries int, boFormula func(time.Duration) time.Duration) error {
 	try := 1
 	for {
@@ -67,11 +79,7 @@ func main() {
 	logging.Init(log.InfoLevel, "inventoryserver", false)
 	logger := logging.Get("inventoryserver", false)
 
-	logger.Infof(`
-		// ----------------------- //
-		// --- inventoryserver --- //
-		// -----   %v    ----- //
-		// ----------------------- //`, version)
+	logger.Infof("%s\n%s", banner, version)
 
 	logger.Info("loading config...", "CONFIG_FILE", os.Getenv("CONFIG_FILE"))
 	cfg, err := config.LoadConfig()

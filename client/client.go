@@ -23,6 +23,7 @@ import (
 
 	pbArmory "github.com/komadiina/spelltext/proto/armory"
 	pbChat "github.com/komadiina/spelltext/proto/chat"
+	pbGamba "github.com/komadiina/spelltext/proto/gamba"
 	pbInventory "github.com/komadiina/spelltext/proto/inventory"
 	pbStore "github.com/komadiina/spelltext/proto/store"
 )
@@ -91,6 +92,14 @@ func InitializeClients(c *types.SpelltextClient) {
 		c.Logger.Error("failed to init armory client", "reason", err)
 	} else {
 		c.Clients.CharacterClient = pbArmory.NewCharacterClient(conn)
+	}
+
+	// gamba
+	conn, err = grpc.NewClient("localhost:50055", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		c.Logger.Error("failed to init gamba client", "reason", err)
+	} else {
+		c.Clients.GambaClient = pbGamba.NewGambaClient(conn)
 	}
 }
 

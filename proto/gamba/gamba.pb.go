@@ -60,8 +60,7 @@ func (*GetChestsRequest) Descriptor() ([]byte, []int) {
 
 type GetChestsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Chest         *repo.GambaChest       `protobuf:"bytes,1,opt,name=chest,proto3" json:"chest,omitempty"`
-	Items         []*repo.Item           `protobuf:"bytes,2,rep,name=items,proto3" json:"items,omitempty"`
+	Chests        []*repo.GambaChest     `protobuf:"bytes,1,rep,name=chests,proto3" json:"chests,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -96,14 +95,95 @@ func (*GetChestsResponse) Descriptor() ([]byte, []int) {
 	return file_gamba_gamba_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *GetChestsResponse) GetChest() *repo.GambaChest {
+func (x *GetChestsResponse) GetChests() []*repo.GambaChest {
 	if x != nil {
-		return x.Chest
+		return x.Chests
 	}
 	return nil
 }
 
-func (x *GetChestsResponse) GetItems() []*repo.Item {
+type GetChestDetailsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ChestId       uint64                 `protobuf:"varint,1,opt,name=chest_id,json=chestId,proto3" json:"chest_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetChestDetailsRequest) Reset() {
+	*x = GetChestDetailsRequest{}
+	mi := &file_gamba_gamba_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetChestDetailsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetChestDetailsRequest) ProtoMessage() {}
+
+func (x *GetChestDetailsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_gamba_gamba_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetChestDetailsRequest.ProtoReflect.Descriptor instead.
+func (*GetChestDetailsRequest) Descriptor() ([]byte, []int) {
+	return file_gamba_gamba_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *GetChestDetailsRequest) GetChestId() uint64 {
+	if x != nil {
+		return x.ChestId
+	}
+	return 0
+}
+
+type GetChestDetailsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Items         []*repo.Item           `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetChestDetailsResponse) Reset() {
+	*x = GetChestDetailsResponse{}
+	mi := &file_gamba_gamba_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetChestDetailsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetChestDetailsResponse) ProtoMessage() {}
+
+func (x *GetChestDetailsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_gamba_gamba_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetChestDetailsResponse.ProtoReflect.Descriptor instead.
+func (*GetChestDetailsResponse) Descriptor() ([]byte, []int) {
+	return file_gamba_gamba_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *GetChestDetailsResponse) GetItems() []*repo.Item {
 	if x != nil {
 		return x.Items
 	}
@@ -120,7 +200,7 @@ type OpenChestRequest struct {
 
 func (x *OpenChestRequest) Reset() {
 	*x = OpenChestRequest{}
-	mi := &file_gamba_gamba_proto_msgTypes[2]
+	mi := &file_gamba_gamba_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -132,7 +212,7 @@ func (x *OpenChestRequest) String() string {
 func (*OpenChestRequest) ProtoMessage() {}
 
 func (x *OpenChestRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_gamba_gamba_proto_msgTypes[2]
+	mi := &file_gamba_gamba_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -145,7 +225,7 @@ func (x *OpenChestRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OpenChestRequest.ProtoReflect.Descriptor instead.
 func (*OpenChestRequest) Descriptor() ([]byte, []int) {
-	return file_gamba_gamba_proto_rawDescGZIP(), []int{2}
+	return file_gamba_gamba_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *OpenChestRequest) GetCharacterId() uint64 {
@@ -171,7 +251,7 @@ type OpenChestResponse struct {
 
 func (x *OpenChestResponse) Reset() {
 	*x = OpenChestResponse{}
-	mi := &file_gamba_gamba_proto_msgTypes[3]
+	mi := &file_gamba_gamba_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -183,7 +263,7 @@ func (x *OpenChestResponse) String() string {
 func (*OpenChestResponse) ProtoMessage() {}
 
 func (x *OpenChestResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_gamba_gamba_proto_msgTypes[3]
+	mi := &file_gamba_gamba_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -196,7 +276,7 @@ func (x *OpenChestResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OpenChestResponse.ProtoReflect.Descriptor instead.
 func (*OpenChestResponse) Descriptor() ([]byte, []int) {
-	return file_gamba_gamba_proto_rawDescGZIP(), []int{3}
+	return file_gamba_gamba_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *OpenChestResponse) GetItem() *repo.Item {
@@ -211,19 +291,23 @@ var File_gamba_gamba_proto protoreflect.FileDescriptor
 const file_gamba_gamba_proto_rawDesc = "" +
 	"\n" +
 	"\x11gamba/gamba.proto\x12\x05gamba\x1a\x0frepo/repo.proto\"\x12\n" +
-	"\x10GetChestsRequest\"]\n" +
-	"\x11GetChestsResponse\x12&\n" +
-	"\x05chest\x18\x01 \x01(\v2\x10.repo.GambaChestR\x05chest\x12 \n" +
-	"\x05items\x18\x02 \x03(\v2\n" +
+	"\x10GetChestsRequest\"=\n" +
+	"\x11GetChestsResponse\x12(\n" +
+	"\x06chests\x18\x01 \x03(\v2\x10.repo.GambaChestR\x06chests\"3\n" +
+	"\x16GetChestDetailsRequest\x12\x19\n" +
+	"\bchest_id\x18\x01 \x01(\x04R\achestId\";\n" +
+	"\x17GetChestDetailsResponse\x12 \n" +
+	"\x05items\x18\x01 \x03(\v2\n" +
 	".repo.ItemR\x05items\"P\n" +
 	"\x10OpenChestRequest\x12!\n" +
 	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\x12\x19\n" +
 	"\bchest_id\x18\x02 \x01(\x04R\achestId\"3\n" +
 	"\x11OpenChestResponse\x12\x1e\n" +
 	"\x04item\x18\x01 \x01(\v2\n" +
-	".repo.ItemR\x04item2\x87\x01\n" +
+	".repo.ItemR\x04item2\xd9\x01\n" +
 	"\x05Gamba\x12>\n" +
-	"\tGetChests\x12\x17.gamba.GetChestsRequest\x1a\x18.gamba.GetChestsResponse\x12>\n" +
+	"\tGetChests\x12\x17.gamba.GetChestsRequest\x1a\x18.gamba.GetChestsResponse\x12P\n" +
+	"\x0fGetChestDetails\x12\x1d.gamba.GetChestDetailsRequest\x1a\x1e.gamba.GetChestDetailsResponse\x12>\n" +
 	"\tOpenChest\x12\x17.gamba.OpenChestRequest\x1a\x18.gamba.OpenChestResponseB2Z0github.com/komadiina/spelltext/proto/gamba;gambab\x06proto3"
 
 var (
@@ -238,25 +322,29 @@ func file_gamba_gamba_proto_rawDescGZIP() []byte {
 	return file_gamba_gamba_proto_rawDescData
 }
 
-var file_gamba_gamba_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_gamba_gamba_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_gamba_gamba_proto_goTypes = []any{
-	(*GetChestsRequest)(nil),  // 0: gamba.GetChestsRequest
-	(*GetChestsResponse)(nil), // 1: gamba.GetChestsResponse
-	(*OpenChestRequest)(nil),  // 2: gamba.OpenChestRequest
-	(*OpenChestResponse)(nil), // 3: gamba.OpenChestResponse
-	(*repo.GambaChest)(nil),   // 4: repo.GambaChest
-	(*repo.Item)(nil),         // 5: repo.Item
+	(*GetChestsRequest)(nil),        // 0: gamba.GetChestsRequest
+	(*GetChestsResponse)(nil),       // 1: gamba.GetChestsResponse
+	(*GetChestDetailsRequest)(nil),  // 2: gamba.GetChestDetailsRequest
+	(*GetChestDetailsResponse)(nil), // 3: gamba.GetChestDetailsResponse
+	(*OpenChestRequest)(nil),        // 4: gamba.OpenChestRequest
+	(*OpenChestResponse)(nil),       // 5: gamba.OpenChestResponse
+	(*repo.GambaChest)(nil),         // 6: repo.GambaChest
+	(*repo.Item)(nil),               // 7: repo.Item
 }
 var file_gamba_gamba_proto_depIdxs = []int32{
-	4, // 0: gamba.GetChestsResponse.chest:type_name -> repo.GambaChest
-	5, // 1: gamba.GetChestsResponse.items:type_name -> repo.Item
-	5, // 2: gamba.OpenChestResponse.item:type_name -> repo.Item
+	6, // 0: gamba.GetChestsResponse.chests:type_name -> repo.GambaChest
+	7, // 1: gamba.GetChestDetailsResponse.items:type_name -> repo.Item
+	7, // 2: gamba.OpenChestResponse.item:type_name -> repo.Item
 	0, // 3: gamba.Gamba.GetChests:input_type -> gamba.GetChestsRequest
-	2, // 4: gamba.Gamba.OpenChest:input_type -> gamba.OpenChestRequest
-	1, // 5: gamba.Gamba.GetChests:output_type -> gamba.GetChestsResponse
-	3, // 6: gamba.Gamba.OpenChest:output_type -> gamba.OpenChestResponse
-	5, // [5:7] is the sub-list for method output_type
-	3, // [3:5] is the sub-list for method input_type
+	2, // 4: gamba.Gamba.GetChestDetails:input_type -> gamba.GetChestDetailsRequest
+	4, // 5: gamba.Gamba.OpenChest:input_type -> gamba.OpenChestRequest
+	1, // 6: gamba.Gamba.GetChests:output_type -> gamba.GetChestsResponse
+	3, // 7: gamba.Gamba.GetChestDetails:output_type -> gamba.GetChestDetailsResponse
+	5, // 8: gamba.Gamba.OpenChest:output_type -> gamba.OpenChestResponse
+	6, // [6:9] is the sub-list for method output_type
+	3, // [3:6] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name
 	3, // [3:3] is the sub-list for extension extendee
 	0, // [0:3] is the sub-list for field type_name
@@ -273,7 +361,7 @@ func file_gamba_gamba_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_gamba_gamba_proto_rawDesc), len(file_gamba_gamba_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

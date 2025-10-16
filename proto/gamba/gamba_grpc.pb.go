@@ -19,8 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Gamba_GetChests_FullMethodName = "/gamba.Gamba/GetChests"
-	Gamba_OpenChest_FullMethodName = "/gamba.Gamba/OpenChest"
+	Gamba_GetChests_FullMethodName       = "/gamba.Gamba/GetChests"
+	Gamba_GetChestDetails_FullMethodName = "/gamba.Gamba/GetChestDetails"
+	Gamba_OpenChest_FullMethodName       = "/gamba.Gamba/OpenChest"
 )
 
 // GambaClient is the client API for Gamba service.
@@ -28,6 +29,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GambaClient interface {
 	GetChests(ctx context.Context, in *GetChestsRequest, opts ...grpc.CallOption) (*GetChestsResponse, error)
+	GetChestDetails(ctx context.Context, in *GetChestDetailsRequest, opts ...grpc.CallOption) (*GetChestDetailsResponse, error)
 	OpenChest(ctx context.Context, in *OpenChestRequest, opts ...grpc.CallOption) (*OpenChestResponse, error)
 }
 
@@ -49,6 +51,16 @@ func (c *gambaClient) GetChests(ctx context.Context, in *GetChestsRequest, opts 
 	return out, nil
 }
 
+func (c *gambaClient) GetChestDetails(ctx context.Context, in *GetChestDetailsRequest, opts ...grpc.CallOption) (*GetChestDetailsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetChestDetailsResponse)
+	err := c.cc.Invoke(ctx, Gamba_GetChestDetails_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *gambaClient) OpenChest(ctx context.Context, in *OpenChestRequest, opts ...grpc.CallOption) (*OpenChestResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(OpenChestResponse)
@@ -64,6 +76,7 @@ func (c *gambaClient) OpenChest(ctx context.Context, in *OpenChestRequest, opts 
 // for forward compatibility.
 type GambaServer interface {
 	GetChests(context.Context, *GetChestsRequest) (*GetChestsResponse, error)
+	GetChestDetails(context.Context, *GetChestDetailsRequest) (*GetChestDetailsResponse, error)
 	OpenChest(context.Context, *OpenChestRequest) (*OpenChestResponse, error)
 	mustEmbedUnimplementedGambaServer()
 }
@@ -77,6 +90,9 @@ type UnimplementedGambaServer struct{}
 
 func (UnimplementedGambaServer) GetChests(context.Context, *GetChestsRequest) (*GetChestsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetChests not implemented")
+}
+func (UnimplementedGambaServer) GetChestDetails(context.Context, *GetChestDetailsRequest) (*GetChestDetailsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetChestDetails not implemented")
 }
 func (UnimplementedGambaServer) OpenChest(context.Context, *OpenChestRequest) (*OpenChestResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OpenChest not implemented")
@@ -120,6 +136,24 @@ func _Gamba_GetChests_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Gamba_GetChestDetails_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetChestDetailsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GambaServer).GetChestDetails(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Gamba_GetChestDetails_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GambaServer).GetChestDetails(ctx, req.(*GetChestDetailsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Gamba_OpenChest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(OpenChestRequest)
 	if err := dec(in); err != nil {
@@ -148,6 +182,10 @@ var Gamba_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetChests",
 			Handler:    _Gamba_GetChests_Handler,
+		},
+		{
+			MethodName: "GetChestDetails",
+			Handler:    _Gamba_GetChestDetails_Handler,
 		},
 		{
 			MethodName: "OpenChest",

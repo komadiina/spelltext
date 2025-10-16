@@ -73,8 +73,6 @@ func AddMainmenuPage(c *types.SpelltextClient) {
 			tv.SetText(`no character selected -- select one from the [blue]armory[""] page`)
 		}
 
-		c.Logger.Info(c.AppStorage[constants.SELECTED_CHARACTER] != nil)
-
 		f2.AddItem(
 			tv,
 			4, 1, false,

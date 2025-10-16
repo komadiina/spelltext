@@ -9,7 +9,7 @@ nats:
     replicaCount: 3
     jetstream:
       enabled: true
-      fileStore: 
+      fileStore:
         dir: /data/jetstream
         maxSize: 10Gi
     auth:
@@ -24,18 +24,17 @@ flyway:
     url: "jdbc:postgresql://spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local:5432/spelltext"
     user: postgres
     password: changeme
-  
+
 primary:
   extraVolumeMounts:
     - name: flyway-scripts
       mountPath: /flyway/sql
-  
+
 extraVolumes:
   - name: flyway-scripts
     persistentVolumeClaim:
       claimName: flyway-scripts-pvc
 
-  
 # spelltext service
 chatserver:
   enabled: true
@@ -45,7 +44,7 @@ chatserver:
   containerPort: 50051
   targetPort: 50051
   protocol: "TCP"
-  
+
 storeserver:
   enabled: true
   image: "ghcr.io/komadiina/spelltext/storeserver:latest"
@@ -62,4 +61,22 @@ inventoryserver:
   portName: "grpc"
   containerPort: 50053
   targetPort: 50053
+  protocol: "TCP"
+
+charserver:
+  enabled: true
+  image: "ghcr.io/komadiina/spelltext/charserver:latest"
+  port: 50054
+  portName: "grpc"
+  containerPort: 50054
+  targetPort: 50054
+  protocol: "TCP"
+
+gambaserver:
+  enabled: true
+  image: "ghcr.io/komadiina/spelltext/gambaserver:latest"
+  port: 50055
+  portName: "grpc"
+  containerPort: 50055
+  targetPort: 50055
   protocol: "TCP"

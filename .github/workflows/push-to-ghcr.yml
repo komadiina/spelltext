@@ -48,6 +48,13 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           dockerfile: server/inventory/Dockerfile
 
+      - name: build & push server/gamba
+        uses: macbre/push-to-ghcr@master
+        with:
+          image_name: ${{github.repository}}/gambaserver
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          dockerfile: server/gamba/Dockerfile
+
       - name: build & push scripts/db (flyway)
         uses: macbre/push-to-ghcr@master
         with:

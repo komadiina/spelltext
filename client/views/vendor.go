@@ -136,6 +136,7 @@ func AddVendorPage(c *types.SpelltextClient) {
 					// unmark red
 					table.GetCell(row, 0).SetTextColor(constants.COLOR_NAME)
 					UpdateBasket(&basket, basketPrice, c)
+					bought[resp.Items[row-1].GetId()] = false
 					return
 				} else {
 					// add to basket

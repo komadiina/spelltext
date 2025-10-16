@@ -7,8 +7,15 @@ import "repo/repo.proto";
 message GetChestsRequest {}
 
 message GetChestsResponse {
-    repo.GambaChest chest = 1;
-    repeated repo.Item items = 2;
+    repeated repo.GambaChest chests = 1;
+}
+
+message GetChestDetailsRequest {
+    uint64 chest_id = 1;
+}
+
+message GetChestDetailsResponse {
+    repeated repo.Item items = 1;
 }
 
 message OpenChestRequest {
@@ -22,5 +29,6 @@ message OpenChestResponse {
 
 service Gamba {
     rpc GetChests(GetChestsRequest) returns (GetChestsResponse);
+    rpc GetChestDetails(GetChestDetailsRequest) returns (GetChestDetailsResponse);
     rpc OpenChest(OpenChestRequest) returns (OpenChestResponse);
 }
