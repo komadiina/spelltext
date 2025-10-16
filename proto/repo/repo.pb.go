@@ -1278,6 +1278,142 @@ func (x *VendorWare) GetItemType() *ItemType {
 	return nil
 }
 
+type GambaChest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Description   string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	GoldPrice     uint64                 `protobuf:"varint,4,opt,name=gold_price,json=goldPrice,proto3" json:"gold_price,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GambaChest) Reset() {
+	*x = GambaChest{}
+	mi := &file_repo_repo_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GambaChest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GambaChest) ProtoMessage() {}
+
+func (x *GambaChest) ProtoReflect() protoreflect.Message {
+	mi := &file_repo_repo_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GambaChest.ProtoReflect.Descriptor instead.
+func (*GambaChest) Descriptor() ([]byte, []int) {
+	return file_repo_repo_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *GambaChest) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *GambaChest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *GambaChest) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *GambaChest) GetGoldPrice() uint64 {
+	if x != nil {
+		return x.GoldPrice
+	}
+	return 0
+}
+
+type GambaChestContent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	GambaChestId  uint64                 `protobuf:"varint,1,opt,name=gamba_chest_id,json=gambaChestId,proto3" json:"gamba_chest_id,omitempty"`
+	ItemId        uint64                 `protobuf:"varint,2,opt,name=item_id,json=itemId,proto3" json:"item_id,omitempty"`
+	GambaChest    *GambaChest            `protobuf:"bytes,20,opt,name=gamba_chest,json=gambaChest,proto3" json:"gamba_chest,omitempty"`
+	Item          *Item                  `protobuf:"bytes,21,opt,name=item,proto3" json:"item,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GambaChestContent) Reset() {
+	*x = GambaChestContent{}
+	mi := &file_repo_repo_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GambaChestContent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GambaChestContent) ProtoMessage() {}
+
+func (x *GambaChestContent) ProtoReflect() protoreflect.Message {
+	mi := &file_repo_repo_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GambaChestContent.ProtoReflect.Descriptor instead.
+func (*GambaChestContent) Descriptor() ([]byte, []int) {
+	return file_repo_repo_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *GambaChestContent) GetGambaChestId() uint64 {
+	if x != nil {
+		return x.GambaChestId
+	}
+	return 0
+}
+
+func (x *GambaChestContent) GetItemId() uint64 {
+	if x != nil {
+		return x.ItemId
+	}
+	return 0
+}
+
+func (x *GambaChestContent) GetGambaChest() *GambaChest {
+	if x != nil {
+		return x.GambaChest
+	}
+	return nil
+}
+
+func (x *GambaChestContent) GetItem() *Item {
+	if x != nil {
+		return x.Item
+	}
+	return nil
+}
+
 var File_repo_repo_proto protoreflect.FileDescriptor
 
 const file_repo_repo_proto_rawDesc = "" +
@@ -1416,7 +1552,21 @@ const file_repo_repo_proto_rawDesc = "" +
 	"\fitem_type_id\x18\x02 \x01(\x04R\n" +
 	"itemTypeId\x12$\n" +
 	"\x06vendor\x18\x14 \x01(\v2\f.repo.VendorR\x06vendor\x12+\n" +
-	"\titem_type\x18\x15 \x01(\v2\x0e.repo.ItemTypeR\bitemTypeB0Z.github.com/komadiina/spelltext/proto/repo;repob\x06proto3"
+	"\titem_type\x18\x15 \x01(\v2\x0e.repo.ItemTypeR\bitemType\"q\n" +
+	"\n" +
+	"GambaChest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
+	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x1d\n" +
+	"\n" +
+	"gold_price\x18\x04 \x01(\x04R\tgoldPrice\"\xa5\x01\n" +
+	"\x11GambaChestContent\x12$\n" +
+	"\x0egamba_chest_id\x18\x01 \x01(\x04R\fgambaChestId\x12\x17\n" +
+	"\aitem_id\x18\x02 \x01(\x04R\x06itemId\x121\n" +
+	"\vgamba_chest\x18\x14 \x01(\v2\x10.repo.GambaChestR\n" +
+	"gambaChest\x12\x1e\n" +
+	"\x04item\x18\x15 \x01(\v2\n" +
+	".repo.ItemR\x04itemB0Z.github.com/komadiina/spelltext/proto/repo;repob\x06proto3"
 
 var (
 	file_repo_repo_proto_rawDescOnce sync.Once
@@ -1430,7 +1580,7 @@ func file_repo_repo_proto_rawDescGZIP() []byte {
 	return file_repo_repo_proto_rawDescData
 }
 
-var file_repo_repo_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
+var file_repo_repo_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
 var file_repo_repo_proto_goTypes = []any{
 	(*User)(nil),                           // 0: repo.User
 	(*Hero)(nil),                           // 1: repo.Hero
@@ -1446,7 +1596,9 @@ var file_repo_repo_proto_goTypes = []any{
 	(*CharacterInventoryItemInstance)(nil), // 11: repo.CharacterInventoryItemInstance
 	(*Vendor)(nil),                         // 12: repo.Vendor
 	(*VendorWare)(nil),                     // 13: repo.VendorWare
-	(*timestamppb.Timestamp)(nil),          // 14: google.protobuf.Timestamp
+	(*GambaChest)(nil),                     // 14: repo.GambaChest
+	(*GambaChestContent)(nil),              // 15: repo.GambaChestContent
+	(*timestamppb.Timestamp)(nil),          // 16: google.protobuf.Timestamp
 }
 var file_repo_repo_proto_depIdxs = []int32{
 	3,  // 0: repo.ItemTemplate.equip_slot:type_name -> repo.EquipSlot
@@ -1456,17 +1608,19 @@ var file_repo_repo_proto_depIdxs = []int32{
 	1,  // 4: repo.Character.hero:type_name -> repo.Hero
 	0,  // 5: repo.Character.user:type_name -> repo.User
 	8,  // 6: repo.CharacterInventory.character:type_name -> repo.Character
-	14, // 7: repo.ItemInstance.created_at:type_name -> google.protobuf.Timestamp
+	16, // 7: repo.ItemInstance.created_at:type_name -> google.protobuf.Timestamp
 	6,  // 8: repo.ItemInstance.item:type_name -> repo.Item
 	8,  // 9: repo.CharacterInventoryItemInstance.character:type_name -> repo.Character
 	10, // 10: repo.CharacterInventoryItemInstance.item_instance:type_name -> repo.ItemInstance
 	12, // 11: repo.VendorWare.vendor:type_name -> repo.Vendor
 	2,  // 12: repo.VendorWare.item_type:type_name -> repo.ItemType
-	13, // [13:13] is the sub-list for method output_type
-	13, // [13:13] is the sub-list for method input_type
-	13, // [13:13] is the sub-list for extension type_name
-	13, // [13:13] is the sub-list for extension extendee
-	0,  // [0:13] is the sub-list for field type_name
+	14, // 13: repo.GambaChestContent.gamba_chest:type_name -> repo.GambaChest
+	6,  // 14: repo.GambaChestContent.item:type_name -> repo.Item
+	15, // [15:15] is the sub-list for method output_type
+	15, // [15:15] is the sub-list for method input_type
+	15, // [15:15] is the sub-list for extension type_name
+	15, // [15:15] is the sub-list for extension extendee
+	0,  // [0:15] is the sub-list for field type_name
 }
 
 func init() { file_repo_repo_proto_init() }
@@ -1480,7 +1634,7 @@ func file_repo_repo_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_repo_repo_proto_rawDesc), len(file_repo_repo_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   14,
+			NumMessages:   16,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

@@ -55,6 +55,7 @@ func AddVendorPage(c *types.SpelltextClient) {
 
 		flex := STNewFlex().AddItem(vendor, 1, 1, false).SetDirection(tview.FlexRow)
 		flex.SetBorder(true).SetTitle(" vendor ")
+
 		flex.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 			if event.Key() == tcell.KeyCtrlB {
 				c.Logger.Info("cashing out", "len(basket)", len(basket))
@@ -65,6 +66,17 @@ func AddVendorPage(c *types.SpelltextClient) {
 				}
 
 				// reset basket, reload gold available
+				availableGold.SetText(fmt.Sprintf(`available gold: [yellow]%d[""]`, char.GetGold()))
+				char = c.AppStorage[constants.SELECTED_CHARACTER].(*pbArmory.TCharacter)
+				m := utils.CreateModal(
+					"purchase successful",
+					fmt.Sprintf("you've bought %d items (remaining gold: %d)", len(basket), char.GetGold()),
+					c,
+					nil,
+				)
+
+				basket = make([]*pbStore.Item, 0)
+				c.App.SetRoot(m, true).EnableMouse(true)
 			}
 
 			return event

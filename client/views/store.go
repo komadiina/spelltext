@@ -3,6 +3,7 @@ package views
 import (
 	"github.com/komadiina/spelltext/client/constants"
 	types "github.com/komadiina/spelltext/client/types"
+	"github.com/komadiina/spelltext/client/utils"
 	pb "github.com/komadiina/spelltext/proto/store"
 	"github.com/rivo/tview"
 )
@@ -17,6 +18,12 @@ func AddStorePage(c *types.SpelltextClient) {
 		resp, err := c.Clients.StoreClient.ListVendors(*c.Context, &pb.StoreListVendorRequest{})
 		if err != nil {
 			c.Logger.Error(err)
+			m := utils.CreateModal("oops... ", "error: " + err.Error(), c, func() {
+				c.NavigateTo(constants.PAGE_MAINMENU); 
+				c.App.SetRoot(c.PageManager.Pages, true).EnableMouse(true)
+			})
+			
+			c.App.SetRoot(m, true).EnableMouse(true)
 		}
 
 		if len(resp.Vendors) == 0 {

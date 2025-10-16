@@ -82,23 +82,24 @@ func (s *InventoryService) GetBalance(ctx context.Context, req *pb.InventoryBala
 }
 
 func (s *InventoryService) AddItemsToBackpack(ctx context.Context, req *pb.AddItemsToBackpackRequest) (*pb.AddItemsToBackpackResponse, error) {
+	builder := sq.Insert("character_inventory_item_instance").
+		Columns("character_id, item_instance_id").
+		PlaceholderFormat(sq.Dollar)
+
 	for _, itemInstanceId := range req.ItemInstanceIds {
-		s.Logger.Info("adding item to backpack", "item_instance_id", itemInstanceId, "character_id", req.CharacterId)
-		sql, args, err := sq.Insert("character_inventory_item_instance").
-			Values(req.GetCharacterId(), itemInstanceId).
-			PlaceholderFormat(sq.Dollar).
-			ToSql()
+		builder = builder.Values(req.GetCharacterId(), itemInstanceId)
+	}
 
-		if err != nil {
-			s.Logger.Error(err)
-			return nil, err
-		}
+	sql, args, err := builder.ToSql()
+	if err != nil {
+		s.Logger.Error(err)
+		return nil, err
+	}
 
-		_, err = s.DbPool.Exec(ctx, sql, args...)
-		if err != nil {
-			s.Logger.Error(err)
-			return nil, err
-		}
+	_, err = s.DbPool.Exec(ctx, sql, args...)
+	if err != nil {
+		s.Logger.Error(err)
+		return nil, err
 	}
 
 	return &pb.AddItemsToBackpackResponse{Success: true}, nil
@@ -132,7 +133,6 @@ func (s *InventoryService) ListBackpackItems(ctx context.Context, req *pb.ListBa
 	}
 
 	sql = fmt.Sprintf("%s %s", prefix, sql)
-	s.Logger.Info(sql)
 	rows, err := s.DbPool.Query(ctx, sql, req.CharacterId)
 	if err != nil {
 		s.Logger.Error("failed to run query", "err", err)

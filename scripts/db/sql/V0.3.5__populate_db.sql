@@ -52,3 +52,14 @@ insert into vendor_wares values (2, 2);
 insert into vendor_wares values (3, 3);
 insert into vendor_wares values (4, 1);
 insert into vendor_wares values (4, 2);
+
+insert into gamba_chests values (DEFAULT, 'poor man''s', 'nothing exceptional', 8);
+insert into gamba_chests values (DEFAULT, 'armor', 'need something to wear?', 9);
+insert into gamba_chest_contents values (1, 1);
+insert into gamba_chest_contents values (1, 3);
+insert into gamba_chest_contents values (1, 6);
+insert into gamba_chest_contents values (1, 7);
+insert into gamba_chest_contents values (2, 1);
+insert into gamba_chest_contents values (2, 2);
+insert into gamba_chest_contents values (2, 3);
+insert into gamba_chest_contents values (2, 4);

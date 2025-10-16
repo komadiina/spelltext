@@ -6,6 +6,11 @@ $ cd $PROJECT_ROOT/proto
 $ export FILES="store/store.proto inventory/inventory.proto armory/armory.proto chat/chat.proto repo/repo.proto"
 $ protoc -I. -I$(dirname "$(which protoc)")/../include --go_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. store/store.proto inventory/inventory.proto armory/armory.proto chat/chat.proto repo/repo.proto
 ```
+or, use [files](./files):
+```sh
+$ cd $PROJECT_ROOT/proto
+$ protoc -I. -I$(dirname "$(which protoc)")/../include --go_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. $(cat ./files)
+```
 
 `-I$(dirname "$(which protoc)")/../include` is necessary to import `google.protobuf` packages. requires some tweaks if `protoc` is installed via `winget` (on windows):
 - navigate to `$(dirname "$(which protoc)")`

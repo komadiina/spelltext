@@ -144,3 +144,18 @@ message VendorWare {
     Vendor vendor = 20;
     ItemType item_type = 21;
 }
+
+message GambaChest {
+    uint64 id = 1;
+    string name = 2;
+    string description = 3;
+    uint64 gold_price = 4;
+}
+
+message GambaChestContent {
+    uint64 gamba_chest_id = 1;
+    uint64 item_id = 2;
+
+    GambaChest gamba_chest = 20;
+    Item item = 21;
+}

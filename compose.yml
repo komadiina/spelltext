@@ -67,6 +67,23 @@ services:
     depends_on:
       - postgres
   
+  gambaserver:
+    build:
+      context: .
+      dockerfile: server/gamba/Dockerfile
+    volumes:
+      - ./logs/gambaserver:/logs
+    ports:
+      - "50055:50055"
+    networks:
+      - spelltext
+    develop:
+      watch:
+        - action: "restart"
+          path: "./server/gamba"
+    depends_on:
+      - postgres
+
   nats:
     image: nats
     command: ["-js"]

@@ -9,27 +9,27 @@ storeserver:
   # kube
   # pgUser: postgres
   # pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
-  
+
   # docker
   pgUser: user
   pgHost: postgres
-    
+
   pgPass: changeme
   pgPort: 5432
   pgDbName: spelltext
   pgSslMode: disable
-  
+
 inventoryserver:
   port: 50053
   # could refactor this into a namespace-like structure (e.g. .docker.xserver, .kube.xserver, ...)
   # k8s
   # pgUser: postgres
   # pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
-  
+
   # docker
   pgUser: user
   pgHost: postgres
-    
+
   pgPass: changeme
   pgPort: 5432
   pgDbName: spelltext
@@ -41,7 +41,7 @@ charserver:
   # k8s
   # pgUser: postgres
   # pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
-  
+
   # docker
   pgUser: user
   pgHost: postgres
@@ -50,7 +50,23 @@ charserver:
   pgPort: 5432
   pgDbName: spelltext
   pgSslMode: disable
-  
+
+gambaserver:
+  port: 50055
+
+  # k8s
+  # pgUser: postgres
+  # pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
+
+  # docker
+  pgUser: user
+  pgHost: postgres
+
+  pgPass: changeme
+  pgPort: 5432
+  pgDbName: spelltext
+  pgSslMode: disable
+
 client:
   nats_url: nats://127.0.0.1:4222
   max_wait_time: 5

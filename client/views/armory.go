@@ -53,7 +53,11 @@ func AddArmoryPage(c *types.SpelltextClient) {
 			tview.NewTextView().SetDynamicColors(true),
 		}
 
-		panel.SetBorder(true).SetBorderPadding(0, 1, 1, 1).SetTitle(" character details ").SetTitleAlign(tview.AlignLeft)
+		panel.SetBorder(true).
+			SetBorderPadding(0, 1, 1, 1).
+			SetTitle(" character details ").
+			SetTitleAlign(tview.AlignLeft)
+
 		panel = panel.
 			AddItem(details.Name, 1, 1, false).
 			AddItem(details.Level, 1, 1, false).
