@@ -4,7 +4,9 @@
 
 **(WIP!!)** command-line interface based mmorpg (derives *spell* from mmorpg **spells**, *text* because it's, well, *text-based*). uses [tview](https://github.com/rivo/tview) as the graphical interface. started as a [bachelor's thesis/project](https://efee.etf.unibl.org/vector/zavrsni-radovi/2520) of mine, relying on the Kubernetes orchestration & containerization concepts, as well as high-availability and consistency-related prerequisites.
 
-![mp4](./docs/demo.mp4)
+<video width="640" height="360" controls>
+  <source src="docs/demo.mp4" type="video/mp4">
+</video>
 
 ## contents
 - [spelltext](#spelltext)
