@@ -4,7 +4,8 @@
 
 **(WIP!!)** command-line interface based mmorpg (derives *spell* from mmorpg **spells**, *text* because it's, well, *text-based*). uses [tview](https://github.com/rivo/tview) as the graphical interface. started as a [bachelor's thesis/project](https://efee.etf.unibl.org/vector/zavrsni-radovi/2520) of mine, relying on the Kubernetes orchestration & containerization concepts, as well as high-availability and consistency-related prerequisites.
 
-https://github.com/komadiina/spelltext/blob/dev-docker/docs/demo.mp4
+https://github.com/user-attachments/assets/c27e122b-e7e9-46cd-8445-781d1778dfa4
+
 
 ## contents
 - [spelltext](#spelltext)
@@ -18,7 +19,6 @@ for further usage, refer to the [docs/USAGE.md](./docs/USAGE.md) doc, where ever
 
 ## components
 - `chatserver`: uses fanout MQ (built upon NATS JetStream durable streams)
-- `inventoryserver`: contains a **pgsql** database (will be sharded, to support high-availability and balanced load), detailing player inventory status, currency (coins, boss tokens, etc.)
 - `progserver`: progre**sss**erver is a bit too much, no? keeps track of player story progression
 - `charserver`: servers as a primary character build service - specializations, talents
 - `storeserver`: a vendor-based marketplace service
