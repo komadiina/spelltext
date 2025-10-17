@@ -1,0 +1,34 @@
+syntax = "proto3";
+package gamba;
+option go_package = "github.com/komadiina/spelltext/proto/gamba;gamba";
+
+import "repo/repo.proto";
+
+message GetChestsRequest {}
+
+message GetChestsResponse {
+    repeated repo.GambaChest chests = 1;
+}
+
+message GetChestDetailsRequest {
+    uint64 chest_id = 1;
+}
+
+message GetChestDetailsResponse {
+    repeated repo.Item items = 1;
+}
+
+message OpenChestRequest {
+    uint64 character_id = 1;
+    uint64 chest_id = 2;
+}
+
+message OpenChestResponse {
+    repo.Item item = 1;
+}
+
+service Gamba {
+    rpc GetChests(GetChestsRequest) returns (GetChestsResponse);
+    rpc GetChestDetails(GetChestDetailsRequest) returns (GetChestDetailsResponse);
+    rpc OpenChest(OpenChestRequest) returns (OpenChestResponse);
+}

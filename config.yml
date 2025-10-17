@@ -1,56 +1,48 @@
 chatserver:
   port: 50051
-  # natsUrl: nats://spelltext-nats:4222
-  natsUrl: nats://nats:4222
+  natsUrl: nats://spelltext-nats:4222
   maxAsyncPublish: 512
 
 storeserver:
   port: 50052
-  # kube
-  # pgUser: postgres
-  # pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
-  
-  # docker
-  pgUser: user
-  pgHost: postgres
-    
+  pgUser: storeuser
   pgPass: changeme
+  pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
+  # pgHost: postgres
   pgPort: 5432
   pgDbName: spelltext
   pgSslMode: disable
-  
+
 inventoryserver:
   port: 50053
-  # could refactor this into a namespace-like structure (e.g. .docker.xserver, .kube.xserver, ...)
-  # k8s
-  # pgUser: postgres
-  # pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
-  
-  # docker
-  pgUser: user
-  pgHost: postgres
-    
+  pgUser: inventoryuser
   pgPass: changeme
+  pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
+  # pgHost: postgres
   pgPort: 5432
   pgDbName: spelltext
   pgSslMode: disable
 
 charserver:
   port: 50054
-
-  # k8s
-  # pgUser: postgres
-  # pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
-  
-  # docker
-  pgUser: user
-  pgHost: postgres
-
+  pgUser: charuser
   pgPass: changeme
+  pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
+  # pgHost: postgres
   pgPort: 5432
   pgDbName: spelltext
   pgSslMode: disable
-  
+
+gambaserver:
+  port: 50055
+  pgUser: gambauser
+  pgPass: changeme
+  pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
+  # pgHost: postgres
+  pgPort: 5432
+  pgDbName: spelltext
+  pgSslMode: disable
+
 client:
   nats_url: nats://127.0.0.1:4222
   max_wait_time: 5

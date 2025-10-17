@@ -68,8 +68,7 @@ $ minikube start
 # navigate to project root dir
 $ cd $PROJECT_ROOT
 
-$ helm install spelltext k8s/postgresql-ha/ -n spelltext --create-namespace
-$ helm upgrade spelltext k8s/spelltext/ -n spelltext
+$ helm install spelltext k8s/spelltext -f k8s/spelltext/values.yaml -n spelltext --create-namespace 
 
 # (confirm) set current kubectl namespace to 'spelltext'
 $ kubectl config set-context --current --namespace=spelltext
@@ -110,6 +109,12 @@ cleanup:
 ```sh
 $ helm uninstall spelltext
 $ kubectl delete ns spelltext
+
+# remove persistent volumes via kubectl 
+$ kubectl get pv
+# WARNING: only use '--all' when it is safe to do so
+$ kubectl delete pv <pv-name>
+
 # terminate the nats port-forward terminal
 # terminate the minikube tunnel terminal
 $ minikube stop

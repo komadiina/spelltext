@@ -21,11 +21,15 @@ require (
 	github.com/cosiner/argv v0.1.0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.7 // indirect
 	github.com/derekparker/trie v0.0.0-20230829180723-39f4de51ef7d // indirect
+	github.com/ebitengine/oto/v3 v3.3.2 // indirect
+	github.com/ebitengine/purego v0.8.0 // indirect
 	github.com/go-delve/delve v1.25.2 // indirect
 	github.com/go-delve/liner v1.2.3-0.20231231155935-4726ab1d7f62 // indirect
 	github.com/go-logfmt/logfmt v0.6.0 // indirect
 	github.com/google/go-dap v0.12.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
+	github.com/gopxl/beep/v2 v2.1.1 // indirect
+	github.com/hajimehoshi/go-mp3 v0.3.4 // indirect
 	github.com/hashicorp/golang-lru v1.0.2 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
@@ -41,6 +45,7 @@ require (
 	github.com/nats-io/nats.go v1.46.0 // indirect
 	github.com/nats-io/nkeys v0.4.11 // indirect
 	github.com/nats-io/nuid v1.0.1 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/spf13/cobra v1.10.1 // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
@@ -60,6 +65,7 @@ require (
 	github.com/charmbracelet/log v0.4.2
 	github.com/gdamore/encoding v1.0.1 // indirect
 	github.com/gdamore/tcell/v2 v2.8.1
+	github.com/gopxl/beep v1.4.1
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/jackc/pgx/v5 v5.7.6
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect

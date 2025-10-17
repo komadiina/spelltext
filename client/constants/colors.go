@@ -10,4 +10,6 @@ var (
 	COLOR_STRENGTH   = tcell.ColorOrange
 	COLOR_SPELLPOWER = tcell.ColorMediumPurple
 	COLOR_DAMAGE     = tcell.ColorIndianRed
+	COLOR_GOLD       = tcell.ColorYellow
+	COLOR_ARMOR      = tcell.ColorLightBlue
 )

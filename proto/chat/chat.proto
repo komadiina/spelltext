@@ -1,6 +1,6 @@
 syntax = "proto3";
 package chat;
-option go_package = "proto/chat;chat";
+option go_package = "github.com/komadiina/spelltext/proto/proto/chat;chat";
 
 message ChatMessage {
   string sender = 1;

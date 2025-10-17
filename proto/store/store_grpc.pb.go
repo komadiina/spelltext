@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v6.32.1
-// source: store.proto
+// source: store/store.proto
 
 package store
 
@@ -22,7 +22,7 @@ const (
 	Store_ListVendors_FullMethodName     = "/store.Store/ListVendors"
 	Store_ListVendorItems_FullMethodName = "/store.Store/ListVendorItems"
 	Store_AddItem_FullMethodName         = "/store.Store/AddItem"
-	Store_BuyItem_FullMethodName         = "/store.Store/BuyItem"
+	Store_BuyItems_FullMethodName        = "/store.Store/BuyItems"
 	Store_SellItem_FullMethodName        = "/store.Store/SellItem"
 )
 
@@ -33,7 +33,7 @@ type StoreClient interface {
 	ListVendors(ctx context.Context, in *StoreListVendorRequest, opts ...grpc.CallOption) (*StoreListVendorResponse, error)
 	ListVendorItems(ctx context.Context, in *StoreListVendorItemRequest, opts ...grpc.CallOption) (*ListVendorItemResponse, error)
 	AddItem(ctx context.Context, in *AddItemRequest, opts ...grpc.CallOption) (*AddItemResponse, error)
-	BuyItem(ctx context.Context, in *BuyItemRequest, opts ...grpc.CallOption) (*BuyItemResponse, error)
+	BuyItems(ctx context.Context, in *BuyItemRequest, opts ...grpc.CallOption) (*BuyItemResponse, error)
 	SellItem(ctx context.Context, in *SellItemRequest, opts ...grpc.CallOption) (*SellItemResponse, error)
 }
 
@@ -75,10 +75,10 @@ func (c *storeClient) AddItem(ctx context.Context, in *AddItemRequest, opts ...g
 	return out, nil
 }
 
-func (c *storeClient) BuyItem(ctx context.Context, in *BuyItemRequest, opts ...grpc.CallOption) (*BuyItemResponse, error) {
+func (c *storeClient) BuyItems(ctx context.Context, in *BuyItemRequest, opts ...grpc.CallOption) (*BuyItemResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(BuyItemResponse)
-	err := c.cc.Invoke(ctx, Store_BuyItem_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Store_BuyItems_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -102,7 +102,7 @@ type StoreServer interface {
 	ListVendors(context.Context, *StoreListVendorRequest) (*StoreListVendorResponse, error)
 	ListVendorItems(context.Context, *StoreListVendorItemRequest) (*ListVendorItemResponse, error)
 	AddItem(context.Context, *AddItemRequest) (*AddItemResponse, error)
-	BuyItem(context.Context, *BuyItemRequest) (*BuyItemResponse, error)
+	BuyItems(context.Context, *BuyItemRequest) (*BuyItemResponse, error)
 	SellItem(context.Context, *SellItemRequest) (*SellItemResponse, error)
 	mustEmbedUnimplementedStoreServer()
 }
@@ -123,8 +123,8 @@ func (UnimplementedStoreServer) ListVendorItems(context.Context, *StoreListVendo
 func (UnimplementedStoreServer) AddItem(context.Context, *AddItemRequest) (*AddItemResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddItem not implemented")
 }
-func (UnimplementedStoreServer) BuyItem(context.Context, *BuyItemRequest) (*BuyItemResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BuyItem not implemented")
+func (UnimplementedStoreServer) BuyItems(context.Context, *BuyItemRequest) (*BuyItemResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BuyItems not implemented")
 }
 func (UnimplementedStoreServer) SellItem(context.Context, *SellItemRequest) (*SellItemResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SellItem not implemented")
@@ -204,20 +204,20 @@ func _Store_AddItem_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Store_BuyItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Store_BuyItems_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(BuyItemRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(StoreServer).BuyItem(ctx, in)
+		return srv.(StoreServer).BuyItems(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Store_BuyItem_FullMethodName,
+		FullMethod: Store_BuyItems_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StoreServer).BuyItem(ctx, req.(*BuyItemRequest))
+		return srv.(StoreServer).BuyItems(ctx, req.(*BuyItemRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -260,8 +260,8 @@ var Store_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Store_AddItem_Handler,
 		},
 		{
-			MethodName: "BuyItem",
-			Handler:    _Store_BuyItem_Handler,
+			MethodName: "BuyItems",
+			Handler:    _Store_BuyItems_Handler,
 		},
 		{
 			MethodName: "SellItem",
@@ -269,5 +269,5 @@ var Store_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "store.proto",
+	Metadata: "store/store.proto",
 }

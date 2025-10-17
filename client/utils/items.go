@@ -2,10 +2,15 @@ package utils
 
 import (
 	"fmt"
+	"strings"
+
+	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	pb "github.com/komadiina/spelltext/proto/store"
 )
 
-func BuyItem() {}
+func GetFullItemName(item *pbRepo.Item) string {
+	return strings.Trim(fmt.Sprintf("%s %s %s", item.GetPrefix(), item.GetItemTemplate().GetName(), item.GetSuffix()), " ")
+}
 
 func GetItemName(item *pb.Item) string {
 	var prefix string = ""

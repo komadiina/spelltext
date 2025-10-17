@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: charserver
+  namespace: spelltext
+  labels:
+    app: charserver
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: charserver
+  template:
+    metadata:
+      labels:
+        app: charserver
+    spec:
+      containers:
+        - name: charserver
+          image: {{ .Values.charserver.image | toString }}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: {{ .Values.charserver.containerPort }}
+              name: {{ .Values.charserver.portName }}
+              protocol: {{ .Values.charserver.protocol }}
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.charserver.containerPort }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.charserver.containerPort }}
+            initialDelaySeconds: 15
+            periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: charserver
+  namespace: spelltext
+  labels:
+    app: charserver
+spec:
+  type: ClusterIP
+  selector:
+    app: charserver
+  ports:
+    - name: {{ .Values.charserver.portName }}
+      port: {{ .Values.charserver.port }}
+      targetPort: {{ .Values.charserver.targetPort }}
+      protocol: {{ .Values.charserver.protocol }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: charserver-ingress
+  namespace: spelltext
+  labels:
+    app: charserver
+spec:
+  type: LoadBalancer
+  selector:
+    app: charserver
+  ports:
+    - name: {{ .Values.charserver.portName }}
+      port: {{ .Values.charserver.port }}
+      targetPort: {{ .Values.charserver.targetPort }}
+      protocol: {{ .Values.charserver.protocol }}

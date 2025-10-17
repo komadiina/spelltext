@@ -11,3 +11,5 @@ CREATE TABLE heroes (
   spellpower_pl int not null default 0,
   PRIMARY KEY (id)
 );
+
+CREATE UNIQUE INDEX idx_heroes_name ON heroes (name);

@@ -1,0 +1,161 @@
+syntax = "proto3"; 
+package repo;
+option go_package = "github.com/komadiina/spelltext/proto/repo;repo";
+
+import "google/protobuf/timestamp.proto";
+
+message User {
+    uint64 id = 1;
+    string username = 2;
+    string password_hash = 3;
+    string email = 4;
+}
+
+message Hero {
+    uint64 id = 1;
+    string name = 2;
+    int64 base_health = 3;
+    int64 base_power = 4;
+    int64 base_strength = 5;
+    int64 base_spellpower = 6;
+    int64 health_per_level = 7;
+    int64 power_per_level = 8;
+    int64 strength_per_level = 9;
+    int64 spellpower_per_level = 10;
+}
+
+message ItemType {
+    uint64 id = 1;
+    string code = 2;
+    string name = 3;
+}
+
+message EquipSlot {
+    uint64 id = 1;
+    string code = 2;
+    string name = 3;
+}
+
+message ItemTemplate {
+    uint64 id = 1;
+    string name = 2;
+    uint64 item_type_id = 3;
+    uint64 equip_slot_id = 4;
+    string description = 5;
+    uint64 gold_price = 6;
+    uint64 buyable_with_tokens = 7;
+    uint64 token_price = 8;
+    string metadata = 9;
+    EquipSlot equip_slot = 20;
+    ItemType item_type = 21;
+}
+
+message ConsumableTemplate {
+    uint64 id = 1;
+    string name = 2;
+    uint32 stackable = 3;
+    uint64 gold_price = 4;
+}
+
+message Item {
+    uint64 id = 1;
+    string prefix = 2;
+    string suffix = 3;
+    uint64 item_template_id = 4;
+    uint64 health = 5;
+    uint64 power = 6;
+    uint64 strength = 7;
+    uint64 spellpower = 8;
+    uint64 bonus_damage = 9;
+    uint64 bonus_armor = 10;
+    ItemTemplate item_template = 20;
+}
+
+message Consumable {
+    uint64 id = 1;
+    string prefix = 2;
+    string suffix = 3;
+    uint64 item_template_id = 4;
+    uint64 health = 5;
+    uint64 power = 6;
+    uint64 strength = 7;
+    uint64 spellpower = 8;
+    uint64 bonus_damage = 9;
+    uint64 bonus_armor = 10;
+    uint64 uses = 11;
+
+    ConsumableTemplate consumable_template = 20;
+}
+
+message Character {
+    uint64 character_id = 1;
+    uint64 user_id = 2;
+    uint64 hero_id = 3;
+    string character_name = 4;
+    uint64 level = 5;
+    uint64 experience = 6;
+    uint64 gold = 7;
+    uint64 tokens = 8;
+    uint64 points_health = 9;
+    uint64 points_power = 10;
+    uint64 points_strength = 11;
+    uint64 points_spellpower = 12;
+
+    Hero hero = 20;
+    User user = 21;
+}
+
+message CharacterInventory {
+    uint64 character_id = 1;
+    uint64 gold = 2;
+    uint64 tokens = 3;
+    uint64 base_inventory_size = 4;
+    uint64 expanded_inventory_size = 5;
+
+    Character character = 20;
+}
+
+message ItemInstance {
+    uint64 item_instance_id = 1;
+    uint64 item_id = 2;
+    uint64 owner_character_id = 3;
+    google.protobuf.Timestamp created_at = 4;
+
+    Item item = 20;
+}
+
+message CharacterInventoryItemInstance {
+    uint64 character_id = 1;
+    uint64 item_instance_id = 2;
+    Character character = 20;
+    ItemInstance item_instance = 21;
+}
+
+message Vendor {
+    uint64 id = 1;
+    string name = 2;
+    string ware_shorthand = 3;
+}
+
+message VendorWare {
+    uint64 vendor_id = 1;
+    uint64 item_type_id = 2;
+
+    Vendor vendor = 20;
+    ItemType item_type = 21;
+}
+
+message GambaChest {
+    uint64 id = 1;
+    string name = 2;
+    string description = 3;
+    uint64 gold_price = 4;
+}
+
+message GambaChestContent {
+    uint64 gamba_chest_id = 1;
+    uint64 item_id = 2;
+
+    GambaChest gamba_chest = 20;
+    Item item = 21;
+}

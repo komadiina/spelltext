@@ -8,10 +8,10 @@ import (
 
 	"github.com/charmbracelet/log"
 	"github.com/gdamore/tcell/v2"
+	"github.com/komadiina/spelltext/client/audio"
 	"github.com/komadiina/spelltext/client/config"
 	"github.com/komadiina/spelltext/client/constants"
 	"github.com/komadiina/spelltext/client/factory"
-	"github.com/komadiina/spelltext/client/registry"
 	"github.com/komadiina/spelltext/client/types"
 	"github.com/komadiina/spelltext/client/views"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
@@ -22,6 +22,7 @@ import (
 
 	pbArmory "github.com/komadiina/spelltext/proto/armory"
 	pbChat "github.com/komadiina/spelltext/proto/chat"
+	pbGamba "github.com/komadiina/spelltext/proto/gamba"
 	pbInventory "github.com/komadiina/spelltext/proto/inventory"
 	pbStore "github.com/komadiina/spelltext/proto/store"
 )
@@ -40,9 +41,6 @@ func InitializeNats(cfg *config.Config) (*nats.Conn, nats.JetStream, error) {
 	return conn, js, nil
 }
 
-func InitRegistry(cfg *config.Config) *registry.Registry {
-	return registry.NewRegistry()
-}
 
 func InitializePages(client *types.SpelltextClient) {
 	views.AddLoginPage(client)
@@ -91,6 +89,14 @@ func InitializeClients(c *types.SpelltextClient) {
 	} else {
 		c.Clients.CharacterClient = pbArmory.NewCharacterClient(conn)
 	}
+
+	// gamba
+	conn, err = grpc.NewClient("localhost:50055", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		c.Logger.Error("failed to init gamba client", "reason", err)
+	} else {
+		c.Clients.GambaClient = pbGamba.NewGambaClient(conn)
+	}
 }
 
 func main() {
@@ -102,19 +108,26 @@ func main() {
 	cfg, err := config.LoadConfig()
 	if err != nil {
 		logger.Error("failed to load config, using default values.", "reason", err)
-	} else {
-
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
 
+	// init audio manager
+	am := audio.NewManager(44000)
+	err = am.Preload(constants.PRELOAD)
+
+	if err != nil {
+		logger.Fatal("failed to preload audio files", "reason", err)
+	}
+
 	client := types.SpelltextClient{
-		Config:     cfg,
-		Logger:     logger,
-		App:        tview.NewApplication(),
-		User:       &types.SpelltextUser{},
-		Context:    &ctx,
-		AppStorage: make(map[string]any),
+		Config:       cfg,
+		Logger:       logger,
+		App:          tview.NewApplication(),
+		User:         &types.SpelltextUser{},
+		Context:      &ctx,
+		AppStorage:   make(map[string]any),
+		AudioManager: am,
 	}
 
 	logger.Info("initializing clients...")
@@ -148,10 +161,16 @@ func main() {
 
 	client.App.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		if event.Key() == tcell.KeyEscape {
+			client.AudioManager.Play(constants.BLIP_TINY, client.Logger)
+
 			if client.PageManager.Pop() == -1 {
 				client.App.Stop()
 				return nil
 			}
+		} else if event.Key() == tcell.KeyEnter {
+			client.AudioManager.Play(constants.BLIP_NOTIFICATION, client.Logger)
+		} else {
+			client.AudioManager.Play(constants.BLIP_NAVIGATE, client.Logger)
 		}
 
 		return event

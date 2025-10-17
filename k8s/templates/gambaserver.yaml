@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: gambaserver
+  namespace: spelltext
+  labels:
+    app: gambaserver
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: gambaserver
+  template:
+    metadata:
+      labels:
+        app: gambaserver
+    spec:
+      containers:
+        - name: gambaserver
+          image: {{ .Values.gambaserver.image | toString }}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: {{ .Values.gambaserver.containerPort }}
+              name: {{ .Values.gambaserver.portName }}
+              protocol: {{ .Values.gambaserver.protocol }}
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.gambaserver.containerPort }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: {{.Values.gambaserver.containerPort }}
+            initialDelaySeconds: 15
+            periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gambaserver
+  namespace: spelltext
+  labels:
+    app: gambaserver
+spec:
+  type: ClusterIP
+  selector:
+    app: gambaserver
+  ports:
+    - name: {{.Values.gambaserver.portName }}
+      port: {{.Values.gambaserver.port }}
+      targetPort: {{.Values.gambaserver.targetPort }}
+      protocol: {{.Values.gambaserver.protocol }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gambaserver-ingress
+  namespace: spelltext
+  labels:
+    app: gambaserver
+spec:
+  type: LoadBalancer
+  selector:
+    app: gambaserver
+  ports:
+    - name: {{.Values.gambaserver.portName }}
+      port: {{.Values.gambaserver.port }}
+      targetPort: {{.Values.gambaserver.targetPort }}
+      protocol: {{.Values.gambaserver.protocol }}

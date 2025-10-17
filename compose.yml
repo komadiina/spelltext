@@ -14,7 +14,7 @@ services:
         - action: "restart"
           path: "./server/chat" 
     depends_on:
-      - nats
+      - spelltext-nats
   
   storeserver:
     build:
@@ -67,7 +67,24 @@ services:
     depends_on:
       - postgres
   
-  nats:
+  gambaserver:
+    build:
+      context: .
+      dockerfile: server/gamba/Dockerfile
+    volumes:
+      - ./logs/gambaserver:/logs
+    ports:
+      - "50055:50055"
+    networks:
+      - spelltext
+    develop:
+      watch:
+        - action: "restart"
+          path: "./server/gamba"
+    depends_on:
+      - postgres
+
+  spelltext-nats:
     image: nats
     command: ["-js"]
     ports:
@@ -83,7 +100,7 @@ services:
       - ./scripts/db/sql:/flyway/sql
     networks:
       - spelltext
-    command: ["-url=jdbc:postgresql://postgres:5432/spelltext", "-user=user", "-password=changeme"  ,"-baselineOnMigrate=true", "-connectRetries=15",  "migrate"]
+    command: ["-url=jdbc:postgresql://postgres:5432/spelltext", "-user=postgres", "-password=changeme"  ,"-baselineOnMigrate=true", "-connectRetries=15",  "migrate"]
     depends_on:
       - postgres
   
@@ -91,10 +108,12 @@ services:
     image: postgres
     environment:
       - POSTGRES_PASSWORD=changeme
-      - POSTGRES_USER=user
+      - POSTGRES_USER=postgres
       - POSTGRES_DB=spelltext
       - POSTGRES_REQUIRE_AUTH=false
       - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - ./scripts/db/docker/initdbScripts:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
     networks:
@@ -113,6 +132,8 @@ services:
     ports:
       - "5434:80"
     
+volumes:
+  pg-data:
   
 networks:
   spelltext:

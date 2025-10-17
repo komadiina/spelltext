@@ -4,3 +4,6 @@ create table item_types (
   name VARCHAR(64) NOT NULL,
   PRIMARY KEY(id)
 );
+
+
+CREATE UNIQUE INDEX idx_item_types_code ON item_types (code);

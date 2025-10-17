@@ -10,12 +10,26 @@ import (
 	"github.com/charmbracelet/log"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+	pbInventory "github.com/komadiina/spelltext/proto/inventory"
 	pb "github.com/komadiina/spelltext/proto/store"
 	"github.com/komadiina/spelltext/server/store/config"
 	"github.com/komadiina/spelltext/server/store/server"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
+
+const banner = `
+                _ _ _            _   
+               | | | |          | |  
+ ___ _ __   ___| | | |_ _____  _| |_ 
+/ __| '_ \ / _ \ | | __/ _ \ \/ / __|
+\__ \ |_) |  __/ | | ||  __/>  <| |_ 
+|___/ .__/ \___|_|_|\__\___/_/\_\\__|
+    | |                              
+    |_|                              
+
+`
 
 func InitializePool(s *server.StoreService, context context.Context, conninfo string, backoff time.Duration, maxRetries int, boFormula func(time.Duration) time.Duration) error {
 	try := 1
@@ -59,6 +73,23 @@ func InitializePool(s *server.StoreService, context context.Context, conninfo st
 	}
 }
 
+func InitClientConn(target string, credentials grpc.DialOption, backoff int, maxRetries int) (*grpc.ClientConn, error) {
+	try := 1
+	for {
+		conn, err := grpc.NewClient(target, credentials)
+
+		if err != nil && try >= maxRetries {
+			return nil, err
+		} else if err == nil && try < maxRetries {
+			return conn, nil
+		} else if err != nil && try < maxRetries {
+			backoff *= 3
+			time.Sleep(time.Duration(backoff) * time.Second)
+			try++
+		}
+	}
+}
+
 var version = os.Getenv("VERSION")
 
 func main() {
@@ -67,11 +98,7 @@ func main() {
 	logging.Init(log.InfoLevel, "storeserver", false)
 	logger := logging.Get("storeserver", false)
 
-	logger.Infof(`
-		// ------------------- //
-		// --- storeserver --- //
-		// ---   %v    --- //
-		// ------------------- //`, version)
+	logger.Infof("%s\n%s", banner, version)
 
 	logger.Info("loading config...", "CONFIG_FILE", os.Getenv("CONFIG_FILE"))
 	cfg, err := config.LoadConfig()
@@ -91,6 +118,20 @@ func main() {
 
 	s := grpc.NewServer()
 	ss := server.StoreService{Config: cfg, Logger: logger}
+
+	// init inventory clientConn
+	clientConn, err := InitClientConn("inventoryserver:50053", grpc.WithTransportCredentials(insecure.NewCredentials()), 5, 10)
+	if err != nil {
+		logger.Fatal(err)
+	}
+
+	ss.Connections = &server.Connections{
+		Inventory: clientConn,
+	}
+	ss.Clients = &server.Clients{
+		Inventory: pbInventory.NewInventoryClient(clientConn),
+	}
+	defer ss.Connections.Inventory.Close()
 
 	conninfo := fmt.Sprintf(
 		"postgres://%s:%s@%s:%d/%s?sslmode=%s",

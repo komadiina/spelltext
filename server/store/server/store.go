@@ -8,16 +8,29 @@ import (
 	sq "github.com/Masterminds/squirrel"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+	pbArmory "github.com/komadiina/spelltext/proto/armory"
+	pbInventory "github.com/komadiina/spelltext/proto/inventory"
 	pb "github.com/komadiina/spelltext/proto/store"
 	"github.com/komadiina/spelltext/server/store/config"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
+	"google.golang.org/grpc"
 )
+
+type Connections struct {
+	Inventory *grpc.ClientConn
+}
+
+type Clients struct {
+	Inventory pbInventory.InventoryClient
+}
 
 type StoreService struct {
 	pb.UnimplementedStoreServer
-	DbPool *pgxpool.Pool
-	Config *config.Config
-	Logger *logging.Logger
+	DbPool      *pgxpool.Pool
+	Config      *config.Config
+	Logger      *logging.Logger
+	Clients     *Clients
+	Connections *Connections
 }
 
 func tryConnect(s *StoreService, context context.Context, conninfo string, backoff time.Duration, maxRetries int, boFormula func(time.Duration) time.Duration) (pgx.Conn, error) {
@@ -69,14 +82,12 @@ func (s *StoreService) GetConn(ctx context.Context) *pgx.Conn {
 }
 
 func (s *StoreService) ListVendors(ctx context.Context, req *pb.StoreListVendorRequest) (*pb.StoreListVendorResponse, error) {
-	q := sq.Select("*").From("vendors")
-	sql, _, err := q.ToSql()
+	sql, _, err := sq.Select("*").From("vendors").ToSql()
 	if err != nil {
 		s.Logger.Error("failed to build query", "err", err)
 		return nil, err
 	}
 
-	s.Logger.Info("running query", "query", sql)
 	rows, err := s.DbPool.Query(ctx, sql)
 	if err != nil {
 		s.Logger.Error("failed to run query", "err", err)
@@ -114,15 +125,20 @@ func (s *StoreService) ListVendorItems(ctx context.Context, req *pb.StoreListVen
 	prefix := fmt.Sprintf("WITH v_filt AS (%s)", cteSql)
 
 	query := sq.
-		Select("templ.id, templ.name, templ.item_type_id, templ.rarity, templ.stackable, templ.stack_size, templ.bind_on_pickup, templ.description, templ.gold_price, templ.buyable_with_tokens," +
-			"coalesce(a.prefix, w.prefix, c.prefix, '') as prefix," +
-			"coalesce(a.suffix, w.suffix, c.suffix, '') as suffix," +
-			"v_filt.code, COALESCE(templ.token_price, 0)").
+		Select("templ.id, templ.name, templ.item_type_id," +
+			"templ.description, templ.gold_price, templ.buyable_with_tokens," +
+			"COALESCE(i.prefix, '') AS prefix," +
+			"COALESCE(i.suffix, '') AS suffix," +
+			"v_filt.code, COALESCE(templ.token_price, 0)," +
+			"COALESCE(i.health, 0) AS health," +
+			"COALESCE(i.power, 0) AS power," +
+			"COALESCE(i.strength, 0) AS strength," +
+			"COALESCE(i.spellpower, 0) AS spellpower," +
+			"COALESCE(i.bonus_damage, 0) AS bonus_damage," +
+			"COALESCE(i.bonus_armor, 0) AS bonus_armor").
 		From("item_templates AS templ").
 		InnerJoin("v_filt ON v_filt.item_type_id = templ.item_type_id").
-		LeftJoin("weapons AS w ON w.item_template_id = templ.id").
-		LeftJoin("armors AS a ON a.item_template_id = templ.id").
-		LeftJoin("consumables AS c ON c.item_template_id = templ.id")
+		LeftJoin("items AS i ON i.item_template_id = templ.id")
 
 	sql, _, err := query.ToSql()
 	if err != nil {
@@ -144,10 +160,6 @@ func (s *StoreService) ListVendorItems(ctx context.Context, req *pb.StoreListVen
 			&it.Id,
 			&it.Name,
 			&it.ItemTypeId,
-			&it.Rarity,
-			&it.Stackable,
-			&it.StackSize,
-			&it.BindOnPickup,
 			&it.Description,
 			&it.GoldPrice,
 			&it.BuyableWithTokens,
@@ -155,6 +167,12 @@ func (s *StoreService) ListVendorItems(ctx context.Context, req *pb.StoreListVen
 			&it.Suffix,
 			&it.ItemTypeCode,
 			&it.TokenPrice,
+			&it.Health,
+			&it.Power,
+			&it.Strength,
+			&it.Spellpower,
+			&it.BonusDamage,
+			&it.BonusArmor,
 		)
 
 		if err != nil {
@@ -173,7 +191,121 @@ func (s *StoreService) AddItem(ctx context.Context, req *pb.AddItemRequest) (*pb
 	return nil, nil
 }
 
-func (s *StoreService) BuyItem(ctx context.Context, req *pb.BuyItemRequest) (*pb.BuyItemResponse, error) {
-	s.Logger.Warn("unimplemented method called (BuyItem)")
-	return nil, nil
+func (s *StoreService) BuyItems(ctx context.Context, req *pb.BuyItemRequest) (*pb.BuyItemResponse, error) {
+	s.Logger.Info(s.DbPool.Config())
+	s.Logger.Debugf("BuyItems(%+v)", req)
+	start := time.Now()
+
+	errResp := &pb.BuyItemResponse{Success: false, Message: "error ocurred"}
+	// check if character has enough gold
+	sql, _, err := sq.Select("c.gold").
+		From("characters AS c").
+		Where("c.character_id = $1").
+		ToSql()
+
+	c := &pbArmory.TCharacter{Id: req.CharacterId}
+	rows, err := s.DbPool.Query(ctx, sql, req.CharacterId)
+	for rows.Next() {
+		err := rows.Scan(&c.Gold)
+
+		if err != nil {
+			s.Logger.Error(err)
+			return errResp, err
+		}
+	}
+	rows.Close()
+
+	// get item gold prices
+	sql, args, err := sq.
+		Select("i.id, it.gold_price, i.item_template_id").
+		From("items AS i").
+		InnerJoin("item_templates AS it ON i.id = it.id").
+		Where(sq.Eq{"i.id": req.ItemIds}).
+		PlaceholderFormat(sq.Dollar).
+		ToSql()
+
+	if err != nil {
+		s.Logger.Error(err)
+		return errResp, err
+	}
+
+	rows, err = s.DbPool.Query(ctx, sql, args...)
+	if err != nil {
+		s.Logger.Error(err)
+		return nil, err
+	}
+
+	var items []*pb.Item
+	for rows.Next() {
+		item := &pb.Item{}
+
+		err := rows.Scan(&item.Id, &item.GoldPrice, &item.ItemTemplateId)
+		if err != nil {
+			s.Logger.Error(err)
+			return errResp, err
+		}
+
+		items = append(items, item)
+	}
+
+	var sum uint64 = 0
+	for _, item := range items {
+		sum += item.GetGoldPrice()
+	}
+
+	if sum > c.Gold {
+		s.Logger.Infof("character %s overbought attempt, gold_amount=%d, character_gold=%d", c.Name, sum, c.Gold)
+		return &pb.BuyItemResponse{Success: false, Message: "not enough gold"}, fmt.Errorf("overbuy attempt")
+	}
+
+	batch := &pgx.Batch{}
+	sql = "INSERT INTO item_instances VALUES (DEFAULT, $1, $2, DEFAULT, DEFAULT) RETURNING item_instance_id"
+	var itemInstanceIds []uint64
+	for _, item := range items {
+		batch.Queue(sql, item.ItemTemplateId, c.Id)
+	}
+
+	res := s.DbPool.SendBatch(ctx, batch)
+	defer res.Close()
+	for i := 0; i < len(items); i++ {
+		row := res.QueryRow()
+		if err != nil {
+			s.Logger.Error(err)
+			return nil, err
+		}
+
+		var itemInstanceId uint64
+		err = row.Scan(&itemInstanceId)
+		if err != nil {
+			s.Logger.Error(err)
+			return nil, err
+		}
+
+		itemInstanceIds = append(itemInstanceIds, itemInstanceId)
+	}
+
+	s.Logger.Info(itemInstanceIds)
+
+	// update character gold
+	sql = "UPDATE characters SET gold = gold - $1 WHERE character_id = $2"
+	_, err = s.DbPool.Exec(ctx, sql, sum, c.Id)
+	if err != nil {
+		s.Logger.Error(err)
+		return errResp, err
+	}
+
+	// TODO: move from direct service-service to MQ (problem: wait-for-ack)
+	_, err = s.Clients.Inventory.AddItemsToBackpack(ctx, &pbInventory.AddItemsToBackpackRequest{
+		CharacterId:     c.Id,
+		ItemInstanceIds: itemInstanceIds,
+	})
+
+	if err != nil {
+		s.Logger.Error(err)
+		return errResp, err
+	}
+
+	s.Logger.Infof("finished, start=%v, t=%v", start.Format(time.RFC3339), time.Since(start))
+
+	return &pb.BuyItemResponse{Success: true, Message: "items bought & added to inventory"}, nil
 }

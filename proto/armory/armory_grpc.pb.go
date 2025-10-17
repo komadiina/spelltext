@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v6.32.1
-// source: armory.proto
+// source: armory/armory.proto
 
 package armory
 
@@ -231,5 +231,5 @@ var Character_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "armory.proto",
+	Metadata: "armory/armory.proto",
 }

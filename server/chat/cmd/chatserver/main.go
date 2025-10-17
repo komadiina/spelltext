@@ -16,15 +16,23 @@ import (
 
 var version = os.Getenv("VERSION")
 
+const banner = `
+                _ _ _            _   
+               | | | |          | |  
+ ___ _ __   ___| | | |_ _____  _| |_ 
+/ __| '_ \ / _ \ | | __/ _ \ \/ / __|
+\__ \ |_) |  __/ | | ||  __/>  <| |_ 
+|___/ .__/ \___|_|_|\__\___/_/\_\\__|
+    | |                              
+    |_|                              
+
+`
+
 func main() {
 	logging.Init(log.InfoLevel, "chatserver", false)
 	logger := logging.Get("chatserver", false)
 
-	logger.Infof(`
-		// -------------------- //
-		// ---- chatserver ---- //
-		// ----   %v   ---- //
-		// -------------------- //`, version)
+	logger.Infof("%s\n%s", banner, version)
 
 	logger.Info("loading config...", "CONFIG_FILE", os.Getenv("CONFIG_FILE"))
 	cfg, err := config.LoadConfig()

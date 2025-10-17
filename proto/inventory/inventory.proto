@@ -1,6 +1,8 @@
 syntax = "proto3";
 package inventory;
-option go_package = "proto/inventory;inventory";
+option go_package = "github.com/komadiina/spelltext/proto/inventory;inventory";
+
+import "repo/repo.proto";
 
 message InventoryBalanceRequest {
   string username = 1;
@@ -23,7 +25,27 @@ message SellItemResponse {
   string message = 2;
 }
 
+message AddItemsToBackpackRequest {
+  uint64 character_id = 1;
+  repeated uint64 item_instance_ids = 2;
+}
+
+message AddItemsToBackpackResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ListBackpackItemsRequest {
+  uint64 character_id = 1;
+}
+
+message ListBackpackItemsResponse {
+  repeated repo.Item items = 1;
+}
+
 service Inventory {
   rpc GetBalance(InventoryBalanceRequest) returns (InventoryBalanceResponse);
   rpc SellItem(SellItemRequest) returns (SellItemResponse);
+  rpc AddItemsToBackpack(AddItemsToBackpackRequest) returns (AddItemsToBackpackResponse);
+  rpc ListBackpackItems(ListBackpackItemsRequest) returns (ListBackpackItemsResponse);
 }
