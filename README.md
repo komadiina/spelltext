@@ -11,10 +11,35 @@ https://github.com/user-attachments/assets/c27e122b-e7e9-46cd-8445-781d1778dfa4
 - [spelltext](#spelltext)
   - [contents](#contents)
   - [usage](#usage)
+    - [quickstart](#quickstart)
   - [components](#components)
-  - [todo:](#todo)
 
 ## usage
+### quickstart
+to get up and running with **spelltext** with *kubernetes*, simply run:
+```sh
+# rebuild proto (if necessary):
+$ cd proto 
+$ protoc -I. -I$(dirname "$(which protoc)")/../include --go_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. $(cat ./files) 
+$ cd ..
+
+# deploy cluster:
+$ minikube start
+$ helm install spelltext k8s/ -f k8s/values.yaml -n spelltext --create-namespace
+$ kubectl config set-context --current --namespace=spelltext
+$ minikube tunnel # occupies terminal
+$ kubectl port-forward pods/spelltext-nats 4222:4222 # also occupies terminal
+
+# run client:
+$ cd client 
+$ go run client.go
+```
+
+or with *docker* via *docker-compose*:
+```sh
+$ docker compose up --build --force-recreate --no-attach pgadmin
+```
+
 for further usage, refer to the [docs/USAGE.md](./docs/USAGE.md) doc, where everything from setting up, configuring services, maintaining and cleaning up is explained.
 
 ## components
@@ -25,6 +50,3 @@ for further usage, refer to the [docs/USAGE.md](./docs/USAGE.md) doc, where ever
 - `combatserver`: instances a isolated '1v1' environment for two entities (players, NPCs)
 - `gambaserver`: lets players open chests of various tiers by spending currency - contacts `inventoryserver` upon ChestOpenEvent 
 
-## todo:
-`1st oct, 2025`:
-- fix pgpool `pool_passwd` not using `values.yaml:.pgpool.customUsers[.usernames, .passwords]` field 

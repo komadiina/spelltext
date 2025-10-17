@@ -12,7 +12,6 @@ import (
 	"github.com/komadiina/spelltext/client/config"
 	"github.com/komadiina/spelltext/client/constants"
 	"github.com/komadiina/spelltext/client/factory"
-	"github.com/komadiina/spelltext/client/registry"
 	"github.com/komadiina/spelltext/client/types"
 	"github.com/komadiina/spelltext/client/views"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
@@ -42,9 +41,6 @@ func InitializeNats(cfg *config.Config) (*nats.Conn, nats.JetStream, error) {
 	return conn, js, nil
 }
 
-func InitRegistry(cfg *config.Config) *registry.Registry {
-	return registry.NewRegistry()
-}
 
 func InitializePages(client *types.SpelltextClient) {
 	views.AddLoginPage(client)

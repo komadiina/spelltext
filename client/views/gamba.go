@@ -31,6 +31,7 @@ func AddGambaPage(c *types.SpelltextClient) {
 
 		resp, err := functions.GetGambaChests(c)
 		if err != nil {
+			c.Logger.Error(err)
 			flex.AddItem(tview.NewTextView().SetText("failed to fetch available chests. please try again later."), 0, 1, false)
 		} else {
 			chests := resp.GetChests()

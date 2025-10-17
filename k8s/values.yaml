@@ -1,0 +1,151 @@
+namespace:
+  name: spelltext
+  environment: dev
+
+images:
+  useLocal: true
+
+# core services
+nats:
+  enabled: true
+  config:
+    replicaCount: 3
+    jetstream:
+      enabled: true
+      fileStore:
+        dir: /data/jetstream
+        maxSize: 10Gi
+    auth:
+      enabled: false
+    persistence:
+      enabled: true
+
+flyway:
+  enabled: true
+  image: "ghcr.io/komadiina/spelltext/flyway:latest"
+  # image: "spelltext-flyway:latest"
+  database:
+    url: "jdbc:postgresql://spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local:5432/spelltext"
+    user: postgres
+    password: changeme
+
+primary:
+  extraVolumeMounts:
+    - name: flyway-scripts
+      mountPath: /flyway/sql
+
+extraVolumes:
+  - name: flyway-scripts
+    persistentVolumeClaim:
+      claimName: flyway-scripts-pvc
+
+postgresql-ha:
+  enabled: true
+  pgpool:
+    initdbScripts:
+      01-add_pgpool_users.sh: |
+        #!/bin/sh
+        echo "[initdbScripts] initializing pgpool users..."
+
+        pg_enc -m --config-file="/opt/bitnami/pgpool/conf/pgpool.conf" -u postgres changeme
+        echo "[initdbScripts] user 'postgres' created..."
+        pg_enc -m --config-file="/opt/bitnami/pgpool/conf/pgpool.conf" -u repmgr changeme
+        echo "[initdbScripts] user 'repmgr' created..."
+
+        pg_enc -m --config-file="/opt/bitnami/pgpool/conf/pgpool.conf" -u superuser changeme
+        pg_enc -m --config-file="/opt/bitnami/pgpool/conf/pgpool.conf" -u storeuser changeme
+        pg_enc -m --config-file="/opt/bitnami/pgpool/conf/pgpool.conf" -u inventoryuser changeme
+        pg_enc -m --config-file="/opt/bitnami/pgpool/conf/pgpool.conf" -u charuser changeme
+        pg_enc -m --config-file="/opt/bitnami/pgpool/conf/pgpool.conf" -u gambauser changeme
+        pg_enc -m --config-file="/opt/bitnami/pgpool/conf/pgpool.conf" -u chatuser changeme
+        pg_enc -m --config-file="/opt/bitnami/pgpool/conf/pgpool.conf" -u superuser changeme
+        pgpool -a /opt/bitnami/pgpool/conf/pool_hba.conf reload || true
+
+    replicaCount: 1
+    adminUsername: "user"
+    adminPassword: "changeme"
+    authenticationMethod: scram-sha-256
+    livenessProbe:
+      initialDelaySeconds: 25
+    readinessProbe:
+      initialDelaySeconds: 25
+
+  postgresql:
+    username: "postgres"
+    password: "changeme"
+    database: "spelltext"
+    repmgrDatabase: "spelltext"
+    pgHbaTrustAll: true
+    initdbScripts:
+      01-add_roles.sh: |
+        echo "[initdbScripts] creating users..."
+        psql -U postgres -d postgres -c "CREATE USER inventoryuser WITH LOGIN PASSWORD 'changeme';"
+        psql -U postgres -d spelltext -c "GRANT ALL PRIVILEGES ON SCHEMA public TO inventoryuser;"
+
+        psql -U postgres -d postgres -c "CREATE USER charuser WITH LOGIN PASSWORD 'changeme';"
+        psql -U postgres -d spelltext -c "GRANT ALL PRIVILEGES ON SCHEMA public TO charuser;"
+
+        psql -U postgres -d postgres -c "CREATE USER gambauser WITH LOGIN PASSWORD 'changeme';"
+        psql -U postgres -d spelltext -c "GRANT ALL PRIVILEGES ON SCHEMA public TO gambauser;"
+
+        psql -U postgres -d postgres -c "CREATE USER chatuser WITH LOGIN PASSWORD 'changeme';"
+        psql -U postgres -d spelltext -c "GRANT ALL PRIVILEGES ON SCHEMA public TO chatuser;"
+
+        psql -U postgres -d postgres -c "CREATE USER storeuser WITH LOGIN PASSWORD 'changeme';"
+        psql -U postgres -d spelltext -c "GRANT ALL PRIVILEGES ON SCHEMA public TO storeuser;"
+
+        psql -U postgres -d spelltext -c "GRANT pg_read_all_data TO inventoryuser, charuser, gambauser, chatuser, storeuser;"
+        psql -U postgres -d spelltext -c "GRANT pg_write_all_data TO inventoryuser, charuser, gambauser, chatuser, storeuser;"
+
+        psql -U postgres -d postgres -c "ALTER SYSTEM SET wal_level = logical;"
+        psql -U postgres -d postgres -c "SELECT pg_reload_conf();"
+    livenessProbe:
+      initialDelaySeconds: 15
+    readinessProbe:
+      initialDelaySeconds: 15
+
+# spelltext services
+chatserver:
+  enabled: true
+  image: "ghcr.io/komadiina/spelltext/chatserver:latest"
+  port: 50051
+  portName: "grpc"
+  containerPort: 50051
+  targetPort: 50051
+  protocol: "TCP"
+
+storeserver:
+  enabled: true
+  image: "ghcr.io/komadiina/spelltext/storeserver:latest"
+  port: 50052
+  portName: "grpc"
+  containerPort: 50052
+  targetPort: 50052
+  protocol: "TCP"
+
+inventoryserver:
+  enabled: true
+  image: "ghcr.io/komadiina/spelltext/inventoryserver:latest"
+  port: 50053
+  portName: "grpc"
+  containerPort: 50053
+  targetPort: 50053
+  protocol: "TCP"
+
+charserver:
+  enabled: true
+  image: "ghcr.io/komadiina/spelltext/charserver:latest"
+  port: 50054
+  portName: "grpc"
+  containerPort: 50054
+  targetPort: 50054
+  protocol: "TCP"
+
+gambaserver:
+  enabled: true
+  image: "ghcr.io/komadiina/spelltext/gambaserver:latest"
+  port: 50055
+  portName: "grpc"
+  containerPort: 50055
+  targetPort: 50055
+  protocol: "TCP"

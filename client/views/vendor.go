@@ -59,14 +59,18 @@ func AddVendorPage(c *types.SpelltextClient) {
 		flex.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 			if event.Key() == tcell.KeyCtrlB {
 				c.Logger.Info("cashing out", "len(basket)", len(basket))
-				// TODO
 				char := c.AppStorage[constants.SELECTED_CHARACTER].(*pbArmory.TCharacter)
 				if err := functions.BuyItems(basket, char, c); err != nil {
 					c.Logger.Error(err)
 				}
 
 				// reset basket, reload gold available
-				availableGold.SetText(fmt.Sprintf(`available gold: [yellow]%d[""]`, char.GetGold()))
+				go func() {
+					c.App.QueueUpdateDraw(func() {
+						availableGold.SetText(fmt.Sprintf(`available gold: [yellow]%d[""]`, char.GetGold()))
+					})
+				}()
+
 				char = c.AppStorage[constants.SELECTED_CHARACTER].(*pbArmory.TCharacter)
 				m := utils.CreateModal(
 					"purchase successful",
@@ -74,8 +78,8 @@ func AddVendorPage(c *types.SpelltextClient) {
 					c,
 					nil,
 				)
-
 				basket = make([]*pbStore.Item, 0)
+
 				c.App.SetRoot(m, true).EnableMouse(true)
 			}
 
@@ -84,7 +88,12 @@ func AddVendorPage(c *types.SpelltextClient) {
 
 		table := tview.NewTable().SetSeparator('|')
 		table.SetBorder(true)
-		table = functions.MakeVendorTableHeader(table)
+
+		go func() {
+			c.App.QueueUpdateDraw(func() {
+				functions.MakeVendorTableHeader(table)
+			})
+		}()
 
 		list := tview.NewList()
 		bought := make(map[uint64]bool)

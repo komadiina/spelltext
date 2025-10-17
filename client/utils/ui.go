@@ -45,3 +45,11 @@ func UpdateGold(tv *tview.TextView, format string, delta int64, c *types.Spellte
 
 	return tv.SetText(fmt.Sprintf(format, char.Gold))
 }
+
+func UpdateCharacter(old *pbArmory.TCharacter, new *pbArmory.TCharacter, c *types.SpelltextClient) {
+	c.AppStorage[constants.SELECTED_CHARACTER] = new
+}
+
+func UpdateCharacterFunc(char *pbArmory.TCharacter, c *types.SpelltextClient, f func(*pbArmory.TCharacter) *pbArmory.TCharacter) {
+	c.AppStorage[constants.SELECTED_CHARACTER] = f(char)
+}

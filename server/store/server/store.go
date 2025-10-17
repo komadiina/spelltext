@@ -14,14 +14,23 @@ import (
 	"github.com/komadiina/spelltext/server/store/config"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 )
+
+type Connections struct {
+	Inventory *grpc.ClientConn
+}
+
+type Clients struct {
+	Inventory pbInventory.InventoryClient
+}
 
 type StoreService struct {
 	pb.UnimplementedStoreServer
-	DbPool *pgxpool.Pool
-	Config *config.Config
-	Logger *logging.Logger
+	DbPool      *pgxpool.Pool
+	Config      *config.Config
+	Logger      *logging.Logger
+	Clients     *Clients
+	Connections *Connections
 }
 
 func tryConnect(s *StoreService, context context.Context, conninfo string, backoff time.Duration, maxRetries int, boFormula func(time.Duration) time.Duration) (pgx.Conn, error) {
@@ -183,16 +192,10 @@ func (s *StoreService) AddItem(ctx context.Context, req *pb.AddItemRequest) (*pb
 }
 
 func (s *StoreService) BuyItems(ctx context.Context, req *pb.BuyItemRequest) (*pb.BuyItemResponse, error) {
+	s.Logger.Info(s.DbPool.Config())
 	s.Logger.Debugf("BuyItems(%+v)", req)
+	start := time.Now()
 
-	// tx, err := s.DbPool.Begin(ctx)
-	// defer func() {_ = tx.Rollback(ctx)}()
-
-	// if err != nil {
-	// 	s.Logger.Error("failed to begin transaction", "err", err)
-	// 	return nil, err
-	// }
-	
 	errResp := &pb.BuyItemResponse{Success: false, Message: "error ocurred"}
 	// check if character has enough gold
 	sql, _, err := sq.Select("c.gold").
@@ -202,7 +205,6 @@ func (s *StoreService) BuyItems(ctx context.Context, req *pb.BuyItemRequest) (*p
 
 	c := &pbArmory.TCharacter{Id: req.CharacterId}
 	rows, err := s.DbPool.Query(ctx, sql, req.CharacterId)
-	// rows, err := tx.Query(ctx, sql, req.CharacterId)
 	for rows.Next() {
 		err := rows.Scan(&c.Gold)
 
@@ -211,6 +213,7 @@ func (s *StoreService) BuyItems(ctx context.Context, req *pb.BuyItemRequest) (*p
 			return errResp, err
 		}
 	}
+	rows.Close()
 
 	// get item gold prices
 	sql, args, err := sq.
@@ -220,24 +223,23 @@ func (s *StoreService) BuyItems(ctx context.Context, req *pb.BuyItemRequest) (*p
 		Where(sq.Eq{"i.id": req.ItemIds}).
 		PlaceholderFormat(sq.Dollar).
 		ToSql()
-	
+
 	if err != nil {
 		s.Logger.Error(err)
 		return errResp, err
 	}
 
 	rows, err = s.DbPool.Query(ctx, sql, args...)
-	// rows, err = tx.Query(ctx, sql, args...)
 	if err != nil {
 		s.Logger.Error(err)
 		return nil, err
 	}
-	
+
 	var items []*pb.Item
 	for rows.Next() {
 		item := &pb.Item{}
-		
-		err := rows.Scan(&item.Id, &item.GoldPrice, &item.ItemTemplateId) // repeated but skip block of code
+
+		err := rows.Scan(&item.Id, &item.GoldPrice, &item.ItemTemplateId)
 		if err != nil {
 			s.Logger.Error(err)
 			return errResp, err
@@ -256,49 +258,46 @@ func (s *StoreService) BuyItems(ctx context.Context, req *pb.BuyItemRequest) (*p
 		return &pb.BuyItemResponse{Success: false, Message: "not enough gold"}, fmt.Errorf("overbuy attempt")
 	}
 
+	batch := &pgx.Batch{}
+	sql = "INSERT INTO item_instances VALUES (DEFAULT, $1, $2, DEFAULT, DEFAULT) RETURNING item_instance_id"
 	var itemInstanceIds []uint64
-	sql = "INSERT INTO item_instances VALUES (DEFAULT, $1, $2, DEFAULT, DEFAULT) RETURNING item_instance_id" // could? refactor into single multi-line insert
 	for _, item := range items {
-		rows, err := s.DbPool.Query(ctx, sql, item.GetId(), c.Id)
-		// rows, err := tx.Query(ctx, sql, item.GetId(), c.Id)
+		batch.Queue(sql, item.ItemTemplateId, c.Id)
+	}
+
+	res := s.DbPool.SendBatch(ctx, batch)
+	defer res.Close()
+	for i := 0; i < len(items); i++ {
+		row := res.QueryRow()
 		if err != nil {
 			s.Logger.Error(err)
-			return errResp, err
+			return nil, err
 		}
 
-		for rows.Next() {
-			var id uint64
-			err := rows.Scan(&id)
-			if err != nil {
-				s.Logger.Error(err)
-				return errResp, err
-			}
-
-			itemInstanceIds = append(itemInstanceIds, id)
+		var itemInstanceId uint64
+		err = row.Scan(&itemInstanceId)
+		if err != nil {
+			s.Logger.Error(err)
+			return nil, err
 		}
+
+		itemInstanceIds = append(itemInstanceIds, itemInstanceId)
 	}
 
 	s.Logger.Info(itemInstanceIds)
-	
+
 	// update character gold
 	sql = "UPDATE characters SET gold = gold - $1 WHERE character_id = $2"
 	_, err = s.DbPool.Exec(ctx, sql, sum, c.Id)
-	// _, err = tx.Exec(ctx, sql, sum, c.Id)
 	if err != nil {
 		s.Logger.Error(err)
 		return errResp, err
 	}
 
 	// TODO: move from direct service-service to MQ (problem: wait-for-ack)
-	conn, err := grpc.NewClient("inventoryserver:50053", grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		s.Logger.Error("failed to init inventory client", "reason", err)
-		return errResp, err
-	}
-	invClient := pbInventory.NewInventoryClient(conn)
-	_, err = invClient.AddItemsToBackpack(ctx, &pbInventory.AddItemsToBackpackRequest{
-		CharacterId: c.Id,
-		ItemInstanceIds: itemInstanceIds, // ERROR: using ItemIds instead of last inserted ids into 'item_instances' table
+	_, err = s.Clients.Inventory.AddItemsToBackpack(ctx, &pbInventory.AddItemsToBackpackRequest{
+		CharacterId:     c.Id,
+		ItemInstanceIds: itemInstanceIds,
 	})
 
 	if err != nil {
@@ -306,11 +305,7 @@ func (s *StoreService) BuyItems(ctx context.Context, req *pb.BuyItemRequest) (*p
 		return errResp, err
 	}
 
-	// err = tx.Commit(ctx)
-	// if err != nil {
-	// 	s.Logger.Error(err)
-	// 	return errResp, err
-	// }
+	s.Logger.Infof("finished, start=%v, t=%v", start.Format(time.RFC3339), time.Since(start))
 
 	return &pb.BuyItemResponse{Success: true, Message: "items bought & added to inventory"}, nil
 }

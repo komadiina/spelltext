@@ -83,7 +83,7 @@ func (s *InventoryService) GetBalance(ctx context.Context, req *pb.InventoryBala
 
 func (s *InventoryService) AddItemsToBackpack(ctx context.Context, req *pb.AddItemsToBackpackRequest) (*pb.AddItemsToBackpackResponse, error) {
 	builder := sq.Insert("character_inventory_item_instance").
-		Columns("character_id, item_instance_id").
+		Columns("character_id", "item_instance_id").
 		PlaceholderFormat(sq.Dollar)
 
 	for _, itemInstanceId := range req.ItemInstanceIds {
@@ -95,6 +95,8 @@ func (s *InventoryService) AddItemsToBackpack(ctx context.Context, req *pb.AddIt
 		s.Logger.Error(err)
 		return nil, err
 	}
+
+	s.Logger.Info("running query", "sql", sql, "args", args)
 
 	_, err = s.DbPool.Exec(ctx, sql, args...)
 	if err != nil {
@@ -133,6 +135,8 @@ func (s *InventoryService) ListBackpackItems(ctx context.Context, req *pb.ListBa
 	}
 
 	sql = fmt.Sprintf("%s %s", prefix, sql)
+	s.Logger.Info("running query", "sql", sql)
+	
 	rows, err := s.DbPool.Query(ctx, sql, req.CharacterId)
 	if err != nil {
 		s.Logger.Error("failed to run query", "err", err)
@@ -185,6 +189,10 @@ func (s *InventoryService) ListBackpackItems(ctx context.Context, req *pb.ListBa
 		item.ItemTemplate.EquipSlot = equipSlot
 
 		items = append(items, item)
+	}
+
+	for _, item := range items {
+		s.Logger.Info(item)
 	}
 
 	return &pb.ListBackpackItemsResponse{Items: items}, nil

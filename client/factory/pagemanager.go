@@ -99,8 +99,6 @@ func (pm *PageManager) Push(pageName string, keepCached bool) {
 
 // navigate backward
 func (pm *PageManager) Pop() int {
-	pm.Logger.Infof("navigating backward from: %v", pm.stack[len(pm.stack)-1])
-
 	if len(pm.stack) <= 2 {
 		return -1
 	}

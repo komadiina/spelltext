@@ -31,6 +31,8 @@ func AddInventoryPage(c *types.SpelltextClient) {
 
 		items := functions.GetBackpackItems(c).GetItems()
 
+		c.Logger.Info(items)
+
 		if len(items) == 0 {
 			flex.AddItem(tview.NewTextView().SetText("no items in backpack").SetWrap(true).SetWordWrap(true), 0, 1, false)
 		} else {
