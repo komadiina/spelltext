@@ -10,7 +10,7 @@ RUN go mod download
 
 # TODO: break this down into smaller pieces
 COPY . .
-RUN go build /server/chat/cmd/chatserver/main.go
+RUN go build /server/chat/cmd/main.go
 
 FROM alpine:3.22.1
 WORKDIR /

@@ -100,7 +100,7 @@ services:
       - ./scripts/db/sql:/flyway/sql
     networks:
       - spelltext
-    command: ["-url=jdbc:postgresql://postgres:5432/spelltext", "-user=postgres", "-password=changeme"  ,"-baselineOnMigrate=true", "-connectRetries=15",  "migrate"]
+    command: ["-url=jdbc:postgresql://postgres:5432/spelltext", "-user=postgres", "-password=changeme"  ,"-baselineOnMigrate=true","-X", "-connectRetries=15",  "migrate"]
     depends_on:
       - postgres
   
