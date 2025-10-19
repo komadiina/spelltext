@@ -5,6 +5,7 @@ import "github.com/komadiina/spelltext/shared/config"
 type Config struct {
 	NatsURL         string `yaml:"nats_url" env:"NATS_URL" env-default:"nats://127.0.0.1:4222"`
 	MaxPollInterval int    `yaml:"max_wait_time" env:"MAX_WAIT_TIME" env-default:"5"`
+	AudioEnabled    bool   `yaml:"audio_enabled" env:"AUDIO_ENABLED" env-default:"true"`
 }
 
 func LoadConfig() (*Config, error) {

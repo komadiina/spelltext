@@ -154,38 +154,32 @@ func AddArmoryPage(c *types.SpelltextClient) {
 		equipmentPane := tview.NewFlex().SetDirection(tview.FlexColumn)
 		equipmentPane.SetBorder(true).SetBorderPadding(1, 1, 2, 2).SetTitle(" equipment ")
 
-		items := functions.GetBackpackItems(c)
-		equippedItems := functions.GetEquippedItems(c)
-		root := tview.NewTreeNode("equipped: ")
-		tree := tview.NewTreeView().SetRoot(root)
-		if items == nil {
-			for _, item := range equippedItems {
-				child := tview.NewTreeNode(utils.GetFullItemName(item)).
-					SetReference(item.GetId())
-				root.AddChild(child)
+		equipSlots := functions.GetEquipSlots(c)
+		backpack := functions.GetBackpackItems(c).Items // :(
+		grouped := functions.GroupItems(backpack, equipSlots)
+
+		c.Logger.Info(equipSlots)
+		c.Logger.Info(backpack)
+
+		root := tview.NewTreeNode("available:").
+			SetColor(constants.COLOR_ARMOR)
+		tree := tview.NewTreeView().
+			SetRoot(root).
+			SetCurrentNode(root)
+
+		for slot, items := range grouped {
+			node := tview.NewTreeNode(slot)
+			for _, item := range items {
+				node.AddChild(tview.NewTreeNode(utils.GetFullItemName(item))).
+					SetSelectable(true)
 			}
 
-			equipmentPane.AddItem(tree, 0, 1, false)
-			tree.SetSelectedFunc(func(node *tview.TreeNode) {
-				ref := node.GetReference()
-				if ref == nil {
-					return
-				}
-
-				children := node.GetChildren()
-				if len(children) == 0 {
-					return
-				} else {
-					node.SetExpanded(!node.IsExpanded())
-					c.Logger.Infof("node: %+v", node)
-				}
-			})
-
-			flex.AddItem(equipmentPane, 0, 1, false)
+			root.AddChild(node)
 		}
 
+		equipmentPane.AddItem(tree, 0, 1, true)
+
 		flex.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-			// f := flex.GetInputCapture()
 			if event.Key() == tcell.KeyTAB {
 				focused := c.App.GetFocus()
 
@@ -195,8 +189,6 @@ func AddArmoryPage(c *types.SpelltextClient) {
 					c.App.SetFocus(equipmentPane)
 				}
 			}
-
-			// f(event)
 			return event
 		})
 

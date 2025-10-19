@@ -1,0 +1,860 @@
+{
+  "head": [
+    {
+      "item_name": "Helm of the Flame Warden",
+      "gold": 120,
+      "health_points": 40,
+      "power_points": 6,
+      "strength_points": 8,
+      "spellpower_points": 2
+    },
+    {
+      "item_name": "Ironbark Skullcap",
+      "gold": 90,
+      "health_points": 34,
+      "power_points": 4,
+      "strength_points": 6,
+      "spellpower_points": 1
+    },
+    {
+      "item_name": "Skullcap of the Fallen",
+      "gold": 75,
+      "health_points": 28,
+      "power_points": 5,
+      "strength_points": 5,
+      "spellpower_points": 3
+    },
+    {
+      "item_name": "Gilded Visage",
+      "gold": 180,
+      "health_points": 22,
+      "power_points": 3,
+      "strength_points": 10,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Wyrmscale Headguard",
+      "gold": 210,
+      "health_points": 50,
+      "power_points": 8,
+      "strength_points": 12,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Seafarer's Tricorne",
+      "gold": 40,
+      "health_points": 12,
+      "power_points": 2,
+      "strength_points": 2,
+      "spellpower_points": 1
+    },
+    {
+      "item_name": "Runecaster Hood",
+      "gold": 110,
+      "health_points": 16,
+      "power_points": 5,
+      "strength_points": 1,
+      "spellpower_points": 10
+    },
+    {
+      "item_name": "Shadeveil Coif",
+      "gold": 160,
+      "health_points": 30,
+      "power_points": 6,
+      "strength_points": 3,
+      "spellpower_points": 8
+    }
+  ],
+  "neck": [
+    {
+      "item_name": "Pendant of Steadfast Might",
+      "gold": 95,
+      "health_points": 18,
+      "power_points": 4,
+      "strength_points": 7,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Amulet of Quiet Resolve",
+      "gold": 130,
+      "health_points": 22,
+      "power_points": 3,
+      "strength_points": 2,
+      "spellpower_points": 9
+    },
+    {
+      "item_name": "Chain of the Ironbound",
+      "gold": 70,
+      "health_points": 12,
+      "power_points": 2,
+      "strength_points": 5,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Talisman of Wyrm's Breath",
+      "gold": 210,
+      "health_points": 28,
+      "power_points": 6,
+      "strength_points": 0,
+      "spellpower_points": 14
+    },
+    {
+      "item_name": "Seal of the Sentinel",
+      "gold": 160,
+      "health_points": 26,
+      "power_points": 5,
+      "strength_points": 8,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Soulforged Torque",
+      "gold": 240,
+      "health_points": 36,
+      "power_points": 9,
+      "strength_points": 6,
+      "spellpower_points": 6
+    },
+    {
+      "item_name": "Pendant of Mystic Echoes",
+      "gold": 140,
+      "health_points": 14,
+      "power_points": 4,
+      "strength_points": 0,
+      "spellpower_points": 12
+    },
+    {
+      "item_name": "Hearthguard Locket",
+      "gold": 55,
+      "health_points": 10,
+      "power_points": 1,
+      "strength_points": 3,
+      "spellpower_points": 0
+    }
+  ],
+  "shoulder": [
+    {
+      "item_name": "Spaulders of the Stonewatch",
+      "gold": 130,
+      "health_points": 38,
+      "power_points": 5,
+      "strength_points": 9,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Mantle of Whispering Wind",
+      "gold": 150,
+      "health_points": 24,
+      "power_points": 6,
+      "strength_points": 2,
+      "spellpower_points": 8
+    },
+    {
+      "item_name": "Bloodforged Pauldrons",
+      "gold": 200,
+      "health_points": 44,
+      "power_points": 9,
+      "strength_points": 12,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Runeshift Shoulderguards",
+      "gold": 170,
+      "health_points": 30,
+      "power_points": 7,
+      "strength_points": 4,
+      "spellpower_points": 6
+    },
+    {
+      "item_name": "Hunter's Drift Mantle",
+      "gold": 85,
+      "health_points": 18,
+      "power_points": 3,
+      "strength_points": 5,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Ashenbind Shoulders",
+      "gold": 190,
+      "health_points": 32,
+      "power_points": 6,
+      "strength_points": 3,
+      "spellpower_points": 10
+    },
+    {
+      "item_name": "Bronze Defender Spaulders",
+      "gold": 45,
+      "health_points": 12,
+      "power_points": 2,
+      "strength_points": 3,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Ebonwing Mantle",
+      "gold": 220,
+      "health_points": 28,
+      "power_points": 8,
+      "strength_points": 1,
+      "spellpower_points": 14
+    }
+  ],
+  "back": [
+    {
+      "item_name": "Cloak of the Nightwatch",
+      "gold": 75,
+      "health_points": 14,
+      "power_points": 3,
+      "strength_points": 2,
+      "spellpower_points": 4
+    },
+    {
+      "item_name": "Windsong Cape",
+      "gold": 110,
+      "health_points": 10,
+      "power_points": 5,
+      "strength_points": 0,
+      "spellpower_points": 8
+    },
+    {
+      "item_name": "Cape of Stalwart Defense",
+      "gold": 95,
+      "health_points": 22,
+      "power_points": 3,
+      "strength_points": 6,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Drape of Dragonhide",
+      "gold": 160,
+      "health_points": 34,
+      "power_points": 6,
+      "strength_points": 9,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Shroud of Echoes",
+      "gold": 140,
+      "health_points": 12,
+      "power_points": 4,
+      "strength_points": 0,
+      "spellpower_points": 11
+    },
+    {
+      "item_name": "Sable Cloak",
+      "gold": 50,
+      "health_points": 8,
+      "power_points": 1,
+      "strength_points": 1,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Galeweave Wrap",
+      "gold": 85,
+      "health_points": 6,
+      "power_points": 4,
+      "strength_points": 0,
+      "spellpower_points": 6
+    },
+    {
+      "item_name": "Mantle of Frozen Stars",
+      "gold": 210,
+      "health_points": 20,
+      "power_points": 7,
+      "strength_points": 0,
+      "spellpower_points": 18
+    }
+  ],
+  "chest": [
+    {
+      "item_name": "Breastplate of the Iron Legion",
+      "gold": 220,
+      "health_points": 60,
+      "power_points": 10,
+      "strength_points": 16,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Robe of Silent Wisdom",
+      "gold": 200,
+      "health_points": 28,
+      "power_points": 6,
+      "strength_points": 0,
+      "spellpower_points": 24
+    },
+    {
+      "item_name": "Vest of the Emberguard",
+      "gold": 160,
+      "health_points": 48,
+      "power_points": 8,
+      "strength_points": 10,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Chain of the Deepwatch",
+      "gold": 140,
+      "health_points": 36,
+      "power_points": 6,
+      "strength_points": 8,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Silkweave Tunic",
+      "gold": 120,
+      "health_points": 18,
+      "power_points": 5,
+      "strength_points": 0,
+      "spellpower_points": 12
+    },
+    {
+      "item_name": "Plate of the Fallen General",
+      "gold": 300,
+      "health_points": 80,
+      "power_points": 14,
+      "strength_points": 22,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Shroudguard Hauberk",
+      "gold": 180,
+      "health_points": 40,
+      "power_points": 9,
+      "strength_points": 6,
+      "spellpower_points": 6
+    },
+    {
+      "item_name": "Bronze Chest of Initiates",
+      "gold": 20,
+      "health_points": 8,
+      "power_points": 1,
+      "strength_points": 2,
+      "spellpower_points": 0
+    }
+  ],
+  "wrist": [
+    {
+      "item_name": "Bracers of Iron Will",
+      "gold": 70,
+      "health_points": 16,
+      "power_points": 3,
+      "strength_points": 5,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Runed Wristwraps",
+      "gold": 95,
+      "health_points": 8,
+      "power_points": 4,
+      "strength_points": 1,
+      "spellpower_points": 8
+    },
+    {
+      "item_name": "Vanguard Armplates",
+      "gold": 110,
+      "health_points": 22,
+      "power_points": 5,
+      "strength_points": 7,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Bindings of the Tempest",
+      "gold": 130,
+      "health_points": 12,
+      "power_points": 6,
+      "strength_points": 0,
+      "spellpower_points": 10
+    },
+    {
+      "item_name": "Leather Wristguards",
+      "gold": 40,
+      "health_points": 6,
+      "power_points": 1,
+      "strength_points": 2,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Cuffs of Steady Resolve",
+      "gold": 85,
+      "health_points": 14,
+      "power_points": 3,
+      "strength_points": 4,
+      "spellpower_points": 2
+    },
+    {
+      "item_name": "Ironbark Bracers",
+      "gold": 60,
+      "health_points": 18,
+      "power_points": 2,
+      "strength_points": 6,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Wristwraps of the Fallen Sage",
+      "gold": 150,
+      "health_points": 10,
+      "power_points": 5,
+      "strength_points": 0,
+      "spellpower_points": 14
+    }
+  ],
+  "hands": [
+    {
+      "item_name": "Gauntlets of the Stonefist",
+      "gold": 140,
+      "health_points": 30,
+      "power_points": 6,
+      "strength_points": 10,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Gloves of Whispering Spells",
+      "gold": 165,
+      "health_points": 12,
+      "power_points": 6,
+      "strength_points": 0,
+      "spellpower_points": 18
+    },
+    {
+      "item_name": "Hunter's Grips",
+      "gold": 95,
+      "health_points": 18,
+      "power_points": 4,
+      "strength_points": 6,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Seafarer's Gauntlets",
+      "gold": 45,
+      "health_points": 8,
+      "power_points": 2,
+      "strength_points": 2,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Runecarver Gloves",
+      "gold": 120,
+      "health_points": 14,
+      "power_points": 5,
+      "strength_points": 1,
+      "spellpower_points": 10
+    },
+    {
+      "item_name": "Bronze Armplates",
+      "gold": 25,
+      "health_points": 10,
+      "power_points": 1,
+      "strength_points": 3,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Grips of Frozen Fury",
+      "gold": 200,
+      "health_points": 22,
+      "power_points": 8,
+      "strength_points": 4,
+      "spellpower_points": 12
+    },
+    {
+      "item_name": "Gauntlets of the Hollow King",
+      "gold": 260,
+      "health_points": 36,
+      "power_points": 9,
+      "strength_points": 14,
+      "spellpower_points": 0
+    }
+  ],
+  "legs": [
+    {
+      "item_name": "Legplates of the Ironmarch",
+      "gold": 180,
+      "health_points": 50,
+      "power_points": 9,
+      "strength_points": 14,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Legwraps of Silent Steps",
+      "gold": 110,
+      "health_points": 18,
+      "power_points": 4,
+      "strength_points": 3,
+      "spellpower_points": 8
+    },
+    {
+      "item_name": "Wyrmscale Greaves",
+      "gold": 220,
+      "health_points": 56,
+      "power_points": 10,
+      "strength_points": 16,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Sageweave Leggings",
+      "gold": 140,
+      "health_points": 20,
+      "power_points": 5,
+      "strength_points": 0,
+      "spellpower_points": 16
+    },
+    {
+      "item_name": "Hunter's Breeches",
+      "gold": 95,
+      "health_points": 24,
+      "power_points": 5,
+      "strength_points": 6,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Bronze Legplates",
+      "gold": 35,
+      "health_points": 12,
+      "power_points": 2,
+      "strength_points": 4,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Shadowstep Legguards",
+      "gold": 170,
+      "health_points": 28,
+      "power_points": 7,
+      "strength_points": 2,
+      "spellpower_points": 10
+    },
+    {
+      "item_name": "Leggings of the Frozen Throne",
+      "gold": 280,
+      "health_points": 40,
+      "power_points": 12,
+      "strength_points": 6,
+      "spellpower_points": 20
+    }
+  ],
+  "feet": [
+    {
+      "item_name": "Boots of the Ironstride",
+      "gold": 100,
+      "health_points": 22,
+      "power_points": 4,
+      "strength_points": 8,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Windrunner Boots",
+      "gold": 140,
+      "health_points": 12,
+      "power_points": 6,
+      "strength_points": 0,
+      "spellpower_points": 8
+    },
+    {
+      "item_name": "Stalker's Treads",
+      "gold": 80,
+      "health_points": 18,
+      "power_points": 3,
+      "strength_points": 4,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Sabatons of the Flame Warden",
+      "gold": 160,
+      "health_points": 30,
+      "power_points": 7,
+      "strength_points": 10,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Boots of Quiet Casting",
+      "gold": 155,
+      "health_points": 10,
+      "power_points": 5,
+      "strength_points": 0,
+      "spellpower_points": 14
+    },
+    {
+      "item_name": "Bronze Greaves",
+      "gold": 28,
+      "health_points": 8,
+      "power_points": 1,
+      "strength_points": 2,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Frostwalker's Boots",
+      "gold": 190,
+      "health_points": 20,
+      "power_points": 8,
+      "strength_points": 2,
+      "spellpower_points": 12
+    },
+    {
+      "item_name": "Sandstride Moccasins",
+      "gold": 60,
+      "health_points": 14,
+      "power_points": 2,
+      "strength_points": 3,
+      "spellpower_points": 0
+    }
+  ],
+  "finger_1": [
+    {
+      "item_name": "Band of Mighty Strikes",
+      "gold": 85,
+      "health_points": 6,
+      "power_points": 2,
+      "strength_points": 6,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Ring of Arcane Insight",
+      "gold": 160,
+      "health_points": 4,
+      "power_points": 3,
+      "strength_points": 0,
+      "spellpower_points": 12
+    },
+    {
+      "item_name": "Ironbound Signet",
+      "gold": 60,
+      "health_points": 8,
+      "power_points": 1,
+      "strength_points": 4,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Loop of Wyrm's Fire",
+      "gold": 210,
+      "health_points": 6,
+      "power_points": 4,
+      "strength_points": 2,
+      "spellpower_points": 14
+    },
+    {
+      "item_name": "Ring of Stalwart Defense",
+      "gold": 120,
+      "health_points": 12,
+      "power_points": 2,
+      "strength_points": 6,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Token of the Voyager",
+      "gold": 40,
+      "health_points": 2,
+      "power_points": 0,
+      "strength_points": 0,
+      "spellpower_points": 2
+    },
+    {
+      "item_name": "Seal of Silent Oath",
+      "gold": 95,
+      "health_points": 8,
+      "power_points": 3,
+      "strength_points": 2,
+      "spellpower_points": 4
+    },
+    {
+      "item_name": "Band of the Fallen King",
+      "gold": 260,
+      "health_points": 14,
+      "power_points": 6,
+      "strength_points": 10,
+      "spellpower_points": 0
+    }
+  ],
+  "finger_2": [
+    {
+      "item_name": "Signet of the Tempest",
+      "gold": 110,
+      "health_points": 6,
+      "power_points": 3,
+      "strength_points": 0,
+      "spellpower_points": 10
+    },
+    {
+      "item_name": "Iron Ring of Duty",
+      "gold": 55,
+      "health_points": 10,
+      "power_points": 1,
+      "strength_points": 3,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Ring of the Deepwatch",
+      "gold": 130,
+      "health_points": 12,
+      "power_points": 4,
+      "strength_points": 5,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Loop of Echoing Flame",
+      "gold": 190,
+      "health_points": 8,
+      "power_points": 5,
+      "strength_points": 2,
+      "spellpower_points": 12
+    },
+    {
+      "item_name": "Band of Quiet Resolve",
+      "gold": 75,
+      "health_points": 6,
+      "power_points": 2,
+      "strength_points": 1,
+      "spellpower_points": 6
+    },
+    {
+      "item_name": "Bronze Seal",
+      "gold": 18,
+      "health_points": 2,
+      "power_points": 0,
+      "strength_points": 1,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Ring of Frozen Stars",
+      "gold": 240,
+      "health_points": 10,
+      "power_points": 6,
+      "strength_points": 0,
+      "spellpower_points": 18
+    },
+    {
+      "item_name": "Signet of the Voidwalker",
+      "gold": 220,
+      "health_points": 14,
+      "power_points": 7,
+      "strength_points": 0,
+      "spellpower_points": 14
+    }
+  ],
+  "mh": [
+    {
+      "item_name": "Shovel of the Dredger",
+      "gold": 40,
+      "health_points": 0,
+      "power_points": 6,
+      "strength_points": 4,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Ironcleaver Sword",
+      "gold": 150,
+      "health_points": 0,
+      "power_points": 12,
+      "strength_points": 14,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Wyrmcaller's Staff",
+      "gold": 260,
+      "health_points": 0,
+      "power_points": 10,
+      "strength_points": 0,
+      "spellpower_points": 28
+    },
+    {
+      "item_name": "Bronze Mace",
+      "gold": 35,
+      "health_points": 0,
+      "power_points": 5,
+      "strength_points": 6,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Stormrender Axe",
+      "gold": 220,
+      "health_points": 0,
+      "power_points": 14,
+      "strength_points": 12,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Runeblade of Echoes",
+      "gold": 300,
+      "health_points": 0,
+      "power_points": 16,
+      "strength_points": 6,
+      "spellpower_points": 12
+    },
+    {
+      "item_name": "Sage's Rod",
+      "gold": 180,
+      "health_points": 0,
+      "power_points": 8,
+      "strength_points": 0,
+      "spellpower_points": 18
+    },
+    {
+      "item_name": "Hunter's Longblade",
+      "gold": 120,
+      "health_points": 0,
+      "power_points": 9,
+      "strength_points": 9,
+      "spellpower_points": 0
+    }
+  ],
+  "oh": [
+    {
+      "item_name": "Plank Shield",
+      "gold": 20,
+      "health_points": 12,
+      "power_points": 0,
+      "strength_points": 2,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Brassbuckler",
+      "gold": 60,
+      "health_points": 18,
+      "power_points": 0,
+      "strength_points": 4,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Aegis of the Stoneheart",
+      "gold": 200,
+      "health_points": 48,
+      "power_points": 0,
+      "strength_points": 10,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Orb of Mystic Hums",
+      "gold": 210,
+      "health_points": 6,
+      "power_points": 4,
+      "strength_points": 0,
+      "spellpower_points": 16
+    },
+    {
+      "item_name": "Kite Shield of the Legion",
+      "gold": 170,
+      "health_points": 36,
+      "power_points": 0,
+      "strength_points": 8,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Tome of the Luminous Mind",
+      "gold": 240,
+      "health_points": 4,
+      "power_points": 5,
+      "strength_points": 0,
+      "spellpower_points": 22
+    },
+    {
+      "item_name": "Buckler of Quick Parry",
+      "gold": 95,
+      "health_points": 20,
+      "power_points": 0,
+      "strength_points": 5,
+      "spellpower_points": 0
+    },
+    {
+      "item_name": "Haunted Lantern",
+      "gold": 150,
+      "health_points": 10,
+      "power_points": 3,
+      "strength_points": 0,
+      "spellpower_points": 12
+    }
+  ]
+}

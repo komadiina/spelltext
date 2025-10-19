@@ -532,12 +532,12 @@ type Item struct {
 	Prefix         string                 `protobuf:"bytes,2,opt,name=prefix,proto3" json:"prefix,omitempty"`
 	Suffix         string                 `protobuf:"bytes,3,opt,name=suffix,proto3" json:"suffix,omitempty"`
 	ItemTemplateId uint64                 `protobuf:"varint,4,opt,name=item_template_id,json=itemTemplateId,proto3" json:"item_template_id,omitempty"`
-	Health         uint64                 `protobuf:"varint,5,opt,name=health,proto3" json:"health,omitempty"`
-	Power          uint64                 `protobuf:"varint,6,opt,name=power,proto3" json:"power,omitempty"`
-	Strength       uint64                 `protobuf:"varint,7,opt,name=strength,proto3" json:"strength,omitempty"`
-	Spellpower     uint64                 `protobuf:"varint,8,opt,name=spellpower,proto3" json:"spellpower,omitempty"`
-	BonusDamage    uint64                 `protobuf:"varint,9,opt,name=bonus_damage,json=bonusDamage,proto3" json:"bonus_damage,omitempty"`
-	BonusArmor     uint64                 `protobuf:"varint,10,opt,name=bonus_armor,json=bonusArmor,proto3" json:"bonus_armor,omitempty"`
+	Health         int64                  `protobuf:"varint,5,opt,name=health,proto3" json:"health,omitempty"`
+	Power          int64                  `protobuf:"varint,6,opt,name=power,proto3" json:"power,omitempty"`
+	Strength       int64                  `protobuf:"varint,7,opt,name=strength,proto3" json:"strength,omitempty"`
+	Spellpower     int64                  `protobuf:"varint,8,opt,name=spellpower,proto3" json:"spellpower,omitempty"`
+	BonusDamage    int64                  `protobuf:"varint,9,opt,name=bonus_damage,json=bonusDamage,proto3" json:"bonus_damage,omitempty"`
+	BonusArmor     int64                  `protobuf:"varint,10,opt,name=bonus_armor,json=bonusArmor,proto3" json:"bonus_armor,omitempty"`
 	ItemTemplate   *ItemTemplate          `protobuf:"bytes,20,opt,name=item_template,json=itemTemplate,proto3" json:"item_template,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
@@ -601,42 +601,42 @@ func (x *Item) GetItemTemplateId() uint64 {
 	return 0
 }
 
-func (x *Item) GetHealth() uint64 {
+func (x *Item) GetHealth() int64 {
 	if x != nil {
 		return x.Health
 	}
 	return 0
 }
 
-func (x *Item) GetPower() uint64 {
+func (x *Item) GetPower() int64 {
 	if x != nil {
 		return x.Power
 	}
 	return 0
 }
 
-func (x *Item) GetStrength() uint64 {
+func (x *Item) GetStrength() int64 {
 	if x != nil {
 		return x.Strength
 	}
 	return 0
 }
 
-func (x *Item) GetSpellpower() uint64 {
+func (x *Item) GetSpellpower() int64 {
 	if x != nil {
 		return x.Spellpower
 	}
 	return 0
 }
 
-func (x *Item) GetBonusDamage() uint64 {
+func (x *Item) GetBonusDamage() int64 {
 	if x != nil {
 		return x.BonusDamage
 	}
 	return 0
 }
 
-func (x *Item) GetBonusArmor() uint64 {
+func (x *Item) GetBonusArmor() int64 {
 	if x != nil {
 		return x.BonusArmor
 	}
@@ -656,12 +656,12 @@ type Consumable struct {
 	Prefix             string                 `protobuf:"bytes,2,opt,name=prefix,proto3" json:"prefix,omitempty"`
 	Suffix             string                 `protobuf:"bytes,3,opt,name=suffix,proto3" json:"suffix,omitempty"`
 	ItemTemplateId     uint64                 `protobuf:"varint,4,opt,name=item_template_id,json=itemTemplateId,proto3" json:"item_template_id,omitempty"`
-	Health             uint64                 `protobuf:"varint,5,opt,name=health,proto3" json:"health,omitempty"`
-	Power              uint64                 `protobuf:"varint,6,opt,name=power,proto3" json:"power,omitempty"`
-	Strength           uint64                 `protobuf:"varint,7,opt,name=strength,proto3" json:"strength,omitempty"`
-	Spellpower         uint64                 `protobuf:"varint,8,opt,name=spellpower,proto3" json:"spellpower,omitempty"`
-	BonusDamage        uint64                 `protobuf:"varint,9,opt,name=bonus_damage,json=bonusDamage,proto3" json:"bonus_damage,omitempty"`
-	BonusArmor         uint64                 `protobuf:"varint,10,opt,name=bonus_armor,json=bonusArmor,proto3" json:"bonus_armor,omitempty"`
+	Health             int64                  `protobuf:"varint,5,opt,name=health,proto3" json:"health,omitempty"`
+	Power              int64                  `protobuf:"varint,6,opt,name=power,proto3" json:"power,omitempty"`
+	Strength           int64                  `protobuf:"varint,7,opt,name=strength,proto3" json:"strength,omitempty"`
+	Spellpower         int64                  `protobuf:"varint,8,opt,name=spellpower,proto3" json:"spellpower,omitempty"`
+	BonusDamage        int64                  `protobuf:"varint,9,opt,name=bonus_damage,json=bonusDamage,proto3" json:"bonus_damage,omitempty"`
+	BonusArmor         int64                  `protobuf:"varint,10,opt,name=bonus_armor,json=bonusArmor,proto3" json:"bonus_armor,omitempty"`
 	Uses               uint64                 `protobuf:"varint,11,opt,name=uses,proto3" json:"uses,omitempty"`
 	ConsumableTemplate *ConsumableTemplate    `protobuf:"bytes,20,opt,name=consumable_template,json=consumableTemplate,proto3" json:"consumable_template,omitempty"`
 	unknownFields      protoimpl.UnknownFields
@@ -726,42 +726,42 @@ func (x *Consumable) GetItemTemplateId() uint64 {
 	return 0
 }
 
-func (x *Consumable) GetHealth() uint64 {
+func (x *Consumable) GetHealth() int64 {
 	if x != nil {
 		return x.Health
 	}
 	return 0
 }
 
-func (x *Consumable) GetPower() uint64 {
+func (x *Consumable) GetPower() int64 {
 	if x != nil {
 		return x.Power
 	}
 	return 0
 }
 
-func (x *Consumable) GetStrength() uint64 {
+func (x *Consumable) GetStrength() int64 {
 	if x != nil {
 		return x.Strength
 	}
 	return 0
 }
 
-func (x *Consumable) GetSpellpower() uint64 {
+func (x *Consumable) GetSpellpower() int64 {
 	if x != nil {
 		return x.Spellpower
 	}
 	return 0
 }
 
-func (x *Consumable) GetBonusDamage() uint64 {
+func (x *Consumable) GetBonusDamage() int64 {
 	if x != nil {
 		return x.BonusDamage
 	}
 	return 0
 }
 
-func (x *Consumable) GetBonusArmor() uint64 {
+func (x *Consumable) GetBonusArmor() int64 {
 	if x != nil {
 		return x.BonusArmor
 	}
@@ -2290,15 +2290,15 @@ const file_repo_repo_proto_rawDesc = "" +
 	"\x06prefix\x18\x02 \x01(\tR\x06prefix\x12\x16\n" +
 	"\x06suffix\x18\x03 \x01(\tR\x06suffix\x12(\n" +
 	"\x10item_template_id\x18\x04 \x01(\x04R\x0eitemTemplateId\x12\x16\n" +
-	"\x06health\x18\x05 \x01(\x04R\x06health\x12\x14\n" +
-	"\x05power\x18\x06 \x01(\x04R\x05power\x12\x1a\n" +
-	"\bstrength\x18\a \x01(\x04R\bstrength\x12\x1e\n" +
+	"\x06health\x18\x05 \x01(\x03R\x06health\x12\x14\n" +
+	"\x05power\x18\x06 \x01(\x03R\x05power\x12\x1a\n" +
+	"\bstrength\x18\a \x01(\x03R\bstrength\x12\x1e\n" +
 	"\n" +
-	"spellpower\x18\b \x01(\x04R\n" +
+	"spellpower\x18\b \x01(\x03R\n" +
 	"spellpower\x12!\n" +
-	"\fbonus_damage\x18\t \x01(\x04R\vbonusDamage\x12\x1f\n" +
+	"\fbonus_damage\x18\t \x01(\x03R\vbonusDamage\x12\x1f\n" +
 	"\vbonus_armor\x18\n" +
-	" \x01(\x04R\n" +
+	" \x01(\x03R\n" +
 	"bonusArmor\x127\n" +
 	"\ritem_template\x18\x14 \x01(\v2\x12.repo.ItemTemplateR\fitemTemplate\"\x83\x03\n" +
 	"\n" +
@@ -2307,15 +2307,15 @@ const file_repo_repo_proto_rawDesc = "" +
 	"\x06prefix\x18\x02 \x01(\tR\x06prefix\x12\x16\n" +
 	"\x06suffix\x18\x03 \x01(\tR\x06suffix\x12(\n" +
 	"\x10item_template_id\x18\x04 \x01(\x04R\x0eitemTemplateId\x12\x16\n" +
-	"\x06health\x18\x05 \x01(\x04R\x06health\x12\x14\n" +
-	"\x05power\x18\x06 \x01(\x04R\x05power\x12\x1a\n" +
-	"\bstrength\x18\a \x01(\x04R\bstrength\x12\x1e\n" +
+	"\x06health\x18\x05 \x01(\x03R\x06health\x12\x14\n" +
+	"\x05power\x18\x06 \x01(\x03R\x05power\x12\x1a\n" +
+	"\bstrength\x18\a \x01(\x03R\bstrength\x12\x1e\n" +
 	"\n" +
-	"spellpower\x18\b \x01(\x04R\n" +
+	"spellpower\x18\b \x01(\x03R\n" +
 	"spellpower\x12!\n" +
-	"\fbonus_damage\x18\t \x01(\x04R\vbonusDamage\x12\x1f\n" +
+	"\fbonus_damage\x18\t \x01(\x03R\vbonusDamage\x12\x1f\n" +
 	"\vbonus_armor\x18\n" +
-	" \x01(\x04R\n" +
+	" \x01(\x03R\n" +
 	"bonusArmor\x12\x12\n" +
 	"\x04uses\x18\v \x01(\x04R\x04uses\x12I\n" +
 	"\x13consumable_template\x18\x14 \x01(\v2\x18.repo.ConsumableTemplateR\x12consumableTemplate\"\xc7\x03\n" +

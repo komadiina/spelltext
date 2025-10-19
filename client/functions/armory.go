@@ -75,3 +75,31 @@ func GetEquippedItems(c *types.SpelltextClient) []*pbRepo.Item {
 
 	return resp.GetItems()
 }
+
+func GetEquipSlots(c *types.SpelltextClient) []*pbRepo.EquipSlot {
+	if es, ok := c.AppStorage[constants.EQUIP_SLOTS].([]*pbRepo.EquipSlot); ok {
+		return es
+	}
+
+	resp, err := c.Clients.CharacterClient.GetEquipSlots(*c.Context, &pb.GetEquipSlotsRequest{})
+	if err != nil {
+		c.Logger.Error(err)
+		return nil
+	}
+
+	return resp.GetSlots()
+}
+
+func GroupItems(items []*pbRepo.Item, slots []*pbRepo.EquipSlot) map[string][]*pbRepo.Item {
+	m := make(map[string][]*pbRepo.Item)
+
+	for _, item := range items {
+		for _, slot := range slots {
+			if item.GetItemTemplate().GetEquipSlot().GetId() == slot.GetId() {
+				m[slot.GetName()] = append(m[slot.GetName()], item)
+			}
+		}
+	}
+
+	return m
+}

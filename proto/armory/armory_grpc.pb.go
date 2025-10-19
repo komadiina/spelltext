@@ -29,6 +29,7 @@ const (
 	Character_GetEquippedItems_FullMethodName         = "/armory.Character/GetEquippedItems"
 	Character_EquipItem_FullMethodName                = "/armory.Character/EquipItem"
 	Character_UnequipItem_FullMethodName              = "/armory.Character/UnequipItem"
+	Character_GetEquipSlots_FullMethodName            = "/armory.Character/GetEquipSlots"
 )
 
 // CharacterClient is the client API for Character service.
@@ -45,6 +46,7 @@ type CharacterClient interface {
 	GetEquippedItems(ctx context.Context, in *GetEquippedItemsRequest, opts ...grpc.CallOption) (*GetEquippedItemsResponse, error)
 	EquipItem(ctx context.Context, in *EquipItemRequest, opts ...grpc.CallOption) (*EquipItemResponse, error)
 	UnequipItem(ctx context.Context, in *UnequipItemRequest, opts ...grpc.CallOption) (*UnequipItemResponse, error)
+	GetEquipSlots(ctx context.Context, in *GetEquipSlotsRequest, opts ...grpc.CallOption) (*GetEquipSlotsResponse, error)
 }
 
 type characterClient struct {
@@ -155,6 +157,16 @@ func (c *characterClient) UnequipItem(ctx context.Context, in *UnequipItemReques
 	return out, nil
 }
 
+func (c *characterClient) GetEquipSlots(ctx context.Context, in *GetEquipSlotsRequest, opts ...grpc.CallOption) (*GetEquipSlotsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetEquipSlotsResponse)
+	err := c.cc.Invoke(ctx, Character_GetEquipSlots_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CharacterServer is the server API for Character service.
 // All implementations must embed UnimplementedCharacterServer
 // for forward compatibility.
@@ -169,6 +181,7 @@ type CharacterServer interface {
 	GetEquippedItems(context.Context, *GetEquippedItemsRequest) (*GetEquippedItemsResponse, error)
 	EquipItem(context.Context, *EquipItemRequest) (*EquipItemResponse, error)
 	UnequipItem(context.Context, *UnequipItemRequest) (*UnequipItemResponse, error)
+	GetEquipSlots(context.Context, *GetEquipSlotsRequest) (*GetEquipSlotsResponse, error)
 	mustEmbedUnimplementedCharacterServer()
 }
 
@@ -208,6 +221,9 @@ func (UnimplementedCharacterServer) EquipItem(context.Context, *EquipItemRequest
 }
 func (UnimplementedCharacterServer) UnequipItem(context.Context, *UnequipItemRequest) (*UnequipItemResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UnequipItem not implemented")
+}
+func (UnimplementedCharacterServer) GetEquipSlots(context.Context, *GetEquipSlotsRequest) (*GetEquipSlotsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetEquipSlots not implemented")
 }
 func (UnimplementedCharacterServer) mustEmbedUnimplementedCharacterServer() {}
 func (UnimplementedCharacterServer) testEmbeddedByValue()                   {}
@@ -410,6 +426,24 @@ func _Character_UnequipItem_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Character_GetEquipSlots_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetEquipSlotsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CharacterServer).GetEquipSlots(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Character_GetEquipSlots_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CharacterServer).GetEquipSlots(ctx, req.(*GetEquipSlotsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Character_ServiceDesc is the grpc.ServiceDesc for Character service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -456,6 +490,10 @@ var Character_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UnequipItem",
 			Handler:    _Character_UnequipItem_Handler,
+		},
+		{
+			MethodName: "GetEquipSlots",
+			Handler:    _Character_GetEquipSlots_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

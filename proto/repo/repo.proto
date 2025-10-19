@@ -63,12 +63,12 @@ message Item {
     string prefix = 2;
     string suffix = 3;
     uint64 item_template_id = 4;
-    uint64 health = 5;
-    uint64 power = 6;
-    uint64 strength = 7;
-    uint64 spellpower = 8;
-    uint64 bonus_damage = 9;
-    uint64 bonus_armor = 10;
+    int64 health = 5;
+    int64 power = 6;
+    int64 strength = 7;
+    int64 spellpower = 8;
+    int64 bonus_damage = 9;
+    int64 bonus_armor = 10;
     ItemTemplate item_template = 20;
 }
 
@@ -77,12 +77,12 @@ message Consumable {
     string prefix = 2;
     string suffix = 3;
     uint64 item_template_id = 4;
-    uint64 health = 5;
-    uint64 power = 6;
-    uint64 strength = 7;
-    uint64 spellpower = 8;
-    uint64 bonus_damage = 9;
-    uint64 bonus_armor = 10;
+    int64 health = 5;
+    int64 power = 6;
+    int64 strength = 7;
+    int64 spellpower = 8;
+    int64 bonus_damage = 9;
+    int64 bonus_armor = 10;
     uint64 uses = 11;
 
     ConsumableTemplate consumable_template = 20;

@@ -545,3 +545,41 @@ func (s *CharacterService) UnequipItem(ctx context.Context, req *pb.UnequipItemR
 
 	return &pb.UnequipItemResponse{Success: true}, nil
 }
+
+func (s *CharacterService) GetEquipSlots(ctx context.Context, req *pb.GetEquipSlotsRequest) (*pb.GetEquipSlotsResponse, error) {
+	sql, _, err := sq.
+		Select("*").
+		From("equip_slots").
+		ToSql()
+
+	if err != nil {
+		s.Logger.Error(err)
+		return nil, err
+	}
+
+	rows, err := s.DbPool.Query(ctx, sql)
+	if err != nil {
+		s.Logger.Error(err)
+		return nil, err
+	}
+
+	var equipSlots []*pbRepo.EquipSlot
+	for rows.Next() {
+		es := &pbRepo.EquipSlot{}
+
+		err := rows.Scan(
+			&es.Id,
+			&es.Code,
+			&es.Name,
+		)
+
+		if err != nil {
+			s.Logger.Error(err)
+			return nil, err
+		}
+
+		equipSlots = append(equipSlots, es)
+	}
+
+	return &pb.GetEquipSlotsResponse{Slots: equipSlots}, nil
+}

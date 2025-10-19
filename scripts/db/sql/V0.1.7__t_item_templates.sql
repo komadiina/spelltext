@@ -3,7 +3,7 @@ create table item_templates (
   name varchar(255) not null,
   item_type_id int not null,
   equip_slot_id int not null,
-  description text,
+  description varchar(255) not null default '',
   gold_price int not null default 0,
   buyable_with_tokens smallint not null default 0,
   token_price smallint not null default 0,

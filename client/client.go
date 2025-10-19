@@ -107,6 +107,18 @@ func InitializeClients(c *types.SpelltextClient) {
 	}
 }
 
+const banner = `
+                _ _ _            _   
+               | | | |          | |  
+ ___ _ __   ___| | | |_ _____  _| |_ 
+/ __| '_ \ / _ \ | | __/ _ \ \/ / __|
+\__ \ |_) |  __/ | | ||  __/>  <| |_ 
+|___/ .__/ \___|_|_|\__\___/_/\_\\__|
+    | |                              
+    |_|                              
+
+`
+
 func main() {
 	flag.Parse()
 	logging.Init(log.InfoLevel, "client", true)
@@ -127,6 +139,8 @@ func main() {
 	if err != nil {
 		logger.Fatal("failed to preload audio files", "reason", err)
 	}
+
+	am.AudioEnabled = cfg.AudioEnabled
 
 	client := types.SpelltextClient{
 		Config:       cfg,
@@ -171,16 +185,16 @@ func main() {
 
 	client.App.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		if event.Key() == tcell.KeyEscape {
-			client.AudioManager.Play(constants.BLIP_TINY, client.Logger)
+			client.AudioManager.Play(constants.BLIP_BACKWARD, client.Logger)
 
 			if client.PageManager.Pop() == -1 {
 				client.App.Stop()
 				return nil
 			}
 		} else if event.Key() == tcell.KeyEnter {
-			client.AudioManager.Play(constants.BLIP_NOTIFICATION, client.Logger)
+			client.AudioManager.Play(constants.BLIP_FORWARD, client.Logger)
 		} else {
-			client.AudioManager.Play(constants.BLIP_NAVIGATE, client.Logger)
+			client.AudioManager.Play(constants.BLIP_INPUT, client.Logger)
 		}
 
 		return event
@@ -195,5 +209,9 @@ func main() {
 	defer cancel()
 
 	logger.Info("client shutdown.")
-	fmt.Println("bye")
+	fmt.Print(banner)
+	fmt.Println("> thanks for playing this torturefest")
+	fmt.Println("> a game by ogg (https://github.com/komadiina)")
+	fmt.Println("> follow the development at https://github.com/komadiina/spelltext")
+	fmt.Println("~ kthxb")
 }

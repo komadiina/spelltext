@@ -57,7 +57,3 @@ authserver:
 
   charserver:
     port: 50054
-
-client:
-  nats_url: nats://127.0.0.1:4222
-  max_wait_time: 5

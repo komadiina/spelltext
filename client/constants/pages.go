@@ -35,6 +35,7 @@ const (
 	SELECTED_VENDOR_ID   = "selectedVendorID"
 	SELECTED_VENDOR_NAME = "selectedVendorName"
 	AVAILABLE_GOLD       = "availableGold"
+	EQUIP_SLOTS          = "equipSlots"
 )
 
 var SHORTCUTS = map[tcell.Key]string{

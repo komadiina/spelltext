@@ -990,6 +990,86 @@ func (x *GetEquippedItemsResponse) GetItems() []*repo.Item {
 	return nil
 }
 
+type GetEquipSlotsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetEquipSlotsRequest) Reset() {
+	*x = GetEquipSlotsRequest{}
+	mi := &file_armory_armory_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetEquipSlotsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetEquipSlotsRequest) ProtoMessage() {}
+
+func (x *GetEquipSlotsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_armory_armory_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetEquipSlotsRequest.ProtoReflect.Descriptor instead.
+func (*GetEquipSlotsRequest) Descriptor() ([]byte, []int) {
+	return file_armory_armory_proto_rawDescGZIP(), []int{20}
+}
+
+type GetEquipSlotsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Slots         []*repo.EquipSlot      `protobuf:"bytes,1,rep,name=slots,proto3" json:"slots,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetEquipSlotsResponse) Reset() {
+	*x = GetEquipSlotsResponse{}
+	mi := &file_armory_armory_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetEquipSlotsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetEquipSlotsResponse) ProtoMessage() {}
+
+func (x *GetEquipSlotsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_armory_armory_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetEquipSlotsResponse.ProtoReflect.Descriptor instead.
+func (*GetEquipSlotsResponse) Descriptor() ([]byte, []int) {
+	return file_armory_armory_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *GetEquipSlotsResponse) GetSlots() []*repo.EquipSlot {
+	if x != nil {
+		return x.Slots
+	}
+	return nil
+}
+
 var File_armory_armory_proto protoreflect.FileDescriptor
 
 const file_armory_armory_proto_rawDesc = "" +
@@ -1050,7 +1130,10 @@ const file_armory_armory_proto_rawDesc = "" +
 	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\"<\n" +
 	"\x18GetEquippedItemsResponse\x12 \n" +
 	"\x05items\x18\x01 \x03(\v2\n" +
-	".repo.ItemR\x05items2\xc7\x06\n" +
+	".repo.ItemR\x05items\"\x16\n" +
+	"\x14GetEquipSlotsRequest\">\n" +
+	"\x15GetEquipSlotsResponse\x12%\n" +
+	"\x05slots\x18\x01 \x03(\v2\x0f.repo.EquipSlotR\x05slots2\x95\a\n" +
 	"\tCharacter\x12C\n" +
 	"\n" +
 	"ListHeroes\x12\x19.armory.ListHeroesRequest\x1a\x1a.armory.ListHeroesResponse\x12O\n" +
@@ -1062,7 +1145,8 @@ const file_armory_armory_proto_rawDesc = "" +
 	"\x0fDeleteCharacter\x12\x1e.armory.DeleteCharacterRequest\x1a\x1f.armory.DeleteCharacterResponse\x12U\n" +
 	"\x10GetEquippedItems\x12\x1f.armory.GetEquippedItemsRequest\x1a .armory.GetEquippedItemsResponse\x12@\n" +
 	"\tEquipItem\x12\x18.armory.EquipItemRequest\x1a\x19.armory.EquipItemResponse\x12F\n" +
-	"\vUnequipItem\x12\x1a.armory.UnequipItemRequest\x1a\x1b.armory.UnequipItemResponseB:Z8github.com/komadiina/spelltext/proto/proto/armory;armoryb\x06proto3"
+	"\vUnequipItem\x12\x1a.armory.UnequipItemRequest\x1a\x1b.armory.UnequipItemResponse\x12L\n" +
+	"\rGetEquipSlots\x12\x1c.armory.GetEquipSlotsRequest\x1a\x1d.armory.GetEquipSlotsResponseB:Z8github.com/komadiina/spelltext/proto/proto/armory;armoryb\x06proto3"
 
 var (
 	file_armory_armory_proto_rawDescOnce sync.Once
@@ -1076,7 +1160,7 @@ func file_armory_armory_proto_rawDescGZIP() []byte {
 	return file_armory_armory_proto_rawDescData
 }
 
-var file_armory_armory_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
+var file_armory_armory_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
 var file_armory_armory_proto_goTypes = []any{
 	(*ListHeroesRequest)(nil),                // 0: armory.ListHeroesRequest
 	(*ListHeroesResponse)(nil),               // 1: armory.ListHeroesResponse
@@ -1098,43 +1182,49 @@ var file_armory_armory_proto_goTypes = []any{
 	(*UnequipItemResponse)(nil),              // 17: armory.UnequipItemResponse
 	(*GetEquippedItemsRequest)(nil),          // 18: armory.GetEquippedItemsRequest
 	(*GetEquippedItemsResponse)(nil),         // 19: armory.GetEquippedItemsResponse
-	(*repo.Hero)(nil),                        // 20: repo.Hero
-	(*repo.Character)(nil),                   // 21: repo.Character
-	(*repo.Item)(nil),                        // 22: repo.Item
+	(*GetEquipSlotsRequest)(nil),             // 20: armory.GetEquipSlotsRequest
+	(*GetEquipSlotsResponse)(nil),            // 21: armory.GetEquipSlotsResponse
+	(*repo.Hero)(nil),                        // 22: repo.Hero
+	(*repo.Character)(nil),                   // 23: repo.Character
+	(*repo.Item)(nil),                        // 24: repo.Item
+	(*repo.EquipSlot)(nil),                   // 25: repo.EquipSlot
 }
 var file_armory_armory_proto_depIdxs = []int32{
-	20, // 0: armory.ListHeroesResponse.heroes:type_name -> repo.Hero
-	21, // 1: armory.ListCharactersResponse.characters:type_name -> repo.Character
-	21, // 2: armory.GetLastSelectedCharacterResponse.character:type_name -> repo.Character
-	21, // 3: armory.GetCharacterResponse.character:type_name -> repo.Character
-	20, // 4: armory.CreateCharacterRequest.hero:type_name -> repo.Hero
-	21, // 5: armory.CreateCharacterResponse.character:type_name -> repo.Character
-	22, // 6: armory.GetEquippedItemsResponse.items:type_name -> repo.Item
-	0,  // 7: armory.Character.ListHeroes:input_type -> armory.ListHeroesRequest
-	2,  // 8: armory.Character.ListCharacters:input_type -> armory.ListCharactersRequest
-	4,  // 9: armory.Character.SetSelectedCharacter:input_type -> armory.SetSelectedCharacterRequest
-	6,  // 10: armory.Character.GetLastSelectedCharacter:input_type -> armory.GetLastSelectedCharacterRequest
-	8,  // 11: armory.Character.GetCharacter:input_type -> armory.GetCharacterRequest
-	10, // 12: armory.Character.CreateCharacter:input_type -> armory.CreateCharacterRequest
-	12, // 13: armory.Character.DeleteCharacter:input_type -> armory.DeleteCharacterRequest
-	18, // 14: armory.Character.GetEquippedItems:input_type -> armory.GetEquippedItemsRequest
-	14, // 15: armory.Character.EquipItem:input_type -> armory.EquipItemRequest
-	16, // 16: armory.Character.UnequipItem:input_type -> armory.UnequipItemRequest
-	1,  // 17: armory.Character.ListHeroes:output_type -> armory.ListHeroesResponse
-	3,  // 18: armory.Character.ListCharacters:output_type -> armory.ListCharactersResponse
-	5,  // 19: armory.Character.SetSelectedCharacter:output_type -> armory.SetSelectedCharacterResponse
-	7,  // 20: armory.Character.GetLastSelectedCharacter:output_type -> armory.GetLastSelectedCharacterResponse
-	9,  // 21: armory.Character.GetCharacter:output_type -> armory.GetCharacterResponse
-	11, // 22: armory.Character.CreateCharacter:output_type -> armory.CreateCharacterResponse
-	13, // 23: armory.Character.DeleteCharacter:output_type -> armory.DeleteCharacterResponse
-	19, // 24: armory.Character.GetEquippedItems:output_type -> armory.GetEquippedItemsResponse
-	15, // 25: armory.Character.EquipItem:output_type -> armory.EquipItemResponse
-	17, // 26: armory.Character.UnequipItem:output_type -> armory.UnequipItemResponse
-	17, // [17:27] is the sub-list for method output_type
-	7,  // [7:17] is the sub-list for method input_type
-	7,  // [7:7] is the sub-list for extension type_name
-	7,  // [7:7] is the sub-list for extension extendee
-	0,  // [0:7] is the sub-list for field type_name
+	22, // 0: armory.ListHeroesResponse.heroes:type_name -> repo.Hero
+	23, // 1: armory.ListCharactersResponse.characters:type_name -> repo.Character
+	23, // 2: armory.GetLastSelectedCharacterResponse.character:type_name -> repo.Character
+	23, // 3: armory.GetCharacterResponse.character:type_name -> repo.Character
+	22, // 4: armory.CreateCharacterRequest.hero:type_name -> repo.Hero
+	23, // 5: armory.CreateCharacterResponse.character:type_name -> repo.Character
+	24, // 6: armory.GetEquippedItemsResponse.items:type_name -> repo.Item
+	25, // 7: armory.GetEquipSlotsResponse.slots:type_name -> repo.EquipSlot
+	0,  // 8: armory.Character.ListHeroes:input_type -> armory.ListHeroesRequest
+	2,  // 9: armory.Character.ListCharacters:input_type -> armory.ListCharactersRequest
+	4,  // 10: armory.Character.SetSelectedCharacter:input_type -> armory.SetSelectedCharacterRequest
+	6,  // 11: armory.Character.GetLastSelectedCharacter:input_type -> armory.GetLastSelectedCharacterRequest
+	8,  // 12: armory.Character.GetCharacter:input_type -> armory.GetCharacterRequest
+	10, // 13: armory.Character.CreateCharacter:input_type -> armory.CreateCharacterRequest
+	12, // 14: armory.Character.DeleteCharacter:input_type -> armory.DeleteCharacterRequest
+	18, // 15: armory.Character.GetEquippedItems:input_type -> armory.GetEquippedItemsRequest
+	14, // 16: armory.Character.EquipItem:input_type -> armory.EquipItemRequest
+	16, // 17: armory.Character.UnequipItem:input_type -> armory.UnequipItemRequest
+	20, // 18: armory.Character.GetEquipSlots:input_type -> armory.GetEquipSlotsRequest
+	1,  // 19: armory.Character.ListHeroes:output_type -> armory.ListHeroesResponse
+	3,  // 20: armory.Character.ListCharacters:output_type -> armory.ListCharactersResponse
+	5,  // 21: armory.Character.SetSelectedCharacter:output_type -> armory.SetSelectedCharacterResponse
+	7,  // 22: armory.Character.GetLastSelectedCharacter:output_type -> armory.GetLastSelectedCharacterResponse
+	9,  // 23: armory.Character.GetCharacter:output_type -> armory.GetCharacterResponse
+	11, // 24: armory.Character.CreateCharacter:output_type -> armory.CreateCharacterResponse
+	13, // 25: armory.Character.DeleteCharacter:output_type -> armory.DeleteCharacterResponse
+	19, // 26: armory.Character.GetEquippedItems:output_type -> armory.GetEquippedItemsResponse
+	15, // 27: armory.Character.EquipItem:output_type -> armory.EquipItemResponse
+	17, // 28: armory.Character.UnequipItem:output_type -> armory.UnequipItemResponse
+	21, // 29: armory.Character.GetEquipSlots:output_type -> armory.GetEquipSlotsResponse
+	19, // [19:30] is the sub-list for method output_type
+	8,  // [8:19] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_armory_armory_proto_init() }
@@ -1148,7 +1238,7 @@ func file_armory_armory_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_armory_armory_proto_rawDesc), len(file_armory_armory_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   20,
+			NumMessages:   22,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

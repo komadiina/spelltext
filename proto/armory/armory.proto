@@ -108,6 +108,12 @@ message GetEquippedItemsResponse {
     repeated repo.Item items = 1;
 }
 
+message GetEquipSlotsRequest {}
+
+message GetEquipSlotsResponse {
+    repeated repo.EquipSlot slots = 1;
+}
+
 service Character {
     rpc ListHeroes               (ListHeroesRequest)                returns (ListHeroesResponse);
     rpc ListCharacters           (ListCharactersRequest)            returns (ListCharactersResponse);
@@ -119,4 +125,5 @@ service Character {
     rpc GetEquippedItems         (GetEquippedItemsRequest)          returns (GetEquippedItemsResponse);
     rpc EquipItem                (EquipItemRequest)                 returns (EquipItemResponse);
     rpc UnequipItem              (UnequipItemRequest)               returns (UnequipItemResponse);
+    rpc GetEquipSlots            (GetEquipSlotsRequest)             returns (GetEquipSlotsResponse);
 }
