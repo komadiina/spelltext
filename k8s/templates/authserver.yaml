@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: authserver
+  namespace: spelltext
+  labels: 
+    app: authserver
+
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: authserver
+  template:
+    metadata:
+      labels:
+        app: authserver
+    spec:
+      containers:
+      - name: authserver
+        image: {{ .Values.authserver.image | toString }}
+        imagePullPolicy: Always
+        ports:
+          - containerPort: {{ .Values.authserver.containerPort }}
+            name: {{ .Values.authserver.portName }}
+            protocol: {{ .Values.authserver.protocol }}
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.authserver.containerPort }}
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.authserver.containerPort }}
+          initialDelaySeconds: 15
+          periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authserver
+  namespace: spelltext
+  labels:
+    app: authserver
+spec:
+  type: ClusterIP
+  selector:
+    app: authserver
+  ports:
+    - name: {{ .Values.authserver.portName }}
+      port: {{ .Values.authserver.port }}
+      targetPort: {{ .Values.authserver.targetPort }}
+      protocol: {{ .Values.authserver.protocol }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authserver-ingress
+  namespace: spelltext
+  labels:
+    app: authserver
+spec:
+  type: LoadBalancer
+  selector:
+    app: authserver
+  ports:
+    - name: {{ .Values.authserver.portName }}
+      port: {{ .Values.authserver.port }}
+      targetPort: {{ .Values.authserver.targetPort }}
+      protocol: {{ .Values.authserver.protocol }}
