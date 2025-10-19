@@ -8,7 +8,7 @@ import (
 	"github.com/komadiina/spelltext/client/functions"
 	types "github.com/komadiina/spelltext/client/types"
 	"github.com/komadiina/spelltext/client/utils"
-	pbArmory "github.com/komadiina/spelltext/proto/armory"
+	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	"github.com/rivo/tview"
 )
 
@@ -47,7 +47,7 @@ func AddGambaPage(c *types.SpelltextClient) {
 					SetText(
 						fmt.Sprintf(
 							"available gold: %dg",
-							c.AppStorage[constants.SELECTED_CHARACTER].(*pbArmory.TCharacter).GetGold(),
+							c.AppStorage[constants.SELECTED_CHARACTER].(*pbRepo.Character).GetGold(),
 						))
 
 				availableGold.SetBorder(true).SetBorderPadding(1, 1, 2, 2)

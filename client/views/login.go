@@ -19,14 +19,21 @@ func AddLoginPage(c *types.SpelltextClient) {
 			SetFieldWidth(len(header2)).
 			SetChangedFunc(func(text string) { *c.User = functions.GetUserByUsername(strings.ToLower(text)) })
 
+		var password string
+
 		form := tview.NewForm().
 			AddTextView("", "[yellow]"+header1, 0, 1, true, false).
 			AddTextView("", "[blue]"+header2, 0, 1, true, false).
 			AddTextView("", "", 0, 1, true, false).
 			AddFormItem(username).
-			AddPasswordField("password: ", "", len(header2), '*', func(text string) {}).
+			AddPasswordField("password: ", "", len(header2), '*', func(text string) {
+				password = strings.Trim(text, " ")
+			}).
 			AddButton("login", func() {
+				functions.LoginUser(c, username.GetText(), password)
+				c.AppStorage[constants.CURRENT_USER_NAME] = username.GetText()
 				c.Logger.Info("user logged in", "username", username.GetText())
+				functions.SetLastSelectedCharacter(c)
 				c.PageManager.Push(constants.PAGE_MAINMENU, false)
 			})
 

@@ -52,15 +52,16 @@ import (
 	"github.com/gopxl/beep"
 	"github.com/gopxl/beep/mp3"
 	"github.com/gopxl/beep/speaker"
+	"github.com/komadiina/spelltext/client/constants"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 )
 
 type Manager struct {
-	targetRate beep.SampleRate
-	buffers    map[string]*beep.Buffer
-	mutex      sync.RWMutex
-	initOnce   sync.Once
-	Logger     *logging.Logger
+	AudioEnabled bool
+	targetRate   beep.SampleRate
+	buffers      map[string]*beep.Buffer
+	mutex        sync.RWMutex
+	initOnce     sync.Once
 }
 
 func NewManager(targetRate beep.SampleRate) *Manager {
@@ -103,6 +104,10 @@ func (m *Manager) Preload(soundFiles []string) error {
 }
 
 func (m *Manager) Play(key string, logger *logging.Logger) {
+	if !m.AudioEnabled {
+		return
+	}
+
 	m.mutex.RLock()
 	buf, ok := m.buffers[key]
 	m.mutex.RUnlock()
@@ -115,4 +120,24 @@ func (m *Manager) Play(key string, logger *logging.Logger) {
 	s := buf.Streamer(0, buf.Len())
 
 	speaker.Play(s)
+}
+
+func (m *Manager) PlayBackground(logger *logging.Logger) {
+	if !m.AudioEnabled {
+		return
+	}
+
+	m.mutex.RLock()
+	// use beep.Loop(-1, streamer) for constants.BACKGROUND_OST
+	buf, ok := m.buffers[constants.BACKGROUND_OST]
+	m.mutex.RUnlock()
+
+	if !ok {
+		logger.Warnf("sound %s not found", constants.BACKGROUND_OST)
+		return
+	}
+
+	str := buf.Streamer(0, buf.Len())
+	loop := beep.Loop(-1, str)
+	speaker.Play(loop)
 }

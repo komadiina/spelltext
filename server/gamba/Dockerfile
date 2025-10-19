@@ -9,7 +9,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-RUN go build /server/gamba/cmd/gambaserver/main.go
+RUN go build /server/gamba/cmd/main.go
 
 FROM alpine:3.22.1
 WORKDIR /

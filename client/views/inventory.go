@@ -7,7 +7,7 @@ import (
 	"github.com/komadiina/spelltext/client/constants"
 	"github.com/komadiina/spelltext/client/functions"
 	types "github.com/komadiina/spelltext/client/types"
-	pbArmory "github.com/komadiina/spelltext/proto/armory"
+	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	"github.com/rivo/tview"
 )
 
@@ -23,8 +23,8 @@ func AddInventoryPage(c *types.SpelltextClient) {
 			flex.AddItem(tview.NewTextView().SetText("no character selected"), 0, 1, false)
 			return flex
 		} else {
-			char := char.(*pbArmory.TCharacter)
-			tv := tview.NewTextView().SetText(fmt.Sprintf("browsing %s's inventory", char.Name))
+			char := char.(*pbRepo.Character)
+			tv := tview.NewTextView().SetText(fmt.Sprintf("browsing %s's inventory", char.CharacterName))
 			tv.SetBackgroundColor(tcell.ColorSlateGrey).SetBorderPadding(1, 1, 2, 2)
 			flex.AddItem(tv, 3, 1, false).AddItem(tview.NewTextView().SetWrap(true).SetWordWrap(true), 1, 1, false)
 		}

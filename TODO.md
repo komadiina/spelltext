@@ -1,0 +1,7 @@
+- logger: refactor to accept Writer object as an Init() input parameter
+- charserver: add equipment introspective
+  - fix character update on DeleteCharacter invocation
+- combatserver: implement 1v1 turn-based player-npc combat 
+- progserver: implement questing system
+- system: loki + grafana for logging
+- final: proper database pre-seed, apply persistence

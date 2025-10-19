@@ -54,6 +54,13 @@ jobs:
           image_name: ${{github.repository}}/gambaserver
           github_token: ${{secrets.GITHUB_TOKEN}}
           dockerfile: server/gamba/Dockerfile
+      
+      - name: build & push server/auth
+        uses: macbre/push-to-ghcr@master
+        with:
+          image_name: ${{github.repository}}/authserver
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          dockerfile: server/auth/Dockerfile
 
       - name: build & push scripts/db (flyway)
         uses: macbre/push-to-ghcr@master

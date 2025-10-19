@@ -2,24 +2,26 @@ syntax = "proto3";
 package armory;
 option go_package = "github.com/komadiina/spelltext/proto/proto/armory;armory";
 
-message TCharacter {
-    uint64 id       = 1;
-    string name     = 2;
-    string class    = 3;
-    uint32 level    = 4;
-    uint64 gold     = 5;
-    uint64 tokens   = 6;
-}
+import "repo/repo.proto";
 
-message THero {
-    string name     = 1;
-    uint64 id       = 2;
-}
+// message TCharacter {
+//     uint64 id       = 1;
+//     string name     = 2;
+//     string class    = 3;
+//     uint32 level    = 4;
+//     uint64 gold     = 5;
+//     uint64 tokens   = 6;
+// }
+
+// message THero {
+//     string name     = 1;
+//     uint64 id       = 2;
+// }
 
 message ListHeroesRequest {}
 
 message ListHeroesResponse {
-    repeated THero heroes = 1;
+    repeated repo.Hero heroes = 1;
 }
 
 message ListCharactersRequest {
@@ -27,17 +29,45 @@ message ListCharactersRequest {
 }
 
 message ListCharactersResponse {
-    repeated TCharacter characters = 1;
+    repeated repo.Character characters = 1;
+}
+
+message SetSelectedCharacterRequest {
+    uint64 user_id      = 1;
+    uint64 character_id = 2;
+}
+
+message SetSelectedCharacterResponse {
+    bool success    = 1;
+    string message  = 2;
+}
+
+message GetLastSelectedCharacterRequest {
+    string username = 1;
+}
+
+message GetLastSelectedCharacterResponse {
+    repo.Character character = 1;
+}
+
+message GetCharacterRequest {
+    uint64 character_id = 1;
+}
+
+message GetCharacterResponse {
+    repo.Character character = 1;
 }
 
 message CreateCharacterRequest {
-    THero hero  = 1;
-    string name = 2;
+    uint64 user_id  = 1;
+    repo.Hero hero  = 2;
+    string name     = 3;
 }
 
 message CreateCharacterResponse {
-    bool success    = 1;
-    string message  = 2;
+    bool success             = 1;
+    string message           = 2;
+    repo.Character character = 3;
 }
 
 message DeleteCharacterRequest {
@@ -49,9 +79,51 @@ message DeleteCharacterResponse {
     string message  = 2;
 }
 
+message EquipItemRequest {
+    uint64 character_id     = 1;
+    uint64 item_instance_id = 2;
+    uint64 equip_slot_id    = 3;
+}
+
+message EquipItemResponse {
+    bool success    = 1;
+    string message  = 2;
+}
+
+message UnequipItemRequest {
+    uint64 character_id     = 1;
+    uint64 equip_slot_id    = 2;
+}
+
+message UnequipItemResponse {
+    bool success    = 1;
+    string message  = 2;
+}
+
+message GetEquippedItemsRequest {
+    uint64 character_id = 1;
+}
+
+message GetEquippedItemsResponse {
+    repeated repo.Item items = 1;
+}
+
+message GetEquipSlotsRequest {}
+
+message GetEquipSlotsResponse {
+    repeated repo.EquipSlot slots = 1;
+}
+
 service Character {
-    rpc ListHeroes      (ListHeroesRequest)         returns (ListHeroesResponse);
-    rpc ListCharacters  (ListCharactersRequest)     returns (ListCharactersResponse);
-    rpc CreateCharacter (CreateCharacterRequest)    returns (CreateCharacterResponse);
-    rpc DeleteCharacter (DeleteCharacterRequest)    returns (DeleteCharacterResponse);
+    rpc ListHeroes               (ListHeroesRequest)                returns (ListHeroesResponse);
+    rpc ListCharacters           (ListCharactersRequest)            returns (ListCharactersResponse);
+    rpc SetSelectedCharacter     (SetSelectedCharacterRequest)      returns (SetSelectedCharacterResponse);
+    rpc GetLastSelectedCharacter (GetLastSelectedCharacterRequest)  returns (GetLastSelectedCharacterResponse);
+    rpc GetCharacter             (GetCharacterRequest)              returns (GetCharacterResponse);
+    rpc CreateCharacter          (CreateCharacterRequest)           returns (CreateCharacterResponse);
+    rpc DeleteCharacter          (DeleteCharacterRequest)           returns (DeleteCharacterResponse);
+    rpc GetEquippedItems         (GetEquippedItemsRequest)          returns (GetEquippedItemsResponse);
+    rpc EquipItem                (EquipItemRequest)                 returns (EquipItemResponse);
+    rpc UnequipItem              (UnequipItemRequest)               returns (UnequipItemResponse);
+    rpc GetEquipSlots            (GetEquipSlotsRequest)             returns (GetEquipSlotsResponse);
 }

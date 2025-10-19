@@ -7,8 +7,8 @@ storeserver:
   port: 50052
   pgUser: storeuser
   pgPass: changeme
-  pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
-  # pgHost: postgres
+  # pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
+  pgHost: postgres
   pgPort: 5432
   pgDbName: spelltext
   pgSslMode: disable
@@ -17,8 +17,8 @@ inventoryserver:
   port: 50053
   pgUser: inventoryuser
   pgPass: changeme
-  pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
-  # pgHost: postgres
+  # pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
+  pgHost: postgres
   pgPort: 5432
   pgDbName: spelltext
   pgSslMode: disable
@@ -27,8 +27,8 @@ charserver:
   port: 50054
   pgUser: charuser
   pgPass: changeme
-  pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
-  # pgHost: postgres
+  # pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
+  pgHost: postgres
   pgPort: 5432
   pgDbName: spelltext
   pgSslMode: disable
@@ -37,12 +37,23 @@ gambaserver:
   port: 50055
   pgUser: gambauser
   pgPass: changeme
-  pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
-  # pgHost: postgres
+  # pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
+  pgHost: postgres
   pgPort: 5432
   pgDbName: spelltext
   pgSslMode: disable
 
-client:
-  nats_url: nats://127.0.0.1:4222
-  max_wait_time: 5
+authserver:
+  port: 50056
+  pgUser: storeuser
+  pgPass: changeme
+  # pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
+  pgHost: postgres
+  pgPort: 5432
+  pgDbName: spelltext
+  pgSslMode: disable
+  authType: hash
+  trust: true
+
+  charserver:
+    port: 50054

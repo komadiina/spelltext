@@ -23,13 +23,14 @@ const (
 )
 
 type User struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Username      string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
-	PasswordHash  string                 `protobuf:"bytes,3,opt,name=password_hash,json=passwordHash,proto3" json:"password_hash,omitempty"`
-	Email         string                 `protobuf:"bytes,4,opt,name=email,proto3" json:"email,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state               protoimpl.MessageState `protogen:"open.v1"`
+	Id                  uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Username            string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
+	PasswordHash        string                 `protobuf:"bytes,3,opt,name=password_hash,json=passwordHash,proto3" json:"password_hash,omitempty"`
+	Email               string                 `protobuf:"bytes,4,opt,name=email,proto3" json:"email,omitempty"`
+	SelectedCharacterId uint64                 `protobuf:"varint,5,opt,name=selected_character_id,json=selectedCharacterId,proto3" json:"selected_character_id,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *User) Reset() {
@@ -88,6 +89,13 @@ func (x *User) GetEmail() string {
 		return x.Email
 	}
 	return ""
+}
+
+func (x *User) GetSelectedCharacterId() uint64 {
+	if x != nil {
+		return x.SelectedCharacterId
+	}
+	return 0
 }
 
 type Hero struct {
@@ -524,12 +532,12 @@ type Item struct {
 	Prefix         string                 `protobuf:"bytes,2,opt,name=prefix,proto3" json:"prefix,omitempty"`
 	Suffix         string                 `protobuf:"bytes,3,opt,name=suffix,proto3" json:"suffix,omitempty"`
 	ItemTemplateId uint64                 `protobuf:"varint,4,opt,name=item_template_id,json=itemTemplateId,proto3" json:"item_template_id,omitempty"`
-	Health         uint64                 `protobuf:"varint,5,opt,name=health,proto3" json:"health,omitempty"`
-	Power          uint64                 `protobuf:"varint,6,opt,name=power,proto3" json:"power,omitempty"`
-	Strength       uint64                 `protobuf:"varint,7,opt,name=strength,proto3" json:"strength,omitempty"`
-	Spellpower     uint64                 `protobuf:"varint,8,opt,name=spellpower,proto3" json:"spellpower,omitempty"`
-	BonusDamage    uint64                 `protobuf:"varint,9,opt,name=bonus_damage,json=bonusDamage,proto3" json:"bonus_damage,omitempty"`
-	BonusArmor     uint64                 `protobuf:"varint,10,opt,name=bonus_armor,json=bonusArmor,proto3" json:"bonus_armor,omitempty"`
+	Health         int64                  `protobuf:"varint,5,opt,name=health,proto3" json:"health,omitempty"`
+	Power          int64                  `protobuf:"varint,6,opt,name=power,proto3" json:"power,omitempty"`
+	Strength       int64                  `protobuf:"varint,7,opt,name=strength,proto3" json:"strength,omitempty"`
+	Spellpower     int64                  `protobuf:"varint,8,opt,name=spellpower,proto3" json:"spellpower,omitempty"`
+	BonusDamage    int64                  `protobuf:"varint,9,opt,name=bonus_damage,json=bonusDamage,proto3" json:"bonus_damage,omitempty"`
+	BonusArmor     int64                  `protobuf:"varint,10,opt,name=bonus_armor,json=bonusArmor,proto3" json:"bonus_armor,omitempty"`
 	ItemTemplate   *ItemTemplate          `protobuf:"bytes,20,opt,name=item_template,json=itemTemplate,proto3" json:"item_template,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
@@ -593,42 +601,42 @@ func (x *Item) GetItemTemplateId() uint64 {
 	return 0
 }
 
-func (x *Item) GetHealth() uint64 {
+func (x *Item) GetHealth() int64 {
 	if x != nil {
 		return x.Health
 	}
 	return 0
 }
 
-func (x *Item) GetPower() uint64 {
+func (x *Item) GetPower() int64 {
 	if x != nil {
 		return x.Power
 	}
 	return 0
 }
 
-func (x *Item) GetStrength() uint64 {
+func (x *Item) GetStrength() int64 {
 	if x != nil {
 		return x.Strength
 	}
 	return 0
 }
 
-func (x *Item) GetSpellpower() uint64 {
+func (x *Item) GetSpellpower() int64 {
 	if x != nil {
 		return x.Spellpower
 	}
 	return 0
 }
 
-func (x *Item) GetBonusDamage() uint64 {
+func (x *Item) GetBonusDamage() int64 {
 	if x != nil {
 		return x.BonusDamage
 	}
 	return 0
 }
 
-func (x *Item) GetBonusArmor() uint64 {
+func (x *Item) GetBonusArmor() int64 {
 	if x != nil {
 		return x.BonusArmor
 	}
@@ -648,12 +656,12 @@ type Consumable struct {
 	Prefix             string                 `protobuf:"bytes,2,opt,name=prefix,proto3" json:"prefix,omitempty"`
 	Suffix             string                 `protobuf:"bytes,3,opt,name=suffix,proto3" json:"suffix,omitempty"`
 	ItemTemplateId     uint64                 `protobuf:"varint,4,opt,name=item_template_id,json=itemTemplateId,proto3" json:"item_template_id,omitempty"`
-	Health             uint64                 `protobuf:"varint,5,opt,name=health,proto3" json:"health,omitempty"`
-	Power              uint64                 `protobuf:"varint,6,opt,name=power,proto3" json:"power,omitempty"`
-	Strength           uint64                 `protobuf:"varint,7,opt,name=strength,proto3" json:"strength,omitempty"`
-	Spellpower         uint64                 `protobuf:"varint,8,opt,name=spellpower,proto3" json:"spellpower,omitempty"`
-	BonusDamage        uint64                 `protobuf:"varint,9,opt,name=bonus_damage,json=bonusDamage,proto3" json:"bonus_damage,omitempty"`
-	BonusArmor         uint64                 `protobuf:"varint,10,opt,name=bonus_armor,json=bonusArmor,proto3" json:"bonus_armor,omitempty"`
+	Health             int64                  `protobuf:"varint,5,opt,name=health,proto3" json:"health,omitempty"`
+	Power              int64                  `protobuf:"varint,6,opt,name=power,proto3" json:"power,omitempty"`
+	Strength           int64                  `protobuf:"varint,7,opt,name=strength,proto3" json:"strength,omitempty"`
+	Spellpower         int64                  `protobuf:"varint,8,opt,name=spellpower,proto3" json:"spellpower,omitempty"`
+	BonusDamage        int64                  `protobuf:"varint,9,opt,name=bonus_damage,json=bonusDamage,proto3" json:"bonus_damage,omitempty"`
+	BonusArmor         int64                  `protobuf:"varint,10,opt,name=bonus_armor,json=bonusArmor,proto3" json:"bonus_armor,omitempty"`
 	Uses               uint64                 `protobuf:"varint,11,opt,name=uses,proto3" json:"uses,omitempty"`
 	ConsumableTemplate *ConsumableTemplate    `protobuf:"bytes,20,opt,name=consumable_template,json=consumableTemplate,proto3" json:"consumable_template,omitempty"`
 	unknownFields      protoimpl.UnknownFields
@@ -718,42 +726,42 @@ func (x *Consumable) GetItemTemplateId() uint64 {
 	return 0
 }
 
-func (x *Consumable) GetHealth() uint64 {
+func (x *Consumable) GetHealth() int64 {
 	if x != nil {
 		return x.Health
 	}
 	return 0
 }
 
-func (x *Consumable) GetPower() uint64 {
+func (x *Consumable) GetPower() int64 {
 	if x != nil {
 		return x.Power
 	}
 	return 0
 }
 
-func (x *Consumable) GetStrength() uint64 {
+func (x *Consumable) GetStrength() int64 {
 	if x != nil {
 		return x.Strength
 	}
 	return 0
 }
 
-func (x *Consumable) GetSpellpower() uint64 {
+func (x *Consumable) GetSpellpower() int64 {
 	if x != nil {
 		return x.Spellpower
 	}
 	return 0
 }
 
-func (x *Consumable) GetBonusDamage() uint64 {
+func (x *Consumable) GetBonusDamage() int64 {
 	if x != nil {
 		return x.BonusDamage
 	}
 	return 0
 }
 
-func (x *Consumable) GetBonusArmor() uint64 {
+func (x *Consumable) GetBonusArmor() int64 {
 	if x != nil {
 		return x.BonusArmor
 	}
@@ -1414,16 +1422,825 @@ func (x *GambaChestContent) GetItem() *Item {
 	return nil
 }
 
+type CharacterEquipment struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	CharacterId    uint64                 `protobuf:"varint,1,opt,name=character_id,json=characterId,proto3" json:"character_id,omitempty"`
+	EquipSlotId    uint64                 `protobuf:"varint,2,opt,name=equip_slot_id,json=equipSlotId,proto3" json:"equip_slot_id,omitempty"`
+	ItemInstanceId uint64                 `protobuf:"varint,3,opt,name=item_instance_id,json=itemInstanceId,proto3" json:"item_instance_id,omitempty"`
+	EquipSlot      *EquipSlot             `protobuf:"bytes,20,opt,name=equip_slot,json=equipSlot,proto3" json:"equip_slot,omitempty"`
+	ItemInstance   *ItemInstance          `protobuf:"bytes,21,opt,name=item_instance,json=itemInstance,proto3" json:"item_instance,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *CharacterEquipment) Reset() {
+	*x = CharacterEquipment{}
+	mi := &file_repo_repo_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CharacterEquipment) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CharacterEquipment) ProtoMessage() {}
+
+func (x *CharacterEquipment) ProtoReflect() protoreflect.Message {
+	mi := &file_repo_repo_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CharacterEquipment.ProtoReflect.Descriptor instead.
+func (*CharacterEquipment) Descriptor() ([]byte, []int) {
+	return file_repo_repo_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *CharacterEquipment) GetCharacterId() uint64 {
+	if x != nil {
+		return x.CharacterId
+	}
+	return 0
+}
+
+func (x *CharacterEquipment) GetEquipSlotId() uint64 {
+	if x != nil {
+		return x.EquipSlotId
+	}
+	return 0
+}
+
+func (x *CharacterEquipment) GetItemInstanceId() uint64 {
+	if x != nil {
+		return x.ItemInstanceId
+	}
+	return 0
+}
+
+func (x *CharacterEquipment) GetEquipSlot() *EquipSlot {
+	if x != nil {
+		return x.EquipSlot
+	}
+	return nil
+}
+
+func (x *CharacterEquipment) GetItemInstance() *ItemInstance {
+	if x != nil {
+		return x.ItemInstance
+	}
+	return nil
+}
+
+type Quest struct {
+	state            protoimpl.MessageState `protogen:"open.v1"`
+	Id               uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name             string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Description      string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	LevelRequirement uint64                 `protobuf:"varint,4,opt,name=level_requirement,json=levelRequirement,proto3" json:"level_requirement,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *Quest) Reset() {
+	*x = Quest{}
+	mi := &file_repo_repo_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Quest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Quest) ProtoMessage() {}
+
+func (x *Quest) ProtoReflect() protoreflect.Message {
+	mi := &file_repo_repo_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Quest.ProtoReflect.Descriptor instead.
+func (*Quest) Descriptor() ([]byte, []int) {
+	return file_repo_repo_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *Quest) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *Quest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Quest) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *Quest) GetLevelRequirement() uint64 {
+	if x != nil {
+		return x.LevelRequirement
+	}
+	return 0
+}
+
+type QuestPrerequisite struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	BaseQuestId       uint64                 `protobuf:"varint,1,opt,name=base_quest_id,json=baseQuestId,proto3" json:"base_quest_id,omitempty"`
+	PrequisiteQuestId uint64                 `protobuf:"varint,2,opt,name=prequisite_quest_id,json=prequisiteQuestId,proto3" json:"prequisite_quest_id,omitempty"`
+	BaseQuest         *Quest                 `protobuf:"bytes,20,opt,name=base_quest,json=baseQuest,proto3" json:"base_quest,omitempty"`
+	PrequisiteQuest   *Quest                 `protobuf:"bytes,21,opt,name=prequisite_quest,json=prequisiteQuest,proto3" json:"prequisite_quest,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *QuestPrerequisite) Reset() {
+	*x = QuestPrerequisite{}
+	mi := &file_repo_repo_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *QuestPrerequisite) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QuestPrerequisite) ProtoMessage() {}
+
+func (x *QuestPrerequisite) ProtoReflect() protoreflect.Message {
+	mi := &file_repo_repo_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use QuestPrerequisite.ProtoReflect.Descriptor instead.
+func (*QuestPrerequisite) Descriptor() ([]byte, []int) {
+	return file_repo_repo_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *QuestPrerequisite) GetBaseQuestId() uint64 {
+	if x != nil {
+		return x.BaseQuestId
+	}
+	return 0
+}
+
+func (x *QuestPrerequisite) GetPrequisiteQuestId() uint64 {
+	if x != nil {
+		return x.PrequisiteQuestId
+	}
+	return 0
+}
+
+func (x *QuestPrerequisite) GetBaseQuest() *Quest {
+	if x != nil {
+		return x.BaseQuest
+	}
+	return nil
+}
+
+func (x *QuestPrerequisite) GetPrequisiteQuest() *Quest {
+	if x != nil {
+		return x.PrequisiteQuest
+	}
+	return nil
+}
+
+type QuestReward struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	QuestId       uint64                 `protobuf:"varint,2,opt,name=quest_id,json=questId,proto3" json:"quest_id,omitempty"`
+	RewardType    string                 `protobuf:"bytes,3,opt,name=reward_type,json=rewardType,proto3" json:"reward_type,omitempty"`
+	ItemId        uint64                 `protobuf:"varint,4,opt,name=item_id,json=itemId,proto3" json:"item_id,omitempty"`
+	Amount        uint64                 `protobuf:"varint,5,opt,name=amount,proto3" json:"amount,omitempty"`
+	Quest         *Quest                 `protobuf:"bytes,20,opt,name=quest,proto3" json:"quest,omitempty"`
+	Item          *Item                  `protobuf:"bytes,21,opt,name=item,proto3" json:"item,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *QuestReward) Reset() {
+	*x = QuestReward{}
+	mi := &file_repo_repo_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *QuestReward) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QuestReward) ProtoMessage() {}
+
+func (x *QuestReward) ProtoReflect() protoreflect.Message {
+	mi := &file_repo_repo_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use QuestReward.ProtoReflect.Descriptor instead.
+func (*QuestReward) Descriptor() ([]byte, []int) {
+	return file_repo_repo_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *QuestReward) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *QuestReward) GetQuestId() uint64 {
+	if x != nil {
+		return x.QuestId
+	}
+	return 0
+}
+
+func (x *QuestReward) GetRewardType() string {
+	if x != nil {
+		return x.RewardType
+	}
+	return ""
+}
+
+func (x *QuestReward) GetItemId() uint64 {
+	if x != nil {
+		return x.ItemId
+	}
+	return 0
+}
+
+func (x *QuestReward) GetAmount() uint64 {
+	if x != nil {
+		return x.Amount
+	}
+	return 0
+}
+
+func (x *QuestReward) GetQuest() *Quest {
+	if x != nil {
+		return x.Quest
+	}
+	return nil
+}
+
+func (x *QuestReward) GetItem() *Item {
+	if x != nil {
+		return x.Item
+	}
+	return nil
+}
+
+type PlayerCompletedQuests struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	CharacterId   uint64                 `protobuf:"varint,1,opt,name=character_id,json=characterId,proto3" json:"character_id,omitempty"`
+	QuestId       uint64                 `protobuf:"varint,2,opt,name=quest_id,json=questId,proto3" json:"quest_id,omitempty"`
+	Quest         *Quest                 `protobuf:"bytes,20,opt,name=quest,proto3" json:"quest,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PlayerCompletedQuests) Reset() {
+	*x = PlayerCompletedQuests{}
+	mi := &file_repo_repo_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PlayerCompletedQuests) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PlayerCompletedQuests) ProtoMessage() {}
+
+func (x *PlayerCompletedQuests) ProtoReflect() protoreflect.Message {
+	mi := &file_repo_repo_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PlayerCompletedQuests.ProtoReflect.Descriptor instead.
+func (*PlayerCompletedQuests) Descriptor() ([]byte, []int) {
+	return file_repo_repo_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *PlayerCompletedQuests) GetCharacterId() uint64 {
+	if x != nil {
+		return x.CharacterId
+	}
+	return 0
+}
+
+func (x *PlayerCompletedQuests) GetQuestId() uint64 {
+	if x != nil {
+		return x.QuestId
+	}
+	return 0
+}
+
+func (x *PlayerCompletedQuests) GetQuest() *Quest {
+	if x != nil {
+		return x.Quest
+	}
+	return nil
+}
+
+type NpcTemplate struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	MinLevel      uint32                 `protobuf:"varint,3,opt,name=min_level,json=minLevel,proto3" json:"min_level,omitempty"`
+	MaxLevel      uint32                 `protobuf:"varint,4,opt,name=max_level,json=maxLevel,proto3" json:"max_level,omitempty"`
+	HealthPoints  uint64                 `protobuf:"varint,5,opt,name=health_points,json=healthPoints,proto3" json:"health_points,omitempty"`
+	BaseDamage    uint64                 `protobuf:"varint,6,opt,name=base_damage,json=baseDamage,proto3" json:"base_damage,omitempty"`
+	BaseXpReward  uint64                 `protobuf:"varint,7,opt,name=base_xp_reward,json=baseXpReward,proto3" json:"base_xp_reward,omitempty"`
+	DropItemId    uint64                 `protobuf:"varint,8,opt,name=drop_item_id,json=dropItemId,proto3" json:"drop_item_id,omitempty"`
+	DropItem      *Item                  `protobuf:"bytes,20,opt,name=drop_item,json=dropItem,proto3" json:"drop_item,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *NpcTemplate) Reset() {
+	*x = NpcTemplate{}
+	mi := &file_repo_repo_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *NpcTemplate) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*NpcTemplate) ProtoMessage() {}
+
+func (x *NpcTemplate) ProtoReflect() protoreflect.Message {
+	mi := &file_repo_repo_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use NpcTemplate.ProtoReflect.Descriptor instead.
+func (*NpcTemplate) Descriptor() ([]byte, []int) {
+	return file_repo_repo_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *NpcTemplate) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *NpcTemplate) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *NpcTemplate) GetMinLevel() uint32 {
+	if x != nil {
+		return x.MinLevel
+	}
+	return 0
+}
+
+func (x *NpcTemplate) GetMaxLevel() uint32 {
+	if x != nil {
+		return x.MaxLevel
+	}
+	return 0
+}
+
+func (x *NpcTemplate) GetHealthPoints() uint64 {
+	if x != nil {
+		return x.HealthPoints
+	}
+	return 0
+}
+
+func (x *NpcTemplate) GetBaseDamage() uint64 {
+	if x != nil {
+		return x.BaseDamage
+	}
+	return 0
+}
+
+func (x *NpcTemplate) GetBaseXpReward() uint64 {
+	if x != nil {
+		return x.BaseXpReward
+	}
+	return 0
+}
+
+func (x *NpcTemplate) GetDropItemId() uint64 {
+	if x != nil {
+		return x.DropItemId
+	}
+	return 0
+}
+
+func (x *NpcTemplate) GetDropItem() *Item {
+	if x != nil {
+		return x.DropItem
+	}
+	return nil
+}
+
+type Npc struct {
+	state            protoimpl.MessageState `protogen:"open.v1"`
+	Id               uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Prefix           string                 `protobuf:"bytes,2,opt,name=prefix,proto3" json:"prefix,omitempty"`
+	Suffix           string                 `protobuf:"bytes,3,opt,name=suffix,proto3" json:"suffix,omitempty"`
+	TemplateId       uint64                 `protobuf:"varint,4,opt,name=template_id,json=templateId,proto3" json:"template_id,omitempty"`
+	HealthMultiplier float32                `protobuf:"fixed32,5,opt,name=health_multiplier,json=healthMultiplier,proto3" json:"health_multiplier,omitempty"`
+	DamageMultiplier float32                `protobuf:"fixed32,6,opt,name=damage_multiplier,json=damageMultiplier,proto3" json:"damage_multiplier,omitempty"`
+	NpcTemplate      *NpcTemplate           `protobuf:"bytes,20,opt,name=npc_template,json=npcTemplate,proto3" json:"npc_template,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *Npc) Reset() {
+	*x = Npc{}
+	mi := &file_repo_repo_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Npc) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Npc) ProtoMessage() {}
+
+func (x *Npc) ProtoReflect() protoreflect.Message {
+	mi := &file_repo_repo_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Npc.ProtoReflect.Descriptor instead.
+func (*Npc) Descriptor() ([]byte, []int) {
+	return file_repo_repo_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *Npc) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *Npc) GetPrefix() string {
+	if x != nil {
+		return x.Prefix
+	}
+	return ""
+}
+
+func (x *Npc) GetSuffix() string {
+	if x != nil {
+		return x.Suffix
+	}
+	return ""
+}
+
+func (x *Npc) GetTemplateId() uint64 {
+	if x != nil {
+		return x.TemplateId
+	}
+	return 0
+}
+
+func (x *Npc) GetHealthMultiplier() float32 {
+	if x != nil {
+		return x.HealthMultiplier
+	}
+	return 0
+}
+
+func (x *Npc) GetDamageMultiplier() float32 {
+	if x != nil {
+		return x.DamageMultiplier
+	}
+	return 0
+}
+
+func (x *Npc) GetNpcTemplate() *NpcTemplate {
+	if x != nil {
+		return x.NpcTemplate
+	}
+	return nil
+}
+
+type QuestObjective struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	QuestId       uint64                 `protobuf:"varint,1,opt,name=quest_id,json=questId,proto3" json:"quest_id,omitempty"`
+	NpcId         uint64                 `protobuf:"varint,2,opt,name=npc_id,json=npcId,proto3" json:"npc_id,omitempty"`
+	Quest         *Quest                 `protobuf:"bytes,20,opt,name=quest,proto3" json:"quest,omitempty"`
+	Npc           *Npc                   `protobuf:"bytes,21,opt,name=npc,proto3" json:"npc,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *QuestObjective) Reset() {
+	*x = QuestObjective{}
+	mi := &file_repo_repo_proto_msgTypes[23]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *QuestObjective) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QuestObjective) ProtoMessage() {}
+
+func (x *QuestObjective) ProtoReflect() protoreflect.Message {
+	mi := &file_repo_repo_proto_msgTypes[23]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use QuestObjective.ProtoReflect.Descriptor instead.
+func (*QuestObjective) Descriptor() ([]byte, []int) {
+	return file_repo_repo_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *QuestObjective) GetQuestId() uint64 {
+	if x != nil {
+		return x.QuestId
+	}
+	return 0
+}
+
+func (x *QuestObjective) GetNpcId() uint64 {
+	if x != nil {
+		return x.NpcId
+	}
+	return 0
+}
+
+func (x *QuestObjective) GetQuest() *Quest {
+	if x != nil {
+		return x.Quest
+	}
+	return nil
+}
+
+func (x *QuestObjective) GetNpc() *Npc {
+	if x != nil {
+		return x.Npc
+	}
+	return nil
+}
+
+type Ability struct {
+	state                protoimpl.MessageState `protogen:"open.v1"`
+	Id                   uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name                 string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Description          string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	Type                 string                 `protobuf:"bytes,4,opt,name=type,proto3" json:"type,omitempty"`
+	TalentPointCost      uint32                 `protobuf:"varint,5,opt,name=talent_point_cost,json=talentPointCost,proto3" json:"talent_point_cost,omitempty"`
+	PowerCost            uint64                 `protobuf:"varint,6,opt,name=power_cost,json=powerCost,proto3" json:"power_cost,omitempty"`
+	BaseDamage           uint64                 `protobuf:"varint,7,opt,name=base_damage,json=baseDamage,proto3" json:"base_damage,omitempty"`
+	StrengthMultiplier   float32                `protobuf:"fixed32,8,opt,name=strength_multiplier,json=strengthMultiplier,proto3" json:"strength_multiplier,omitempty"`
+	SpellpowerMultiplier float32                `protobuf:"fixed32,9,opt,name=spellpower_multiplier,json=spellpowerMultiplier,proto3" json:"spellpower_multiplier,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
+}
+
+func (x *Ability) Reset() {
+	*x = Ability{}
+	mi := &file_repo_repo_proto_msgTypes[24]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Ability) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Ability) ProtoMessage() {}
+
+func (x *Ability) ProtoReflect() protoreflect.Message {
+	mi := &file_repo_repo_proto_msgTypes[24]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Ability.ProtoReflect.Descriptor instead.
+func (*Ability) Descriptor() ([]byte, []int) {
+	return file_repo_repo_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *Ability) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *Ability) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Ability) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *Ability) GetType() string {
+	if x != nil {
+		return x.Type
+	}
+	return ""
+}
+
+func (x *Ability) GetTalentPointCost() uint32 {
+	if x != nil {
+		return x.TalentPointCost
+	}
+	return 0
+}
+
+func (x *Ability) GetPowerCost() uint64 {
+	if x != nil {
+		return x.PowerCost
+	}
+	return 0
+}
+
+func (x *Ability) GetBaseDamage() uint64 {
+	if x != nil {
+		return x.BaseDamage
+	}
+	return 0
+}
+
+func (x *Ability) GetStrengthMultiplier() float32 {
+	if x != nil {
+		return x.StrengthMultiplier
+	}
+	return 0
+}
+
+func (x *Ability) GetSpellpowerMultiplier() float32 {
+	if x != nil {
+		return x.SpellpowerMultiplier
+	}
+	return 0
+}
+
+type Update struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+	Version       string                 `protobuf:"bytes,3,opt,name=version,proto3" json:"version,omitempty"`
+	Description   string                 `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Update) Reset() {
+	*x = Update{}
+	mi := &file_repo_repo_proto_msgTypes[25]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Update) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Update) ProtoMessage() {}
+
+func (x *Update) ProtoReflect() protoreflect.Message {
+	mi := &file_repo_repo_proto_msgTypes[25]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Update.ProtoReflect.Descriptor instead.
+func (*Update) Descriptor() ([]byte, []int) {
+	return file_repo_repo_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *Update) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *Update) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+func (x *Update) GetVersion() string {
+	if x != nil {
+		return x.Version
+	}
+	return ""
+}
+
+func (x *Update) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
 var File_repo_repo_proto protoreflect.FileDescriptor
 
 const file_repo_repo_proto_rawDesc = "" +
 	"\n" +
-	"\x0frepo/repo.proto\x12\x04repo\x1a\x1fgoogle/protobuf/timestamp.proto\"m\n" +
+	"\x0frepo/repo.proto\x12\x04repo\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa1\x01\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x1a\n" +
 	"\busername\x18\x02 \x01(\tR\busername\x12#\n" +
 	"\rpassword_hash\x18\x03 \x01(\tR\fpasswordHash\x12\x14\n" +
-	"\x05email\x18\x04 \x01(\tR\x05email\"\xea\x02\n" +
+	"\x05email\x18\x04 \x01(\tR\x05email\x122\n" +
+	"\x15selected_character_id\x18\x05 \x01(\x04R\x13selectedCharacterId\"\xea\x02\n" +
 	"\x04Hero\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1f\n" +
@@ -1473,15 +2290,15 @@ const file_repo_repo_proto_rawDesc = "" +
 	"\x06prefix\x18\x02 \x01(\tR\x06prefix\x12\x16\n" +
 	"\x06suffix\x18\x03 \x01(\tR\x06suffix\x12(\n" +
 	"\x10item_template_id\x18\x04 \x01(\x04R\x0eitemTemplateId\x12\x16\n" +
-	"\x06health\x18\x05 \x01(\x04R\x06health\x12\x14\n" +
-	"\x05power\x18\x06 \x01(\x04R\x05power\x12\x1a\n" +
-	"\bstrength\x18\a \x01(\x04R\bstrength\x12\x1e\n" +
+	"\x06health\x18\x05 \x01(\x03R\x06health\x12\x14\n" +
+	"\x05power\x18\x06 \x01(\x03R\x05power\x12\x1a\n" +
+	"\bstrength\x18\a \x01(\x03R\bstrength\x12\x1e\n" +
 	"\n" +
-	"spellpower\x18\b \x01(\x04R\n" +
+	"spellpower\x18\b \x01(\x03R\n" +
 	"spellpower\x12!\n" +
-	"\fbonus_damage\x18\t \x01(\x04R\vbonusDamage\x12\x1f\n" +
+	"\fbonus_damage\x18\t \x01(\x03R\vbonusDamage\x12\x1f\n" +
 	"\vbonus_armor\x18\n" +
-	" \x01(\x04R\n" +
+	" \x01(\x03R\n" +
 	"bonusArmor\x127\n" +
 	"\ritem_template\x18\x14 \x01(\v2\x12.repo.ItemTemplateR\fitemTemplate\"\x83\x03\n" +
 	"\n" +
@@ -1490,15 +2307,15 @@ const file_repo_repo_proto_rawDesc = "" +
 	"\x06prefix\x18\x02 \x01(\tR\x06prefix\x12\x16\n" +
 	"\x06suffix\x18\x03 \x01(\tR\x06suffix\x12(\n" +
 	"\x10item_template_id\x18\x04 \x01(\x04R\x0eitemTemplateId\x12\x16\n" +
-	"\x06health\x18\x05 \x01(\x04R\x06health\x12\x14\n" +
-	"\x05power\x18\x06 \x01(\x04R\x05power\x12\x1a\n" +
-	"\bstrength\x18\a \x01(\x04R\bstrength\x12\x1e\n" +
+	"\x06health\x18\x05 \x01(\x03R\x06health\x12\x14\n" +
+	"\x05power\x18\x06 \x01(\x03R\x05power\x12\x1a\n" +
+	"\bstrength\x18\a \x01(\x03R\bstrength\x12\x1e\n" +
 	"\n" +
-	"spellpower\x18\b \x01(\x04R\n" +
+	"spellpower\x18\b \x01(\x03R\n" +
 	"spellpower\x12!\n" +
-	"\fbonus_damage\x18\t \x01(\x04R\vbonusDamage\x12\x1f\n" +
+	"\fbonus_damage\x18\t \x01(\x03R\vbonusDamage\x12\x1f\n" +
 	"\vbonus_armor\x18\n" +
-	" \x01(\x04R\n" +
+	" \x01(\x03R\n" +
 	"bonusArmor\x12\x12\n" +
 	"\x04uses\x18\v \x01(\x04R\x04uses\x12I\n" +
 	"\x13consumable_template\x18\x14 \x01(\v2\x18.repo.ConsumableTemplateR\x12consumableTemplate\"\xc7\x03\n" +
@@ -1566,7 +2383,83 @@ const file_repo_repo_proto_rawDesc = "" +
 	"\vgamba_chest\x18\x14 \x01(\v2\x10.repo.GambaChestR\n" +
 	"gambaChest\x12\x1e\n" +
 	"\x04item\x18\x15 \x01(\v2\n" +
-	".repo.ItemR\x04itemB0Z.github.com/komadiina/spelltext/proto/repo;repob\x06proto3"
+	".repo.ItemR\x04item\"\xee\x01\n" +
+	"\x12CharacterEquipment\x12!\n" +
+	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\x12\"\n" +
+	"\requip_slot_id\x18\x02 \x01(\x04R\vequipSlotId\x12(\n" +
+	"\x10item_instance_id\x18\x03 \x01(\x04R\x0eitemInstanceId\x12.\n" +
+	"\n" +
+	"equip_slot\x18\x14 \x01(\v2\x0f.repo.EquipSlotR\tequipSlot\x127\n" +
+	"\ritem_instance\x18\x15 \x01(\v2\x12.repo.ItemInstanceR\fitemInstance\"z\n" +
+	"\x05Quest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
+	"\vdescription\x18\x03 \x01(\tR\vdescription\x12+\n" +
+	"\x11level_requirement\x18\x04 \x01(\x04R\x10levelRequirement\"\xcb\x01\n" +
+	"\x11QuestPrerequisite\x12\"\n" +
+	"\rbase_quest_id\x18\x01 \x01(\x04R\vbaseQuestId\x12.\n" +
+	"\x13prequisite_quest_id\x18\x02 \x01(\x04R\x11prequisiteQuestId\x12*\n" +
+	"\n" +
+	"base_quest\x18\x14 \x01(\v2\v.repo.QuestR\tbaseQuest\x126\n" +
+	"\x10prequisite_quest\x18\x15 \x01(\v2\v.repo.QuestR\x0fprequisiteQuest\"\xcd\x01\n" +
+	"\vQuestReward\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x19\n" +
+	"\bquest_id\x18\x02 \x01(\x04R\aquestId\x12\x1f\n" +
+	"\vreward_type\x18\x03 \x01(\tR\n" +
+	"rewardType\x12\x17\n" +
+	"\aitem_id\x18\x04 \x01(\x04R\x06itemId\x12\x16\n" +
+	"\x06amount\x18\x05 \x01(\x04R\x06amount\x12!\n" +
+	"\x05quest\x18\x14 \x01(\v2\v.repo.QuestR\x05quest\x12\x1e\n" +
+	"\x04item\x18\x15 \x01(\v2\n" +
+	".repo.ItemR\x04item\"x\n" +
+	"\x15PlayerCompletedQuests\x12!\n" +
+	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\x12\x19\n" +
+	"\bquest_id\x18\x02 \x01(\x04R\aquestId\x12!\n" +
+	"\x05quest\x18\x14 \x01(\v2\v.repo.QuestR\x05quest\"\xa2\x02\n" +
+	"\vNpcTemplate\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1b\n" +
+	"\tmin_level\x18\x03 \x01(\rR\bminLevel\x12\x1b\n" +
+	"\tmax_level\x18\x04 \x01(\rR\bmaxLevel\x12#\n" +
+	"\rhealth_points\x18\x05 \x01(\x04R\fhealthPoints\x12\x1f\n" +
+	"\vbase_damage\x18\x06 \x01(\x04R\n" +
+	"baseDamage\x12$\n" +
+	"\x0ebase_xp_reward\x18\a \x01(\x04R\fbaseXpReward\x12 \n" +
+	"\fdrop_item_id\x18\b \x01(\x04R\n" +
+	"dropItemId\x12'\n" +
+	"\tdrop_item\x18\x14 \x01(\v2\n" +
+	".repo.ItemR\bdropItem\"\xf6\x01\n" +
+	"\x03Npc\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x16\n" +
+	"\x06prefix\x18\x02 \x01(\tR\x06prefix\x12\x16\n" +
+	"\x06suffix\x18\x03 \x01(\tR\x06suffix\x12\x1f\n" +
+	"\vtemplate_id\x18\x04 \x01(\x04R\n" +
+	"templateId\x12+\n" +
+	"\x11health_multiplier\x18\x05 \x01(\x02R\x10healthMultiplier\x12+\n" +
+	"\x11damage_multiplier\x18\x06 \x01(\x02R\x10damageMultiplier\x124\n" +
+	"\fnpc_template\x18\x14 \x01(\v2\x11.repo.NpcTemplateR\vnpcTemplate\"\x82\x01\n" +
+	"\x0eQuestObjective\x12\x19\n" +
+	"\bquest_id\x18\x01 \x01(\x04R\aquestId\x12\x15\n" +
+	"\x06npc_id\x18\x02 \x01(\x04R\x05npcId\x12!\n" +
+	"\x05quest\x18\x14 \x01(\v2\v.repo.QuestR\x05quest\x12\x1b\n" +
+	"\x03npc\x18\x15 \x01(\v2\t.repo.NpcR\x03npc\"\xb5\x02\n" +
+	"\aAbility\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
+	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x12\n" +
+	"\x04type\x18\x04 \x01(\tR\x04type\x12*\n" +
+	"\x11talent_point_cost\x18\x05 \x01(\rR\x0ftalentPointCost\x12\x1d\n" +
+	"\n" +
+	"power_cost\x18\x06 \x01(\x04R\tpowerCost\x12\x1f\n" +
+	"\vbase_damage\x18\a \x01(\x04R\n" +
+	"baseDamage\x12/\n" +
+	"\x13strength_multiplier\x18\b \x01(\x02R\x12strengthMultiplier\x123\n" +
+	"\x15spellpower_multiplier\x18\t \x01(\x02R\x14spellpowerMultiplier\"j\n" +
+	"\x06Update\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x14\n" +
+	"\x05title\x18\x02 \x01(\tR\x05title\x12\x18\n" +
+	"\aversion\x18\x03 \x01(\tR\aversion\x12 \n" +
+	"\vdescription\x18\x04 \x01(\tR\vdescriptionB0Z.github.com/komadiina/spelltext/proto/repo;repob\x06proto3"
 
 var (
 	file_repo_repo_proto_rawDescOnce sync.Once
@@ -1580,7 +2473,7 @@ func file_repo_repo_proto_rawDescGZIP() []byte {
 	return file_repo_repo_proto_rawDescData
 }
 
-var file_repo_repo_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
+var file_repo_repo_proto_msgTypes = make([]protoimpl.MessageInfo, 26)
 var file_repo_repo_proto_goTypes = []any{
 	(*User)(nil),                           // 0: repo.User
 	(*Hero)(nil),                           // 1: repo.Hero
@@ -1598,7 +2491,17 @@ var file_repo_repo_proto_goTypes = []any{
 	(*VendorWare)(nil),                     // 13: repo.VendorWare
 	(*GambaChest)(nil),                     // 14: repo.GambaChest
 	(*GambaChestContent)(nil),              // 15: repo.GambaChestContent
-	(*timestamppb.Timestamp)(nil),          // 16: google.protobuf.Timestamp
+	(*CharacterEquipment)(nil),             // 16: repo.CharacterEquipment
+	(*Quest)(nil),                          // 17: repo.Quest
+	(*QuestPrerequisite)(nil),              // 18: repo.QuestPrerequisite
+	(*QuestReward)(nil),                    // 19: repo.QuestReward
+	(*PlayerCompletedQuests)(nil),          // 20: repo.PlayerCompletedQuests
+	(*NpcTemplate)(nil),                    // 21: repo.NpcTemplate
+	(*Npc)(nil),                            // 22: repo.Npc
+	(*QuestObjective)(nil),                 // 23: repo.QuestObjective
+	(*Ability)(nil),                        // 24: repo.Ability
+	(*Update)(nil),                         // 25: repo.Update
+	(*timestamppb.Timestamp)(nil),          // 26: google.protobuf.Timestamp
 }
 var file_repo_repo_proto_depIdxs = []int32{
 	3,  // 0: repo.ItemTemplate.equip_slot:type_name -> repo.EquipSlot
@@ -1608,7 +2511,7 @@ var file_repo_repo_proto_depIdxs = []int32{
 	1,  // 4: repo.Character.hero:type_name -> repo.Hero
 	0,  // 5: repo.Character.user:type_name -> repo.User
 	8,  // 6: repo.CharacterInventory.character:type_name -> repo.Character
-	16, // 7: repo.ItemInstance.created_at:type_name -> google.protobuf.Timestamp
+	26, // 7: repo.ItemInstance.created_at:type_name -> google.protobuf.Timestamp
 	6,  // 8: repo.ItemInstance.item:type_name -> repo.Item
 	8,  // 9: repo.CharacterInventoryItemInstance.character:type_name -> repo.Character
 	10, // 10: repo.CharacterInventoryItemInstance.item_instance:type_name -> repo.ItemInstance
@@ -1616,11 +2519,22 @@ var file_repo_repo_proto_depIdxs = []int32{
 	2,  // 12: repo.VendorWare.item_type:type_name -> repo.ItemType
 	14, // 13: repo.GambaChestContent.gamba_chest:type_name -> repo.GambaChest
 	6,  // 14: repo.GambaChestContent.item:type_name -> repo.Item
-	15, // [15:15] is the sub-list for method output_type
-	15, // [15:15] is the sub-list for method input_type
-	15, // [15:15] is the sub-list for extension type_name
-	15, // [15:15] is the sub-list for extension extendee
-	0,  // [0:15] is the sub-list for field type_name
+	3,  // 15: repo.CharacterEquipment.equip_slot:type_name -> repo.EquipSlot
+	10, // 16: repo.CharacterEquipment.item_instance:type_name -> repo.ItemInstance
+	17, // 17: repo.QuestPrerequisite.base_quest:type_name -> repo.Quest
+	17, // 18: repo.QuestPrerequisite.prequisite_quest:type_name -> repo.Quest
+	17, // 19: repo.QuestReward.quest:type_name -> repo.Quest
+	6,  // 20: repo.QuestReward.item:type_name -> repo.Item
+	17, // 21: repo.PlayerCompletedQuests.quest:type_name -> repo.Quest
+	6,  // 22: repo.NpcTemplate.drop_item:type_name -> repo.Item
+	21, // 23: repo.Npc.npc_template:type_name -> repo.NpcTemplate
+	17, // 24: repo.QuestObjective.quest:type_name -> repo.Quest
+	22, // 25: repo.QuestObjective.npc:type_name -> repo.Npc
+	26, // [26:26] is the sub-list for method output_type
+	26, // [26:26] is the sub-list for method input_type
+	26, // [26:26] is the sub-list for extension type_name
+	26, // [26:26] is the sub-list for extension extendee
+	0,  // [0:26] is the sub-list for field type_name
 }
 
 func init() { file_repo_repo_proto_init() }
@@ -1634,7 +2548,7 @@ func file_repo_repo_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_repo_repo_proto_rawDesc), len(file_repo_repo_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   16,
+			NumMessages:   26,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

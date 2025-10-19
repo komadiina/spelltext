@@ -149,3 +149,12 @@ gambaserver:
   containerPort: 50055
   targetPort: 50055
   protocol: "TCP"
+
+authserver:
+  enabled: true
+  image: "ghcr.io/komadiina/spelltext/authserver:latest"
+  port: 50056
+  portName: "grpc"
+  containerPort: 50056
+  targetPort: 50056
+  protocol: "TCP"

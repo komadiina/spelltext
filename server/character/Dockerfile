@@ -9,7 +9,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-RUN go build /server/character/cmd/charserver/main.go
+RUN go build /server/character/cmd/main.go
 
 FROM alpine:3.22.1
 WORKDIR /

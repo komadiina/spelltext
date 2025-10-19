@@ -1,0 +1,33 @@
+syntax = "proto3";
+package armory;
+option go_package = "github.com/komadiina/spelltext/proto/proto/armory;armory";
+
+import "repo/repo.proto";
+
+message LoginRequest {
+    string username     = 1;
+    string passwordHash = 2;
+}
+
+message LoginResponse {
+    bool success             = 1;
+    repo.User user           = 2;
+    repo.Character character = 3;
+}
+
+message RegisterRequest {
+    string username             = 1;
+    string email                = 2;
+    string password             = 3;
+    string passwordConfirmed    = 4;
+}
+
+message RegisterResponse {
+    bool success    = 1;
+    repo.User user  = 2;
+}
+
+service Auth {
+    rpc Login(LoginRequest) returns (LoginResponse);
+    rpc Register(RegisterRequest) returns (RegisterResponse);
+}

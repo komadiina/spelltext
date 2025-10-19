@@ -84,6 +84,23 @@ services:
     depends_on:
       - postgres
 
+  authserver:
+    build:
+      context: .
+      dockerfile: server/auth/Dockerfile
+    volumes:
+      - ./logs/authserver:/logs
+    ports:
+      - "50056:50056"
+    networks:
+      - spelltext
+    develop:
+      watch:
+        - action: "restart"
+          path: "./server/auth"
+    depends_on:
+      - postgres
+
   spelltext-nats:
     image: nats
     command: ["-js"]
@@ -94,13 +111,13 @@ services:
     
   flyway:
     build:
-      context: scripts/db
+      context: scripts/db 
       dockerfile: Dockerfile
     volumes:
       - ./scripts/db/sql:/flyway/sql
     networks:
       - spelltext
-    command: ["-url=jdbc:postgresql://postgres:5432/spelltext", "-user=postgres", "-password=changeme"  ,"-baselineOnMigrate=true", "-connectRetries=15",  "migrate"]
+    command: ["-url=jdbc:postgresql://postgres:5432/spelltext", "-user=postgres", "-password=changeme", "-baselineOnMigrate=true", "-connectRetries=15",  "migrate"]
     depends_on:
       - postgres
   
@@ -112,8 +129,11 @@ services:
       - POSTGRES_DB=spelltext
       - POSTGRES_REQUIRE_AUTH=false
       - POSTGRES_HOST_AUTH_METHOD=trust
+    command: -c config_file=/etc/postgresql.conf
     volumes:
       - ./scripts/db/docker/initdbScripts:/docker-entrypoint-initdb.d
+      # - pg-data:/var/lib/postgresql/data # enable for persistence
+      - ./db/postgresql.conf:/etc/postgresql.conf
     ports:
       - "5432:5432"
     networks:

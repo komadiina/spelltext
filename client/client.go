@@ -21,6 +21,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 
 	pbArmory "github.com/komadiina/spelltext/proto/armory"
+	pbAuth "github.com/komadiina/spelltext/proto/auth"
 	pbChat "github.com/komadiina/spelltext/proto/chat"
 	pbGamba "github.com/komadiina/spelltext/proto/gamba"
 	pbInventory "github.com/komadiina/spelltext/proto/inventory"
@@ -40,7 +41,6 @@ func InitializeNats(cfg *config.Config) (*nats.Conn, nats.JetStream, error) {
 
 	return conn, js, nil
 }
-
 
 func InitializePages(client *types.SpelltextClient) {
 	views.AddLoginPage(client)
@@ -97,7 +97,27 @@ func InitializeClients(c *types.SpelltextClient) {
 	} else {
 		c.Clients.GambaClient = pbGamba.NewGambaClient(conn)
 	}
+
+	// auth
+	conn, err = grpc.NewClient("localhost:50056", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		c.Logger.Error("failed to init auth client", "reason", err)
+	} else {
+		c.Clients.AuthClient = pbAuth.NewAuthClient(conn)
+	}
 }
+
+const banner = `
+                _ _ _            _   
+               | | | |          | |  
+ ___ _ __   ___| | | |_ _____  _| |_ 
+/ __| '_ \ / _ \ | | __/ _ \ \/ / __|
+\__ \ |_) |  __/ | | ||  __/>  <| |_ 
+|___/ .__/ \___|_|_|\__\___/_/\_\\__|
+    | |                              
+    |_|                              
+
+`
 
 func main() {
 	flag.Parse()
@@ -120,6 +140,8 @@ func main() {
 		logger.Fatal("failed to preload audio files", "reason", err)
 	}
 
+	am.AudioEnabled = cfg.AudioEnabled
+
 	client := types.SpelltextClient{
 		Config:       cfg,
 		Logger:       logger,
@@ -129,6 +151,8 @@ func main() {
 		AppStorage:   make(map[string]any),
 		AudioManager: am,
 	}
+
+	client.AudioManager.PlayBackground(logger)
 
 	logger.Info("initializing clients...")
 	InitializeClients(&client)
@@ -161,16 +185,16 @@ func main() {
 
 	client.App.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		if event.Key() == tcell.KeyEscape {
-			client.AudioManager.Play(constants.BLIP_TINY, client.Logger)
+			client.AudioManager.Play(constants.BLIP_BACKWARD, client.Logger)
 
 			if client.PageManager.Pop() == -1 {
 				client.App.Stop()
 				return nil
 			}
 		} else if event.Key() == tcell.KeyEnter {
-			client.AudioManager.Play(constants.BLIP_NOTIFICATION, client.Logger)
+			client.AudioManager.Play(constants.BLIP_FORWARD, client.Logger)
 		} else {
-			client.AudioManager.Play(constants.BLIP_NAVIGATE, client.Logger)
+			client.AudioManager.Play(constants.BLIP_INPUT, client.Logger)
 		}
 
 		return event
@@ -185,5 +209,9 @@ func main() {
 	defer cancel()
 
 	logger.Info("client shutdown.")
-	fmt.Println("bye")
+	fmt.Print(banner)
+	fmt.Println("> thanks for playing this torturefest")
+	fmt.Println("> a game by ogg (https://github.com/komadiina)")
+	fmt.Println("> follow the development at https://github.com/komadiina/spelltext")
+	fmt.Println("~ kthxb")
 }

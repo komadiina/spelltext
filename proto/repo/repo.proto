@@ -9,6 +9,7 @@ message User {
     string username = 2;
     string password_hash = 3;
     string email = 4;
+    uint64 selected_character_id = 5;
 }
 
 message Hero {
@@ -62,12 +63,12 @@ message Item {
     string prefix = 2;
     string suffix = 3;
     uint64 item_template_id = 4;
-    uint64 health = 5;
-    uint64 power = 6;
-    uint64 strength = 7;
-    uint64 spellpower = 8;
-    uint64 bonus_damage = 9;
-    uint64 bonus_armor = 10;
+    int64 health = 5;
+    int64 power = 6;
+    int64 strength = 7;
+    int64 spellpower = 8;
+    int64 bonus_damage = 9;
+    int64 bonus_armor = 10;
     ItemTemplate item_template = 20;
 }
 
@@ -76,12 +77,12 @@ message Consumable {
     string prefix = 2;
     string suffix = 3;
     uint64 item_template_id = 4;
-    uint64 health = 5;
-    uint64 power = 6;
-    uint64 strength = 7;
-    uint64 spellpower = 8;
-    uint64 bonus_damage = 9;
-    uint64 bonus_armor = 10;
+    int64 health = 5;
+    int64 power = 6;
+    int64 strength = 7;
+    int64 spellpower = 8;
+    int64 bonus_damage = 9;
+    int64 bonus_armor = 10;
     uint64 uses = 11;
 
     ConsumableTemplate consumable_template = 20;
@@ -158,4 +159,98 @@ message GambaChestContent {
 
     GambaChest gamba_chest = 20;
     Item item = 21;
+}
+
+message CharacterEquipment {
+    uint64 character_id = 1;
+    uint64 equip_slot_id = 2;
+    uint64 item_instance_id = 3;
+
+    EquipSlot equip_slot = 20;
+    ItemInstance item_instance = 21;
+}
+
+message Quest {
+    uint64 id = 1;
+    string name = 2;
+    string description = 3;
+    uint64 level_requirement = 4;
+}
+
+message QuestPrerequisite {
+    uint64 base_quest_id = 1;
+    uint64 prequisite_quest_id = 2;
+
+    Quest base_quest = 20;
+    Quest prequisite_quest = 21;
+}
+
+message QuestReward {
+    uint64 id = 1;
+    uint64 quest_id = 2;
+    string reward_type = 3;
+
+    uint64 item_id = 4;
+    uint64 amount = 5;
+
+    Quest quest = 20;
+    Item item = 21;
+}
+
+message PlayerCompletedQuests {
+    uint64 character_id = 1;
+    uint64 quest_id = 2;
+
+    Quest quest = 20;
+}
+
+message NpcTemplate {
+    uint64 id = 1;
+    string name = 2;
+    uint32 min_level = 3;
+    uint32 max_level = 4;
+    uint64 health_points = 5;
+    uint64 base_damage = 6;
+    uint64 base_xp_reward = 7;
+    uint64 drop_item_id = 8;
+
+    Item drop_item = 20;
+}
+
+message Npc {
+    uint64 id = 1;
+    string prefix = 2;
+    string suffix = 3;
+    uint64 template_id = 4;
+    float health_multiplier = 5;
+    float damage_multiplier = 6;
+
+    NpcTemplate npc_template = 20;
+}
+
+message QuestObjective {
+    uint64 quest_id = 1;
+    uint64 npc_id = 2;
+
+    Quest quest = 20;
+    Npc npc = 21;
+}
+
+message Ability {
+    uint64 id = 1;
+    string name = 2;
+    string description = 3;
+    string type = 4;
+    uint32 talent_point_cost = 5;
+    uint64 power_cost = 6;
+    uint64 base_damage = 7;
+    float strength_multiplier = 8;
+    float spellpower_multiplier = 9;
+}
+
+message Update {
+    uint64 id = 1;
+    string title = 2;
+    string version = 3;
+    string description = 4;
 }

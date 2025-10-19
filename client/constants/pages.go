@@ -28,12 +28,14 @@ const (
 )
 
 const (
+	CURRENT_USER         = "currentUser"
 	CURRENT_USER_ID      = "currentUserId"
 	CURRENT_USER_NAME    = "currentUserName"
 	SELECTED_CHARACTER   = "selectedCharacter"
 	SELECTED_VENDOR_ID   = "selectedVendorID"
 	SELECTED_VENDOR_NAME = "selectedVendorName"
 	AVAILABLE_GOLD       = "availableGold"
+	EQUIP_SLOTS          = "equipSlots"
 )
 
 var SHORTCUTS = map[tcell.Key]string{
