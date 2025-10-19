@@ -1,0 +1,1 @@
+-- alter system set wal_level = logical;

@@ -8,7 +8,7 @@ import (
 	"github.com/komadiina/spelltext/client/functions"
 	types "github.com/komadiina/spelltext/client/types"
 	"github.com/komadiina/spelltext/client/utils"
-	pbArmory "github.com/komadiina/spelltext/proto/armory"
+	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	pbStore "github.com/komadiina/spelltext/proto/store"
 	"github.com/rivo/tview"
 )
@@ -20,7 +20,7 @@ func UpdateBasket(basket *[]*pbStore.Item, tv *tview.TextView, c *types.Spelltex
 	}
 
 	color := "yellow"
-	if totalGold > c.AppStorage[constants.SELECTED_CHARACTER].(*pbArmory.TCharacter).GetGold() {
+	if totalGold > c.AppStorage[constants.SELECTED_CHARACTER].(*pbRepo.Character).GetGold() {
 		color = "red"
 	}
 
@@ -44,7 +44,7 @@ func AddVendorPage(c *types.SpelltextClient) {
 		basketPrice := tview.NewTextView().SetDynamicColors(true).SetText(`basket price: [yellow]0g[""]`)
 		basketPrice.SetBorder(true).SetBorderPadding(1, 1, 2, 2)
 
-		availableGold := tview.NewTextView().SetDynamicColors(true).SetText(fmt.Sprintf(`available gold: [yellow]%d[""]`, c.AppStorage[constants.SELECTED_CHARACTER].(*pbArmory.TCharacter).GetGold()))
+		availableGold := tview.NewTextView().SetDynamicColors(true).SetText(fmt.Sprintf(`available gold: [yellow]%d[""]`, c.AppStorage[constants.SELECTED_CHARACTER].(*pbRepo.Character).GetGold()))
 		availableGold.SetBorder(true).SetBorderPadding(1, 1, 2, 2)
 
 		totals.AddItem(basketPrice, 5, 1, false).AddItem(availableGold, 5, 1, false)
@@ -59,7 +59,7 @@ func AddVendorPage(c *types.SpelltextClient) {
 		flex.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 			if event.Key() == tcell.KeyCtrlB {
 				c.Logger.Info("cashing out", "len(basket)", len(basket))
-				char := c.AppStorage[constants.SELECTED_CHARACTER].(*pbArmory.TCharacter)
+				char := c.AppStorage[constants.SELECTED_CHARACTER].(*pbRepo.Character)
 				if err := functions.BuyItems(basket, char, c); err != nil {
 					c.Logger.Error(err)
 				}
@@ -71,7 +71,7 @@ func AddVendorPage(c *types.SpelltextClient) {
 					})
 				}()
 
-				char = c.AppStorage[constants.SELECTED_CHARACTER].(*pbArmory.TCharacter)
+				char = c.AppStorage[constants.SELECTED_CHARACTER].(*pbRepo.Character)
 				m := utils.CreateModal(
 					"purchase successful",
 					fmt.Sprintf("you've bought %d items (remaining gold: %d)", len(basket), char.GetGold()),

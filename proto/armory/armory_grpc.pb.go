@@ -19,10 +19,16 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Character_ListHeroes_FullMethodName      = "/armory.Character/ListHeroes"
-	Character_ListCharacters_FullMethodName  = "/armory.Character/ListCharacters"
-	Character_CreateCharacter_FullMethodName = "/armory.Character/CreateCharacter"
-	Character_DeleteCharacter_FullMethodName = "/armory.Character/DeleteCharacter"
+	Character_ListHeroes_FullMethodName               = "/armory.Character/ListHeroes"
+	Character_ListCharacters_FullMethodName           = "/armory.Character/ListCharacters"
+	Character_SetSelectedCharacter_FullMethodName     = "/armory.Character/SetSelectedCharacter"
+	Character_GetLastSelectedCharacter_FullMethodName = "/armory.Character/GetLastSelectedCharacter"
+	Character_GetCharacter_FullMethodName             = "/armory.Character/GetCharacter"
+	Character_CreateCharacter_FullMethodName          = "/armory.Character/CreateCharacter"
+	Character_DeleteCharacter_FullMethodName          = "/armory.Character/DeleteCharacter"
+	Character_GetEquippedItems_FullMethodName         = "/armory.Character/GetEquippedItems"
+	Character_EquipItem_FullMethodName                = "/armory.Character/EquipItem"
+	Character_UnequipItem_FullMethodName              = "/armory.Character/UnequipItem"
 )
 
 // CharacterClient is the client API for Character service.
@@ -31,8 +37,14 @@ const (
 type CharacterClient interface {
 	ListHeroes(ctx context.Context, in *ListHeroesRequest, opts ...grpc.CallOption) (*ListHeroesResponse, error)
 	ListCharacters(ctx context.Context, in *ListCharactersRequest, opts ...grpc.CallOption) (*ListCharactersResponse, error)
+	SetSelectedCharacter(ctx context.Context, in *SetSelectedCharacterRequest, opts ...grpc.CallOption) (*SetSelectedCharacterResponse, error)
+	GetLastSelectedCharacter(ctx context.Context, in *GetLastSelectedCharacterRequest, opts ...grpc.CallOption) (*GetLastSelectedCharacterResponse, error)
+	GetCharacter(ctx context.Context, in *GetCharacterRequest, opts ...grpc.CallOption) (*GetCharacterResponse, error)
 	CreateCharacter(ctx context.Context, in *CreateCharacterRequest, opts ...grpc.CallOption) (*CreateCharacterResponse, error)
 	DeleteCharacter(ctx context.Context, in *DeleteCharacterRequest, opts ...grpc.CallOption) (*DeleteCharacterResponse, error)
+	GetEquippedItems(ctx context.Context, in *GetEquippedItemsRequest, opts ...grpc.CallOption) (*GetEquippedItemsResponse, error)
+	EquipItem(ctx context.Context, in *EquipItemRequest, opts ...grpc.CallOption) (*EquipItemResponse, error)
+	UnequipItem(ctx context.Context, in *UnequipItemRequest, opts ...grpc.CallOption) (*UnequipItemResponse, error)
 }
 
 type characterClient struct {
@@ -63,6 +75,36 @@ func (c *characterClient) ListCharacters(ctx context.Context, in *ListCharacters
 	return out, nil
 }
 
+func (c *characterClient) SetSelectedCharacter(ctx context.Context, in *SetSelectedCharacterRequest, opts ...grpc.CallOption) (*SetSelectedCharacterResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetSelectedCharacterResponse)
+	err := c.cc.Invoke(ctx, Character_SetSelectedCharacter_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *characterClient) GetLastSelectedCharacter(ctx context.Context, in *GetLastSelectedCharacterRequest, opts ...grpc.CallOption) (*GetLastSelectedCharacterResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetLastSelectedCharacterResponse)
+	err := c.cc.Invoke(ctx, Character_GetLastSelectedCharacter_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *characterClient) GetCharacter(ctx context.Context, in *GetCharacterRequest, opts ...grpc.CallOption) (*GetCharacterResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetCharacterResponse)
+	err := c.cc.Invoke(ctx, Character_GetCharacter_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *characterClient) CreateCharacter(ctx context.Context, in *CreateCharacterRequest, opts ...grpc.CallOption) (*CreateCharacterResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CreateCharacterResponse)
@@ -83,14 +125,50 @@ func (c *characterClient) DeleteCharacter(ctx context.Context, in *DeleteCharact
 	return out, nil
 }
 
+func (c *characterClient) GetEquippedItems(ctx context.Context, in *GetEquippedItemsRequest, opts ...grpc.CallOption) (*GetEquippedItemsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetEquippedItemsResponse)
+	err := c.cc.Invoke(ctx, Character_GetEquippedItems_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *characterClient) EquipItem(ctx context.Context, in *EquipItemRequest, opts ...grpc.CallOption) (*EquipItemResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(EquipItemResponse)
+	err := c.cc.Invoke(ctx, Character_EquipItem_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *characterClient) UnequipItem(ctx context.Context, in *UnequipItemRequest, opts ...grpc.CallOption) (*UnequipItemResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UnequipItemResponse)
+	err := c.cc.Invoke(ctx, Character_UnequipItem_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CharacterServer is the server API for Character service.
 // All implementations must embed UnimplementedCharacterServer
 // for forward compatibility.
 type CharacterServer interface {
 	ListHeroes(context.Context, *ListHeroesRequest) (*ListHeroesResponse, error)
 	ListCharacters(context.Context, *ListCharactersRequest) (*ListCharactersResponse, error)
+	SetSelectedCharacter(context.Context, *SetSelectedCharacterRequest) (*SetSelectedCharacterResponse, error)
+	GetLastSelectedCharacter(context.Context, *GetLastSelectedCharacterRequest) (*GetLastSelectedCharacterResponse, error)
+	GetCharacter(context.Context, *GetCharacterRequest) (*GetCharacterResponse, error)
 	CreateCharacter(context.Context, *CreateCharacterRequest) (*CreateCharacterResponse, error)
 	DeleteCharacter(context.Context, *DeleteCharacterRequest) (*DeleteCharacterResponse, error)
+	GetEquippedItems(context.Context, *GetEquippedItemsRequest) (*GetEquippedItemsResponse, error)
+	EquipItem(context.Context, *EquipItemRequest) (*EquipItemResponse, error)
+	UnequipItem(context.Context, *UnequipItemRequest) (*UnequipItemResponse, error)
 	mustEmbedUnimplementedCharacterServer()
 }
 
@@ -107,11 +185,29 @@ func (UnimplementedCharacterServer) ListHeroes(context.Context, *ListHeroesReque
 func (UnimplementedCharacterServer) ListCharacters(context.Context, *ListCharactersRequest) (*ListCharactersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListCharacters not implemented")
 }
+func (UnimplementedCharacterServer) SetSelectedCharacter(context.Context, *SetSelectedCharacterRequest) (*SetSelectedCharacterResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetSelectedCharacter not implemented")
+}
+func (UnimplementedCharacterServer) GetLastSelectedCharacter(context.Context, *GetLastSelectedCharacterRequest) (*GetLastSelectedCharacterResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLastSelectedCharacter not implemented")
+}
+func (UnimplementedCharacterServer) GetCharacter(context.Context, *GetCharacterRequest) (*GetCharacterResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCharacter not implemented")
+}
 func (UnimplementedCharacterServer) CreateCharacter(context.Context, *CreateCharacterRequest) (*CreateCharacterResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateCharacter not implemented")
 }
 func (UnimplementedCharacterServer) DeleteCharacter(context.Context, *DeleteCharacterRequest) (*DeleteCharacterResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteCharacter not implemented")
+}
+func (UnimplementedCharacterServer) GetEquippedItems(context.Context, *GetEquippedItemsRequest) (*GetEquippedItemsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetEquippedItems not implemented")
+}
+func (UnimplementedCharacterServer) EquipItem(context.Context, *EquipItemRequest) (*EquipItemResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EquipItem not implemented")
+}
+func (UnimplementedCharacterServer) UnequipItem(context.Context, *UnequipItemRequest) (*UnequipItemResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UnequipItem not implemented")
 }
 func (UnimplementedCharacterServer) mustEmbedUnimplementedCharacterServer() {}
 func (UnimplementedCharacterServer) testEmbeddedByValue()                   {}
@@ -170,6 +266,60 @@ func _Character_ListCharacters_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Character_SetSelectedCharacter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetSelectedCharacterRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CharacterServer).SetSelectedCharacter(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Character_SetSelectedCharacter_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CharacterServer).SetSelectedCharacter(ctx, req.(*SetSelectedCharacterRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Character_GetLastSelectedCharacter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetLastSelectedCharacterRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CharacterServer).GetLastSelectedCharacter(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Character_GetLastSelectedCharacter_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CharacterServer).GetLastSelectedCharacter(ctx, req.(*GetLastSelectedCharacterRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Character_GetCharacter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCharacterRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CharacterServer).GetCharacter(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Character_GetCharacter_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CharacterServer).GetCharacter(ctx, req.(*GetCharacterRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Character_CreateCharacter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateCharacterRequest)
 	if err := dec(in); err != nil {
@@ -206,6 +356,60 @@ func _Character_DeleteCharacter_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Character_GetEquippedItems_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetEquippedItemsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CharacterServer).GetEquippedItems(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Character_GetEquippedItems_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CharacterServer).GetEquippedItems(ctx, req.(*GetEquippedItemsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Character_EquipItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EquipItemRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CharacterServer).EquipItem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Character_EquipItem_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CharacterServer).EquipItem(ctx, req.(*EquipItemRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Character_UnequipItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UnequipItemRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CharacterServer).UnequipItem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Character_UnequipItem_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CharacterServer).UnequipItem(ctx, req.(*UnequipItemRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Character_ServiceDesc is the grpc.ServiceDesc for Character service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -222,12 +426,36 @@ var Character_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Character_ListCharacters_Handler,
 		},
 		{
+			MethodName: "SetSelectedCharacter",
+			Handler:    _Character_SetSelectedCharacter_Handler,
+		},
+		{
+			MethodName: "GetLastSelectedCharacter",
+			Handler:    _Character_GetLastSelectedCharacter_Handler,
+		},
+		{
+			MethodName: "GetCharacter",
+			Handler:    _Character_GetCharacter_Handler,
+		},
+		{
 			MethodName: "CreateCharacter",
 			Handler:    _Character_CreateCharacter_Handler,
 		},
 		{
 			MethodName: "DeleteCharacter",
 			Handler:    _Character_DeleteCharacter_Handler,
+		},
+		{
+			MethodName: "GetEquippedItems",
+			Handler:    _Character_GetEquippedItems_Handler,
+		},
+		{
+			MethodName: "EquipItem",
+			Handler:    _Character_EquipItem_Handler,
+		},
+		{
+			MethodName: "UnequipItem",
+			Handler:    _Character_UnequipItem_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

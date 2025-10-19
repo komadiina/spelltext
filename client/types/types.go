@@ -7,6 +7,7 @@ import (
 	"github.com/komadiina/spelltext/client/config"
 	"github.com/komadiina/spelltext/client/factory"
 	pbArmory "github.com/komadiina/spelltext/proto/armory"
+	pbAuth "github.com/komadiina/spelltext/proto/auth"
 	pbChat "github.com/komadiina/spelltext/proto/chat"
 	pbGamba "github.com/komadiina/spelltext/proto/gamba"
 	pbInventory "github.com/komadiina/spelltext/proto/inventory"
@@ -46,6 +47,7 @@ type Clients struct {
 	CharacterClient pbArmory.CharacterClient
 	InventoryClient pbInventory.InventoryClient
 	GambaClient     pbGamba.GambaClient
+	AuthClient      pbAuth.AuthClient
 }
 
 type NavigableForm struct {

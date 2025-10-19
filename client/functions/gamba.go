@@ -5,7 +5,6 @@ import (
 
 	"github.com/komadiina/spelltext/client/constants"
 	"github.com/komadiina/spelltext/client/types"
-	pbArmory "github.com/komadiina/spelltext/proto/armory"
 	pbGamba "github.com/komadiina/spelltext/proto/gamba"
 	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	"github.com/rivo/tview"
@@ -54,14 +53,14 @@ func MakeChestTableRow(row int, chest *pbRepo.GambaChest, table *tview.Table) *t
 }
 
 func OpenChest(chest *pbRepo.GambaChest, c *types.SpelltextClient) (*pbGamba.OpenChestResponse, error) {
-	char := c.AppStorage[constants.SELECTED_CHARACTER].(*pbArmory.TCharacter)
+	char := c.AppStorage[constants.SELECTED_CHARACTER].(*pbRepo.Character)
 	if char.Gold < chest.GoldPrice {
 		err := fmt.Errorf("unable to open chest, insufficient balance: need=>%dg, have=%dg", chest.GetGoldPrice(), char.GetGold())
 		c.Logger.Error(err)
 		return nil, err
 	}
 
-	req := &pbGamba.OpenChestRequest{CharacterId: char.GetId(), ChestId: chest.GetId()}
+	req := &pbGamba.OpenChestRequest{CharacterId: char.GetCharacterId(), ChestId: chest.GetId()}
 	resp, err := c.Clients.GambaClient.OpenChest(*c.Context, req)
 	if err != nil {
 		c.Logger.Error(err)

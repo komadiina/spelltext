@@ -206,8 +206,6 @@ func (s *GambaService) OpenChest(ctx context.Context, req *pb.OpenChestRequest) 
 		items = append(items, i)
 	}
 
-	s.Logger.Info(items)
-
 	reward := items[rand.Intn(len(items)-1)]
 
 	// update character gold

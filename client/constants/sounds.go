@@ -6,6 +6,7 @@ const (
 	BLIP_COIN         = "assets/coin.mp3"
 	BLIP_CONFIRM      = "assets/confirm.mp3"
 	BLIP_NAVIGATE     = "assets/bleep030.mp3"
+	BACKGROUND_OST    = "assets/bg2.mp3"
 )
 
-var PRELOAD = []string{BLIP_NOTIFICATION, BLIP_TINY, BLIP_COIN, BLIP_CONFIRM, BLIP_NAVIGATE}
+var PRELOAD = []string{BLIP_NOTIFICATION, BLIP_TINY, BLIP_COIN, BLIP_CONFIRM, BLIP_NAVIGATE, BACKGROUND_OST}

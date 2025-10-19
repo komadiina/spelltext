@@ -8,8 +8,8 @@ import (
 	sq "github.com/Masterminds/squirrel"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
-	pbArmory "github.com/komadiina/spelltext/proto/armory"
 	pbInventory "github.com/komadiina/spelltext/proto/inventory"
+	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	pb "github.com/komadiina/spelltext/proto/store"
 	"github.com/komadiina/spelltext/server/store/config"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
@@ -203,7 +203,7 @@ func (s *StoreService) BuyItems(ctx context.Context, req *pb.BuyItemRequest) (*p
 		Where("c.character_id = $1").
 		ToSql()
 
-	c := &pbArmory.TCharacter{Id: req.CharacterId}
+	c := &pbRepo.Character{CharacterId: req.CharacterId}
 	rows, err := s.DbPool.Query(ctx, sql, req.CharacterId)
 	for rows.Next() {
 		err := rows.Scan(&c.Gold)
@@ -254,7 +254,7 @@ func (s *StoreService) BuyItems(ctx context.Context, req *pb.BuyItemRequest) (*p
 	}
 
 	if sum > c.Gold {
-		s.Logger.Infof("character %s overbought attempt, gold_amount=%d, character_gold=%d", c.Name, sum, c.Gold)
+		s.Logger.Infof("character %s overbought attempt, gold_amount=%d, character_gold=%d", c.CharacterName, sum, c.Gold)
 		return &pb.BuyItemResponse{Success: false, Message: "not enough gold"}, fmt.Errorf("overbuy attempt")
 	}
 
@@ -262,7 +262,7 @@ func (s *StoreService) BuyItems(ctx context.Context, req *pb.BuyItemRequest) (*p
 	sql = "INSERT INTO item_instances VALUES (DEFAULT, $1, $2, DEFAULT, DEFAULT) RETURNING item_instance_id"
 	var itemInstanceIds []uint64
 	for _, item := range items {
-		batch.Queue(sql, item.ItemTemplateId, c.Id)
+		batch.Queue(sql, item.ItemTemplateId, c.CharacterId)
 	}
 
 	res := s.DbPool.SendBatch(ctx, batch)
@@ -284,11 +284,9 @@ func (s *StoreService) BuyItems(ctx context.Context, req *pb.BuyItemRequest) (*p
 		itemInstanceIds = append(itemInstanceIds, itemInstanceId)
 	}
 
-	s.Logger.Info(itemInstanceIds)
-
 	// update character gold
 	sql = "UPDATE characters SET gold = gold - $1 WHERE character_id = $2"
-	_, err = s.DbPool.Exec(ctx, sql, sum, c.Id)
+	_, err = s.DbPool.Exec(ctx, sql, sum, c.CharacterId)
 	if err != nil {
 		s.Logger.Error(err)
 		return errResp, err
@@ -296,7 +294,7 @@ func (s *StoreService) BuyItems(ctx context.Context, req *pb.BuyItemRequest) (*p
 
 	// TODO: move from direct service-service to MQ (problem: wait-for-ack)
 	_, err = s.Clients.Inventory.AddItemsToBackpack(ctx, &pbInventory.AddItemsToBackpackRequest{
-		CharacterId:     c.Id,
+		CharacterId:     c.CharacterId,
 		ItemInstanceIds: itemInstanceIds,
 	})
 

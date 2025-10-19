@@ -28,6 +28,7 @@ const (
 )
 
 const (
+	CURRENT_USER         = "currentUser"
 	CURRENT_USER_ID      = "currentUserId"
 	CURRENT_USER_NAME    = "currentUserName"
 	SELECTED_CHARACTER   = "selectedCharacter"

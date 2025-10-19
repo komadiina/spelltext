@@ -96,8 +96,6 @@ func (s *InventoryService) AddItemsToBackpack(ctx context.Context, req *pb.AddIt
 		return nil, err
 	}
 
-	s.Logger.Info("running query", "sql", sql, "args", args)
-
 	_, err = s.DbPool.Exec(ctx, sql, args...)
 	if err != nil {
 		s.Logger.Error(err)
@@ -135,8 +133,7 @@ func (s *InventoryService) ListBackpackItems(ctx context.Context, req *pb.ListBa
 	}
 
 	sql = fmt.Sprintf("%s %s", prefix, sql)
-	s.Logger.Info("running query", "sql", sql)
-	
+
 	rows, err := s.DbPool.Query(ctx, sql, req.CharacterId)
 	if err != nil {
 		s.Logger.Error("failed to run query", "err", err)
@@ -189,10 +186,6 @@ func (s *InventoryService) ListBackpackItems(ctx context.Context, req *pb.ListBa
 		item.ItemTemplate.EquipSlot = equipSlot
 
 		items = append(items, item)
-	}
-
-	for _, item := range items {
-		s.Logger.Info(item)
 	}
 
 	return &pb.ListBackpackItemsResponse{Items: items}, nil

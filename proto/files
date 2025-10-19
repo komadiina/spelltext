@@ -1,1 +1,1 @@
-store/store.proto inventory/inventory.proto armory/armory.proto chat/chat.proto repo/repo.proto gamba/gamba.proto
+store/store.proto inventory/inventory.proto armory/armory.proto chat/chat.proto repo/repo.proto gamba/gamba.proto auth/auth.proto

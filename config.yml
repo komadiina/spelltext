@@ -43,6 +43,21 @@ gambaserver:
   pgDbName: spelltext
   pgSslMode: disable
 
+authserver:
+  port: 50056
+  pgUser: storeuser
+  pgPass: changeme
+  # pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
+  pgHost: postgres
+  pgPort: 5432
+  pgDbName: spelltext
+  pgSslMode: disable
+  authType: hash
+  trust: true
+
+  charserver:
+    port: 50054
+
 client:
   nats_url: nats://127.0.0.1:4222
   max_wait_time: 5

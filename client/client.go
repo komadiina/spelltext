@@ -21,6 +21,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 
 	pbArmory "github.com/komadiina/spelltext/proto/armory"
+	pbAuth "github.com/komadiina/spelltext/proto/auth"
 	pbChat "github.com/komadiina/spelltext/proto/chat"
 	pbGamba "github.com/komadiina/spelltext/proto/gamba"
 	pbInventory "github.com/komadiina/spelltext/proto/inventory"
@@ -40,7 +41,6 @@ func InitializeNats(cfg *config.Config) (*nats.Conn, nats.JetStream, error) {
 
 	return conn, js, nil
 }
-
 
 func InitializePages(client *types.SpelltextClient) {
 	views.AddLoginPage(client)
@@ -97,6 +97,14 @@ func InitializeClients(c *types.SpelltextClient) {
 	} else {
 		c.Clients.GambaClient = pbGamba.NewGambaClient(conn)
 	}
+
+	// auth
+	conn, err = grpc.NewClient("localhost:50056", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		c.Logger.Error("failed to init auth client", "reason", err)
+	} else {
+		c.Clients.AuthClient = pbAuth.NewAuthClient(conn)
+	}
 }
 
 func main() {
@@ -129,6 +137,8 @@ func main() {
 		AppStorage:   make(map[string]any),
 		AudioManager: am,
 	}
+
+	client.AudioManager.PlayBackground(logger)
 
 	logger.Info("initializing clients...")
 	InitializeClients(&client)
