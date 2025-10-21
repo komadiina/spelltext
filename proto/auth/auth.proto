@@ -1,6 +1,6 @@
 syntax = "proto3";
-package armory;
-option go_package = "github.com/komadiina/spelltext/proto/proto/armory;armory";
+package auth;
+option go_package = "github.com/komadiina/spelltext/proto/proto/auth;auth";
 
 import "repo/repo.proto";
 

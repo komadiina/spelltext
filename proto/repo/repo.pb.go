@@ -9,7 +9,6 @@ package repo
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -1018,8 +1017,7 @@ type ItemInstance struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	ItemInstanceId   uint64                 `protobuf:"varint,1,opt,name=item_instance_id,json=itemInstanceId,proto3" json:"item_instance_id,omitempty"`
 	ItemId           uint64                 `protobuf:"varint,2,opt,name=item_id,json=itemId,proto3" json:"item_id,omitempty"`
-	OwnerCharacterId uint64                 `protobuf:"varint,3,opt,name=owner_character_id,json=ownerCharacterId,proto3" json:"owner_character_id,omitempty"`
-	CreatedAt        *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	OwnerCharacterId uint64                 `protobuf:"varint,3,opt,name=owner_character_id,json=ownerCharacterId,proto3" json:"owner_character_id,omitempty"` // google.protobuf.Timestamp created_at = 4;
 	Item             *Item                  `protobuf:"bytes,20,opt,name=item,proto3" json:"item,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
@@ -1074,13 +1072,6 @@ func (x *ItemInstance) GetOwnerCharacterId() uint64 {
 		return x.OwnerCharacterId
 	}
 	return 0
-}
-
-func (x *ItemInstance) GetCreatedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.CreatedAt
-	}
-	return nil
 }
 
 func (x *ItemInstance) GetItem() *Item {
@@ -2234,7 +2225,7 @@ var File_repo_repo_proto protoreflect.FileDescriptor
 
 const file_repo_repo_proto_rawDesc = "" +
 	"\n" +
-	"\x0frepo/repo.proto\x12\x04repo\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa1\x01\n" +
+	"\x0frepo/repo.proto\x12\x04repo\"\xa1\x01\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x1a\n" +
 	"\busername\x18\x02 \x01(\tR\busername\x12#\n" +
@@ -2345,13 +2336,11 @@ const file_repo_repo_proto_rawDesc = "" +
 	"\x06tokens\x18\x03 \x01(\x04R\x06tokens\x12.\n" +
 	"\x13base_inventory_size\x18\x04 \x01(\x04R\x11baseInventorySize\x126\n" +
 	"\x17expanded_inventory_size\x18\x05 \x01(\x04R\x15expandedInventorySize\x12-\n" +
-	"\tcharacter\x18\x14 \x01(\v2\x0f.repo.CharacterR\tcharacter\"\xda\x01\n" +
+	"\tcharacter\x18\x14 \x01(\v2\x0f.repo.CharacterR\tcharacter\"\x9f\x01\n" +
 	"\fItemInstance\x12(\n" +
 	"\x10item_instance_id\x18\x01 \x01(\x04R\x0eitemInstanceId\x12\x17\n" +
 	"\aitem_id\x18\x02 \x01(\x04R\x06itemId\x12,\n" +
-	"\x12owner_character_id\x18\x03 \x01(\x04R\x10ownerCharacterId\x129\n" +
-	"\n" +
-	"created_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12\x1e\n" +
+	"\x12owner_character_id\x18\x03 \x01(\x04R\x10ownerCharacterId\x12\x1e\n" +
 	"\x04item\x18\x14 \x01(\v2\n" +
 	".repo.ItemR\x04item\"\xd5\x01\n" +
 	"\x1eCharacterInventoryItemInstance\x12!\n" +
@@ -2501,7 +2490,6 @@ var file_repo_repo_proto_goTypes = []any{
 	(*QuestObjective)(nil),                 // 23: repo.QuestObjective
 	(*Ability)(nil),                        // 24: repo.Ability
 	(*Update)(nil),                         // 25: repo.Update
-	(*timestamppb.Timestamp)(nil),          // 26: google.protobuf.Timestamp
 }
 var file_repo_repo_proto_depIdxs = []int32{
 	3,  // 0: repo.ItemTemplate.equip_slot:type_name -> repo.EquipSlot
@@ -2511,30 +2499,29 @@ var file_repo_repo_proto_depIdxs = []int32{
 	1,  // 4: repo.Character.hero:type_name -> repo.Hero
 	0,  // 5: repo.Character.user:type_name -> repo.User
 	8,  // 6: repo.CharacterInventory.character:type_name -> repo.Character
-	26, // 7: repo.ItemInstance.created_at:type_name -> google.protobuf.Timestamp
-	6,  // 8: repo.ItemInstance.item:type_name -> repo.Item
-	8,  // 9: repo.CharacterInventoryItemInstance.character:type_name -> repo.Character
-	10, // 10: repo.CharacterInventoryItemInstance.item_instance:type_name -> repo.ItemInstance
-	12, // 11: repo.VendorWare.vendor:type_name -> repo.Vendor
-	2,  // 12: repo.VendorWare.item_type:type_name -> repo.ItemType
-	14, // 13: repo.GambaChestContent.gamba_chest:type_name -> repo.GambaChest
-	6,  // 14: repo.GambaChestContent.item:type_name -> repo.Item
-	3,  // 15: repo.CharacterEquipment.equip_slot:type_name -> repo.EquipSlot
-	10, // 16: repo.CharacterEquipment.item_instance:type_name -> repo.ItemInstance
-	17, // 17: repo.QuestPrerequisite.base_quest:type_name -> repo.Quest
-	17, // 18: repo.QuestPrerequisite.prequisite_quest:type_name -> repo.Quest
-	17, // 19: repo.QuestReward.quest:type_name -> repo.Quest
-	6,  // 20: repo.QuestReward.item:type_name -> repo.Item
-	17, // 21: repo.PlayerCompletedQuests.quest:type_name -> repo.Quest
-	6,  // 22: repo.NpcTemplate.drop_item:type_name -> repo.Item
-	21, // 23: repo.Npc.npc_template:type_name -> repo.NpcTemplate
-	17, // 24: repo.QuestObjective.quest:type_name -> repo.Quest
-	22, // 25: repo.QuestObjective.npc:type_name -> repo.Npc
-	26, // [26:26] is the sub-list for method output_type
-	26, // [26:26] is the sub-list for method input_type
-	26, // [26:26] is the sub-list for extension type_name
-	26, // [26:26] is the sub-list for extension extendee
-	0,  // [0:26] is the sub-list for field type_name
+	6,  // 7: repo.ItemInstance.item:type_name -> repo.Item
+	8,  // 8: repo.CharacterInventoryItemInstance.character:type_name -> repo.Character
+	10, // 9: repo.CharacterInventoryItemInstance.item_instance:type_name -> repo.ItemInstance
+	12, // 10: repo.VendorWare.vendor:type_name -> repo.Vendor
+	2,  // 11: repo.VendorWare.item_type:type_name -> repo.ItemType
+	14, // 12: repo.GambaChestContent.gamba_chest:type_name -> repo.GambaChest
+	6,  // 13: repo.GambaChestContent.item:type_name -> repo.Item
+	3,  // 14: repo.CharacterEquipment.equip_slot:type_name -> repo.EquipSlot
+	10, // 15: repo.CharacterEquipment.item_instance:type_name -> repo.ItemInstance
+	17, // 16: repo.QuestPrerequisite.base_quest:type_name -> repo.Quest
+	17, // 17: repo.QuestPrerequisite.prequisite_quest:type_name -> repo.Quest
+	17, // 18: repo.QuestReward.quest:type_name -> repo.Quest
+	6,  // 19: repo.QuestReward.item:type_name -> repo.Item
+	17, // 20: repo.PlayerCompletedQuests.quest:type_name -> repo.Quest
+	6,  // 21: repo.NpcTemplate.drop_item:type_name -> repo.Item
+	21, // 22: repo.Npc.npc_template:type_name -> repo.NpcTemplate
+	17, // 23: repo.QuestObjective.quest:type_name -> repo.Quest
+	22, // 24: repo.QuestObjective.npc:type_name -> repo.Npc
+	25, // [25:25] is the sub-list for method output_type
+	25, // [25:25] is the sub-list for method input_type
+	25, // [25:25] is the sub-list for extension type_name
+	25, // [25:25] is the sub-list for extension extendee
+	0,  // [0:25] is the sub-list for field type_name
 }
 
 func init() { file_repo_repo_proto_init() }

@@ -1,0 +1,15 @@
+{
+    "Servers": {
+        "1": {
+            "Group": "servers",
+            "Name": "docker",
+            "Host": "postgres",
+            "Port": 5432,
+            "MaintenanceDB": "postgres",
+            "Username": "postgres",
+            "Password": "changeme",
+            "Sslmode": "disable",
+            "Favorite": true
+        }
+    }
+}

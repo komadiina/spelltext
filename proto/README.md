@@ -3,8 +3,8 @@
 upon modifications, to regenerate the code, run (**directory where the command is ran from matters btw**):
 ```sh
 $ cd $PROJECT_ROOT/proto
-$ export FILES="store/store.proto inventory/inventory.proto armory/armory.proto chat/chat.proto repo/repo.proto"
-$ protoc -I. -I$(dirname "$(which protoc)")/../include --go_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. store/store.proto inventory/inventory.proto armory/armory.proto chat/chat.proto repo/repo.proto
+$ export FILES="store/store.proto inventory/inventory.proto character/character.proto chat/chat.proto repo/repo.proto"
+$ protoc -I. -I$(dirname "$(which protoc)")/../include --go_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. store/store.proto inventory/inventory.proto character/character.proto chat/chat.proto repo/repo.proto
 ```
 or, use [files](./files):
 ```sh

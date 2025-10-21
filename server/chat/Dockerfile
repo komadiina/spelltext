@@ -16,6 +16,7 @@ FROM alpine:3.22.1
 WORKDIR /
 
 ENV CONFIG_FILE=./config.yml
+ENV VERSION=0.4.2
 COPY --from=base ./main ./chatserver
 COPY --from=base ./config.yml ./config.yml
 

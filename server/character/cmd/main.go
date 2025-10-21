@@ -10,7 +10,7 @@ import (
 	"github.com/charmbracelet/log"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
-	pb "github.com/komadiina/spelltext/proto/armory"
+	pb "github.com/komadiina/spelltext/proto/char"
 	"github.com/komadiina/spelltext/server/character/config"
 	"github.com/komadiina/spelltext/server/character/server"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
@@ -31,7 +31,7 @@ func InitializePool(s *server.CharacterService, context context.Context, conninf
 			conn.Close(context)
 
 			pool, err := pgxpool.New(context, fmt.Sprintf(
-				"postgres://%s:%s@%s:%d/%s?sslmode=%s",
+				"user=%s password=%s host=%s port=%d dbname=%s sslmode=%s pool_max_conns=10 pool_min_conns=3 pool_health_check_period=30s",
 				s.Config.PgUser,
 				s.Config.PgPass,
 				s.Config.PgHost,

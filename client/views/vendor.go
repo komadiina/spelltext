@@ -33,10 +33,10 @@ func AddVendorPage(c *types.SpelltextClient) {
 	c.PageManager.RegisterFactory(constants.PAGE_VENDOR, func() tview.Primitive {
 		if c.AppStorage[constants.SELECTED_CHARACTER] == nil {
 			f := tview.NewFlex().SetFullScreen(true)
-			f.SetBorder(true).SetBorderPadding(1, 1, 5, 5).SetTitle(" hello? ")
+			f.SetBorder(true).SetBorderPadding(1, 1, 5, 5).SetTitle(" [::b]hello?[::-] ")
 
 			return f.AddItem(tview.NewTextView().
-				SetText("no character selected. select a character from the armory page, and come back... dummy"), 0, 1, false)
+				SetText("no character selected. select a character from the character page, and come back... dummy"), 0, 1, false)
 		}
 
 		basket := make([]*pbStore.Item, 0)
@@ -54,7 +54,7 @@ func AddVendorPage(c *types.SpelltextClient) {
 			SetText(fmt.Sprintf(`[blue]%v[""]'s wares`, c.AppStorage[constants.SELECTED_VENDOR_NAME]))
 
 		flex := STNewFlex().AddItem(vendor, 1, 1, false).SetDirection(tview.FlexRow)
-		flex.SetBorder(true).SetTitle(" vendor ")
+		flex.SetBorder(true).SetTitle(fmt.Sprintf(" [::b]vendor - %s[::-] ", c.AppStorage[constants.SELECTED_VENDOR_NAME]))
 
 		flex.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 			if event.Key() == tcell.KeyCtrlB {
@@ -162,7 +162,7 @@ func AddVendorPage(c *types.SpelltextClient) {
 
 		guide := tview.NewFlex().
 			SetDirection(tview.FlexColumn).
-			AddItem(tview.NewTextView().SetText(" keymap legend: "), 0, 1, false)
+			AddItem(tview.NewTextView().SetText(" [::b]keymap legend[::-]: "), 0, 1, false)
 
 		guide.SetBorder(true)
 

@@ -388,7 +388,7 @@ func (x *ListBackpackItemsRequest) GetCharacterId() uint64 {
 
 type ListBackpackItemsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Items         []*repo.Item           `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
+	ItemInstances []*repo.ItemInstance   `protobuf:"bytes,1,rep,name=item_instances,json=itemInstances,proto3" json:"item_instances,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -423,9 +423,9 @@ func (*ListBackpackItemsResponse) Descriptor() ([]byte, []int) {
 	return file_inventory_inventory_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *ListBackpackItemsResponse) GetItems() []*repo.Item {
+func (x *ListBackpackItemsResponse) GetItemInstances() []*repo.ItemInstance {
 	if x != nil {
-		return x.Items
+		return x.ItemInstances
 	}
 	return nil
 }
@@ -455,10 +455,9 @@ const file_inventory_inventory_proto_rawDesc = "" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\"=\n" +
 	"\x18ListBackpackItemsRequest\x12!\n" +
-	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\"=\n" +
-	"\x19ListBackpackItemsResponse\x12 \n" +
-	"\x05items\x18\x01 \x03(\v2\n" +
-	".repo.ItemR\x05items2\xea\x02\n" +
+	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\"V\n" +
+	"\x19ListBackpackItemsResponse\x129\n" +
+	"\x0eitem_instances\x18\x01 \x03(\v2\x12.repo.ItemInstanceR\ritemInstances2\xea\x02\n" +
 	"\tInventory\x12U\n" +
 	"\n" +
 	"GetBalance\x12\".inventory.InventoryBalanceRequest\x1a#.inventory.InventoryBalanceResponse\x12C\n" +
@@ -488,10 +487,10 @@ var file_inventory_inventory_proto_goTypes = []any{
 	(*AddItemsToBackpackResponse)(nil), // 5: inventory.AddItemsToBackpackResponse
 	(*ListBackpackItemsRequest)(nil),   // 6: inventory.ListBackpackItemsRequest
 	(*ListBackpackItemsResponse)(nil),  // 7: inventory.ListBackpackItemsResponse
-	(*repo.Item)(nil),                  // 8: repo.Item
+	(*repo.ItemInstance)(nil),          // 8: repo.ItemInstance
 }
 var file_inventory_inventory_proto_depIdxs = []int32{
-	8, // 0: inventory.ListBackpackItemsResponse.items:type_name -> repo.Item
+	8, // 0: inventory.ListBackpackItemsResponse.item_instances:type_name -> repo.ItemInstance
 	0, // 1: inventory.Inventory.GetBalance:input_type -> inventory.InventoryBalanceRequest
 	2, // 2: inventory.Inventory.SellItem:input_type -> inventory.SellItemRequest
 	4, // 3: inventory.Inventory.AddItemsToBackpack:input_type -> inventory.AddItemsToBackpackRequest

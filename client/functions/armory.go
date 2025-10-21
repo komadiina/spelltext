@@ -5,7 +5,7 @@ import (
 
 	"github.com/komadiina/spelltext/client/constants"
 	"github.com/komadiina/spelltext/client/types"
-	pb "github.com/komadiina/spelltext/proto/armory"
+	pb "github.com/komadiina/spelltext/proto/char"
 	pbRepo "github.com/komadiina/spelltext/proto/repo"
 )
 
@@ -62,7 +62,7 @@ func RefreshCharacter(char *pbRepo.Character, c *types.SpelltextClient) error {
 	return err
 }
 
-func GetEquippedItems(c *types.SpelltextClient) []*pbRepo.Item {
+func GetEquippedItems(c *types.SpelltextClient) []*pbRepo.ItemInstance {
 	req := &pb.GetEquippedItemsRequest{
 		CharacterId: c.AppStorage[constants.SELECTED_CHARACTER].(*pbRepo.Character).GetCharacterId(),
 	}
@@ -73,7 +73,7 @@ func GetEquippedItems(c *types.SpelltextClient) []*pbRepo.Item {
 		return nil
 	}
 
-	return resp.GetItems()
+	return resp.GetItemInstances()
 }
 
 func GetEquipSlots(c *types.SpelltextClient) []*pbRepo.EquipSlot {
@@ -90,16 +90,36 @@ func GetEquipSlots(c *types.SpelltextClient) []*pbRepo.EquipSlot {
 	return resp.GetSlots()
 }
 
-func GroupItems(items []*pbRepo.Item, slots []*pbRepo.EquipSlot) map[string][]*pbRepo.Item {
-	m := make(map[string][]*pbRepo.Item)
-
-	for _, item := range items {
+func GroupItems(instances []*pbRepo.ItemInstance, slots []*pbRepo.EquipSlot) map[*pbRepo.EquipSlot][]*pbRepo.ItemInstance {
+	m := make(map[*pbRepo.EquipSlot][]*pbRepo.ItemInstance)
+	// slices.SortFunc(slots, func(a, b *pbRepo.EquipSlot) int { return cmp.Compare(a.GetId(), b.GetId()) })
+	for _, instance := range instances {
 		for _, slot := range slots {
-			if item.GetItemTemplate().GetEquipSlot().GetId() == slot.GetId() {
-				m[slot.GetName()] = append(m[slot.GetName()], item)
+			if instance.GetItem().GetItemTemplate().GetEquipSlot().GetId() == slot.GetId() {
+				m[slot] = append(m[slot], instance)
 			}
 		}
 	}
 
 	return m
+}
+
+func ToggleEquip(item *pbRepo.ItemInstance, c *types.SpelltextClient, char *pbRepo.Character, equipSlot *pbRepo.EquipSlot, shouldEquip bool) error {
+	c.Logger.Infof("%+v", equipSlot)
+
+	req := &pb.ToggleEquipRequest{
+		CharacterId:    char.GetCharacterId(),
+		ItemInstanceId: item.ItemInstanceId,
+		EquipSlotId:    equipSlot.GetId(),
+		ShouldEquip:    shouldEquip,
+	}
+
+	_, err := c.Clients.CharacterClient.ToggleEquip(*c.Context, req)
+
+	if err != nil {
+		c.Logger.Error(err)
+		return err
+	}
+
+	return nil
 }

@@ -43,7 +43,7 @@ func InitializePool(s *server.GambaService, context context.Context, conninfo st
 			conn.Close(context)
 
 			pool, err := pgxpool.New(context, fmt.Sprintf(
-				"postgres://%s:%s@%s:%d/%s?sslmode=%s",
+				"user=%s password=%s host=%s port=%d dbname=%s sslmode=%s pool_max_conns=10 pool_min_conns=3 pool_health_check_period=30s",
 				s.Config.PgUser,
 				s.Config.PgPass,
 				s.Config.PgHost,

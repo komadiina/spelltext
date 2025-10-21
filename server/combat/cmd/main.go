@@ -10,9 +10,9 @@ import (
 	"github.com/charmbracelet/log"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
-	pb "github.com/komadiina/spelltext/proto/inventory"
-	"github.com/komadiina/spelltext/server/inventory/config"
-	"github.com/komadiina/spelltext/server/inventory/server"
+	pb "github.com/komadiina/spelltext/proto/combat"
+	"github.com/komadiina/spelltext/server/combat/config"
+	"github.com/komadiina/spelltext/server/combat/server"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 	"google.golang.org/grpc"
 )
@@ -29,7 +29,7 @@ const banner = `
 
 `
 
-func InitializePool(s *server.InventoryService, context context.Context, conninfo string, backoff time.Duration, maxRetries int, boFormula func(time.Duration) time.Duration) error {
+func InitializePool(s *server.CombatService, context context.Context, conninfo string, backoff time.Duration, maxRetries int, boFormula func(time.Duration) time.Duration) error {
 	try := 1
 	for {
 		conn, err := pgx.Connect(context, conninfo)
@@ -43,7 +43,7 @@ func InitializePool(s *server.InventoryService, context context.Context, conninf
 			conn.Close(context)
 
 			pool, err := pgxpool.New(context, fmt.Sprintf(
-				"user=%s password=%s host=%s port=%d dbname=%s sslmode=%s pool_max_conns=10 pool_min_conns=3 pool_health_check_period=30s",
+				"postgres://%s:%s@%s:%d/%s?sslmode=%s",
 				s.Config.PgUser,
 				s.Config.PgPass,
 				s.Config.PgHost,
@@ -76,17 +76,17 @@ var version = os.Getenv("VERSION")
 func main() {
 	ctx := context.Background()
 
-	logging.Init(log.InfoLevel, "inventoryserver", false)
-	logger := logging.Get("inventoryserver", false)
+	logging.Init(log.InfoLevel, "combatserver", false)
+	logger := logging.Get("combatserver", false)
 
-	logger.Infof("%s\n%s", banner, version)
+	logger.Infof(`%s%sversion=%s`, banner, "\n", version)
 
 	logger.Info("loading config...", "CONFIG_FILE", os.Getenv("CONFIG_FILE"))
 	cfg, err := config.LoadConfig()
 	if err != nil {
 		logger.Fatal(err)
 	} else {
-		logger.Info("inventoryserver config loaded.")
+		logger.Info("combatserver config loaded.")
 		logger.Infof("conninfo=%v:%v@%v:%v/%v?sslMode=%v, port=%d",
 			cfg.PgUser, cfg.PgPass, cfg.PgHost, cfg.PgPort, cfg.PgDbName, cfg.PgSSLMode, cfg.ServicePort)
 	}
@@ -98,10 +98,10 @@ func main() {
 	}
 
 	s := grpc.NewServer()
-	ss := server.InventoryService{Config: cfg, Logger: logger}
+	ss := server.CombatService{Config: cfg, Logger: logger}
 
 	conninfo := fmt.Sprintf(
-		"postgres://%s:%s@%s:%d/%s?sslmode=%s",
+		"user=%s password=%s host=%s port=%d dbname=%s sslmode=%s pool_max_conns=10 pool_min_conns=3 pool_health_check_period=30s",
 		cfg.PgUser,
 		cfg.PgPass,
 		cfg.PgHost,
@@ -122,8 +122,8 @@ func main() {
 		ss.Logger.Fatal("failed to connect to database/initialize pgxpool, not serving.", "reason", err)
 	}
 
-	pb.RegisterInventoryServer(s, &ss)
-	logger.Info(fmt.Sprintf("%s v%s listening on %s:%d", "inventoryserver", "0.3.0", "127.0.0.1", ss.Config.ServicePort))
+	pb.RegisterCombatServer(s, &ss)
+	logger.Info(fmt.Sprintf("%s v%s listening on %s:%d", "combatserver", version, "127.0.0.1", ss.Config.ServicePort))
 
 	if err := s.Serve(lis); err != nil {
 		logger.Error("failed to serve", "reason", err)

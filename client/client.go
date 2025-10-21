@@ -20,9 +20,10 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
-	pbArmory "github.com/komadiina/spelltext/proto/armory"
 	pbAuth "github.com/komadiina/spelltext/proto/auth"
+	pbChar "github.com/komadiina/spelltext/proto/char"
 	pbChat "github.com/komadiina/spelltext/proto/chat"
+	pbCombat "github.com/komadiina/spelltext/proto/combat"
 	pbGamba "github.com/komadiina/spelltext/proto/gamba"
 	pbInventory "github.com/komadiina/spelltext/proto/inventory"
 	pbStore "github.com/komadiina/spelltext/proto/store"
@@ -46,7 +47,7 @@ func InitializePages(client *types.SpelltextClient) {
 	views.AddLoginPage(client)
 	views.AddMainmenuPage(client)
 	views.AddChatPage(client)
-	views.AddArmoryPage(client)
+	views.AddCharacterPage(client)
 	views.AddStorePage(client)
 	views.AddProgressPage(client)
 	views.AddGambaPage(client)
@@ -57,57 +58,88 @@ func InitializePages(client *types.SpelltextClient) {
 
 func InitializeClients(c *types.SpelltextClient) {
 	c.Clients = &types.Clients{}
+	c.Connections = &types.Connections{}
+
+	host := func(port int) string { return fmt.Sprintf("localhost:%d", port) }
 
 	// chat
-	conn, err := grpc.NewClient("localhost:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(host(c.Config.ChatPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		c.Logger.Error("failed to init chat client", "reason", err)
 	} else {
 		c.Clients.ChatClient = pbChat.NewChatClient(conn)
+		c.Connections.Chat = conn
 	}
 
 	// store
-	conn, err = grpc.NewClient("localhost:50052", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err = grpc.NewClient(host(c.Config.StorePort), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		c.Logger.Error("failed to init store client", "reason", err)
 	} else {
 		c.Clients.StoreClient = pbStore.NewStoreClient(conn)
+		c.Connections.Store = conn
 	}
 
 	// inventory
-	conn, err = grpc.NewClient("localhost:50053", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err = grpc.NewClient(host(c.Config.InventoryPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		c.Logger.Error("failed to init inventory client", "reason", err)
 	} else {
 		c.Clients.InventoryClient = pbInventory.NewInventoryClient(conn)
+		c.Connections.Inventory = conn
 	}
 
-	// armory
-	conn, err = grpc.NewClient("localhost:50054", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	// character
+	conn, err = grpc.NewClient(host(c.Config.CharacterPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		c.Logger.Error("failed to init armory client", "reason", err)
+		c.Logger.Error("failed to init character client", "reason", err)
 	} else {
-		c.Clients.CharacterClient = pbArmory.NewCharacterClient(conn)
+		c.Clients.CharacterClient = pbChar.NewCharacterClient(conn)
+		c.Connections.Character = conn
 	}
 
 	// gamba
-	conn, err = grpc.NewClient("localhost:50055", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err = grpc.NewClient(host(c.Config.GambaPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		c.Logger.Error("failed to init gamba client", "reason", err)
 	} else {
 		c.Clients.GambaClient = pbGamba.NewGambaClient(conn)
+		c.Connections.Gamba = conn
 	}
 
 	// auth
-	conn, err = grpc.NewClient("localhost:50056", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err = grpc.NewClient(host(c.Config.AuthPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		c.Logger.Error("failed to init auth client", "reason", err)
 	} else {
 		c.Clients.AuthClient = pbAuth.NewAuthClient(conn)
+		c.Connections.Auth = conn
+	}
+
+	// combat
+	conn, err = grpc.NewClient(host(c.Config.AuthPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		c.Logger.Error("failed to init auth client", "reason", err)
+	} else {
+		c.Clients.CombatClient = pbCombat.NewCombatClient(conn)
+		c.Connections.Combat = conn
+	}
+}
+
+func closeClients(c *types.SpelltextClient) {
+	if c.Clients != nil {
+		c.Connections.Chat.Close()
+		c.Connections.Store.Close()
+		c.Connections.Inventory.Close()
+		c.Connections.Character.Close()
+		c.Connections.Gamba.Close()
+		c.Connections.Auth.Close()
+		c.Connections.Combat.Close()
 	}
 }
 
 const banner = `
+
                 _ _ _            _   
                | | | |          | |  
  ___ _ __   ___| | | |_ _____  _| |_ 
@@ -124,6 +156,7 @@ func main() {
 	logging.Init(log.InfoLevel, "client", true)
 	logger := logging.Get("client", true)
 
+	err := os.Setenv("CONFIG_FILE", "config.yml")
 	logger.Info("loading client config...", "CONFIG_FILE", os.Getenv("CONFIG_FILE"))
 	cfg, err := config.LoadConfig()
 	if err != nil {
@@ -156,6 +189,7 @@ func main() {
 
 	logger.Info("initializing clients...")
 	InitializeClients(&client)
+	defer closeClients(&client)
 	logger.Info("clients initialized.")
 
 	logger.Info("initializng nats...")
@@ -211,7 +245,7 @@ func main() {
 	logger.Info("client shutdown.")
 	fmt.Print(banner)
 	fmt.Println("> thanks for playing this torturefest")
-	fmt.Println("> a game by ogg (https://github.com/komadiina)")
+	fmt.Println("> a game by ogg/komadiina (https://github.com/komadiina)")
 	fmt.Println("> follow the development at https://github.com/komadiina/spelltext")
 	fmt.Println("~ kthxb")
 }

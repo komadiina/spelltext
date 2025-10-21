@@ -57,3 +57,13 @@ authserver:
 
   charserver:
     port: 50054
+
+combatserver:
+  port: 50057
+  pgUser: storeuser
+  pgPass: changeme
+  # pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
+  pgHost: postgres
+  pgPort: 5432
+  pgDbName: spelltext
+  pgSslMode: disable

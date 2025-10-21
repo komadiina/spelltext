@@ -1,22 +1,8 @@
 syntax = "proto3";
-package armory;
-option go_package = "github.com/komadiina/spelltext/proto/proto/armory;armory";
+package char;
+option go_package = "github.com/komadiina/spelltext/proto/proto/char;char";
 
 import "repo/repo.proto";
-
-// message TCharacter {
-//     uint64 id       = 1;
-//     string name     = 2;
-//     string class    = 3;
-//     uint32 level    = 4;
-//     uint64 gold     = 5;
-//     uint64 tokens   = 6;
-// }
-
-// message THero {
-//     string name     = 1;
-//     uint64 id       = 2;
-// }
 
 message ListHeroesRequest {}
 
@@ -79,6 +65,18 @@ message DeleteCharacterResponse {
     string message  = 2;
 }
 
+message ToggleEquipRequest {
+    uint64 character_id     = 1;
+    uint64 item_instance_id = 2;
+    uint64 equip_slot_id    = 3;
+    bool shouldEquip        = 4;
+}
+
+message ToggleEquipResponse {
+    bool success    = 1;
+    string message  = 2;
+}
+
 message EquipItemRequest {
     uint64 character_id     = 1;
     uint64 item_instance_id = 2;
@@ -105,7 +103,7 @@ message GetEquippedItemsRequest {
 }
 
 message GetEquippedItemsResponse {
-    repeated repo.Item items = 1;
+    repeated repo.ItemInstance itemInstances = 1;
 }
 
 message GetEquipSlotsRequest {}
@@ -123,6 +121,7 @@ service Character {
     rpc CreateCharacter          (CreateCharacterRequest)           returns (CreateCharacterResponse);
     rpc DeleteCharacter          (DeleteCharacterRequest)           returns (DeleteCharacterResponse);
     rpc GetEquippedItems         (GetEquippedItemsRequest)          returns (GetEquippedItemsResponse);
+    rpc ToggleEquip              (ToggleEquipRequest)               returns (ToggleEquipResponse);
     rpc EquipItem                (EquipItemRequest)                 returns (EquipItemResponse);
     rpc UnequipItem              (UnequipItemRequest)               returns (UnequipItemResponse);
     rpc GetEquipSlots            (GetEquipSlotsRequest)             returns (GetEquipSlotsResponse);

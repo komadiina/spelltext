@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v6.32.1
-// source: armory/armory.proto
+// source: char/char.proto
 
-package armory
+package char
 
 import (
 	context "context"
@@ -19,17 +19,18 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Character_ListHeroes_FullMethodName               = "/armory.Character/ListHeroes"
-	Character_ListCharacters_FullMethodName           = "/armory.Character/ListCharacters"
-	Character_SetSelectedCharacter_FullMethodName     = "/armory.Character/SetSelectedCharacter"
-	Character_GetLastSelectedCharacter_FullMethodName = "/armory.Character/GetLastSelectedCharacter"
-	Character_GetCharacter_FullMethodName             = "/armory.Character/GetCharacter"
-	Character_CreateCharacter_FullMethodName          = "/armory.Character/CreateCharacter"
-	Character_DeleteCharacter_FullMethodName          = "/armory.Character/DeleteCharacter"
-	Character_GetEquippedItems_FullMethodName         = "/armory.Character/GetEquippedItems"
-	Character_EquipItem_FullMethodName                = "/armory.Character/EquipItem"
-	Character_UnequipItem_FullMethodName              = "/armory.Character/UnequipItem"
-	Character_GetEquipSlots_FullMethodName            = "/armory.Character/GetEquipSlots"
+	Character_ListHeroes_FullMethodName               = "/char.Character/ListHeroes"
+	Character_ListCharacters_FullMethodName           = "/char.Character/ListCharacters"
+	Character_SetSelectedCharacter_FullMethodName     = "/char.Character/SetSelectedCharacter"
+	Character_GetLastSelectedCharacter_FullMethodName = "/char.Character/GetLastSelectedCharacter"
+	Character_GetCharacter_FullMethodName             = "/char.Character/GetCharacter"
+	Character_CreateCharacter_FullMethodName          = "/char.Character/CreateCharacter"
+	Character_DeleteCharacter_FullMethodName          = "/char.Character/DeleteCharacter"
+	Character_GetEquippedItems_FullMethodName         = "/char.Character/GetEquippedItems"
+	Character_ToggleEquip_FullMethodName              = "/char.Character/ToggleEquip"
+	Character_EquipItem_FullMethodName                = "/char.Character/EquipItem"
+	Character_UnequipItem_FullMethodName              = "/char.Character/UnequipItem"
+	Character_GetEquipSlots_FullMethodName            = "/char.Character/GetEquipSlots"
 )
 
 // CharacterClient is the client API for Character service.
@@ -44,6 +45,7 @@ type CharacterClient interface {
 	CreateCharacter(ctx context.Context, in *CreateCharacterRequest, opts ...grpc.CallOption) (*CreateCharacterResponse, error)
 	DeleteCharacter(ctx context.Context, in *DeleteCharacterRequest, opts ...grpc.CallOption) (*DeleteCharacterResponse, error)
 	GetEquippedItems(ctx context.Context, in *GetEquippedItemsRequest, opts ...grpc.CallOption) (*GetEquippedItemsResponse, error)
+	ToggleEquip(ctx context.Context, in *ToggleEquipRequest, opts ...grpc.CallOption) (*ToggleEquipResponse, error)
 	EquipItem(ctx context.Context, in *EquipItemRequest, opts ...grpc.CallOption) (*EquipItemResponse, error)
 	UnequipItem(ctx context.Context, in *UnequipItemRequest, opts ...grpc.CallOption) (*UnequipItemResponse, error)
 	GetEquipSlots(ctx context.Context, in *GetEquipSlotsRequest, opts ...grpc.CallOption) (*GetEquipSlotsResponse, error)
@@ -137,6 +139,16 @@ func (c *characterClient) GetEquippedItems(ctx context.Context, in *GetEquippedI
 	return out, nil
 }
 
+func (c *characterClient) ToggleEquip(ctx context.Context, in *ToggleEquipRequest, opts ...grpc.CallOption) (*ToggleEquipResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ToggleEquipResponse)
+	err := c.cc.Invoke(ctx, Character_ToggleEquip_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *characterClient) EquipItem(ctx context.Context, in *EquipItemRequest, opts ...grpc.CallOption) (*EquipItemResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(EquipItemResponse)
@@ -179,6 +191,7 @@ type CharacterServer interface {
 	CreateCharacter(context.Context, *CreateCharacterRequest) (*CreateCharacterResponse, error)
 	DeleteCharacter(context.Context, *DeleteCharacterRequest) (*DeleteCharacterResponse, error)
 	GetEquippedItems(context.Context, *GetEquippedItemsRequest) (*GetEquippedItemsResponse, error)
+	ToggleEquip(context.Context, *ToggleEquipRequest) (*ToggleEquipResponse, error)
 	EquipItem(context.Context, *EquipItemRequest) (*EquipItemResponse, error)
 	UnequipItem(context.Context, *UnequipItemRequest) (*UnequipItemResponse, error)
 	GetEquipSlots(context.Context, *GetEquipSlotsRequest) (*GetEquipSlotsResponse, error)
@@ -215,6 +228,9 @@ func (UnimplementedCharacterServer) DeleteCharacter(context.Context, *DeleteChar
 }
 func (UnimplementedCharacterServer) GetEquippedItems(context.Context, *GetEquippedItemsRequest) (*GetEquippedItemsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetEquippedItems not implemented")
+}
+func (UnimplementedCharacterServer) ToggleEquip(context.Context, *ToggleEquipRequest) (*ToggleEquipResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ToggleEquip not implemented")
 }
 func (UnimplementedCharacterServer) EquipItem(context.Context, *EquipItemRequest) (*EquipItemResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method EquipItem not implemented")
@@ -390,6 +406,24 @@ func _Character_GetEquippedItems_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Character_ToggleEquip_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ToggleEquipRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CharacterServer).ToggleEquip(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Character_ToggleEquip_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CharacterServer).ToggleEquip(ctx, req.(*ToggleEquipRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Character_EquipItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(EquipItemRequest)
 	if err := dec(in); err != nil {
@@ -448,7 +482,7 @@ func _Character_GetEquipSlots_Handler(srv interface{}, ctx context.Context, dec 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Character_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "armory.Character",
+	ServiceName: "char.Character",
 	HandlerType: (*CharacterServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -484,6 +518,10 @@ var Character_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Character_GetEquippedItems_Handler,
 		},
 		{
+			MethodName: "ToggleEquip",
+			Handler:    _Character_ToggleEquip_Handler,
+		},
+		{
 			MethodName: "EquipItem",
 			Handler:    _Character_EquipItem_Handler,
 		},
@@ -497,5 +535,5 @@ var Character_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "armory/armory.proto",
+	Metadata: "char/char.proto",
 }
