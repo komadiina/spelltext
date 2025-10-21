@@ -1781,12 +1781,14 @@ type NpcTemplate struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	MinLevel      uint32                 `protobuf:"varint,3,opt,name=min_level,json=minLevel,proto3" json:"min_level,omitempty"`
-	MaxLevel      uint32                 `protobuf:"varint,4,opt,name=max_level,json=maxLevel,proto3" json:"max_level,omitempty"`
-	HealthPoints  uint64                 `protobuf:"varint,5,opt,name=health_points,json=healthPoints,proto3" json:"health_points,omitempty"`
-	BaseDamage    uint64                 `protobuf:"varint,6,opt,name=base_damage,json=baseDamage,proto3" json:"base_damage,omitempty"`
-	BaseXpReward  uint64                 `protobuf:"varint,7,opt,name=base_xp_reward,json=baseXpReward,proto3" json:"base_xp_reward,omitempty"`
-	DropItemId    uint64                 `protobuf:"varint,8,opt,name=drop_item_id,json=dropItemId,proto3" json:"drop_item_id,omitempty"`
+	Description   string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	MinLevel      uint32                 `protobuf:"varint,4,opt,name=min_level,json=minLevel,proto3" json:"min_level,omitempty"`
+	MaxLevel      uint32                 `protobuf:"varint,5,opt,name=max_level,json=maxLevel,proto3" json:"max_level,omitempty"`
+	HealthPoints  uint64                 `protobuf:"varint,6,opt,name=health_points,json=healthPoints,proto3" json:"health_points,omitempty"`
+	BaseDamage    uint64                 `protobuf:"varint,7,opt,name=base_damage,json=baseDamage,proto3" json:"base_damage,omitempty"`
+	BaseXpReward  uint64                 `protobuf:"varint,8,opt,name=base_xp_reward,json=baseXpReward,proto3" json:"base_xp_reward,omitempty"`
+	DropItemId    uint64                 `protobuf:"varint,9,opt,name=drop_item_id,json=dropItemId,proto3" json:"drop_item_id,omitempty"`
+	GoldReward    uint64                 `protobuf:"varint,10,opt,name=gold_reward,json=goldReward,proto3" json:"gold_reward,omitempty"`
 	DropItem      *Item                  `protobuf:"bytes,20,opt,name=drop_item,json=dropItem,proto3" json:"drop_item,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -1836,6 +1838,13 @@ func (x *NpcTemplate) GetName() string {
 	return ""
 }
 
+func (x *NpcTemplate) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
 func (x *NpcTemplate) GetMinLevel() uint32 {
 	if x != nil {
 		return x.MinLevel
@@ -1878,6 +1887,13 @@ func (x *NpcTemplate) GetDropItemId() uint64 {
 	return 0
 }
 
+func (x *NpcTemplate) GetGoldReward() uint64 {
+	if x != nil {
+		return x.GoldReward
+	}
+	return 0
+}
+
 func (x *NpcTemplate) GetDropItem() *Item {
 	if x != nil {
 		return x.DropItem
@@ -1893,6 +1909,7 @@ type Npc struct {
 	TemplateId       uint64                 `protobuf:"varint,4,opt,name=template_id,json=templateId,proto3" json:"template_id,omitempty"`
 	HealthMultiplier float32                `protobuf:"fixed32,5,opt,name=health_multiplier,json=healthMultiplier,proto3" json:"health_multiplier,omitempty"`
 	DamageMultiplier float32                `protobuf:"fixed32,6,opt,name=damage_multiplier,json=damageMultiplier,proto3" json:"damage_multiplier,omitempty"`
+	Level            uint32                 `protobuf:"varint,7,opt,name=level,proto3" json:"level,omitempty"`
 	NpcTemplate      *NpcTemplate           `protobuf:"bytes,20,opt,name=npc_template,json=npcTemplate,proto3" json:"npc_template,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
@@ -1966,6 +1983,13 @@ func (x *Npc) GetHealthMultiplier() float32 {
 func (x *Npc) GetDamageMultiplier() float32 {
 	if x != nil {
 		return x.DamageMultiplier
+	}
+	return 0
+}
+
+func (x *Npc) GetLevel() uint32 {
+	if x != nil {
+		return x.Level
 	}
 	return 0
 }
@@ -2404,20 +2428,24 @@ const file_repo_repo_proto_rawDesc = "" +
 	"\x15PlayerCompletedQuests\x12!\n" +
 	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\x12\x19\n" +
 	"\bquest_id\x18\x02 \x01(\x04R\aquestId\x12!\n" +
-	"\x05quest\x18\x14 \x01(\v2\v.repo.QuestR\x05quest\"\xa2\x02\n" +
+	"\x05quest\x18\x14 \x01(\v2\v.repo.QuestR\x05quest\"\xe5\x02\n" +
 	"\vNpcTemplate\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1b\n" +
-	"\tmin_level\x18\x03 \x01(\rR\bminLevel\x12\x1b\n" +
-	"\tmax_level\x18\x04 \x01(\rR\bmaxLevel\x12#\n" +
-	"\rhealth_points\x18\x05 \x01(\x04R\fhealthPoints\x12\x1f\n" +
-	"\vbase_damage\x18\x06 \x01(\x04R\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
+	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x1b\n" +
+	"\tmin_level\x18\x04 \x01(\rR\bminLevel\x12\x1b\n" +
+	"\tmax_level\x18\x05 \x01(\rR\bmaxLevel\x12#\n" +
+	"\rhealth_points\x18\x06 \x01(\x04R\fhealthPoints\x12\x1f\n" +
+	"\vbase_damage\x18\a \x01(\x04R\n" +
 	"baseDamage\x12$\n" +
-	"\x0ebase_xp_reward\x18\a \x01(\x04R\fbaseXpReward\x12 \n" +
-	"\fdrop_item_id\x18\b \x01(\x04R\n" +
-	"dropItemId\x12'\n" +
+	"\x0ebase_xp_reward\x18\b \x01(\x04R\fbaseXpReward\x12 \n" +
+	"\fdrop_item_id\x18\t \x01(\x04R\n" +
+	"dropItemId\x12\x1f\n" +
+	"\vgold_reward\x18\n" +
+	" \x01(\x04R\n" +
+	"goldReward\x12'\n" +
 	"\tdrop_item\x18\x14 \x01(\v2\n" +
-	".repo.ItemR\bdropItem\"\xf6\x01\n" +
+	".repo.ItemR\bdropItem\"\x8c\x02\n" +
 	"\x03Npc\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x16\n" +
 	"\x06prefix\x18\x02 \x01(\tR\x06prefix\x12\x16\n" +
@@ -2425,7 +2453,8 @@ const file_repo_repo_proto_rawDesc = "" +
 	"\vtemplate_id\x18\x04 \x01(\x04R\n" +
 	"templateId\x12+\n" +
 	"\x11health_multiplier\x18\x05 \x01(\x02R\x10healthMultiplier\x12+\n" +
-	"\x11damage_multiplier\x18\x06 \x01(\x02R\x10damageMultiplier\x124\n" +
+	"\x11damage_multiplier\x18\x06 \x01(\x02R\x10damageMultiplier\x12\x14\n" +
+	"\x05level\x18\a \x01(\rR\x05level\x124\n" +
 	"\fnpc_template\x18\x14 \x01(\v2\x11.repo.NpcTemplateR\vnpcTemplate\"\x82\x01\n" +
 	"\x0eQuestObjective\x12\x19\n" +
 	"\bquest_id\x18\x01 \x01(\x04R\aquestId\x12\x15\n" +

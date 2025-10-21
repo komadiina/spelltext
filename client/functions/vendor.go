@@ -1,11 +1,10 @@
 package functions
 
 import (
-	"github.com/komadiina/spelltext/client/constants"
 	"github.com/komadiina/spelltext/client/types"
 	"github.com/komadiina/spelltext/client/utils"
-	pbStore "github.com/komadiina/spelltext/proto/store"
 	pbRepo "github.com/komadiina/spelltext/proto/repo"
+	pbStore "github.com/komadiina/spelltext/proto/store"
 )
 
 func BuyItems(basket []*pbStore.Item, char *pbRepo.Character, c *types.SpelltextClient) error {
@@ -19,10 +18,10 @@ func BuyItems(basket []*pbStore.Item, char *pbRepo.Character, c *types.Spelltext
 	_, err := c.Clients.StoreClient.BuyItems(*c.Context, &pbStore.BuyItemRequest{CharacterId: char.GetCharacterId(), ItemIds: itemIds})
 	if err == nil {
 		utils.UpdateCharacterFunc(
-			c.AppStorage[constants.SELECTED_CHARACTER].(*pbRepo.Character),
+			c.Storage.SelectedCharacter,
 			c,
 			func(t *pbRepo.Character) *pbRepo.Character {
-				char := c.AppStorage[constants.SELECTED_CHARACTER].(*pbRepo.Character)
+				char := c.Storage.SelectedCharacter
 				char.Gold = uint64(int64(char.Gold) - cost)
 				return char
 			},

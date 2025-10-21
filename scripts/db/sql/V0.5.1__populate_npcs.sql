@@ -1,0 +1,11 @@
+INSERT INTO npcs (prefix, suffix, template_id, health_multiplier, damage_multiplier) VALUES ('tiny', '', 1, 1.0, 1.0);
+INSERT INTO npcs (prefix, suffix, template_id, health_multiplier, damage_multiplier) VALUES ('big', '', 1, 1.5, 1.15);
+INSERT INTO npcs (prefix, suffix, template_id, health_multiplier, damage_multiplier) VALUES ('', '(he''s huge)', 2, 2.0, 1.3);
+INSERT INTO npcs (prefix, suffix, template_id, health_multiplier, damage_multiplier) VALUES ('', '', 2, 1.0, 1.0);
+INSERT INTO npcs (prefix, suffix, template_id, health_multiplier, damage_multiplier) VALUES ('', '', 3, 1.0, 1.0);
+INSERT INTO npcs (prefix, suffix, template_id, health_multiplier, damage_multiplier) VALUES ('green', '', 3, 1.0, 2.0);
+INSERT INTO npcs (prefix, suffix, template_id, health_multiplier, damage_multiplier) VALUES ('', '', 3, 1.0, 1.0);
+INSERT INTO npcs (prefix, suffix, template_id, health_multiplier, damage_multiplier) VALUES ('', '', 4, 1.0, 1.0);
+INSERT INTO npcs (prefix, suffix, template_id, health_multiplier, damage_multiplier) VALUES ('', '', 5, 1.0, 1.0);
+INSERT INTO npcs (prefix, suffix, template_id, health_multiplier, damage_multiplier) VALUES ('nasty', '', 5, 1.5, 1.5);
+INSERT INTO npcs (prefix, suffix, template_id, health_multiplier, damage_multiplier) VALUES ('smol', ', but sharp', 5, 0.5, 3.0);

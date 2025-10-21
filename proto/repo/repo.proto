@@ -207,12 +207,14 @@ message PlayerCompletedQuests {
 message NpcTemplate {
     uint64 id = 1;
     string name = 2;
-    uint32 min_level = 3;
-    uint32 max_level = 4;
-    uint64 health_points = 5;
-    uint64 base_damage = 6;
-    uint64 base_xp_reward = 7;
-    uint64 drop_item_id = 8;
+    string description = 3;
+    uint32 min_level = 4;
+    uint32 max_level = 5;
+    uint64 health_points = 6;
+    uint64 base_damage = 7;
+    uint64 base_xp_reward = 8;
+    uint64 drop_item_id = 9;
+    uint64 gold_reward = 10;
 
     Item drop_item = 20;
 }
@@ -224,6 +226,7 @@ message Npc {
     uint64 template_id = 4;
     float health_multiplier = 5;
     float damage_multiplier = 6;
+    uint32 level = 7;
 
     NpcTemplate npc_template = 20;
 }

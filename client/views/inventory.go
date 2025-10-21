@@ -7,7 +7,6 @@ import (
 	"github.com/komadiina/spelltext/client/constants"
 	"github.com/komadiina/spelltext/client/functions"
 	types "github.com/komadiina/spelltext/client/types"
-	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	"github.com/rivo/tview"
 )
 
@@ -18,12 +17,11 @@ func AddInventoryPage(c *types.SpelltextClient) {
 		flex := tview.NewFlex().SetDirection(tview.FlexRow).SetFullScreen(true)
 		flex.SetBorder(true).SetBorderPadding(1, 1, 5, 5).SetTitle(" [::b]inventory[::-] ")
 
-		char := c.AppStorage[constants.SELECTED_CHARACTER]
+		char := c.Storage.SelectedCharacter
 		if char == nil {
 			flex.AddItem(tview.NewTextView().SetText("no character selected"), 0, 1, false)
 			return flex
 		} else {
-			char := char.(*pbRepo.Character)
 			tv := tview.NewTextView().SetText(fmt.Sprintf("browsing %s's inventory", char.CharacterName))
 			tv.SetBackgroundColor(tcell.ColorSlateGrey).SetBorderPadding(1, 1, 2, 2)
 			flex.AddItem(tv, 3, 1, false).AddItem(tview.NewTextView().SetWrap(true).SetWordWrap(true), 1, 1, false)
@@ -31,7 +29,6 @@ func AddInventoryPage(c *types.SpelltextClient) {
 
 		itemInstances := functions.GetBackpackItems(c).GetItemInstances()
 
-		c.Logger.Info(itemInstances)
 
 		if len(itemInstances) == 0 {
 			flex.AddItem(tview.NewTextView().SetText("no items in backpack").SetWrap(true).SetWordWrap(true), 0, 1, false)

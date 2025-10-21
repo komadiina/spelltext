@@ -64,7 +64,7 @@ func RenderCharactersList(
 		stored = append(stored, character)
 
 		characters.AddItem("-> "+character.CharacterName, "", 0, func() {
-			c.AppStorage[constants.SELECTED_CHARACTER] = character
+			c.Storage.SelectedCharacter = character
 
 			mod := tview.NewModal().
 				SetText(fmt.Sprintf("character: %s", character.CharacterName)).
@@ -74,7 +74,7 @@ func RenderCharactersList(
 				switch buttonIndex {
 				case 0: // select
 					functions.SetSelectedCharacter(character, c)
-					c.AppStorage[constants.SELECTED_CHARACTER] = character
+					c.Storage.SelectedCharacter = character
 					c.App.SetRoot(c.PageManager.Pages, true).EnableMouse(true)
 					selected.SetText(fmt.Sprintf(`+++ currently selected: [orange]%s[""] (lv. %d %s)`, character.CharacterName, character.Level, character.Hero.Name))
 					return
@@ -111,7 +111,6 @@ func RenderCharactersList(
 
 	characters.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		if event.Key() == tcell.KeyCtrlA {
-			c.Logger.Info("create character command pressed.")
 		}
 
 		return event
@@ -223,7 +222,6 @@ func RenderQuickInventoryTree(
 				NewTreeNode(fmt.Sprintf(`[%s]%s[""]`, color, name)).
 				SetSelectable(true)
 			child.SetSelectedFunc(func() {
-				c.Logger.Infof("selected: %v", utils.GetFullItemName(instance.GetItem()))
 				functions.ToggleEquip(
 					instance,
 					c,
@@ -373,7 +371,6 @@ func SetFlexInputHandler(flex *tview.Flex, equipmentPane *tview.Flex, characters
 				c.App.SetFocus(equipmentPane)
 			}
 		} else if event.Key() == tcell.KeyCtrlA {
-			c.Logger.Info("create character command pressed.")
 		}
 		return event
 	})
@@ -398,8 +395,8 @@ func AddCharacterPage(c *types.SpelltextClient) {
 			}
 		}
 
-		charSelected, ok := c.AppStorage[constants.SELECTED_CHARACTER].(*pbRepo.Character)
-		if !ok {
+		charSelected := c.Storage.SelectedCharacter
+		if charSelected == nil {
 			charSelected = &pbRepo.Character{Hero: &pbRepo.Hero{Name: "none selected.."}}
 		}
 		selected := tview.NewTextView().

@@ -26,6 +26,7 @@ import (
 	pbCombat "github.com/komadiina/spelltext/proto/combat"
 	pbGamba "github.com/komadiina/spelltext/proto/gamba"
 	pbInventory "github.com/komadiina/spelltext/proto/inventory"
+	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	pbStore "github.com/komadiina/spelltext/proto/store"
 )
 
@@ -117,7 +118,7 @@ func InitializeClients(c *types.SpelltextClient) {
 	}
 
 	// combat
-	conn, err = grpc.NewClient(host(c.Config.AuthPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err = grpc.NewClient(host(c.Config.CombatPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		c.Logger.Error("failed to init auth client", "reason", err)
 	} else {
@@ -138,6 +139,10 @@ func closeClients(c *types.SpelltextClient) {
 	}
 }
 
+var (
+	fDebugLevel = flag.String("debug", "info", "debug level")
+)
+
 const banner = `
 
                 _ _ _            _   
@@ -153,11 +158,18 @@ const banner = `
 
 func main() {
 	flag.Parse()
-	logging.Init(log.InfoLevel, "client", true)
+	var level log.Level = log.InfoLevel
+	if fDebugLevel == nil {
+		level = log.InfoLevel
+	} else {
+		level, _ = log.ParseLevel(*fDebugLevel)
+	}
+
+	logging.Init(level, "client", true)
 	logger := logging.Get("client", true)
 
 	err := os.Setenv("CONFIG_FILE", "config.yml")
-	logger.Info("loading client config...", "CONFIG_FILE", os.Getenv("CONFIG_FILE"))
+	logger.Debug("loading client config...", "CONFIG_FILE", os.Getenv("CONFIG_FILE"))
 	cfg, err := config.LoadConfig()
 	if err != nil {
 		logger.Error("failed to load config, using default values.", "reason", err)
@@ -183,28 +195,35 @@ func main() {
 		Context:      &ctx,
 		AppStorage:   make(map[string]any),
 		AudioManager: am,
+		Storage: &types.AppStorage{
+			Ministate:         &types.Ministate{},
+			CurrentUser:       &pbRepo.User{},
+			SelectedCharacter: &pbRepo.Character{},
+			SelectedVendor:    &pbRepo.Vendor{},
+			EquipSlots:        nil,
+		},
 	}
 
 	client.AudioManager.PlayBackground(logger)
 
-	logger.Info("initializing clients...")
+	logger.Debug("initializing clients...")
 	InitializeClients(&client)
 	defer closeClients(&client)
-	logger.Info("clients initialized.")
+	logger.Debug("clients initialized.")
 
-	logger.Info("initializng nats...")
+	logger.Debug("initializng nats...")
 	nc, _, err := InitializeNats(cfg)
 	if err != nil {
 		logger.Fatal("failed to init nats/jetstream", "reason", err)
 	}
 
 	client.Nats = nc
-	logger.Info("nats/js initialized.")
+	logger.Debug("nats/js initialized.")
 
-	logger.Info("initializing PageManager factory...")
+	logger.Debug("initializing PageManager factory...")
 	client.PageManager = factory.NewPageManager(client.Logger, client.App)
 	InitializePages(&client)
-	logger.Info("PageManager factory initialized.")
+	logger.Debug("PageManager factory initialized.")
 
 	client.NavigateTo = func(pageKey string) {
 		if client.PageManager.HasPage(pageKey) == false {
@@ -241,11 +260,14 @@ func main() {
 	// cleanup
 	client.Nats.Drain()
 	defer cancel()
+	logger.Debug("client shutdown.")
 
-	logger.Info("client shutdown.")
 	fmt.Print(banner)
-	fmt.Println("> thanks for playing this torturefest")
-	fmt.Println("> a game by ogg/komadiina (https://github.com/komadiina)")
-	fmt.Println("> follow the development at https://github.com/komadiina/spelltext")
-	fmt.Println("~ kthxb")
+	goodbye := `
+		> thanks for playing this torturefest
+		> a game by ogg/komadiina (https://github.com/komadiina)
+		> follow the development at https://github.com/komadiina/spelltext
+		~ kthxb
+	`
+	fmt.Print(goodbye)
 }

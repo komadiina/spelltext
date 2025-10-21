@@ -31,7 +31,7 @@ func InitializePool(s *server.CharacterService, context context.Context, conninf
 			conn.Close(context)
 
 			pool, err := pgxpool.New(context, fmt.Sprintf(
-				"user=%s password=%s host=%s port=%d dbname=%s sslmode=%s pool_max_conns=10 pool_min_conns=3 pool_health_check_period=30s",
+				"user=%s password=%s host=%s port=%d dbname=%s sslmode=%s",
 				s.Config.PgUser,
 				s.Config.PgPass,
 				s.Config.PgHost,

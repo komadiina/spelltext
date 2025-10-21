@@ -4,6 +4,7 @@ import (
 	"github.com/komadiina/spelltext/client/constants"
 	types "github.com/komadiina/spelltext/client/types"
 	"github.com/komadiina/spelltext/client/utils"
+	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	pb "github.com/komadiina/spelltext/proto/store"
 	"github.com/rivo/tview"
 )
@@ -18,11 +19,11 @@ func AddStorePage(c *types.SpelltextClient) {
 		resp, err := c.Clients.StoreClient.ListVendors(*c.Context, &pb.StoreListVendorRequest{})
 		if err != nil {
 			c.Logger.Error(err)
-			m := utils.CreateModal("oops... ", "error: " + err.Error(), c, func() {
-				c.NavigateTo(constants.PAGE_MAINMENU); 
+			m := utils.CreateModal("oops... ", "error: "+err.Error(), c, func() {
+				c.NavigateTo(constants.PAGE_MAINMENU)
 				c.App.SetRoot(c.PageManager.Pages, true).EnableMouse(true)
 			})
-			
+
 			c.App.SetRoot(m, true).EnableMouse(true)
 		}
 
@@ -31,8 +32,10 @@ func AddStorePage(c *types.SpelltextClient) {
 		} else {
 			for _, vendor := range resp.Vendors {
 				list.AddItem("> "+vendor.GetVendorName(), vendor.GetVendorWareDescription()+"\r\n", 0, func() {
-					c.AppStorage[constants.SELECTED_VENDOR_ID] = vendor.GetVendorId()
-					c.AppStorage[constants.SELECTED_VENDOR_NAME] = vendor.GetVendorName()
+					c.Storage.SelectedVendor = &pbRepo.Vendor{
+						Id:   vendor.VendorId,
+						Name: vendor.VendorName,
+					}
 					c.NavigateTo(constants.PAGE_VENDOR)
 				})
 			}

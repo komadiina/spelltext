@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/gdamore/tcell/v2"
-	"github.com/komadiina/spelltext/client/constants"
 	"github.com/komadiina/spelltext/client/types"
 	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	"github.com/rivo/tview"
@@ -38,18 +37,18 @@ func CreateModal(title string, message string, c *types.SpelltextClient, onClose
 }
 
 func UpdateGold(tv *tview.TextView, format string, delta int64, c *types.SpelltextClient) *tview.TextView {
-	char := c.AppStorage[constants.SELECTED_CHARACTER].(*pbRepo.Character)
+	char := c.Storage.SelectedCharacter
 
 	char.Gold = uint64(int64(char.Gold) + delta)
-	c.AppStorage[constants.SELECTED_CHARACTER] = char
+	c.Storage.SelectedCharacter = char
 
 	return tv.SetText(fmt.Sprintf(format, char.Gold))
 }
 
 func UpdateCharacter(old *pbRepo.Character, new *pbRepo.Character, c *types.SpelltextClient) {
-	c.AppStorage[constants.SELECTED_CHARACTER] = new
+	c.Storage.SelectedCharacter = new
 }
 
 func UpdateCharacterFunc(char *pbRepo.Character, c *types.SpelltextClient, f func(*pbRepo.Character) *pbRepo.Character) {
-	c.AppStorage[constants.SELECTED_CHARACTER] = f(char)
+	c.Storage.SelectedCharacter = f(char)
 }

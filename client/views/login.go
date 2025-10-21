@@ -31,8 +31,7 @@ func AddLoginPage(c *types.SpelltextClient) {
 			}).
 			AddButton("login", func() {
 				functions.LoginUser(c, username.GetText(), password)
-				c.AppStorage[constants.CURRENT_USER_NAME] = username.GetText()
-				c.Logger.Info("user logged in", "username", username.GetText())
+				c.Storage.Ministate.Username = username.GetText()
 				functions.SetLastSelectedCharacter(c)
 				c.PageManager.Push(constants.PAGE_MAINMENU, false)
 			})

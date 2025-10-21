@@ -8,7 +8,6 @@ import (
 	"github.com/komadiina/spelltext/client/functions"
 	types "github.com/komadiina/spelltext/client/types"
 	"github.com/komadiina/spelltext/client/utils"
-	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	pbStore "github.com/komadiina/spelltext/proto/store"
 	"github.com/rivo/tview"
 )
@@ -20,7 +19,7 @@ func UpdateBasket(basket *[]*pbStore.Item, tv *tview.TextView, c *types.Spelltex
 	}
 
 	color := "yellow"
-	if totalGold > c.AppStorage[constants.SELECTED_CHARACTER].(*pbRepo.Character).GetGold() {
+	if totalGold > c.Storage.SelectedCharacter.Gold {
 		color = "red"
 	}
 
@@ -31,7 +30,7 @@ func AddVendorPage(c *types.SpelltextClient) {
 	onClose := func() {}
 
 	c.PageManager.RegisterFactory(constants.PAGE_VENDOR, func() tview.Primitive {
-		if c.AppStorage[constants.SELECTED_CHARACTER] == nil {
+		if c.Storage.SelectedCharacter == nil {
 			f := tview.NewFlex().SetFullScreen(true)
 			f.SetBorder(true).SetBorderPadding(1, 1, 5, 5).SetTitle(" [::b]hello?[::-] ")
 
@@ -44,22 +43,24 @@ func AddVendorPage(c *types.SpelltextClient) {
 		basketPrice := tview.NewTextView().SetDynamicColors(true).SetText(`basket price: [yellow]0g[""]`)
 		basketPrice.SetBorder(true).SetBorderPadding(1, 1, 2, 2)
 
-		availableGold := tview.NewTextView().SetDynamicColors(true).SetText(fmt.Sprintf(`available gold: [yellow]%d[""]`, c.AppStorage[constants.SELECTED_CHARACTER].(*pbRepo.Character).GetGold()))
+		availableGold := tview.
+			NewTextView().
+			SetDynamicColors(true).
+			SetText(fmt.Sprintf(`available gold: [yellow]%d[""]`, c.Storage.SelectedCharacter.Gold))
 		availableGold.SetBorder(true).SetBorderPadding(1, 1, 2, 2)
 
 		totals.AddItem(basketPrice, 5, 1, false).AddItem(availableGold, 5, 1, false)
 
 		vendor := tview.NewTextView().
 			SetDynamicColors(true).
-			SetText(fmt.Sprintf(`[blue]%v[""]'s wares`, c.AppStorage[constants.SELECTED_VENDOR_NAME]))
+			SetText(fmt.Sprintf(`[blue]%v[""]'s wares`, c.Storage.SelectedVendor.Name))
 
 		flex := STNewFlex().AddItem(vendor, 1, 1, false).SetDirection(tview.FlexRow)
-		flex.SetBorder(true).SetTitle(fmt.Sprintf(" [::b]vendor - %s[::-] ", c.AppStorage[constants.SELECTED_VENDOR_NAME]))
+		flex.SetBorder(true).SetTitle(fmt.Sprintf(" [::b]vendor - %s[::-] ", c.Storage.SelectedVendor.Name))
 
 		flex.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 			if event.Key() == tcell.KeyCtrlB {
-				c.Logger.Info("cashing out", "len(basket)", len(basket))
-				char := c.AppStorage[constants.SELECTED_CHARACTER].(*pbRepo.Character)
+				char := c.Storage.SelectedCharacter
 				if err := functions.BuyItems(basket, char, c); err != nil {
 					c.Logger.Error(err)
 				}
@@ -71,7 +72,7 @@ func AddVendorPage(c *types.SpelltextClient) {
 					})
 				}()
 
-				char = c.AppStorage[constants.SELECTED_CHARACTER].(*pbRepo.Character)
+				char = c.Storage.SelectedCharacter
 				m := utils.CreateModal(
 					"purchase successful",
 					fmt.Sprintf("you've bought %d items (remaining gold: %d)", len(basket), char.GetGold()),
@@ -101,7 +102,7 @@ func AddVendorPage(c *types.SpelltextClient) {
 		resp, err := c.Clients.StoreClient.ListVendorItems(
 			*c.Context,
 			&pbStore.StoreListVendorItemRequest{
-				VendorId: c.AppStorage[constants.SELECTED_VENDOR_ID].(uint64),
+				VendorId: c.Storage.SelectedVendor.Id,
 			},
 		)
 

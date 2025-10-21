@@ -12,6 +12,7 @@ import (
 	pbCombat "github.com/komadiina/spelltext/proto/combat"
 	pbGamba "github.com/komadiina/spelltext/proto/gamba"
 	pbInventory "github.com/komadiina/spelltext/proto/inventory"
+	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	pbStore "github.com/komadiina/spelltext/proto/store"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 	"github.com/nats-io/nats.go"
@@ -25,6 +26,7 @@ type SpelltextClient struct {
 	Nats         *nats.Conn
 	App          *tview.Application
 	AppStorage   map[string]any
+	Storage      *AppStorage
 	PageManager  *factory.PageManager
 	User         *SpelltextUser
 	Clients      *Clients
@@ -33,6 +35,18 @@ type SpelltextClient struct {
 	AudioManager *audio.Manager
 
 	NavigateTo func(pageKey string)
+}
+
+type Ministate struct {
+	Username string
+}
+
+type AppStorage struct {
+	Ministate         *Ministate
+	CurrentUser       *pbRepo.User
+	SelectedCharacter *pbRepo.Character
+	SelectedVendor    *pbRepo.Vendor
+	EquipSlots        []*pbRepo.EquipSlot
 }
 
 type SpelltextUser struct {

@@ -1,7 +1,8 @@
-- logger: refactor to accept Writer object as an Init() input parameter
-- charserver: add equipment introspective
-  - fix character update on DeleteCharacter invocation
-- combatserver: implement 1v1 turn-based player-npc combat 
-- progserver: implement questing system
-- system: loki + grafana for logging
-- final: proper database pre-seed, apply persistence
+- ~~logger: refactor to accept Writer object as an Init() input parameter~~
+- ~~charserver: add equipment introspective~~
+  - ~~fix character update on DeleteCharacter invocation~~
+- combatserver: **implement 1v1 turn-based player-npc combat**
+  - table `npc_loot_tables` - use it instead of embedded one-item-per-npc approach (in table `npc_templates`)
+- ~~progserver: implement questing system~~ - delayed further down the roadmap
+- system: loki + grafana for logging - **urgent**
+- ~~final: proper database pre-seed, apply persistence~~

@@ -15,7 +15,7 @@ import (
 )
 
 func SendMessage(content string, c *types.SpelltextClient) {
-	resp, err := c.Clients.ChatClient.SendChatMessage(
+	_, err := c.Clients.ChatClient.SendChatMessage(
 		*c.Context, &pb.SendChatMessageRequest{
 			Sender:  c.User.Username,
 			Message: content,
@@ -25,8 +25,6 @@ func SendMessage(content string, c *types.SpelltextClient) {
 		c.Logger.Error("failed to send message", "reason", err)
 		os.Exit(1)
 	}
-
-	c.Logger.Info(fmt.Sprintf("Received response from %s.", resp.GetSender()), "success", resp.GetSuccess())
 }
 
 func JoinChatroom(c *types.SpelltextClient) {
@@ -57,8 +55,6 @@ func AddChatPage(c *types.SpelltextClient) {
 				c.Logger.Error("failed to unmarshal message", "reason", err)
 				return
 			}
-			c.Logger.Info(fmt.Sprintf("Received message from %s: %s", chatMsg.Sender, chatMsg.Message))
-
 			c.App.QueueUpdateDraw(func() {
 				fmt.Fprintf(chat, `[%s]%s[""]: %s%s`, "#EBDBB2", tview.Escape("["+chatMsg.Sender+"]"), chatMsg.Message, "\n")
 				chat.ScrollToEnd()

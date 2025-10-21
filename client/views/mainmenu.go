@@ -6,7 +6,6 @@ import (
 	"github.com/komadiina/spelltext/client/constants"
 	types "github.com/komadiina/spelltext/client/types"
 	"github.com/komadiina/spelltext/client/utils"
-	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	"github.com/rivo/tview"
 )
 
@@ -66,8 +65,8 @@ func AddMainmenuPage(c *types.SpelltextClient) {
 			SetDynamicColors(true).SetWrap(true).SetWordWrap(true)
 		tv.SetBorder(true).SetBorderPadding(0, 0, 1, 1)
 
-		if char, ok := c.AppStorage[constants.SELECTED_CHARACTER]; ok {
-			char := char.(*pbRepo.Character)
+		if c.Storage.SelectedCharacter != nil {
+			char := c.Storage.SelectedCharacter
 			tv.SetText(fmt.Sprintf(`[selected character]%s> %s[""] - %s`, "\n", char.CharacterName, char.Hero.Name))
 		} else {
 			tv.SetText(`no character selected -- select one from the [blue]character[""] page`)

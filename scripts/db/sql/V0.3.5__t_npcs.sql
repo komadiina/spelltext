@@ -6,6 +6,7 @@ create table npcs (
 
     health_multiplier float not null default 1.0,
     damage_multiplier float not null default 1.0,
+    -- level int not null, -- not used here, but embedded by combatservice within minlevel <> maxlevel
 
     foreign key (template_id) references npc_templates (id)
 );
