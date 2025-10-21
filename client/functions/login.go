@@ -3,8 +3,8 @@ package functions
 import (
 	"github.com/komadiina/spelltext/client/constants"
 	"github.com/komadiina/spelltext/client/types"
-	pbArmory "github.com/komadiina/spelltext/proto/armory"
 	pbAuth "github.com/komadiina/spelltext/proto/auth"
+	pbChar "github.com/komadiina/spelltext/proto/char"
 )
 
 func LoginUser(c *types.SpelltextClient, username, password string) {
@@ -19,7 +19,7 @@ func LoginUser(c *types.SpelltextClient, username, password string) {
 }
 
 func SetLastSelectedCharacter(c *types.SpelltextClient) {
-	req := &pbArmory.GetLastSelectedCharacterRequest{
+	req := &pbChar.GetLastSelectedCharacterRequest{
 		Username: c.AppStorage[constants.CURRENT_USER_NAME].(string),
 	}
 

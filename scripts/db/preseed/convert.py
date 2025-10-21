@@ -40,6 +40,7 @@ chest_sql = []
 
 item_template_id = 1
 for slot, items in data.items():
+    item_sql.append(f"-- {slot}")
     equip_slot_id = slot_ids[slot]
     item_type_id = 1 if slot in armor_slots else 2
 
@@ -51,7 +52,7 @@ for slot, items in data.items():
         strp = it["strength_points"]
         sp = it["spellpower_points"]
         bonus_damage = random.randint(0, 10)
-        bonus_armor = random.randint(-10, 10)
+        bonus_armor = random.randint(-5, 20)
 
         sql_template = (
             f"INSERT INTO item_templates (name, item_type_id, equip_slot_id, gold_price) "

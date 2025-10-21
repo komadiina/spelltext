@@ -21,13 +21,11 @@ type ChatService struct {
 	Logger       *logging.Logger
 }
 
-func publishMessage(s *ChatService, msg *pb.ChatMessage) error {
+func (s *ChatService) publishMessage(msg *pb.ChatMessage) error {
 	js, err := s.Nats.JetStream()
 	if err != nil {
 		return err
 	}
-
-	msg.Message = fmt.Sprintf("[%s]: %s\n", msg.Sender, msg.Message)
 
 	data, err := proto.Marshal(msg)
 	if err != nil {
@@ -51,12 +49,11 @@ func publishMessage(s *ChatService, msg *pb.ChatMessage) error {
 // Should broadcast to all users
 func (s *ChatService) JoinChatroom(ctx context.Context, req *pb.JoinChatroomMessageRequest) (*pb.JoinChatroomMessageResponse, error) {
 	s.Logger.Info(fmt.Sprintf("%s joined the chatroom.", req.GetUsername()))
-	err := publishMessage(s, &pb.ChatMessage{Sender: "chatserver", Message: fmt.Sprintf("%s joined the chatroom.", req.GetUsername())})
+	err := s.publishMessage(&pb.ChatMessage{Sender: "chatserver", Message: fmt.Sprintf("%s joined the chatroom.", req.GetUsername())})
 
 	if err != nil {
-		return &pb.JoinChatroomMessageResponse{
-			Success: false,
-		}, err
+		s.Logger.Error(err)
+		return nil, err
 	}
 
 	return &pb.JoinChatroomMessageResponse{
@@ -66,11 +63,10 @@ func (s *ChatService) JoinChatroom(ctx context.Context, req *pb.JoinChatroomMess
 
 // Should broadcast to all users
 func (s *ChatService) LeaveChatroom(ctx context.Context, req *pb.LeaveChatroomMessageRequest) (*pb.LeaveChatroomMessageResponse, error) {
-	err := publishMessage(s, &pb.ChatMessage{Sender: req.GetUsername(), Message: fmt.Sprintf("%s left the chatroom.", req.GetUsername())})
+	err := s.publishMessage(&pb.ChatMessage{Sender: req.GetUsername(), Message: fmt.Sprintf("%s left the chatroom.", req.GetUsername())})
 	if err != nil {
-		return &pb.LeaveChatroomMessageResponse{
-			Success: false,
-		}, err
+		s.Logger.Error(err)
+		return nil, err
 	}
 
 	return &pb.LeaveChatroomMessageResponse{
@@ -82,7 +78,7 @@ func (s *ChatService) SendChatMessage(ctx context.Context, req *pb.SendChatMessa
 	s.Logger.Info(fmt.Sprintf(fmt.Sprintf("[#%d] Received message from %s: %s", s.sentMessages, req.Sender, req.Message)))
 
 	msg := &pb.ChatMessage{Sender: req.Sender, Message: req.Message, Timestamp: uint64(time.Now().Unix())}
-	err := publishMessage(s, msg)
+	err := s.publishMessage(msg)
 
 	if err != nil {
 		s.Logger.Error("failed to publish message", err)

@@ -10,8 +10,8 @@ import (
 	"github.com/charmbracelet/log"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
-	pbArmory "github.com/komadiina/spelltext/proto/armory"
 	pb "github.com/komadiina/spelltext/proto/auth"
+	pbChar "github.com/komadiina/spelltext/proto/char"
 	"github.com/komadiina/spelltext/server/auth/config"
 	"github.com/komadiina/spelltext/server/auth/server"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
@@ -45,7 +45,7 @@ func InitializePool(s *server.AuthService, context context.Context, conninfo str
 			conn.Close(context)
 
 			pool, err := pgxpool.New(context, fmt.Sprintf(
-				"postgres://%s:%s@%s:%d/%s?sslmode=%s",
+				"user=%s password=%s host=%s port=%d dbname=%s sslmode=%s pool_max_conns=10 pool_min_conns=3 pool_health_check_period=30s",
 				s.Config.PgUser,
 				s.Config.PgPass,
 				s.Config.PgHost,
@@ -130,12 +130,12 @@ func main() {
 	}
 
 	ss.Connections = &server.Connections{
-		Armory: clientConn,
+		Character: clientConn,
 	}
 	ss.Clients = &server.Clients{
-		Armory: pbArmory.NewCharacterClient(clientConn),
+		Character: pbChar.NewCharacterClient(clientConn),
 	}
-	defer ss.Connections.Armory.Close()
+	defer ss.Connections.Character.Close()
 
 	conninfo := fmt.Sprintf(
 		"postgres://%s:%s@%s:%d/%s?sslmode=%s",

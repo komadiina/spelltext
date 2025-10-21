@@ -19,7 +19,7 @@ func AddMainmenuPage(c *types.SpelltextClient) {
 		list := tview.NewList()
 		list.
 			SetHighlightFullLine(true).
-			AddItem("- armory", "preview your characters", 'a', func() { c.NavigateTo(constants.PAGE_ARMORY) }).
+			AddItem("- character", "preview your characters", 'a', func() { c.NavigateTo(constants.PAGE_CHARACTER) }).
 			AddItem("- inventory", "peek at what's in your bags", 'i', func() { c.NavigateTo(constants.PAGE_INVENTORY) }).
 			AddItem("- progress", "see what you've accomplished", 'p', func() { c.NavigateTo(constants.PAGE_PROGRESS) }).
 			AddItem("- combat", "THE proving grounds", 'c', func() { c.NavigateTo(constants.PAGE_COMBAT) }).
@@ -29,13 +29,13 @@ func AddMainmenuPage(c *types.SpelltextClient) {
 			AddItem("- quit", "done for today?", 'q', func() { c.App.Stop() })
 		list.SetBorder(true).SetBorderPadding(1, 1, 5, 5)
 
-		updates := tview.NewBox().SetTitle(" updates ").SetBorder(true).SetBorderPadding(1, 1, 5, 5)
+		updates := tview.NewBox().SetTitle(" [::b]updates[::-] ").SetBorder(true).SetBorderPadding(1, 1, 5, 5)
 
 		guide := tview.NewFlex().
 			SetDirection(tview.FlexColumn).
 			AddItem(tview.NewTextView().SetText(" keymap legend: "), 0, 1, false)
 
-		characters, len := utils.AddNavGuide("a", "armory")
+		characters, len := utils.AddNavGuide("a", "character")
 		guide.AddItem(characters, len, 1, false)
 
 		inventory, len := utils.AddNavGuide("i", "inventory")
@@ -70,7 +70,7 @@ func AddMainmenuPage(c *types.SpelltextClient) {
 			char := char.(*pbRepo.Character)
 			tv.SetText(fmt.Sprintf(`[selected character]%s> %s[""] - %s`, "\n", char.CharacterName, char.Hero.Name))
 		} else {
-			tv.SetText(`no character selected -- select one from the [blue]armory[""] page`)
+			tv.SetText(`no character selected -- select one from the [blue]character[""] page`)
 		}
 
 		f2.AddItem(
@@ -89,7 +89,7 @@ func AddMainmenuPage(c *types.SpelltextClient) {
 			AddItem(guide, 3, 1, false).
 			SetFullScreen(true)
 
-		flex.SetBorder(true).SetBorderPadding(1, 1, 5, 5).SetTitle(" menu ")
+		flex.SetBorder(true).SetBorderPadding(1, 1, 5, 5).SetTitle(" [::b]menu[::-] ")
 
 		return flex
 	}, nil, func() { /* noop */ })

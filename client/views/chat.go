@@ -1,7 +1,6 @@
 package views
 
 import (
-	"context"
 	"fmt"
 	"os"
 	"strings"
@@ -12,14 +11,12 @@ import (
 	pb "github.com/komadiina/spelltext/proto/chat"
 	"github.com/nats-io/nats.go"
 	"github.com/rivo/tview"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/protobuf/proto"
 )
 
-func SendMessage(content string, client pb.ChatClient, ctx context.Context, c *types.SpelltextClient) {
-	resp, err := client.SendChatMessage(
-		ctx, &pb.SendChatMessageRequest{
+func SendMessage(content string, c *types.SpelltextClient) {
+	resp, err := c.Clients.ChatClient.SendChatMessage(
+		*c.Context, &pb.SendChatMessageRequest{
 			Sender:  c.User.Username,
 			Message: content,
 		})
@@ -32,22 +29,20 @@ func SendMessage(content string, client pb.ChatClient, ctx context.Context, c *t
 	c.Logger.Info(fmt.Sprintf("Received response from %s.", resp.GetSender()), "success", resp.GetSuccess())
 }
 
-func JoinChatroom(ctx context.Context, client pb.ChatClient, c *types.SpelltextClient) {
-	client.JoinChatroom(ctx, &pb.JoinChatroomMessageRequest{Username: c.User.Username})
+func JoinChatroom(c *types.SpelltextClient) {
+	c.Clients.ChatClient.JoinChatroom(*c.Context, &pb.JoinChatroomMessageRequest{Username: c.User.Username})
 }
 
-func LeaveChatroom(ctx context.Context, client pb.ChatClient, c *types.SpelltextClient) {
-	client.LeaveChatroom(ctx, &pb.LeaveChatroomMessageRequest{Username: c.User.Username})
+func LeaveChatroom(c *types.SpelltextClient) {
+	c.Clients.ChatClient.LeaveChatroom(*c.Context, &pb.LeaveChatroomMessageRequest{Username: c.User.Username})
 }
 
 func AddChatPage(c *types.SpelltextClient) {
-	onClose := func() {}
-
 	c.PageManager.RegisterFactory(constants.PAGE_CHAT, func() tview.Primitive {
 		chat := tview.NewTextView().
 			SetTextAlign(tview.AlignLeft).
-			SetRegions(false).
 			ScrollToEnd()
+		chat.SetDynamicColors(true)
 
 		js, err := c.Nats.JetStream()
 		if err != nil {
@@ -65,7 +60,7 @@ func AddChatPage(c *types.SpelltextClient) {
 			c.Logger.Info(fmt.Sprintf("Received message from %s: %s", chatMsg.Sender, chatMsg.Message))
 
 			c.App.QueueUpdateDraw(func() {
-				fmt.Fprintf(chat, fmt.Sprint(chatMsg.Message))
+				fmt.Fprintf(chat, `[%s]%s[""]: %s%s`, "#EBDBB2", tview.Escape("["+chatMsg.Sender+"]"), chatMsg.Message, "\n")
 				chat.ScrollToEnd()
 			})
 		})
@@ -74,18 +69,7 @@ func AddChatPage(c *types.SpelltextClient) {
 			os.Exit(1)
 		}
 
-		conn, err := grpc.NewClient("localhost:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
-		if err != nil {
-			c.Logger.Error("failed to dial server", "reason", err)
-			os.Exit(1)
-		}
-
-		c.Logger.Info("connected to server!", "addr", conn.Target())
-		c.Logger.Info("initializing nats jetstream subscription...")
-
-		client := pb.NewChatClient(conn)
-		ctx, cancelFunc := context.WithCancel(context.Background())
-		JoinChatroom(ctx, client, c)
+		JoinChatroom(c)
 
 		input := tview.NewInputField().
 			SetLabel("> ")
@@ -94,20 +78,25 @@ func AddChatPage(c *types.SpelltextClient) {
 			sanitized := strings.Trim(input.GetText(), "\r\n")
 
 			if key == tcell.KeyEnter && sanitized != "" {
-				if sanitized == "/exit" {
+				switch sanitized {
+				case "/exit":
 					c.PageManager.Pop()
+					return
+				case "/clear":
+					chat.Clear()
+					input.SetText("")
 					return
 				}
 
-				SendMessage(input.GetText(), client, ctx, c)
+				SendMessage(input.GetText(), c)
 				input.SetText("")
 			} else {
 				input.SetText("")
 			}
 		})
 
-		chat.SetBorder(true).SetTitle(" chat ")
-		input.SetBorder(true).SetTitle(" input ")
+		chat.SetBorder(true).SetTitle(" [::b]chat[::-] ")
+		input.SetBorder(true).SetTitle(" [::b]input[::-] ")
 
 		flex := tview.NewFlex().
 			SetDirection(tview.FlexRow).
@@ -115,14 +104,6 @@ func AddChatPage(c *types.SpelltextClient) {
 			AddItem(input, 3, 1, true).
 			SetFullScreen(true)
 
-		// register cleanup method
-		onClose = func() {
-			fmt.Println("onClose")
-			LeaveChatroom(ctx, client, c)
-			cancelFunc()
-			conn.Close()
-		}
-
 		return flex
-	}, nil, onClose)
+	}, nil, func() { LeaveChatroom(c) })
 }

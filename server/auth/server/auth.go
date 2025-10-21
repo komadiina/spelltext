@@ -2,14 +2,12 @@ package server
 
 import (
 	"context"
-	"fmt"
-	"time"
+	"strings"
 
 	sq "github.com/Masterminds/squirrel"
-	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
-	pbArmory "github.com/komadiina/spelltext/proto/armory"
 	pb "github.com/komadiina/spelltext/proto/auth"
+	pbChar "github.com/komadiina/spelltext/proto/char"
 	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	"github.com/komadiina/spelltext/server/auth/config"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
@@ -17,11 +15,11 @@ import (
 )
 
 type Clients struct {
-	Armory pbArmory.CharacterClient
+	Character pbChar.CharacterClient
 }
 
 type Connections struct {
-	Armory *grpc.ClientConn
+	Character *grpc.ClientConn
 }
 
 type AuthService struct {
@@ -33,60 +31,10 @@ type AuthService struct {
 	Connections *Connections
 }
 
-func tryConnect(s *AuthService, context context.Context, conninfo string, backoff time.Duration, maxRetries int, boFormula func(time.Duration) time.Duration) (pgx.Conn, error) {
-	try := 1
-	for {
-		conn, err := pgx.Connect(context, conninfo)
+func (s *AuthService) setDefaultCharacter(u *pbRepo.User, ctx context.Context) (*pbRepo.Character, error) {
+	req := &pbChar.ListCharactersRequest{Username: u.GetUsername()}
 
-		if err != nil && try >= maxRetries {
-			// conn not established, max retries exceeded
-			s.Logger.Fatal(err)
-		} else if err == nil && try < maxRetries {
-			// conn established within maxRetries
-			s.Logger.Info("pgpool connection established")
-			return *conn, nil
-		} else if err != nil && try < maxRetries {
-			// conn not established, backoff
-			s.Logger.Warn("failed to establish database connection, backing off...", "reason", err, "backoff_seconds", backoff.Seconds())
-			time.Sleep(backoff)
-			backoff = boFormula(backoff)
-			try++
-		}
-	}
-}
-
-func (s *AuthService) GetConn(ctx context.Context) *pgx.Conn {
-	conninfo := fmt.Sprintf(
-		"postgres://%s:%s@%s:%d/%s?sslmode=%s",
-		s.Config.PgUser,
-		s.Config.PgPass,
-		s.Config.PgHost,
-		s.Config.PgPort,
-		s.Config.PgDbName,
-		s.Config.PgSSLMode,
-	)
-
-	backoff := time.Second * 5 // secs
-	time.Sleep(backoff)
-
-	conn, err := tryConnect(s, ctx, conninfo, backoff, 5, func(backoff time.Duration) time.Duration {
-		backoff = backoff + time.Second*5
-		return backoff
-	})
-
-	if err != nil {
-		return nil
-	}
-
-	return &conn
-}
-
-func (s *AuthService) setDefaultCharacter(u *pbRepo.User) (*pbRepo.Character, error) {
-	req := &pbArmory.ListCharactersRequest{Username: u.GetUsername()}
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
-	available, err := s.Clients.Armory.ListCharacters(ctx, req)
+	available, err := s.Clients.Character.ListCharacters(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -95,8 +43,10 @@ func (s *AuthService) setDefaultCharacter(u *pbRepo.User) (*pbRepo.Character, er
 	if len(available.Characters) == 0 {
 		// dont care, create random character
 		hero := &pbRepo.Hero{Id: 1}
-		req := &pbArmory.CreateCharacterRequest{Hero: hero, Name: u.GetUsername(), UserId: u.GetId()}
-		resp, err := s.Clients.Armory.CreateCharacter(ctx, req)
+		name := strings.ToUpper(u.GetUsername()[0:1]) + u.GetUsername()[1:]
+		req := &pbChar.CreateCharacterRequest{Hero: hero, Name: name, UserId: u.GetId()}
+
+		resp, err := s.Clients.Character.CreateCharacter(ctx, req)
 		if err != nil {
 			return nil, err
 		}
@@ -160,7 +110,7 @@ func (s *AuthService) Login(ctx context.Context, req *pb.LoginRequest) (*pb.Logi
 	var character *pbRepo.Character
 
 	if u.SelectedCharacterId == 0 {
-		char, err := s.setDefaultCharacter(u)
+		char, err := s.setDefaultCharacter(u, ctx)
 
 		if err != nil {
 			s.Logger.Error(err)
@@ -170,9 +120,9 @@ func (s *AuthService) Login(ctx context.Context, req *pb.LoginRequest) (*pb.Logi
 		u.SelectedCharacterId = char.GetCharacterId()
 		character = char
 	} else {
-		req := &pbArmory.GetCharacterRequest{CharacterId: u.SelectedCharacterId}
+		req := &pbChar.GetCharacterRequest{CharacterId: u.SelectedCharacterId}
 
-		resp, err := s.Clients.Armory.GetCharacter(ctx, req)
+		resp, err := s.Clients.Character.GetCharacter(ctx, req)
 		if err != nil {
 			s.Logger.Error(err)
 			return nil, err

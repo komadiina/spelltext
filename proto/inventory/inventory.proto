@@ -40,7 +40,7 @@ message ListBackpackItemsRequest {
 }
 
 message ListBackpackItemsResponse {
-  repeated repo.Item items = 1;
+  repeated repo.ItemInstance item_instances = 1;
 }
 
 service Inventory {

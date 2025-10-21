@@ -4,7 +4,7 @@
 // 	protoc        v6.32.1
 // source: auth/auth.proto
 
-package armory
+package auth
 
 import (
 	repo "github.com/komadiina/spelltext/proto/repo"
@@ -258,7 +258,7 @@ var File_auth_auth_proto protoreflect.FileDescriptor
 
 const file_auth_auth_proto_rawDesc = "" +
 	"\n" +
-	"\x0fauth/auth.proto\x12\x06armory\x1a\x0frepo/repo.proto\"N\n" +
+	"\x0fauth/auth.proto\x12\x04auth\x1a\x0frepo/repo.proto\"N\n" +
 	"\fLoginRequest\x12\x1a\n" +
 	"\busername\x18\x01 \x01(\tR\busername\x12\"\n" +
 	"\fpasswordHash\x18\x02 \x01(\tR\fpasswordHash\"x\n" +
@@ -275,10 +275,10 @@ const file_auth_auth_proto_rawDesc = "" +
 	"\x10RegisterResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x1e\n" +
 	"\x04user\x18\x02 \x01(\v2\n" +
-	".repo.UserR\x04user2{\n" +
-	"\x04Auth\x124\n" +
-	"\x05Login\x12\x14.armory.LoginRequest\x1a\x15.armory.LoginResponse\x12=\n" +
-	"\bRegister\x12\x17.armory.RegisterRequest\x1a\x18.armory.RegisterResponseB:Z8github.com/komadiina/spelltext/proto/proto/armory;armoryb\x06proto3"
+	".repo.UserR\x04user2s\n" +
+	"\x04Auth\x120\n" +
+	"\x05Login\x12\x12.auth.LoginRequest\x1a\x13.auth.LoginResponse\x129\n" +
+	"\bRegister\x12\x15.auth.RegisterRequest\x1a\x16.auth.RegisterResponseB6Z4github.com/komadiina/spelltext/proto/proto/auth;authb\x06proto3"
 
 var (
 	file_auth_auth_proto_rawDescOnce sync.Once
@@ -294,21 +294,21 @@ func file_auth_auth_proto_rawDescGZIP() []byte {
 
 var file_auth_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_auth_auth_proto_goTypes = []any{
-	(*LoginRequest)(nil),     // 0: armory.LoginRequest
-	(*LoginResponse)(nil),    // 1: armory.LoginResponse
-	(*RegisterRequest)(nil),  // 2: armory.RegisterRequest
-	(*RegisterResponse)(nil), // 3: armory.RegisterResponse
+	(*LoginRequest)(nil),     // 0: auth.LoginRequest
+	(*LoginResponse)(nil),    // 1: auth.LoginResponse
+	(*RegisterRequest)(nil),  // 2: auth.RegisterRequest
+	(*RegisterResponse)(nil), // 3: auth.RegisterResponse
 	(*repo.User)(nil),        // 4: repo.User
 	(*repo.Character)(nil),   // 5: repo.Character
 }
 var file_auth_auth_proto_depIdxs = []int32{
-	4, // 0: armory.LoginResponse.user:type_name -> repo.User
-	5, // 1: armory.LoginResponse.character:type_name -> repo.Character
-	4, // 2: armory.RegisterResponse.user:type_name -> repo.User
-	0, // 3: armory.Auth.Login:input_type -> armory.LoginRequest
-	2, // 4: armory.Auth.Register:input_type -> armory.RegisterRequest
-	1, // 5: armory.Auth.Login:output_type -> armory.LoginResponse
-	3, // 6: armory.Auth.Register:output_type -> armory.RegisterResponse
+	4, // 0: auth.LoginResponse.user:type_name -> repo.User
+	5, // 1: auth.LoginResponse.character:type_name -> repo.Character
+	4, // 2: auth.RegisterResponse.user:type_name -> repo.User
+	0, // 3: auth.Auth.Login:input_type -> auth.LoginRequest
+	2, // 4: auth.Auth.Register:input_type -> auth.RegisterRequest
+	1, // 5: auth.Auth.Login:output_type -> auth.LoginResponse
+	3, // 6: auth.Auth.Register:output_type -> auth.RegisterResponse
 	5, // [5:7] is the sub-list for method output_type
 	3, // [3:5] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name

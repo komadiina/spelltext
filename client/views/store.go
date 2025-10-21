@@ -46,7 +46,7 @@ func AddStorePage(c *types.SpelltextClient) {
 			AddItem(tview.NewTextView().SetText("weapons, armor, consumables, vanities..."), 1, 1, false).
 			SetFullScreen(true)
 
-		flex.SetBorder(true).SetBorderPadding(1, 1, 5, 5).SetTitle(" store ")
+		flex.SetBorder(true).SetBorderPadding(1, 1, 5, 5).SetTitle(" [::b]store[::-] ")
 
 		return flex
 	}, nil, onClose)

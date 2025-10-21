@@ -19,14 +19,14 @@ func AddGambaPage(c *types.SpelltextClient) {
 		flex := tview.NewFlex().
 			SetDirection(tview.FlexRow).
 			SetFullScreen(true)
-		flex.SetBorder(true).SetBorderPadding(1, 1, 5, 5).SetTitle(" gamba ")
+		flex.SetBorder(true).SetBorderPadding(1, 1, 5, 5).SetTitle(" [::b]gamba[::-] ")
 
 		if c.AppStorage[constants.SELECTED_CHARACTER] == nil {
 			f := tview.NewFlex().SetFullScreen(true)
 			f.SetBorder(true).SetBorderPadding(1, 1, 5, 5).SetTitle(" hello? ")
 
 			return f.AddItem(tview.NewTextView().
-				SetText("no character selected. select a character from the armory page, and come back... dummy"), 0, 1, false)
+				SetText("no character selected. select a character from the character page, and come back... dummy"), 0, 1, false)
 		}
 
 		resp, err := functions.GetGambaChests(c)

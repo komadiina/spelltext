@@ -38,7 +38,7 @@ func AddLoginPage(c *types.SpelltextClient) {
 			})
 
 		flex := STNewFlex().AddItem(form, 0, 1, true)
-		flex.SetBorder(true).SetTitle(" login ")
+		flex.SetBorder(true).SetTitle(" [::b]login[::-] ")
 
 		return flex
 	}, nil, func() { /* noop */ })

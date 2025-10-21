@@ -3,14 +3,12 @@ package server
 import (
 	"context"
 	"fmt"
-	"time"
 
-	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	sq "github.com/Masterminds/squirrel"
 
-	pb "github.com/komadiina/spelltext/proto/armory"
+	pb "github.com/komadiina/spelltext/proto/char"
 	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	"github.com/komadiina/spelltext/server/character/config"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
@@ -21,56 +19,6 @@ type CharacterService struct {
 	DbPool *pgxpool.Pool
 	Config *config.Config
 	Logger *logging.Logger
-}
-
-func tryConnect(s *CharacterService, context context.Context, conninfo string, backoff time.Duration, maxRetries int, boFormula func(time.Duration) time.Duration) (pgx.Conn, error) {
-	attempt := 1
-	for {
-		conn, err := pgx.Connect(context, conninfo)
-
-		if err != nil && attempt >= maxRetries {
-			// conn not established, max retries exceeded
-			s.Logger.Fatal(err)
-		} else if err == nil && attempt < maxRetries {
-			// conn established within maxRetries
-			s.Logger.Info("pgpool connection established")
-			return *conn, nil
-		} else if err != nil && attempt < maxRetries {
-			// conn not established, backoff
-			s.Logger.Warn("failed to establish database connection, backing off...", "reason", err, "backoff_seconds", backoff.Seconds())
-			time.Sleep(backoff)
-			backoff = boFormula(backoff)
-			attempt++
-		}
-	}
-}
-
-func (s *CharacterService) GetConn(ctx context.Context) *pgx.Conn {
-	conninfo := fmt.Sprintf(
-		"postgres://%s:%s@%s:%d/%s?sslmode=%s",
-		s.Config.PgUser,
-		s.Config.PgPass,
-		s.Config.PgHost,
-		s.Config.PgPort,
-		s.Config.PgDbName,
-		s.Config.PgSSLMode,
-	)
-
-	backoff := time.Second * 5 // secs
-	time.Sleep(backoff)
-
-	conn, err := tryConnect(s, ctx, conninfo, backoff, 5, func(backoff time.Duration) time.Duration {
-		backoff = backoff + time.Second*5
-		return backoff
-	})
-
-	if err != nil {
-		return nil
-	} else {
-		s.Logger.Error(err)
-	}
-
-	return &conn
 }
 
 func (s *CharacterService) ListHeroes(ctx context.Context, req *pb.ListHeroesRequest) (*pb.ListHeroesResponse, error) {
@@ -271,13 +219,12 @@ func (s *CharacterService) GetLastSelectedCharacter(ctx context.Context, req *pb
 			&h.StrengthPerLevel,
 			&h.SpellpowerPerLevel,
 		)
-
-		c.Hero = h
-
 		if err != nil {
 			s.Logger.Error(err)
 			return nil, err
 		}
+
+		c.Hero = h
 
 		characters = append(characters, c)
 	}
@@ -342,11 +289,12 @@ func (s *CharacterService) GetCharacter(ctx context.Context, req *pb.GetCharacte
 }
 
 func (s *CharacterService) CreateCharacter(ctx context.Context, req *pb.CreateCharacterRequest) (*pb.CreateCharacterResponse, error) {
-	sql, _, err := sq.
+	sql, args, err := sq.
 		Insert("characters").
-		Columns("user_id", "character_name", "hero_id", "level", "experience", "gold", "tokens", "points_health", "points_power", "points_strength", "points_spellpower").
-		Values(req.GetUserId(), req.GetName(), req.GetHero().GetId(), 1, 0, 0, 0, 0, 0, 0, 0).
+		Columns("user_id", "character_name", "hero_id", "level", "exp", "gold", "tokens", "points_health", "points_power", "points_strength", "points_spellpower").
+		Values(req.GetUserId(), req.GetName(), req.GetHero().GetId(), 1, 1, 50, 0, 0, 0, 0, 0).
 		Suffix("RETURNING character_id").
+		PlaceholderFormat(sq.Dollar).
 		ToSql()
 
 	if err != nil {
@@ -354,7 +302,7 @@ func (s *CharacterService) CreateCharacter(ctx context.Context, req *pb.CreateCh
 		return nil, err
 	}
 
-	row := s.DbPool.QueryRow(ctx, sql)
+	row := s.DbPool.QueryRow(ctx, sql, args...)
 
 	var characterId int64
 	err = row.Scan(&characterId)
@@ -405,6 +353,47 @@ func (s *CharacterService) CreateCharacter(ctx context.Context, req *pb.CreateCh
 
 	c.Hero = h
 
+	// create empty equipped slots for character
+	// get equipment slots
+	sql, _, err = sq.Select("*").From("equip_slots").ToSql()
+
+	if err != nil {
+		s.Logger.Error(err)
+		return nil, err
+	}
+
+	rows, err := s.DbPool.Query(ctx, sql)
+	if err != nil {
+		s.Logger.Error(err)
+		return nil, err
+	}
+
+	var equipSlots []*pbRepo.EquipSlot
+	for rows.Next() {
+		es := &pbRepo.EquipSlot{}
+
+		err := rows.Scan(
+			&es.Id,
+			&es.Code,
+			&es.Name,
+		)
+
+		if err != nil {
+			s.Logger.Error(err)
+			return nil, err
+		}
+
+		equipSlots = append(equipSlots, es)
+	}
+
+	for _, equipSlot := range equipSlots {
+		_, err = s.DbPool.Exec(ctx, "INSERT INTO character_equipments (character_id, equip_slot_id) VALUES ($1, $2)", characterId, equipSlot.Id)
+		if err != nil {
+			s.Logger.Error(err)
+			return nil, err
+		}
+	}
+
 	return &pb.CreateCharacterResponse{Success: true, Message: "character created.", Character: c}, nil
 }
 
@@ -446,7 +435,7 @@ func (s *CharacterService) GetEquippedItems(ctx context.Context, req *pb.GetEqui
 		return nil, err
 	}
 
-	var items []*pbRepo.Item
+	var itemInstances []*pbRepo.ItemInstance
 	for rows.Next() {
 		var foo *any
 		es := &pbRepo.EquipSlot{}
@@ -462,7 +451,8 @@ func (s *CharacterService) GetEquippedItems(ctx context.Context, req *pb.GetEqui
 			&ii.ItemInstanceId,
 			&ii.ItemId,
 			&ii.OwnerCharacterId,
-			&ii.CreatedAt,
+			&foo,
+			&foo,
 			&i.Id,
 			&i.Prefix,
 			&i.Suffix,
@@ -489,20 +479,22 @@ func (s *CharacterService) GetEquippedItems(ctx context.Context, req *pb.GetEqui
 
 		t.EquipSlot = es
 		i.ItemTemplate = t
+		ii.Item = i
+		ii.OwnerCharacterId = req.CharacterId
 
 		if err != nil {
 			s.Logger.Error(err)
 			return nil, err
 		}
 
-		items = append(items, i)
+		itemInstances = append(itemInstances, ii)
 	}
 
-	return &pb.GetEquippedItemsResponse{Items: items}, nil
+	return &pb.GetEquippedItemsResponse{ItemInstances: itemInstances}, nil
 }
 
 func (s *CharacterService) EquipItem(ctx context.Context, req *pb.EquipItemRequest) (*pb.EquipItemResponse, error) {
-	sql, _, err := sq.Update("character_equipment").
+	sql, _, err := sq.Update("character_equipments").
 		Set("item_instance_id", req.ItemInstanceId).
 		Where("character_id = $2").
 		Where("equip_slot_id = $3").
@@ -526,10 +518,11 @@ func (s *CharacterService) EquipItem(ctx context.Context, req *pb.EquipItemReque
 }
 
 func (s *CharacterService) UnequipItem(ctx context.Context, req *pb.UnequipItemRequest) (*pb.UnequipItemResponse, error) {
-	sql, _, err := sq.Update("character_equipment").
+	sql, _, err := sq.Update("character_equipments").
 		Set("item_instance_id", nil).
 		Where("character_id = $2").
 		Where("equip_slot_id = $3").
+		PlaceholderFormat(sq.Dollar).
 		ToSql()
 
 	if err != nil {
@@ -544,6 +537,26 @@ func (s *CharacterService) UnequipItem(ctx context.Context, req *pb.UnequipItemR
 	}
 
 	return &pb.UnequipItemResponse{Success: true}, nil
+}
+
+func (s *CharacterService) ToggleEquip(ctx context.Context, req *pb.ToggleEquipRequest) (*pb.ToggleEquipResponse, error) {
+	if req.ShouldEquip {
+		req := &pb.EquipItemRequest{CharacterId: req.CharacterId, ItemInstanceId: req.ItemInstanceId, EquipSlotId: req.EquipSlotId}
+		_, err := s.EquipItem(ctx, req)
+		if err != nil {
+			s.Logger.Error(err)
+			return nil, err
+		}
+		return &pb.ToggleEquipResponse{Success: true, Message: "item equipped."}, nil
+	} else {
+		req := &pb.UnequipItemRequest{CharacterId: req.CharacterId, EquipSlotId: req.EquipSlotId}
+		_, err := s.UnequipItem(ctx, req)
+		if err != nil {
+			s.Logger.Error(err)
+			return nil, err
+		}
+		return &pb.ToggleEquipResponse{Success: true, Message: "item unequipped."}, nil
+	}
 }
 
 func (s *CharacterService) GetEquipSlots(ctx context.Context, req *pb.GetEquipSlotsRequest) (*pb.GetEquipSlotsResponse, error) {

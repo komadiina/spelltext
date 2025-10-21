@@ -1,7 +1,7 @@
 FROM golang:1.25-alpine AS base
 
 LABEL org.opencontainers.image.source=https://github.com/komadiina/spelltext
-LABEL org.opencontainers.image.description="spelltext storeserver dockerized image"
+LABEL org.opencontainers.image.description="spelltext combatserver dockerized image"
 
 WORKDIR /
 
@@ -9,15 +9,15 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-RUN go build /server/store/cmd/main.go
+RUN go build /server/combat/cmd/main.go
 
 FROM alpine:3.22.1
 WORKDIR /
 
 ENV CONFIG_FILE=./config.yml
-ENV VERSION=0.2.6
+ENV VERSION=0.3.0
 
-COPY --from=base ./main ./storeserver
+COPY --from=base ./main ./combatserver
 COPY --from=base ./config.yml ./config.yml
 
-ENTRYPOINT [ "./storeserver" ]
+ENTRYPOINT [ "./combatserver" ]

@@ -2,7 +2,7 @@ syntax = "proto3";
 package repo;
 option go_package = "github.com/komadiina/spelltext/proto/repo;repo";
 
-import "google/protobuf/timestamp.proto";
+// import "google/protobuf/timestamp.proto";
 
 message User {
     uint64 id = 1;
@@ -120,7 +120,7 @@ message ItemInstance {
     uint64 item_instance_id = 1;
     uint64 item_id = 2;
     uint64 owner_character_id = 3;
-    google.protobuf.Timestamp created_at = 4;
+    // google.protobuf.Timestamp created_at = 4;
 
     Item item = 20;
 }

@@ -118,7 +118,7 @@ func (s *InventoryService) ListBackpackItems(ctx context.Context, req *pb.ListBa
 
 	prefix := fmt.Sprintf("WITH cte AS (%s)", cte)
 
-	sql, _, err := sq.Select("templ.*, es.*, it.*, i.*").
+	sql, _, err := sq.Select("inst.*, templ.*, es.*, it.*, i.*").
 		From("cte AS cte").
 		InnerJoin("item_instances AS inst ON inst.item_instance_id = cte.item_instance_id").
 		InnerJoin("items AS i ON i.id = inst.item_id").
@@ -140,15 +140,21 @@ func (s *InventoryService) ListBackpackItems(ctx context.Context, req *pb.ListBa
 		return nil, err
 	}
 
-	var items []*pbRepo.Item
+	var itemInstances []*pbRepo.ItemInstance
 	for rows.Next() {
 		var foo *any
 		item := &pbRepo.Item{}
 		itemTemplate := &pbRepo.ItemTemplate{}
 		equipSlot := &pbRepo.EquipSlot{}
 		itemType := &pbRepo.ItemType{}
+		inst := &pbRepo.ItemInstance{}
 
 		err := rows.Scan(
+			&inst.ItemInstanceId,
+			&inst.ItemId,
+			&inst.OwnerCharacterId,
+			&foo, // created_at
+			&foo, // metadata
 			&itemTemplate.Id,
 			&itemTemplate.Name,
 			&itemTemplate.ItemTypeId,
@@ -184,9 +190,10 @@ func (s *InventoryService) ListBackpackItems(ctx context.Context, req *pb.ListBa
 		item.ItemTemplate = itemTemplate
 		item.ItemTemplate.ItemType = itemType
 		item.ItemTemplate.EquipSlot = equipSlot
+		inst.Item = item
 
-		items = append(items, item)
+		itemInstances = append(itemInstances, inst)
 	}
 
-	return &pb.ListBackpackItemsResponse{Items: items}, nil
+	return &pb.ListBackpackItemsResponse{ItemInstances: itemInstances}, nil
 }

@@ -2,9 +2,9 @@
 // versions:
 // 	protoc-gen-go v1.36.9
 // 	protoc        v6.32.1
-// source: armory/armory.proto
+// source: char/char.proto
 
-package armory
+package char
 
 import (
 	repo "github.com/komadiina/spelltext/proto/repo"
@@ -30,7 +30,7 @@ type ListHeroesRequest struct {
 
 func (x *ListHeroesRequest) Reset() {
 	*x = ListHeroesRequest{}
-	mi := &file_armory_armory_proto_msgTypes[0]
+	mi := &file_char_char_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -42,7 +42,7 @@ func (x *ListHeroesRequest) String() string {
 func (*ListHeroesRequest) ProtoMessage() {}
 
 func (x *ListHeroesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_armory_armory_proto_msgTypes[0]
+	mi := &file_char_char_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -55,7 +55,7 @@ func (x *ListHeroesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListHeroesRequest.ProtoReflect.Descriptor instead.
 func (*ListHeroesRequest) Descriptor() ([]byte, []int) {
-	return file_armory_armory_proto_rawDescGZIP(), []int{0}
+	return file_char_char_proto_rawDescGZIP(), []int{0}
 }
 
 type ListHeroesResponse struct {
@@ -67,7 +67,7 @@ type ListHeroesResponse struct {
 
 func (x *ListHeroesResponse) Reset() {
 	*x = ListHeroesResponse{}
-	mi := &file_armory_armory_proto_msgTypes[1]
+	mi := &file_char_char_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -79,7 +79,7 @@ func (x *ListHeroesResponse) String() string {
 func (*ListHeroesResponse) ProtoMessage() {}
 
 func (x *ListHeroesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_armory_armory_proto_msgTypes[1]
+	mi := &file_char_char_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -92,7 +92,7 @@ func (x *ListHeroesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListHeroesResponse.ProtoReflect.Descriptor instead.
 func (*ListHeroesResponse) Descriptor() ([]byte, []int) {
-	return file_armory_armory_proto_rawDescGZIP(), []int{1}
+	return file_char_char_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *ListHeroesResponse) GetHeroes() []*repo.Hero {
@@ -111,7 +111,7 @@ type ListCharactersRequest struct {
 
 func (x *ListCharactersRequest) Reset() {
 	*x = ListCharactersRequest{}
-	mi := &file_armory_armory_proto_msgTypes[2]
+	mi := &file_char_char_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -123,7 +123,7 @@ func (x *ListCharactersRequest) String() string {
 func (*ListCharactersRequest) ProtoMessage() {}
 
 func (x *ListCharactersRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_armory_armory_proto_msgTypes[2]
+	mi := &file_char_char_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -136,7 +136,7 @@ func (x *ListCharactersRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCharactersRequest.ProtoReflect.Descriptor instead.
 func (*ListCharactersRequest) Descriptor() ([]byte, []int) {
-	return file_armory_armory_proto_rawDescGZIP(), []int{2}
+	return file_char_char_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *ListCharactersRequest) GetUsername() string {
@@ -155,7 +155,7 @@ type ListCharactersResponse struct {
 
 func (x *ListCharactersResponse) Reset() {
 	*x = ListCharactersResponse{}
-	mi := &file_armory_armory_proto_msgTypes[3]
+	mi := &file_char_char_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -167,7 +167,7 @@ func (x *ListCharactersResponse) String() string {
 func (*ListCharactersResponse) ProtoMessage() {}
 
 func (x *ListCharactersResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_armory_armory_proto_msgTypes[3]
+	mi := &file_char_char_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -180,7 +180,7 @@ func (x *ListCharactersResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCharactersResponse.ProtoReflect.Descriptor instead.
 func (*ListCharactersResponse) Descriptor() ([]byte, []int) {
-	return file_armory_armory_proto_rawDescGZIP(), []int{3}
+	return file_char_char_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *ListCharactersResponse) GetCharacters() []*repo.Character {
@@ -200,7 +200,7 @@ type SetSelectedCharacterRequest struct {
 
 func (x *SetSelectedCharacterRequest) Reset() {
 	*x = SetSelectedCharacterRequest{}
-	mi := &file_armory_armory_proto_msgTypes[4]
+	mi := &file_char_char_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -212,7 +212,7 @@ func (x *SetSelectedCharacterRequest) String() string {
 func (*SetSelectedCharacterRequest) ProtoMessage() {}
 
 func (x *SetSelectedCharacterRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_armory_armory_proto_msgTypes[4]
+	mi := &file_char_char_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -225,7 +225,7 @@ func (x *SetSelectedCharacterRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetSelectedCharacterRequest.ProtoReflect.Descriptor instead.
 func (*SetSelectedCharacterRequest) Descriptor() ([]byte, []int) {
-	return file_armory_armory_proto_rawDescGZIP(), []int{4}
+	return file_char_char_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *SetSelectedCharacterRequest) GetUserId() uint64 {
@@ -252,7 +252,7 @@ type SetSelectedCharacterResponse struct {
 
 func (x *SetSelectedCharacterResponse) Reset() {
 	*x = SetSelectedCharacterResponse{}
-	mi := &file_armory_armory_proto_msgTypes[5]
+	mi := &file_char_char_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -264,7 +264,7 @@ func (x *SetSelectedCharacterResponse) String() string {
 func (*SetSelectedCharacterResponse) ProtoMessage() {}
 
 func (x *SetSelectedCharacterResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_armory_armory_proto_msgTypes[5]
+	mi := &file_char_char_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -277,7 +277,7 @@ func (x *SetSelectedCharacterResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetSelectedCharacterResponse.ProtoReflect.Descriptor instead.
 func (*SetSelectedCharacterResponse) Descriptor() ([]byte, []int) {
-	return file_armory_armory_proto_rawDescGZIP(), []int{5}
+	return file_char_char_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *SetSelectedCharacterResponse) GetSuccess() bool {
@@ -303,7 +303,7 @@ type GetLastSelectedCharacterRequest struct {
 
 func (x *GetLastSelectedCharacterRequest) Reset() {
 	*x = GetLastSelectedCharacterRequest{}
-	mi := &file_armory_armory_proto_msgTypes[6]
+	mi := &file_char_char_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -315,7 +315,7 @@ func (x *GetLastSelectedCharacterRequest) String() string {
 func (*GetLastSelectedCharacterRequest) ProtoMessage() {}
 
 func (x *GetLastSelectedCharacterRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_armory_armory_proto_msgTypes[6]
+	mi := &file_char_char_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -328,7 +328,7 @@ func (x *GetLastSelectedCharacterRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetLastSelectedCharacterRequest.ProtoReflect.Descriptor instead.
 func (*GetLastSelectedCharacterRequest) Descriptor() ([]byte, []int) {
-	return file_armory_armory_proto_rawDescGZIP(), []int{6}
+	return file_char_char_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *GetLastSelectedCharacterRequest) GetUsername() string {
@@ -347,7 +347,7 @@ type GetLastSelectedCharacterResponse struct {
 
 func (x *GetLastSelectedCharacterResponse) Reset() {
 	*x = GetLastSelectedCharacterResponse{}
-	mi := &file_armory_armory_proto_msgTypes[7]
+	mi := &file_char_char_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -359,7 +359,7 @@ func (x *GetLastSelectedCharacterResponse) String() string {
 func (*GetLastSelectedCharacterResponse) ProtoMessage() {}
 
 func (x *GetLastSelectedCharacterResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_armory_armory_proto_msgTypes[7]
+	mi := &file_char_char_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -372,7 +372,7 @@ func (x *GetLastSelectedCharacterResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetLastSelectedCharacterResponse.ProtoReflect.Descriptor instead.
 func (*GetLastSelectedCharacterResponse) Descriptor() ([]byte, []int) {
-	return file_armory_armory_proto_rawDescGZIP(), []int{7}
+	return file_char_char_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *GetLastSelectedCharacterResponse) GetCharacter() *repo.Character {
@@ -391,7 +391,7 @@ type GetCharacterRequest struct {
 
 func (x *GetCharacterRequest) Reset() {
 	*x = GetCharacterRequest{}
-	mi := &file_armory_armory_proto_msgTypes[8]
+	mi := &file_char_char_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -403,7 +403,7 @@ func (x *GetCharacterRequest) String() string {
 func (*GetCharacterRequest) ProtoMessage() {}
 
 func (x *GetCharacterRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_armory_armory_proto_msgTypes[8]
+	mi := &file_char_char_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -416,7 +416,7 @@ func (x *GetCharacterRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCharacterRequest.ProtoReflect.Descriptor instead.
 func (*GetCharacterRequest) Descriptor() ([]byte, []int) {
-	return file_armory_armory_proto_rawDescGZIP(), []int{8}
+	return file_char_char_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *GetCharacterRequest) GetCharacterId() uint64 {
@@ -435,7 +435,7 @@ type GetCharacterResponse struct {
 
 func (x *GetCharacterResponse) Reset() {
 	*x = GetCharacterResponse{}
-	mi := &file_armory_armory_proto_msgTypes[9]
+	mi := &file_char_char_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -447,7 +447,7 @@ func (x *GetCharacterResponse) String() string {
 func (*GetCharacterResponse) ProtoMessage() {}
 
 func (x *GetCharacterResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_armory_armory_proto_msgTypes[9]
+	mi := &file_char_char_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -460,7 +460,7 @@ func (x *GetCharacterResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCharacterResponse.ProtoReflect.Descriptor instead.
 func (*GetCharacterResponse) Descriptor() ([]byte, []int) {
-	return file_armory_armory_proto_rawDescGZIP(), []int{9}
+	return file_char_char_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *GetCharacterResponse) GetCharacter() *repo.Character {
@@ -481,7 +481,7 @@ type CreateCharacterRequest struct {
 
 func (x *CreateCharacterRequest) Reset() {
 	*x = CreateCharacterRequest{}
-	mi := &file_armory_armory_proto_msgTypes[10]
+	mi := &file_char_char_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -493,7 +493,7 @@ func (x *CreateCharacterRequest) String() string {
 func (*CreateCharacterRequest) ProtoMessage() {}
 
 func (x *CreateCharacterRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_armory_armory_proto_msgTypes[10]
+	mi := &file_char_char_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -506,7 +506,7 @@ func (x *CreateCharacterRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateCharacterRequest.ProtoReflect.Descriptor instead.
 func (*CreateCharacterRequest) Descriptor() ([]byte, []int) {
-	return file_armory_armory_proto_rawDescGZIP(), []int{10}
+	return file_char_char_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *CreateCharacterRequest) GetUserId() uint64 {
@@ -541,7 +541,7 @@ type CreateCharacterResponse struct {
 
 func (x *CreateCharacterResponse) Reset() {
 	*x = CreateCharacterResponse{}
-	mi := &file_armory_armory_proto_msgTypes[11]
+	mi := &file_char_char_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -553,7 +553,7 @@ func (x *CreateCharacterResponse) String() string {
 func (*CreateCharacterResponse) ProtoMessage() {}
 
 func (x *CreateCharacterResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_armory_armory_proto_msgTypes[11]
+	mi := &file_char_char_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -566,7 +566,7 @@ func (x *CreateCharacterResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateCharacterResponse.ProtoReflect.Descriptor instead.
 func (*CreateCharacterResponse) Descriptor() ([]byte, []int) {
-	return file_armory_armory_proto_rawDescGZIP(), []int{11}
+	return file_char_char_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *CreateCharacterResponse) GetSuccess() bool {
@@ -599,7 +599,7 @@ type DeleteCharacterRequest struct {
 
 func (x *DeleteCharacterRequest) Reset() {
 	*x = DeleteCharacterRequest{}
-	mi := &file_armory_armory_proto_msgTypes[12]
+	mi := &file_char_char_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -611,7 +611,7 @@ func (x *DeleteCharacterRequest) String() string {
 func (*DeleteCharacterRequest) ProtoMessage() {}
 
 func (x *DeleteCharacterRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_armory_armory_proto_msgTypes[12]
+	mi := &file_char_char_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -624,7 +624,7 @@ func (x *DeleteCharacterRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteCharacterRequest.ProtoReflect.Descriptor instead.
 func (*DeleteCharacterRequest) Descriptor() ([]byte, []int) {
-	return file_armory_armory_proto_rawDescGZIP(), []int{12}
+	return file_char_char_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *DeleteCharacterRequest) GetCharacterId() uint64 {
@@ -644,7 +644,7 @@ type DeleteCharacterResponse struct {
 
 func (x *DeleteCharacterResponse) Reset() {
 	*x = DeleteCharacterResponse{}
-	mi := &file_armory_armory_proto_msgTypes[13]
+	mi := &file_char_char_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -656,7 +656,7 @@ func (x *DeleteCharacterResponse) String() string {
 func (*DeleteCharacterResponse) ProtoMessage() {}
 
 func (x *DeleteCharacterResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_armory_armory_proto_msgTypes[13]
+	mi := &file_char_char_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -669,7 +669,7 @@ func (x *DeleteCharacterResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteCharacterResponse.ProtoReflect.Descriptor instead.
 func (*DeleteCharacterResponse) Descriptor() ([]byte, []int) {
-	return file_armory_armory_proto_rawDescGZIP(), []int{13}
+	return file_char_char_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *DeleteCharacterResponse) GetSuccess() bool {
@@ -680,6 +680,126 @@ func (x *DeleteCharacterResponse) GetSuccess() bool {
 }
 
 func (x *DeleteCharacterResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+type ToggleEquipRequest struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	CharacterId    uint64                 `protobuf:"varint,1,opt,name=character_id,json=characterId,proto3" json:"character_id,omitempty"`
+	ItemInstanceId uint64                 `protobuf:"varint,2,opt,name=item_instance_id,json=itemInstanceId,proto3" json:"item_instance_id,omitempty"`
+	EquipSlotId    uint64                 `protobuf:"varint,3,opt,name=equip_slot_id,json=equipSlotId,proto3" json:"equip_slot_id,omitempty"`
+	ShouldEquip    bool                   `protobuf:"varint,4,opt,name=shouldEquip,proto3" json:"shouldEquip,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *ToggleEquipRequest) Reset() {
+	*x = ToggleEquipRequest{}
+	mi := &file_char_char_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ToggleEquipRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ToggleEquipRequest) ProtoMessage() {}
+
+func (x *ToggleEquipRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_char_char_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ToggleEquipRequest.ProtoReflect.Descriptor instead.
+func (*ToggleEquipRequest) Descriptor() ([]byte, []int) {
+	return file_char_char_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *ToggleEquipRequest) GetCharacterId() uint64 {
+	if x != nil {
+		return x.CharacterId
+	}
+	return 0
+}
+
+func (x *ToggleEquipRequest) GetItemInstanceId() uint64 {
+	if x != nil {
+		return x.ItemInstanceId
+	}
+	return 0
+}
+
+func (x *ToggleEquipRequest) GetEquipSlotId() uint64 {
+	if x != nil {
+		return x.EquipSlotId
+	}
+	return 0
+}
+
+func (x *ToggleEquipRequest) GetShouldEquip() bool {
+	if x != nil {
+		return x.ShouldEquip
+	}
+	return false
+}
+
+type ToggleEquipResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ToggleEquipResponse) Reset() {
+	*x = ToggleEquipResponse{}
+	mi := &file_char_char_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ToggleEquipResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ToggleEquipResponse) ProtoMessage() {}
+
+func (x *ToggleEquipResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_char_char_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ToggleEquipResponse.ProtoReflect.Descriptor instead.
+func (*ToggleEquipResponse) Descriptor() ([]byte, []int) {
+	return file_char_char_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *ToggleEquipResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ToggleEquipResponse) GetMessage() string {
 	if x != nil {
 		return x.Message
 	}
@@ -697,7 +817,7 @@ type EquipItemRequest struct {
 
 func (x *EquipItemRequest) Reset() {
 	*x = EquipItemRequest{}
-	mi := &file_armory_armory_proto_msgTypes[14]
+	mi := &file_char_char_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -709,7 +829,7 @@ func (x *EquipItemRequest) String() string {
 func (*EquipItemRequest) ProtoMessage() {}
 
 func (x *EquipItemRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_armory_armory_proto_msgTypes[14]
+	mi := &file_char_char_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -722,7 +842,7 @@ func (x *EquipItemRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EquipItemRequest.ProtoReflect.Descriptor instead.
 func (*EquipItemRequest) Descriptor() ([]byte, []int) {
-	return file_armory_armory_proto_rawDescGZIP(), []int{14}
+	return file_char_char_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *EquipItemRequest) GetCharacterId() uint64 {
@@ -756,7 +876,7 @@ type EquipItemResponse struct {
 
 func (x *EquipItemResponse) Reset() {
 	*x = EquipItemResponse{}
-	mi := &file_armory_armory_proto_msgTypes[15]
+	mi := &file_char_char_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -768,7 +888,7 @@ func (x *EquipItemResponse) String() string {
 func (*EquipItemResponse) ProtoMessage() {}
 
 func (x *EquipItemResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_armory_armory_proto_msgTypes[15]
+	mi := &file_char_char_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -781,7 +901,7 @@ func (x *EquipItemResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EquipItemResponse.ProtoReflect.Descriptor instead.
 func (*EquipItemResponse) Descriptor() ([]byte, []int) {
-	return file_armory_armory_proto_rawDescGZIP(), []int{15}
+	return file_char_char_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *EquipItemResponse) GetSuccess() bool {
@@ -808,7 +928,7 @@ type UnequipItemRequest struct {
 
 func (x *UnequipItemRequest) Reset() {
 	*x = UnequipItemRequest{}
-	mi := &file_armory_armory_proto_msgTypes[16]
+	mi := &file_char_char_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -820,7 +940,7 @@ func (x *UnequipItemRequest) String() string {
 func (*UnequipItemRequest) ProtoMessage() {}
 
 func (x *UnequipItemRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_armory_armory_proto_msgTypes[16]
+	mi := &file_char_char_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -833,7 +953,7 @@ func (x *UnequipItemRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnequipItemRequest.ProtoReflect.Descriptor instead.
 func (*UnequipItemRequest) Descriptor() ([]byte, []int) {
-	return file_armory_armory_proto_rawDescGZIP(), []int{16}
+	return file_char_char_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *UnequipItemRequest) GetCharacterId() uint64 {
@@ -860,7 +980,7 @@ type UnequipItemResponse struct {
 
 func (x *UnequipItemResponse) Reset() {
 	*x = UnequipItemResponse{}
-	mi := &file_armory_armory_proto_msgTypes[17]
+	mi := &file_char_char_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -872,7 +992,7 @@ func (x *UnequipItemResponse) String() string {
 func (*UnequipItemResponse) ProtoMessage() {}
 
 func (x *UnequipItemResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_armory_armory_proto_msgTypes[17]
+	mi := &file_char_char_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -885,7 +1005,7 @@ func (x *UnequipItemResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnequipItemResponse.ProtoReflect.Descriptor instead.
 func (*UnequipItemResponse) Descriptor() ([]byte, []int) {
-	return file_armory_armory_proto_rawDescGZIP(), []int{17}
+	return file_char_char_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *UnequipItemResponse) GetSuccess() bool {
@@ -911,7 +1031,7 @@ type GetEquippedItemsRequest struct {
 
 func (x *GetEquippedItemsRequest) Reset() {
 	*x = GetEquippedItemsRequest{}
-	mi := &file_armory_armory_proto_msgTypes[18]
+	mi := &file_char_char_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -923,7 +1043,7 @@ func (x *GetEquippedItemsRequest) String() string {
 func (*GetEquippedItemsRequest) ProtoMessage() {}
 
 func (x *GetEquippedItemsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_armory_armory_proto_msgTypes[18]
+	mi := &file_char_char_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -936,7 +1056,7 @@ func (x *GetEquippedItemsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEquippedItemsRequest.ProtoReflect.Descriptor instead.
 func (*GetEquippedItemsRequest) Descriptor() ([]byte, []int) {
-	return file_armory_armory_proto_rawDescGZIP(), []int{18}
+	return file_char_char_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *GetEquippedItemsRequest) GetCharacterId() uint64 {
@@ -948,14 +1068,14 @@ func (x *GetEquippedItemsRequest) GetCharacterId() uint64 {
 
 type GetEquippedItemsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Items         []*repo.Item           `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
+	ItemInstances []*repo.ItemInstance   `protobuf:"bytes,1,rep,name=itemInstances,proto3" json:"itemInstances,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GetEquippedItemsResponse) Reset() {
 	*x = GetEquippedItemsResponse{}
-	mi := &file_armory_armory_proto_msgTypes[19]
+	mi := &file_char_char_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -967,7 +1087,7 @@ func (x *GetEquippedItemsResponse) String() string {
 func (*GetEquippedItemsResponse) ProtoMessage() {}
 
 func (x *GetEquippedItemsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_armory_armory_proto_msgTypes[19]
+	mi := &file_char_char_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -980,12 +1100,12 @@ func (x *GetEquippedItemsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEquippedItemsResponse.ProtoReflect.Descriptor instead.
 func (*GetEquippedItemsResponse) Descriptor() ([]byte, []int) {
-	return file_armory_armory_proto_rawDescGZIP(), []int{19}
+	return file_char_char_proto_rawDescGZIP(), []int{21}
 }
 
-func (x *GetEquippedItemsResponse) GetItems() []*repo.Item {
+func (x *GetEquippedItemsResponse) GetItemInstances() []*repo.ItemInstance {
 	if x != nil {
-		return x.Items
+		return x.ItemInstances
 	}
 	return nil
 }
@@ -998,7 +1118,7 @@ type GetEquipSlotsRequest struct {
 
 func (x *GetEquipSlotsRequest) Reset() {
 	*x = GetEquipSlotsRequest{}
-	mi := &file_armory_armory_proto_msgTypes[20]
+	mi := &file_char_char_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1010,7 +1130,7 @@ func (x *GetEquipSlotsRequest) String() string {
 func (*GetEquipSlotsRequest) ProtoMessage() {}
 
 func (x *GetEquipSlotsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_armory_armory_proto_msgTypes[20]
+	mi := &file_char_char_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1023,7 +1143,7 @@ func (x *GetEquipSlotsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEquipSlotsRequest.ProtoReflect.Descriptor instead.
 func (*GetEquipSlotsRequest) Descriptor() ([]byte, []int) {
-	return file_armory_armory_proto_rawDescGZIP(), []int{20}
+	return file_char_char_proto_rawDescGZIP(), []int{22}
 }
 
 type GetEquipSlotsResponse struct {
@@ -1035,7 +1155,7 @@ type GetEquipSlotsResponse struct {
 
 func (x *GetEquipSlotsResponse) Reset() {
 	*x = GetEquipSlotsResponse{}
-	mi := &file_armory_armory_proto_msgTypes[21]
+	mi := &file_char_char_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1047,7 +1167,7 @@ func (x *GetEquipSlotsResponse) String() string {
 func (*GetEquipSlotsResponse) ProtoMessage() {}
 
 func (x *GetEquipSlotsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_armory_armory_proto_msgTypes[21]
+	mi := &file_char_char_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1060,7 +1180,7 @@ func (x *GetEquipSlotsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEquipSlotsResponse.ProtoReflect.Descriptor instead.
 func (*GetEquipSlotsResponse) Descriptor() ([]byte, []int) {
-	return file_armory_armory_proto_rawDescGZIP(), []int{21}
+	return file_char_char_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *GetEquipSlotsResponse) GetSlots() []*repo.EquipSlot {
@@ -1070,11 +1190,11 @@ func (x *GetEquipSlotsResponse) GetSlots() []*repo.EquipSlot {
 	return nil
 }
 
-var File_armory_armory_proto protoreflect.FileDescriptor
+var File_char_char_proto protoreflect.FileDescriptor
 
-const file_armory_armory_proto_rawDesc = "" +
+const file_char_char_proto_rawDesc = "" +
 	"\n" +
-	"\x13armory/armory.proto\x12\x06armory\x1a\x0frepo/repo.proto\"\x13\n" +
+	"\x0fchar/char.proto\x12\x04char\x1a\x0frepo/repo.proto\"\x13\n" +
 	"\x11ListHeroesRequest\"8\n" +
 	"\x12ListHeroesResponse\x12\"\n" +
 	"\x06heroes\x18\x01 \x03(\v2\n" +
@@ -1112,6 +1232,14 @@ const file_armory_armory_proto_rawDesc = "" +
 	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\"M\n" +
 	"\x17DeleteCharacterResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"\xa7\x01\n" +
+	"\x12ToggleEquipRequest\x12!\n" +
+	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\x12(\n" +
+	"\x10item_instance_id\x18\x02 \x01(\x04R\x0eitemInstanceId\x12\"\n" +
+	"\requip_slot_id\x18\x03 \x01(\x04R\vequipSlotId\x12 \n" +
+	"\vshouldEquip\x18\x04 \x01(\bR\vshouldEquip\"I\n" +
+	"\x13ToggleEquipResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\"\x83\x01\n" +
 	"\x10EquipItemRequest\x12!\n" +
 	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\x12(\n" +
@@ -1127,126 +1255,130 @@ const file_armory_armory_proto_rawDesc = "" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\"<\n" +
 	"\x17GetEquippedItemsRequest\x12!\n" +
-	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\"<\n" +
-	"\x18GetEquippedItemsResponse\x12 \n" +
-	"\x05items\x18\x01 \x03(\v2\n" +
-	".repo.ItemR\x05items\"\x16\n" +
+	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\"T\n" +
+	"\x18GetEquippedItemsResponse\x128\n" +
+	"\ritemInstances\x18\x01 \x03(\v2\x12.repo.ItemInstanceR\ritemInstances\"\x16\n" +
 	"\x14GetEquipSlotsRequest\">\n" +
 	"\x15GetEquipSlotsResponse\x12%\n" +
-	"\x05slots\x18\x01 \x03(\v2\x0f.repo.EquipSlotR\x05slots2\x95\a\n" +
-	"\tCharacter\x12C\n" +
+	"\x05slots\x18\x01 \x03(\v2\x0f.repo.EquipSlotR\x05slots2\xad\a\n" +
+	"\tCharacter\x12?\n" +
 	"\n" +
-	"ListHeroes\x12\x19.armory.ListHeroesRequest\x1a\x1a.armory.ListHeroesResponse\x12O\n" +
-	"\x0eListCharacters\x12\x1d.armory.ListCharactersRequest\x1a\x1e.armory.ListCharactersResponse\x12a\n" +
-	"\x14SetSelectedCharacter\x12#.armory.SetSelectedCharacterRequest\x1a$.armory.SetSelectedCharacterResponse\x12m\n" +
-	"\x18GetLastSelectedCharacter\x12'.armory.GetLastSelectedCharacterRequest\x1a(.armory.GetLastSelectedCharacterResponse\x12I\n" +
-	"\fGetCharacter\x12\x1b.armory.GetCharacterRequest\x1a\x1c.armory.GetCharacterResponse\x12R\n" +
-	"\x0fCreateCharacter\x12\x1e.armory.CreateCharacterRequest\x1a\x1f.armory.CreateCharacterResponse\x12R\n" +
-	"\x0fDeleteCharacter\x12\x1e.armory.DeleteCharacterRequest\x1a\x1f.armory.DeleteCharacterResponse\x12U\n" +
-	"\x10GetEquippedItems\x12\x1f.armory.GetEquippedItemsRequest\x1a .armory.GetEquippedItemsResponse\x12@\n" +
-	"\tEquipItem\x12\x18.armory.EquipItemRequest\x1a\x19.armory.EquipItemResponse\x12F\n" +
-	"\vUnequipItem\x12\x1a.armory.UnequipItemRequest\x1a\x1b.armory.UnequipItemResponse\x12L\n" +
-	"\rGetEquipSlots\x12\x1c.armory.GetEquipSlotsRequest\x1a\x1d.armory.GetEquipSlotsResponseB:Z8github.com/komadiina/spelltext/proto/proto/armory;armoryb\x06proto3"
+	"ListHeroes\x12\x17.char.ListHeroesRequest\x1a\x18.char.ListHeroesResponse\x12K\n" +
+	"\x0eListCharacters\x12\x1b.char.ListCharactersRequest\x1a\x1c.char.ListCharactersResponse\x12]\n" +
+	"\x14SetSelectedCharacter\x12!.char.SetSelectedCharacterRequest\x1a\".char.SetSelectedCharacterResponse\x12i\n" +
+	"\x18GetLastSelectedCharacter\x12%.char.GetLastSelectedCharacterRequest\x1a&.char.GetLastSelectedCharacterResponse\x12E\n" +
+	"\fGetCharacter\x12\x19.char.GetCharacterRequest\x1a\x1a.char.GetCharacterResponse\x12N\n" +
+	"\x0fCreateCharacter\x12\x1c.char.CreateCharacterRequest\x1a\x1d.char.CreateCharacterResponse\x12N\n" +
+	"\x0fDeleteCharacter\x12\x1c.char.DeleteCharacterRequest\x1a\x1d.char.DeleteCharacterResponse\x12Q\n" +
+	"\x10GetEquippedItems\x12\x1d.char.GetEquippedItemsRequest\x1a\x1e.char.GetEquippedItemsResponse\x12B\n" +
+	"\vToggleEquip\x12\x18.char.ToggleEquipRequest\x1a\x19.char.ToggleEquipResponse\x12<\n" +
+	"\tEquipItem\x12\x16.char.EquipItemRequest\x1a\x17.char.EquipItemResponse\x12B\n" +
+	"\vUnequipItem\x12\x18.char.UnequipItemRequest\x1a\x19.char.UnequipItemResponse\x12H\n" +
+	"\rGetEquipSlots\x12\x1a.char.GetEquipSlotsRequest\x1a\x1b.char.GetEquipSlotsResponseB6Z4github.com/komadiina/spelltext/proto/proto/char;charb\x06proto3"
 
 var (
-	file_armory_armory_proto_rawDescOnce sync.Once
-	file_armory_armory_proto_rawDescData []byte
+	file_char_char_proto_rawDescOnce sync.Once
+	file_char_char_proto_rawDescData []byte
 )
 
-func file_armory_armory_proto_rawDescGZIP() []byte {
-	file_armory_armory_proto_rawDescOnce.Do(func() {
-		file_armory_armory_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_armory_armory_proto_rawDesc), len(file_armory_armory_proto_rawDesc)))
+func file_char_char_proto_rawDescGZIP() []byte {
+	file_char_char_proto_rawDescOnce.Do(func() {
+		file_char_char_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_char_char_proto_rawDesc), len(file_char_char_proto_rawDesc)))
 	})
-	return file_armory_armory_proto_rawDescData
+	return file_char_char_proto_rawDescData
 }
 
-var file_armory_armory_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
-var file_armory_armory_proto_goTypes = []any{
-	(*ListHeroesRequest)(nil),                // 0: armory.ListHeroesRequest
-	(*ListHeroesResponse)(nil),               // 1: armory.ListHeroesResponse
-	(*ListCharactersRequest)(nil),            // 2: armory.ListCharactersRequest
-	(*ListCharactersResponse)(nil),           // 3: armory.ListCharactersResponse
-	(*SetSelectedCharacterRequest)(nil),      // 4: armory.SetSelectedCharacterRequest
-	(*SetSelectedCharacterResponse)(nil),     // 5: armory.SetSelectedCharacterResponse
-	(*GetLastSelectedCharacterRequest)(nil),  // 6: armory.GetLastSelectedCharacterRequest
-	(*GetLastSelectedCharacterResponse)(nil), // 7: armory.GetLastSelectedCharacterResponse
-	(*GetCharacterRequest)(nil),              // 8: armory.GetCharacterRequest
-	(*GetCharacterResponse)(nil),             // 9: armory.GetCharacterResponse
-	(*CreateCharacterRequest)(nil),           // 10: armory.CreateCharacterRequest
-	(*CreateCharacterResponse)(nil),          // 11: armory.CreateCharacterResponse
-	(*DeleteCharacterRequest)(nil),           // 12: armory.DeleteCharacterRequest
-	(*DeleteCharacterResponse)(nil),          // 13: armory.DeleteCharacterResponse
-	(*EquipItemRequest)(nil),                 // 14: armory.EquipItemRequest
-	(*EquipItemResponse)(nil),                // 15: armory.EquipItemResponse
-	(*UnequipItemRequest)(nil),               // 16: armory.UnequipItemRequest
-	(*UnequipItemResponse)(nil),              // 17: armory.UnequipItemResponse
-	(*GetEquippedItemsRequest)(nil),          // 18: armory.GetEquippedItemsRequest
-	(*GetEquippedItemsResponse)(nil),         // 19: armory.GetEquippedItemsResponse
-	(*GetEquipSlotsRequest)(nil),             // 20: armory.GetEquipSlotsRequest
-	(*GetEquipSlotsResponse)(nil),            // 21: armory.GetEquipSlotsResponse
-	(*repo.Hero)(nil),                        // 22: repo.Hero
-	(*repo.Character)(nil),                   // 23: repo.Character
-	(*repo.Item)(nil),                        // 24: repo.Item
-	(*repo.EquipSlot)(nil),                   // 25: repo.EquipSlot
+var file_char_char_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
+var file_char_char_proto_goTypes = []any{
+	(*ListHeroesRequest)(nil),                // 0: char.ListHeroesRequest
+	(*ListHeroesResponse)(nil),               // 1: char.ListHeroesResponse
+	(*ListCharactersRequest)(nil),            // 2: char.ListCharactersRequest
+	(*ListCharactersResponse)(nil),           // 3: char.ListCharactersResponse
+	(*SetSelectedCharacterRequest)(nil),      // 4: char.SetSelectedCharacterRequest
+	(*SetSelectedCharacterResponse)(nil),     // 5: char.SetSelectedCharacterResponse
+	(*GetLastSelectedCharacterRequest)(nil),  // 6: char.GetLastSelectedCharacterRequest
+	(*GetLastSelectedCharacterResponse)(nil), // 7: char.GetLastSelectedCharacterResponse
+	(*GetCharacterRequest)(nil),              // 8: char.GetCharacterRequest
+	(*GetCharacterResponse)(nil),             // 9: char.GetCharacterResponse
+	(*CreateCharacterRequest)(nil),           // 10: char.CreateCharacterRequest
+	(*CreateCharacterResponse)(nil),          // 11: char.CreateCharacterResponse
+	(*DeleteCharacterRequest)(nil),           // 12: char.DeleteCharacterRequest
+	(*DeleteCharacterResponse)(nil),          // 13: char.DeleteCharacterResponse
+	(*ToggleEquipRequest)(nil),               // 14: char.ToggleEquipRequest
+	(*ToggleEquipResponse)(nil),              // 15: char.ToggleEquipResponse
+	(*EquipItemRequest)(nil),                 // 16: char.EquipItemRequest
+	(*EquipItemResponse)(nil),                // 17: char.EquipItemResponse
+	(*UnequipItemRequest)(nil),               // 18: char.UnequipItemRequest
+	(*UnequipItemResponse)(nil),              // 19: char.UnequipItemResponse
+	(*GetEquippedItemsRequest)(nil),          // 20: char.GetEquippedItemsRequest
+	(*GetEquippedItemsResponse)(nil),         // 21: char.GetEquippedItemsResponse
+	(*GetEquipSlotsRequest)(nil),             // 22: char.GetEquipSlotsRequest
+	(*GetEquipSlotsResponse)(nil),            // 23: char.GetEquipSlotsResponse
+	(*repo.Hero)(nil),                        // 24: repo.Hero
+	(*repo.Character)(nil),                   // 25: repo.Character
+	(*repo.ItemInstance)(nil),                // 26: repo.ItemInstance
+	(*repo.EquipSlot)(nil),                   // 27: repo.EquipSlot
 }
-var file_armory_armory_proto_depIdxs = []int32{
-	22, // 0: armory.ListHeroesResponse.heroes:type_name -> repo.Hero
-	23, // 1: armory.ListCharactersResponse.characters:type_name -> repo.Character
-	23, // 2: armory.GetLastSelectedCharacterResponse.character:type_name -> repo.Character
-	23, // 3: armory.GetCharacterResponse.character:type_name -> repo.Character
-	22, // 4: armory.CreateCharacterRequest.hero:type_name -> repo.Hero
-	23, // 5: armory.CreateCharacterResponse.character:type_name -> repo.Character
-	24, // 6: armory.GetEquippedItemsResponse.items:type_name -> repo.Item
-	25, // 7: armory.GetEquipSlotsResponse.slots:type_name -> repo.EquipSlot
-	0,  // 8: armory.Character.ListHeroes:input_type -> armory.ListHeroesRequest
-	2,  // 9: armory.Character.ListCharacters:input_type -> armory.ListCharactersRequest
-	4,  // 10: armory.Character.SetSelectedCharacter:input_type -> armory.SetSelectedCharacterRequest
-	6,  // 11: armory.Character.GetLastSelectedCharacter:input_type -> armory.GetLastSelectedCharacterRequest
-	8,  // 12: armory.Character.GetCharacter:input_type -> armory.GetCharacterRequest
-	10, // 13: armory.Character.CreateCharacter:input_type -> armory.CreateCharacterRequest
-	12, // 14: armory.Character.DeleteCharacter:input_type -> armory.DeleteCharacterRequest
-	18, // 15: armory.Character.GetEquippedItems:input_type -> armory.GetEquippedItemsRequest
-	14, // 16: armory.Character.EquipItem:input_type -> armory.EquipItemRequest
-	16, // 17: armory.Character.UnequipItem:input_type -> armory.UnequipItemRequest
-	20, // 18: armory.Character.GetEquipSlots:input_type -> armory.GetEquipSlotsRequest
-	1,  // 19: armory.Character.ListHeroes:output_type -> armory.ListHeroesResponse
-	3,  // 20: armory.Character.ListCharacters:output_type -> armory.ListCharactersResponse
-	5,  // 21: armory.Character.SetSelectedCharacter:output_type -> armory.SetSelectedCharacterResponse
-	7,  // 22: armory.Character.GetLastSelectedCharacter:output_type -> armory.GetLastSelectedCharacterResponse
-	9,  // 23: armory.Character.GetCharacter:output_type -> armory.GetCharacterResponse
-	11, // 24: armory.Character.CreateCharacter:output_type -> armory.CreateCharacterResponse
-	13, // 25: armory.Character.DeleteCharacter:output_type -> armory.DeleteCharacterResponse
-	19, // 26: armory.Character.GetEquippedItems:output_type -> armory.GetEquippedItemsResponse
-	15, // 27: armory.Character.EquipItem:output_type -> armory.EquipItemResponse
-	17, // 28: armory.Character.UnequipItem:output_type -> armory.UnequipItemResponse
-	21, // 29: armory.Character.GetEquipSlots:output_type -> armory.GetEquipSlotsResponse
-	19, // [19:30] is the sub-list for method output_type
-	8,  // [8:19] is the sub-list for method input_type
+var file_char_char_proto_depIdxs = []int32{
+	24, // 0: char.ListHeroesResponse.heroes:type_name -> repo.Hero
+	25, // 1: char.ListCharactersResponse.characters:type_name -> repo.Character
+	25, // 2: char.GetLastSelectedCharacterResponse.character:type_name -> repo.Character
+	25, // 3: char.GetCharacterResponse.character:type_name -> repo.Character
+	24, // 4: char.CreateCharacterRequest.hero:type_name -> repo.Hero
+	25, // 5: char.CreateCharacterResponse.character:type_name -> repo.Character
+	26, // 6: char.GetEquippedItemsResponse.itemInstances:type_name -> repo.ItemInstance
+	27, // 7: char.GetEquipSlotsResponse.slots:type_name -> repo.EquipSlot
+	0,  // 8: char.Character.ListHeroes:input_type -> char.ListHeroesRequest
+	2,  // 9: char.Character.ListCharacters:input_type -> char.ListCharactersRequest
+	4,  // 10: char.Character.SetSelectedCharacter:input_type -> char.SetSelectedCharacterRequest
+	6,  // 11: char.Character.GetLastSelectedCharacter:input_type -> char.GetLastSelectedCharacterRequest
+	8,  // 12: char.Character.GetCharacter:input_type -> char.GetCharacterRequest
+	10, // 13: char.Character.CreateCharacter:input_type -> char.CreateCharacterRequest
+	12, // 14: char.Character.DeleteCharacter:input_type -> char.DeleteCharacterRequest
+	20, // 15: char.Character.GetEquippedItems:input_type -> char.GetEquippedItemsRequest
+	14, // 16: char.Character.ToggleEquip:input_type -> char.ToggleEquipRequest
+	16, // 17: char.Character.EquipItem:input_type -> char.EquipItemRequest
+	18, // 18: char.Character.UnequipItem:input_type -> char.UnequipItemRequest
+	22, // 19: char.Character.GetEquipSlots:input_type -> char.GetEquipSlotsRequest
+	1,  // 20: char.Character.ListHeroes:output_type -> char.ListHeroesResponse
+	3,  // 21: char.Character.ListCharacters:output_type -> char.ListCharactersResponse
+	5,  // 22: char.Character.SetSelectedCharacter:output_type -> char.SetSelectedCharacterResponse
+	7,  // 23: char.Character.GetLastSelectedCharacter:output_type -> char.GetLastSelectedCharacterResponse
+	9,  // 24: char.Character.GetCharacter:output_type -> char.GetCharacterResponse
+	11, // 25: char.Character.CreateCharacter:output_type -> char.CreateCharacterResponse
+	13, // 26: char.Character.DeleteCharacter:output_type -> char.DeleteCharacterResponse
+	21, // 27: char.Character.GetEquippedItems:output_type -> char.GetEquippedItemsResponse
+	15, // 28: char.Character.ToggleEquip:output_type -> char.ToggleEquipResponse
+	17, // 29: char.Character.EquipItem:output_type -> char.EquipItemResponse
+	19, // 30: char.Character.UnequipItem:output_type -> char.UnequipItemResponse
+	23, // 31: char.Character.GetEquipSlots:output_type -> char.GetEquipSlotsResponse
+	20, // [20:32] is the sub-list for method output_type
+	8,  // [8:20] is the sub-list for method input_type
 	8,  // [8:8] is the sub-list for extension type_name
 	8,  // [8:8] is the sub-list for extension extendee
 	0,  // [0:8] is the sub-list for field type_name
 }
 
-func init() { file_armory_armory_proto_init() }
-func file_armory_armory_proto_init() {
-	if File_armory_armory_proto != nil {
+func init() { file_char_char_proto_init() }
+func file_char_char_proto_init() {
+	if File_char_char_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_armory_armory_proto_rawDesc), len(file_armory_armory_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_char_char_proto_rawDesc), len(file_char_char_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   22,
+			NumMessages:   24,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_armory_armory_proto_goTypes,
-		DependencyIndexes: file_armory_armory_proto_depIdxs,
-		MessageInfos:      file_armory_armory_proto_msgTypes,
+		GoTypes:           file_char_char_proto_goTypes,
+		DependencyIndexes: file_char_char_proto_depIdxs,
+		MessageInfos:      file_char_char_proto_msgTypes,
 	}.Build()
-	File_armory_armory_proto = out.File
-	file_armory_armory_proto_goTypes = nil
-	file_armory_armory_proto_depIdxs = nil
+	File_char_char_proto = out.File
+	file_char_char_proto_goTypes = nil
+	file_char_char_proto_depIdxs = nil
 }
