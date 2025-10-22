@@ -19,7 +19,7 @@ create table characters (
 );
 
 
-create unique index idx_characters_id on characters (character_id);
 create index idx_characters_user_id on characters (user_id);
+create index idx_characters_hero_id on characters (hero_id);
 
 -- alter table characters replica identity full;

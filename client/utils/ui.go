@@ -16,6 +16,20 @@ func AddNavGuide(shortcut string, name string) (*tview.TextView, int) {
 	return tv, len(str)
 }
 
+func CreateGuide(hotkeys []*types.UnusableHotkey) *tview.Flex {
+	guide := tview.NewFlex().
+		SetDirection(tview.FlexColumn).
+		AddItem(tview.NewTextView().SetText(" keymap legend: "), 0, 1, false)
+
+	for _, hotkey := range hotkeys {
+		gd, len := AddNavGuide(hotkey.Key, hotkey.Desc)
+		guide.AddItem(gd, len, 1, false)
+	}
+
+	guide.SetBorder(true)
+	return guide
+}
+
 func CreateModal(title string, message string, c *types.SpelltextClient, onClose func()) *tview.Modal {
 	modal := tview.NewModal().
 		SetText(message).
@@ -51,4 +65,8 @@ func UpdateCharacter(old *pbRepo.Character, new *pbRepo.Character, c *types.Spel
 
 func UpdateCharacterFunc(char *pbRepo.Character, c *types.SpelltextClient, f func(*pbRepo.Character) *pbRepo.Character) {
 	c.Storage.SelectedCharacter = f(char)
+}
+
+func BoldText(text string) string {
+	return fmt.Sprint("[::b]", text, "[::-]")
 }

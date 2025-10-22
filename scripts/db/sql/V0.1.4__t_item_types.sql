@@ -5,7 +5,5 @@ create table item_types (
   PRIMARY KEY(id)
 );
 
-
-CREATE UNIQUE INDEX idx_item_types_code ON item_types (code);
-
+create unique index idx_item_types_code on item_types (code);
 -- alter table item_types replica identity full;

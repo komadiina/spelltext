@@ -42,11 +42,19 @@ func AddStorePage(c *types.SpelltextClient) {
 		}
 		list = list.SetWrapAround(true)
 
+		guide := utils.CreateGuide([]*types.UnusableHotkey{
+			{Key: "↑/↓", Desc: "navigate"},
+			{Key: "enter", Desc: "select"},
+			{Key: "esc", Desc: "back"},
+		})
+
 		flex = flex.
 			SetDirection(tview.FlexRow).
 			AddItem(tview.NewTextView().SetText("available vendors: "), 2, 1, false).
 			AddItem(list, 0, 1, true).
 			AddItem(tview.NewTextView().SetText("weapons, armor, consumables, vanities..."), 1, 1, false).
+			AddItem(nil, 1, 1, false).
+			AddItem(guide, 3, 1, false).
 			SetFullScreen(true)
 
 		flex.SetBorder(true).SetBorderPadding(1, 1, 5, 5).SetTitle(" [::b]store[::-] ")

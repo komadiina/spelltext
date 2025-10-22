@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"maps"
 	"slices"
-	"strings"
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/komadiina/spelltext/client/constants"
@@ -149,20 +148,11 @@ func RenderDetailsPane() (*tview.Flex, *CharacterDetailsView) {
 }
 
 func RenderGuide() *tview.Flex {
-	guide := tview.NewFlex().
-		SetDirection(tview.FlexColumn).
-		AddItem(tview.NewTextView().SetText(" keymap legend: "), 0, 1, false)
-	guide.SetBorder(true)
-
-	back, length := utils.AddNavGuide("esc", "back")
-	guide.AddItem(back, length, 1, false)
-
-	add, length := utils.AddNavGuide("ctrl+a", "create new character")
-	guide.AddItem(add, length, 1, false)
-
-	enter, length := utils.AddNavGuide("enter", "character menu")
-	guide.AddItem(enter, length, 1, false)
-	return guide
+	return utils.CreateGuide([]*types.UnusableHotkey{
+		{Key: "ctrl+a", Desc: "new character"},
+		{Key: "enter", Desc: "select"},
+		{Key: "tab", Desc: "navigate"},
+	})
 }
 
 func RenderEquipmentPane(c *types.SpelltextClient, charSelected *pbRepo.Character) *tview.Flex {
@@ -181,16 +171,21 @@ func RenderEquipmentPane(c *types.SpelltextClient, charSelected *pbRepo.Characte
 		return cmp.Compare(a.Id, b.Id)
 	})
 
+	totals := RenderTotalsPane(equipped)
+	bonusesPane := RenderBonusesPane(equipped)
+
+	itemInfo := tview.NewTextView().SetDynamicColors(true)
 	root := tview.NewTreeNode("quick inventory")
 	tree := tview.NewTreeView().
 		SetRoot(root).
 		SetCurrentNode(root)
-	tree = RenderQuickInventoryTree(c, charSelected, equipSlots, tree, root, grouped, sortedKeys)
 
-	equipmentPane.AddItem(tree, 0, 2, true)
+	tree = RenderQuickInventoryTree(c, charSelected, equipSlots, tree, root, grouped, sortedKeys, itemInfo, totals)
 
-	totals := RenderTotalsPane(equipped)
-	bonusesPane := RenderBonusesPane(equipped)
+	flexLeft := tview.NewFlex().SetDirection(tview.FlexRow)
+	flexLeft.AddItem(itemInfo, 2, 1, false)
+	flexLeft.AddItem(tree, 0, 2, true)
+	equipmentPane.AddItem(flexLeft, 0, 2, true)
 
 	bonusesPane.
 		AddItem(nil, 0, 1, false).
@@ -208,6 +203,8 @@ func RenderQuickInventoryTree(
 	root *tview.TreeNode,
 	grouped map[*pbRepo.EquipSlot][]*pbRepo.ItemInstance,
 	sortedKeys []*pbRepo.EquipSlot,
+	itemInfo *tview.TextView,
+	totals *tview.Flex,
 ) *tview.TreeView {
 	for _, slotKey := range sortedKeys {
 		color := "#dedede"
@@ -221,6 +218,7 @@ func RenderQuickInventoryTree(
 			child := tview.
 				NewTreeNode(fmt.Sprintf(`[%s]%s[""]`, color, name)).
 				SetSelectable(true)
+			child.SetReference(instance)
 			child.SetSelectedFunc(func() {
 				functions.ToggleEquip(
 					instance,
@@ -229,13 +227,31 @@ func RenderQuickInventoryTree(
 					instance.Item.ItemTemplate.EquipSlot,
 					true,
 				)
-				// TODO: refresh equipped items
+
+				// TODO: implement update equipped logic locally
+				equipped := functions.GetEquippedItems(c)
+				totals = RenderTotalsPane(equipped)
 			})
+
+			node.SetSelectable(true).SetSelectedFunc(func() {
+				functions.ToggleEquip(instance, c, charSelected, instance.Item.ItemTemplate.EquipSlot, false)
+			})
+			
 			node.AddChild(child)
 		}
 
 		root.AddChild(node)
 	}
+
+	tree.SetChangedFunc(func(node *tview.TreeNode) {
+		ref := node.GetReference()
+		if ref == nil {
+			return
+		}
+
+		instance := ref.(*pbRepo.ItemInstance)
+		itemInfo.SetText(utils.GetItemStats(instance.Item))
+	})
 
 	return tree
 }
@@ -249,70 +265,10 @@ func RenderBonusesPane(equipped []*pbRepo.ItemInstance) *tview.Flex {
 		return cmp.Compare(a.Item.ItemTemplate.EquipSlotId, b.Item.ItemTemplate.EquipSlotId)
 	})
 
-	discardEmpty := func(eq *pbRepo.ItemInstance) string {
-		sb := strings.Builder{}
-
-		if eq.Item.Health != 0 {
-			sgn := "+"
-			if eq.Item.Health < 0 {
-				sgn = ""
-			}
-
-			sb.WriteString(fmt.Sprintf(`[%s]%s%d HP[""], `, constants.TEXT_COLOR_HEALTH, sgn, eq.Item.Health))
-		}
-
-		if eq.Item.Power != 0 {
-			sgn := "+"
-			if eq.Item.Power < 0 {
-				sgn = ""
-			}
-
-			sb.WriteString(fmt.Sprintf(`[%s]%s%d PWR[""], `, constants.TEXT_COLOR_POWER, sgn, eq.Item.Power))
-		}
-
-		if eq.Item.Strength != 0 {
-			sgn := "+"
-			if eq.Item.Strength < 0 {
-				sgn = ""
-			}
-
-			sb.WriteString(fmt.Sprintf(`[%s]%s%d STR[""], `, constants.TEXT_COLOR_STRENGTH, sgn, eq.Item.Strength))
-		}
-
-		if eq.Item.Spellpower != 0 {
-			sgn := "+"
-			if eq.Item.Spellpower < 0 {
-				sgn = ""
-			}
-
-			sb.WriteString(fmt.Sprintf(`[%s]%s%d SP[""], `, constants.TEXT_COLOR_SPELLPOWER, sgn, eq.Item.Spellpower))
-		}
-
-		if eq.Item.BonusDamage != 0 {
-			sgn := "+"
-			if eq.Item.BonusDamage < 0 {
-				sgn = ""
-			}
-
-			sb.WriteString(fmt.Sprintf(`[%s]%s%d DMG[""], `, constants.TEXT_COLOR_DAMAGE, sgn, eq.Item.BonusDamage))
-		}
-
-		if eq.Item.BonusArmor != 0 {
-			sgn := "+"
-			if eq.Item.BonusArmor < 0 {
-				sgn = ""
-			}
-
-			sb.WriteString(fmt.Sprintf(`[%s]%s%d ARM[""], `, constants.TEXT_COLOR_ARMOR, sgn, eq.Item.BonusArmor))
-		}
-
-		return sb.String()[:len(sb.String())-2]
-	}
-
 	for _, eqi := range equipped {
 		es := "[" + eqi.GetItem().GetItemTemplate().GetEquipSlot().GetName() + "]" // escape tview color parsing
 		tv := tview.NewTextView().SetDynamicColors(true)
-		stats := discardEmpty(eqi)
+		stats := utils.GetItemStats(eqi.Item)
 		str := fmt.Sprintf(`[::b]%s[::-] %s%s[::i]%s[::-]`,
 			tview.Escape(es), utils.GetFullItemName(eqi.GetItem()), "\n\t", stats,
 		)

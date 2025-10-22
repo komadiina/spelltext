@@ -505,9 +505,7 @@ func (s *CharacterService) EquipItem(ctx context.Context, req *pb.EquipItemReque
 		s.Logger.Error(err)
 		return nil, err
 	}
-
-	s.Logger.Info(sql)
-
+	
 	_, err = s.DbPool.Exec(ctx, sql, req.ItemInstanceId, req.CharacterId, req.EquipSlotId)
 	if err != nil {
 		s.Logger.Error(err)

@@ -4,6 +4,5 @@ create table vendors (
   ware_shorthand varchar(64)
 );
 
-create unique index idx_vendors_id on vendors (id);
 
 -- alter table vendors replica identity full;

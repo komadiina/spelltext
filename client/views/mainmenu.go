@@ -20,7 +20,7 @@ func AddMainmenuPage(c *types.SpelltextClient) {
 			SetHighlightFullLine(true).
 			AddItem("- character", "preview your characters", 'a', func() { c.NavigateTo(constants.PAGE_CHARACTER) }).
 			AddItem("- inventory", "peek at what's in your bags", 'i', func() { c.NavigateTo(constants.PAGE_INVENTORY) }).
-			AddItem("- progress", "see what you've accomplished", 'p', func() { c.NavigateTo(constants.PAGE_PROGRESS) }).
+			// AddItem("- progress", "see what you've accomplished", 'p', func() { c.NavigateTo(constants.PAGE_PROGRESS) }).
 			AddItem("- combat", "THE proving grounds", 'c', func() { c.NavigateTo(constants.PAGE_COMBAT) }).
 			AddItem("- store", "buy some mighty goods", 's', func() { c.NavigateTo(constants.PAGE_STORE) }).
 			AddItem("- gamba", "gold gold gold\n\n\n", 'g', func() { c.NavigateTo(constants.PAGE_GAMBA) }).
@@ -30,32 +30,16 @@ func AddMainmenuPage(c *types.SpelltextClient) {
 
 		updates := tview.NewBox().SetTitle(" [::b]updates[::-] ").SetBorder(true).SetBorderPadding(1, 1, 5, 5)
 
-		guide := tview.NewFlex().
-			SetDirection(tview.FlexColumn).
-			AddItem(tview.NewTextView().SetText(" keymap legend: "), 0, 1, false)
-
-		characters, len := utils.AddNavGuide("a", "character")
-		guide.AddItem(characters, len, 1, false)
-
-		inventory, len := utils.AddNavGuide("i", "inventory")
-		guide.AddItem(inventory, len, 1, false)
-
-		progress, len := utils.AddNavGuide("p", "progress")
-		guide.AddItem(progress, len, 1, false)
-
-		combat, len := utils.AddNavGuide("b", "combat")
-		guide.AddItem(combat, len, 1, false)
-
-		store, len := utils.AddNavGuide("s", "store")
-		guide.AddItem(store, len, 1, false)
-
-		gamba, len := utils.AddNavGuide("g", "gamba")
-		guide.AddItem(gamba, len, 1, false)
-
-		chat, len := utils.AddNavGuide("y", "chat")
-		guide.AddItem(chat, len, 1, false)
-
-		guide.SetBorder(true)
+		guide := utils.CreateGuide([]*types.UnusableHotkey{
+			{Key: "a", Desc: "character"},
+			{Key: "i", Desc: "inventory"},
+			// {Key: "p", Desc: "progress"},
+			{Key: "b", Desc: "combat"},
+			{Key: "s", Desc: "store"},
+			{Key: "g", Desc: "gamble"},
+			{Key: "y", Desc: "chat"},
+			{Key: "q", Desc: "quit"},
+		})
 
 		f2 := tview.NewFlex().
 			SetDirection(tview.FlexRow).

@@ -43,9 +43,11 @@ for further usage, refer to the [docs/USAGE.md](./docs/USAGE.md) doc, where ever
 
 ## components
 - `chatserver`: uses fanout MQ (built upon NATS JetStream durable streams)
-- `progserver`: progre**sss**erver is a bit too much, no? keeps track of player story progression
-- `charserver`: servers as a primary character build service - specializations, talents
+- `charserver`: servers as a central characters' hub
+- `buildserver`: allows players to upgrade their characters via a build system (TODO)
 - `storeserver`: a vendor-based marketplace service
 - `combatserver`: instances a isolated '1v1' environment for two entities (players, NPCs)
-- `gambaserver`: lets players open chests of various tiers by spending currency - contacts `inventoryserver` upon ChestOpenEvent 
-
+- `gambaserver`: lets players open chests of various tiers by spending currency
+- `authserver`: responsible for authentication
+- `inventoryserver`: sole purpose of organising (CRUD) items into the character inventories (backpack)
+- `progserver`: progre**sss**erver is a bit too much, no? keeps track of player story progression (TODO)

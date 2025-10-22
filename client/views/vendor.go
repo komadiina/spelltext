@@ -161,20 +161,11 @@ func AddVendorPage(c *types.SpelltextClient) {
 		table.SetEvaluateAllRows(true)
 		table.SetBorderPadding(1, 1, 5, 5)
 
-		guide := tview.NewFlex().
-			SetDirection(tview.FlexColumn).
-			AddItem(tview.NewTextView().SetText(" [::b]keymap legend[::-]: "), 0, 1, false)
-
-		guide.SetBorder(true)
-
-		add, len := utils.AddNavGuide("enter", "add to basket")
-		guide.AddItem(add, len, 1, false)
-
-		buy, len := utils.AddNavGuide("ctrl+b", "buy")
-		guide.AddItem(buy, len, 1, false)
-
-		back, len := utils.AddNavGuide("esc", "back")
-		guide.AddItem(back, len, 1, false)
+		guide := utils.CreateGuide([]*types.UnusableHotkey{
+			{Key: "enter", Desc: "add to basket"},
+			{Key: "ctrl+b", Desc: "buy"},
+			{Key: "esc", Desc: "back"},
+		})
 
 		flex = flex.
 			AddItem(table, 0, 1, true).

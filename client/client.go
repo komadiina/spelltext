@@ -55,6 +55,8 @@ func InitializePages(client *types.SpelltextClient) {
 	views.AddCombatPage(client)
 	views.AddInventoryPage(client)
 	views.AddVendorPage(client)
+	views.AddCreateCharacterPage(client)
+	views.AddFightPage(client)
 }
 
 func InitializeClients(c *types.SpelltextClient) {
@@ -264,10 +266,10 @@ func main() {
 
 	fmt.Print(banner)
 	goodbye := `
-		> thanks for playing this torturefest
-		> a game by ogg/komadiina (https://github.com/komadiina)
-		> follow the development at https://github.com/komadiina/spelltext
-		~ kthxb
-	`
+> thanks for playing this torturefest
+> a game by ogg/komadiina (https://github.com/komadiina)
+> follow the development at https://github.com/komadiina/spelltext
+~ kthxb
+`
 	fmt.Print(goodbye)
 }

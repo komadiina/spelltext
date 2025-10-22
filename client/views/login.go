@@ -30,8 +30,9 @@ func AddLoginPage(c *types.SpelltextClient) {
 				password = strings.Trim(text, " ")
 			}).
 			AddButton("login", func() {
-				functions.LoginUser(c, username.GetText(), password)
-				c.Storage.Ministate.Username = username.GetText()
+				uname := strings.ToLower(username.GetText())
+				functions.LoginUser(c, uname, password)
+				c.Storage.Ministate.Username = uname
 				functions.SetLastSelectedCharacter(c)
 				c.PageManager.Push(constants.PAGE_MAINMENU, false)
 			})

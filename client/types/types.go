@@ -38,7 +38,8 @@ type SpelltextClient struct {
 }
 
 type Ministate struct {
-	Username string
+	Username   string
+	CurrentNpc *pbRepo.Npc
 }
 
 type AppStorage struct {
@@ -98,4 +99,9 @@ type CharacterStats struct {
 	Spellpower   int64
 	Armor        int64
 	Damage       int64
+}
+
+type UnusableHotkey struct {
+	Key  string
+	Desc string
 }

@@ -12,5 +12,6 @@ create table npcs (
 );
 
 create index idx_npcs_id on npcs (id);
+create index idx_npc_template_id on npcs (template_id);
 
 -- alter table npcs replica identity full;

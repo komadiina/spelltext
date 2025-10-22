@@ -14,7 +14,7 @@ create table item_templates (
   primary key(id)
 );
 
-create unique index idx_item_templates_id on item_templates (id);
-create index idx_item_templates_buyable_with_tokens on item_templates (buyable_with_tokens);
+create index idx_item_templates_item_type_id on item_templates (item_type_id);
+create index idx_item_templates_equip_slot_id on item_templates (equip_slot_id);
 
 -- alter table item_templates replica identity full;

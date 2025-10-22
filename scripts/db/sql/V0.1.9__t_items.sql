@@ -12,7 +12,6 @@ create table items (
     foreign key (item_template_id) references item_templates (id)
 );
 
-create unique index idx_items_id on items (id);
-create index idx_items_id_item_template_id on items (id, item_template_id);
+create index idx_items_item_template_id on items (item_template_id);
 
 -- alter table items replica identity full;

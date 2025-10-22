@@ -13,7 +13,6 @@ create table abilities (
     spellpower_multiplier float not null default 1.0 
 );
 
-create index idx_abilities_id on abilities (id);
 create index idx_abilities_type on abilities (type);
 
 -- alter table abilities replica identity full;
