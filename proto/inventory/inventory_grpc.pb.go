@@ -8,6 +8,7 @@ package inventory
 
 import (
 	context "context"
+	health "github.com/komadiina/spelltext/proto/health"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -19,7 +20,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Inventory_Ping_FullMethodName               = "/inventory.Inventory/Ping"
+	Inventory_Check_FullMethodName              = "/inventory.Inventory/Check"
 	Inventory_GetBalance_FullMethodName         = "/inventory.Inventory/GetBalance"
 	Inventory_SellItem_FullMethodName           = "/inventory.Inventory/SellItem"
 	Inventory_AddItemsToBackpack_FullMethodName = "/inventory.Inventory/AddItemsToBackpack"
@@ -30,7 +31,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type InventoryClient interface {
-	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
+	Check(ctx context.Context, in *health.HealthCheckRequest, opts ...grpc.CallOption) (*health.HealthCheckResponse, error)
 	GetBalance(ctx context.Context, in *InventoryBalanceRequest, opts ...grpc.CallOption) (*InventoryBalanceResponse, error)
 	SellItem(ctx context.Context, in *SellItemRequest, opts ...grpc.CallOption) (*SellItemResponse, error)
 	AddItemsToBackpack(ctx context.Context, in *AddItemsToBackpackRequest, opts ...grpc.CallOption) (*AddItemsToBackpackResponse, error)
@@ -45,10 +46,10 @@ func NewInventoryClient(cc grpc.ClientConnInterface) InventoryClient {
 	return &inventoryClient{cc}
 }
 
-func (c *inventoryClient) Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error) {
+func (c *inventoryClient) Check(ctx context.Context, in *health.HealthCheckRequest, opts ...grpc.CallOption) (*health.HealthCheckResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(PingResponse)
-	err := c.cc.Invoke(ctx, Inventory_Ping_FullMethodName, in, out, cOpts...)
+	out := new(health.HealthCheckResponse)
+	err := c.cc.Invoke(ctx, Inventory_Check_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -99,7 +100,7 @@ func (c *inventoryClient) ListBackpackItems(ctx context.Context, in *ListBackpac
 // All implementations must embed UnimplementedInventoryServer
 // for forward compatibility.
 type InventoryServer interface {
-	Ping(context.Context, *PingRequest) (*PingResponse, error)
+	Check(context.Context, *health.HealthCheckRequest) (*health.HealthCheckResponse, error)
 	GetBalance(context.Context, *InventoryBalanceRequest) (*InventoryBalanceResponse, error)
 	SellItem(context.Context, *SellItemRequest) (*SellItemResponse, error)
 	AddItemsToBackpack(context.Context, *AddItemsToBackpackRequest) (*AddItemsToBackpackResponse, error)
@@ -114,8 +115,8 @@ type InventoryServer interface {
 // pointer dereference when methods are called.
 type UnimplementedInventoryServer struct{}
 
-func (UnimplementedInventoryServer) Ping(context.Context, *PingRequest) (*PingResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
+func (UnimplementedInventoryServer) Check(context.Context, *health.HealthCheckRequest) (*health.HealthCheckResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Check not implemented")
 }
 func (UnimplementedInventoryServer) GetBalance(context.Context, *InventoryBalanceRequest) (*InventoryBalanceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetBalance not implemented")
@@ -150,20 +151,20 @@ func RegisterInventoryServer(s grpc.ServiceRegistrar, srv InventoryServer) {
 	s.RegisterService(&Inventory_ServiceDesc, srv)
 }
 
-func _Inventory_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PingRequest)
+func _Inventory_Check_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(health.HealthCheckRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(InventoryServer).Ping(ctx, in)
+		return srv.(InventoryServer).Check(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Inventory_Ping_FullMethodName,
+		FullMethod: Inventory_Check_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InventoryServer).Ping(ctx, req.(*PingRequest))
+		return srv.(InventoryServer).Check(ctx, req.(*health.HealthCheckRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -248,8 +249,8 @@ var Inventory_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*InventoryServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Ping",
-			Handler:    _Inventory_Ping_Handler,
+			MethodName: "Check",
+			Handler:    _Inventory_Check_Handler,
 		},
 		{
 			MethodName: "GetBalance",

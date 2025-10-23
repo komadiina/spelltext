@@ -8,13 +8,14 @@ import (
 	sq "github.com/Masterminds/squirrel"
 	"github.com/jackc/pgx/v5/pgxpool"
 	pb "github.com/komadiina/spelltext/proto/gamba"
+	pbHealth "github.com/komadiina/spelltext/proto/health"
 	pbInventory "github.com/komadiina/spelltext/proto/inventory"
 	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	"github.com/komadiina/spelltext/server/gamba/config"
+	health "github.com/komadiina/spelltext/utils"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	healthpb "google.golang.org/grpc/health/grpc_health_v1"
 )
 
 type Connections struct {
@@ -27,7 +28,7 @@ type Clients struct {
 
 type GambaService struct {
 	pb.UnimplementedGambaServer
-	healthpb.UnimplementedHealthServer
+	health.HealthCheckable
 	DbPool      *pgxpool.Pool
 	Config      *config.Config
 	Logger      *logging.Logger
@@ -35,8 +36,8 @@ type GambaService struct {
 	Connections *Connections
 }
 
-func (s *GambaService) Check(ctx context.Context, req *healthpb.HealthCheckRequest) (*healthpb.HealthCheckResponse, error) {
-	return &healthpb.HealthCheckResponse{Status: healthpb.HealthCheckResponse_SERVING}, nil
+func (s *GambaService) Check(ctx context.Context, req *pbHealth.HealthCheckRequest) (*pbHealth.HealthCheckResponse, error) {
+	return &pbHealth.HealthCheckResponse{Status: pbHealth.HealthCheckResponse_SERVING}, nil
 }
 
 func (s *GambaService) GetChests(ctx context.Context, req *pb.GetChestsRequest) (*pb.GetChestsResponse, error) {

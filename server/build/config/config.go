@@ -11,6 +11,9 @@ type Config struct {
 	PgDbName             string `yaml:"pgDbName" env:"PG_DB_NAME" env-default:"spelltext"`
 	PgSSLMode            string `yaml:"pgSslMode" env:"PG_SSL_MODE" env-default:"disable"`
 	CharacterServicePort int    `yaml:"charserver.port" env:"CHARSERVER_PORT" env-default:"50054"`
+	HealthCheckInterval  int    `yaml:"healthCheckInterval" env:"HEALTH_CHECK_INTERVAL" env-default:"10"`
+	MaxReconnAttempts    int    `yaml:"maxReconnectAttempts" env:"MAX_RECONNECT_ATTEMPTS" env-default:"3"`
+	Backoff              int    `yaml:"backoff" env:"BACKOFF" env-default:"2"`
 }
 
 func LoadConfig() (*Config, error) {

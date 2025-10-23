@@ -3,6 +3,7 @@ package char;
 option go_package = "github.com/komadiina/spelltext/proto/proto/char;char";
 
 import "repo/repo.proto";
+import "health/health.proto";
 
 message ListHeroesRequest {}
 
@@ -113,11 +114,8 @@ message GetEquipSlotsResponse {
 }
 
 
-message PingRequest {}
-message PingResponse {}
-
 service Character {
-    rpc Ping                     (PingRequest)                      returns (PingResponse);
+    rpc Check                    (health.HealthCheckRequest)        returns (health.HealthCheckResponse);
     rpc ListHeroes               (ListHeroesRequest)                returns (ListHeroesResponse);
     rpc ListCharacters           (ListCharactersRequest)            returns (ListCharactersResponse);
     rpc SetSelectedCharacter     (SetSelectedCharacterRequest)      returns (SetSelectedCharacterResponse);

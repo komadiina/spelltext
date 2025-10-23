@@ -7,7 +7,9 @@ import (
 
 	"github.com/google/uuid"
 	pb "github.com/komadiina/spelltext/proto/chat"
+	pbHealth "github.com/komadiina/spelltext/proto/health"
 	"github.com/komadiina/spelltext/server/chat/config"
+	health "github.com/komadiina/spelltext/utils"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 	"github.com/nats-io/nats.go"
 	"google.golang.org/protobuf/proto"
@@ -15,10 +17,15 @@ import (
 
 type ChatService struct {
 	pb.UnimplementedChatServer
+	health.HealthCheckable
 	sentMessages int
 	Nats         *nats.Conn
 	Config       *config.Config
 	Logger       *logging.Logger
+}
+
+func (s *ChatService) Check(ctx context.Context, req *pbHealth.HealthCheckRequest) (*pbHealth.HealthCheckResponse, error) {
+	return &pbHealth.HealthCheckResponse{Status: pbHealth.HealthCheckResponse_SERVING}, nil
 }
 
 func (s *ChatService) publishMessage(msg *pb.ChatMessage) error {

@@ -9,16 +9,27 @@ import (
 	pbRepo "github.com/komadiina/spelltext/proto/repo"
 )
 
-func GetAbilities(c *types.SpelltextClient) (*[]*pbRepo.Ability, *[]*pbRepo.Ability, *[]*pbRepo.Ability) {
+func GetAbilities(c *types.SpelltextClient) (*pbBuild.ListAbilitiesResponse, error) {
 	req := &pbBuild.ListAbilitiesRequest{Character: c.Storage.SelectedCharacter}
 	abilities, err := c.Clients.BuildClient.ListAbilities(*c.Context, req)
 	if err != nil {
 		c.Logger.Error(err)
-		return nil, nil, nil
+		return nil, err
 	}
 
-	return &abilities.Available, &abilities.Locked, &abilities.Upgraded
+	return abilities, nil
 }
+
+// func GetPlayerAbilities(c *types.SpelltextClient) []*pbRepo.PlayerAbilityTree {
+// 	req := &pbBuild.GetPlayerAbilitiesRequest{Character: c.Storage.SelectedCharacter}
+// 	resp, err := c.Clients.BuildClient.GetPlayerAbilities(*c.Context, req)
+// 	if err != nil {
+// 		c.Logger.Error(err)
+// 		return nil
+// 	}
+
+// 	return resp
+// }
 
 func GetSpellDetails(ability *pbRepo.Ability) string {
 	return fmt.Sprintf(
@@ -47,8 +58,15 @@ talent points: how many [%s]talent points[""][white][""] are required to unlock 
 	)
 }
 
-func UpgradeAbility(c *types.SpelltextClient, ability *pbRepo.Ability) error {
-	req := &pbBuild.UpgradeAbilityRequest{CharacterId: c.Storage.SelectedCharacter.CharacterId, AbilityId: ability.Id}
+func UpgradeAbility(c *types.SpelltextClient, ability *pbRepo.Ability, newAbility bool) error {
+	req := &pbBuild.UpgradeAbilityRequest{
+		CharacterId: c.Storage.SelectedCharacter.CharacterId,
+		AbilityId:   ability.Id,
+		NewAbility:  newAbility,
+	}
 	_, err := c.Clients.BuildClient.UpgradeAbility(*c.Context, req)
+	if err == nil {
+		c.Storage.SelectedCharacter.UnspentPoints -= 1
+	}
 	return err
 }

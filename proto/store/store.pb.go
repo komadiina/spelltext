@@ -7,6 +7,7 @@
 package store
 
 import (
+	health "github.com/komadiina/spelltext/proto/health"
 	repo "github.com/komadiina/spelltext/proto/repo"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -530,83 +531,11 @@ func (x *SellItemResponse) GetMessage() string {
 	return ""
 }
 
-type PingRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *PingRequest) Reset() {
-	*x = PingRequest{}
-	mi := &file_store_store_proto_msgTypes[9]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *PingRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*PingRequest) ProtoMessage() {}
-
-func (x *PingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_store_store_proto_msgTypes[9]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use PingRequest.ProtoReflect.Descriptor instead.
-func (*PingRequest) Descriptor() ([]byte, []int) {
-	return file_store_store_proto_rawDescGZIP(), []int{9}
-}
-
-type PingResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *PingResponse) Reset() {
-	*x = PingResponse{}
-	mi := &file_store_store_proto_msgTypes[10]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *PingResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*PingResponse) ProtoMessage() {}
-
-func (x *PingResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_store_store_proto_msgTypes[10]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use PingResponse.ProtoReflect.Descriptor instead.
-func (*PingResponse) Descriptor() ([]byte, []int) {
-	return file_store_store_proto_rawDescGZIP(), []int{10}
-}
-
 var File_store_store_proto protoreflect.FileDescriptor
 
 const file_store_store_proto_rawDesc = "" +
 	"\n" +
-	"\x11store/store.proto\x12\x05store\x1a\x0frepo/repo.proto\",\n" +
+	"\x11store/store.proto\x12\x05store\x1a\x0frepo/repo.proto\x1a\x13health/health.proto\",\n" +
 	"\x16StoreListVendorRequest\x12\x12\n" +
 	"\x04noop\x18\x01 \x01(\tR\x04noop\"A\n" +
 	"\x17StoreListVendorResponse\x12&\n" +
@@ -644,11 +573,9 @@ const file_store_store_proto_rawDesc = "" +
 	"\x10item_instance_id\x18\x02 \x01(\x03R\x0eitemInstanceId\"F\n" +
 	"\x10SellItemResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage\"\r\n" +
-	"\vPingRequest\"\x0e\n" +
-	"\fPingResponse2\xd3\x02\n" +
-	"\x05Store\x12/\n" +
-	"\x04Ping\x12\x12.store.PingRequest\x1a\x13.store.PingResponse\x12L\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage2\xe4\x02\n" +
+	"\x05Store\x12@\n" +
+	"\x05Check\x12\x1a.health.HealthCheckRequest\x1a\x1b.health.HealthCheckResponse\x12L\n" +
 	"\vListVendors\x12\x1d.store.StoreListVendorRequest\x1a\x1e.store.StoreListVendorResponse\x12S\n" +
 	"\x0fListVendorItems\x12!.store.StoreListVendorItemRequest\x1a\x1d.store.ListVendorItemResponse\x129\n" +
 	"\bBuyItems\x12\x15.store.BuyItemRequest\x1a\x16.store.BuyItemResponse\x12;\n" +
@@ -666,7 +593,7 @@ func file_store_store_proto_rawDescGZIP() []byte {
 	return file_store_store_proto_rawDescData
 }
 
-var file_store_store_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_store_store_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_store_store_proto_goTypes = []any{
 	(*StoreListVendorRequest)(nil),     // 0: store.StoreListVendorRequest
 	(*StoreListVendorResponse)(nil),    // 1: store.StoreListVendorResponse
@@ -677,20 +604,20 @@ var file_store_store_proto_goTypes = []any{
 	(*BuyItemResponse)(nil),            // 6: store.BuyItemResponse
 	(*SellItemRequest)(nil),            // 7: store.SellItemRequest
 	(*SellItemResponse)(nil),           // 8: store.SellItemResponse
-	(*PingRequest)(nil),                // 9: store.PingRequest
-	(*PingResponse)(nil),               // 10: store.PingResponse
-	(*repo.Vendor)(nil),                // 11: repo.Vendor
-	(*repo.Item)(nil),                  // 12: repo.Item
+	(*repo.Vendor)(nil),                // 9: repo.Vendor
+	(*repo.Item)(nil),                  // 10: repo.Item
+	(*health.HealthCheckRequest)(nil),  // 11: health.HealthCheckRequest
+	(*health.HealthCheckResponse)(nil), // 12: health.HealthCheckResponse
 }
 var file_store_store_proto_depIdxs = []int32{
-	11, // 0: store.StoreListVendorResponse.vendors:type_name -> repo.Vendor
-	12, // 1: store.ListVendorItemResponse.items:type_name -> repo.Item
-	9,  // 2: store.Store.Ping:input_type -> store.PingRequest
+	9,  // 0: store.StoreListVendorResponse.vendors:type_name -> repo.Vendor
+	10, // 1: store.ListVendorItemResponse.items:type_name -> repo.Item
+	11, // 2: store.Store.Check:input_type -> health.HealthCheckRequest
 	0,  // 3: store.Store.ListVendors:input_type -> store.StoreListVendorRequest
 	2,  // 4: store.Store.ListVendorItems:input_type -> store.StoreListVendorItemRequest
 	5,  // 5: store.Store.BuyItems:input_type -> store.BuyItemRequest
 	7,  // 6: store.Store.SellItem:input_type -> store.SellItemRequest
-	10, // 7: store.Store.Ping:output_type -> store.PingResponse
+	12, // 7: store.Store.Check:output_type -> health.HealthCheckResponse
 	1,  // 8: store.Store.ListVendors:output_type -> store.StoreListVendorResponse
 	3,  // 9: store.Store.ListVendorItems:output_type -> store.ListVendorItemResponse
 	6,  // 10: store.Store.BuyItems:output_type -> store.BuyItemResponse
@@ -713,7 +640,7 @@ func file_store_store_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_store_store_proto_rawDesc), len(file_store_store_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

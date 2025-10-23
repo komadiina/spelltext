@@ -7,16 +7,9 @@ import (
 	"github.com/komadiina/spelltext/client/functions"
 	"github.com/komadiina/spelltext/client/types"
 	pbRepo "github.com/komadiina/spelltext/proto/repo"
+	generics "github.com/komadiina/spelltext/utils"
 	"github.com/rivo/tview"
 )
-
-func Map[T, V any](ts []T, fn func(T) V) []V {
-	result := make([]V, len(ts))
-	for i, t := range ts {
-		result[i] = fn(t)
-	}
-	return result
-}
 
 func AddCreateCharacterPage(c *types.SpelltextClient) {
 	c.PageManager.RegisterFactory(constants.PAGE_CREATE_CHARACTER, func() tview.Primitive {
@@ -45,7 +38,7 @@ func AddCreateCharacterPage(c *types.SpelltextClient) {
 			}).
 			AddDropDown(
 				"hero",
-				Map(heroes, func(h *pbRepo.Hero) string { return h.Name }),
+				generics.Map(heroes, func(h *pbRepo.Hero) string { return h.Name }),
 				0,
 				func(option string, optionIndex int) {
 					newCharacter.Hero = heroes[optionIndex]

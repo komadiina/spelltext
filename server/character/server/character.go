@@ -9,22 +9,23 @@ import (
 	sq "github.com/Masterminds/squirrel"
 
 	pb "github.com/komadiina/spelltext/proto/char"
+	pbHealth "github.com/komadiina/spelltext/proto/health"
 	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	"github.com/komadiina/spelltext/server/character/config"
+	monitor "github.com/komadiina/spelltext/utils"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
-	healthpb "google.golang.org/grpc/health/grpc_health_v1"
 )
 
 type CharacterService struct {
 	pb.UnimplementedCharacterServer
-	healthpb.UnimplementedHealthServer
+	monitor.HealthCheckable
 	DbPool *pgxpool.Pool
 	Config *config.Config
 	Logger *logging.Logger
 }
 
-func (s *CharacterService) Check(ctx context.Context, req *healthpb.HealthCheckRequest) (*healthpb.HealthCheckResponse, error) {
-	return &healthpb.HealthCheckResponse{Status: healthpb.HealthCheckResponse_SERVING}, nil
+func (s *CharacterService) Check(ctx context.Context, req *pbHealth.HealthCheckRequest) (*pbHealth.HealthCheckResponse, error) {
+	return &pbHealth.HealthCheckResponse{Status: pbHealth.HealthCheckResponse_SERVING}, nil
 }
 
 func (s *CharacterService) ListHeroes(ctx context.Context, req *pb.ListHeroesRequest) (*pb.ListHeroesResponse, error) {

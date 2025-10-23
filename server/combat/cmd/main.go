@@ -61,7 +61,7 @@ func InitializePool(s *server.CombatService, context context.Context, conninfo s
 			s.DbPool = pool
 
 			return nil
-		} else if err != nil && try < maxRetries {
+		} else {
 			// conn not established, backoff
 			s.Logger.Warn("failed to establish database connection, backing off...", "reason", err, "backoff_seconds", backoff.Seconds())
 			time.Sleep(backoff)

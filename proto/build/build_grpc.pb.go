@@ -8,6 +8,7 @@ package build
 
 import (
 	context "context"
+	health "github.com/komadiina/spelltext/proto/health"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -19,7 +20,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Build_Ping_FullMethodName           = "/build.Build/Ping"
+	Build_Check_FullMethodName          = "/build.Build/Check"
 	Build_ListAbilities_FullMethodName  = "/build.Build/ListAbilities"
 	Build_UpgradeAbility_FullMethodName = "/build.Build/UpgradeAbility"
 )
@@ -28,7 +29,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BuildClient interface {
-	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
+	Check(ctx context.Context, in *health.HealthCheckRequest, opts ...grpc.CallOption) (*health.HealthCheckResponse, error)
 	ListAbilities(ctx context.Context, in *ListAbilitiesRequest, opts ...grpc.CallOption) (*ListAbilitiesResponse, error)
 	UpgradeAbility(ctx context.Context, in *UpgradeAbilityRequest, opts ...grpc.CallOption) (*UpgradeAbilityResponse, error)
 }
@@ -41,10 +42,10 @@ func NewBuildClient(cc grpc.ClientConnInterface) BuildClient {
 	return &buildClient{cc}
 }
 
-func (c *buildClient) Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error) {
+func (c *buildClient) Check(ctx context.Context, in *health.HealthCheckRequest, opts ...grpc.CallOption) (*health.HealthCheckResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(PingResponse)
-	err := c.cc.Invoke(ctx, Build_Ping_FullMethodName, in, out, cOpts...)
+	out := new(health.HealthCheckResponse)
+	err := c.cc.Invoke(ctx, Build_Check_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +76,7 @@ func (c *buildClient) UpgradeAbility(ctx context.Context, in *UpgradeAbilityRequ
 // All implementations must embed UnimplementedBuildServer
 // for forward compatibility.
 type BuildServer interface {
-	Ping(context.Context, *PingRequest) (*PingResponse, error)
+	Check(context.Context, *health.HealthCheckRequest) (*health.HealthCheckResponse, error)
 	ListAbilities(context.Context, *ListAbilitiesRequest) (*ListAbilitiesResponse, error)
 	UpgradeAbility(context.Context, *UpgradeAbilityRequest) (*UpgradeAbilityResponse, error)
 	mustEmbedUnimplementedBuildServer()
@@ -88,8 +89,8 @@ type BuildServer interface {
 // pointer dereference when methods are called.
 type UnimplementedBuildServer struct{}
 
-func (UnimplementedBuildServer) Ping(context.Context, *PingRequest) (*PingResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
+func (UnimplementedBuildServer) Check(context.Context, *health.HealthCheckRequest) (*health.HealthCheckResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Check not implemented")
 }
 func (UnimplementedBuildServer) ListAbilities(context.Context, *ListAbilitiesRequest) (*ListAbilitiesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListAbilities not implemented")
@@ -118,20 +119,20 @@ func RegisterBuildServer(s grpc.ServiceRegistrar, srv BuildServer) {
 	s.RegisterService(&Build_ServiceDesc, srv)
 }
 
-func _Build_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PingRequest)
+func _Build_Check_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(health.HealthCheckRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BuildServer).Ping(ctx, in)
+		return srv.(BuildServer).Check(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Build_Ping_FullMethodName,
+		FullMethod: Build_Check_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BuildServer).Ping(ctx, req.(*PingRequest))
+		return srv.(BuildServer).Check(ctx, req.(*health.HealthCheckRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -180,8 +181,8 @@ var Build_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*BuildServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Ping",
-			Handler:    _Build_Ping_Handler,
+			MethodName: "Check",
+			Handler:    _Build_Check_Handler,
 		},
 		{
 			MethodName: "ListAbilities",

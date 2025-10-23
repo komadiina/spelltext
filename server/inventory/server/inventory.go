@@ -8,17 +8,24 @@ import (
 	sq "github.com/Masterminds/squirrel"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+	pbHealth "github.com/komadiina/spelltext/proto/health"
 	pb "github.com/komadiina/spelltext/proto/inventory"
 	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	"github.com/komadiina/spelltext/server/inventory/config"
+	health "github.com/komadiina/spelltext/utils"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 )
 
 type InventoryService struct {
 	pb.UnimplementedInventoryServer
+	health.HealthCheckable
 	DbPool *pgxpool.Pool
 	Config *config.Config
 	Logger *logging.Logger
+}
+
+func (s *InventoryService) Check(ctx context.Context, req *pbHealth.HealthCheckRequest) (*pbHealth.HealthCheckResponse, error) {
+	return &pbHealth.HealthCheckResponse{Status: pbHealth.HealthCheckResponse_SERVING}, nil
 }
 
 func tryConnect(s *InventoryService, context context.Context, conninfo string, backoff time.Duration, maxRetries int, boFormula func(time.Duration) time.Duration) (pgx.Conn, error) {
@@ -33,7 +40,7 @@ func tryConnect(s *InventoryService, context context.Context, conninfo string, b
 			// conn established within maxRetries
 			s.Logger.Info("pgpool connection established")
 			return *conn, nil
-		} else if err != nil && try < maxRetries {
+		} else {
 			// conn not established, backoff
 			s.Logger.Warn("failed to establish database connection, backing off...", "reason", err, "backoff_seconds", backoff.Seconds())
 			time.Sleep(backoff)

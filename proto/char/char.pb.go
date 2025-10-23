@@ -7,6 +7,7 @@
 package char
 
 import (
+	health "github.com/komadiina/spelltext/proto/health"
 	repo "github.com/komadiina/spelltext/proto/repo"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -1190,83 +1191,11 @@ func (x *GetEquipSlotsResponse) GetSlots() []*repo.EquipSlot {
 	return nil
 }
 
-type PingRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *PingRequest) Reset() {
-	*x = PingRequest{}
-	mi := &file_char_char_proto_msgTypes[24]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *PingRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*PingRequest) ProtoMessage() {}
-
-func (x *PingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_char_char_proto_msgTypes[24]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use PingRequest.ProtoReflect.Descriptor instead.
-func (*PingRequest) Descriptor() ([]byte, []int) {
-	return file_char_char_proto_rawDescGZIP(), []int{24}
-}
-
-type PingResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *PingResponse) Reset() {
-	*x = PingResponse{}
-	mi := &file_char_char_proto_msgTypes[25]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *PingResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*PingResponse) ProtoMessage() {}
-
-func (x *PingResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_char_char_proto_msgTypes[25]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use PingResponse.ProtoReflect.Descriptor instead.
-func (*PingResponse) Descriptor() ([]byte, []int) {
-	return file_char_char_proto_rawDescGZIP(), []int{25}
-}
-
 var File_char_char_proto protoreflect.FileDescriptor
 
 const file_char_char_proto_rawDesc = "" +
 	"\n" +
-	"\x0fchar/char.proto\x12\x04char\x1a\x0frepo/repo.proto\"\x13\n" +
+	"\x0fchar/char.proto\x12\x04char\x1a\x0frepo/repo.proto\x1a\x13health/health.proto\"\x13\n" +
 	"\x11ListHeroesRequest\"8\n" +
 	"\x12ListHeroesResponse\x12\"\n" +
 	"\x06heroes\x18\x01 \x03(\v2\n" +
@@ -1332,11 +1261,9 @@ const file_char_char_proto_rawDesc = "" +
 	"\ritemInstances\x18\x01 \x03(\v2\x12.repo.ItemInstanceR\ritemInstances\"\x16\n" +
 	"\x14GetEquipSlotsRequest\">\n" +
 	"\x15GetEquipSlotsResponse\x12%\n" +
-	"\x05slots\x18\x01 \x03(\v2\x0f.repo.EquipSlotR\x05slots\"\r\n" +
-	"\vPingRequest\"\x0e\n" +
-	"\fPingResponse2\xdc\a\n" +
-	"\tCharacter\x12-\n" +
-	"\x04Ping\x12\x11.char.PingRequest\x1a\x12.char.PingResponse\x12?\n" +
+	"\x05slots\x18\x01 \x03(\v2\x0f.repo.EquipSlotR\x05slots2\xef\a\n" +
+	"\tCharacter\x12@\n" +
+	"\x05Check\x12\x1a.health.HealthCheckRequest\x1a\x1b.health.HealthCheckResponse\x12?\n" +
 	"\n" +
 	"ListHeroes\x12\x17.char.ListHeroesRequest\x1a\x18.char.ListHeroesResponse\x12K\n" +
 	"\x0eListCharacters\x12\x1b.char.ListCharactersRequest\x1a\x1c.char.ListCharactersResponse\x12]\n" +
@@ -1363,7 +1290,7 @@ func file_char_char_proto_rawDescGZIP() []byte {
 	return file_char_char_proto_rawDescData
 }
 
-var file_char_char_proto_msgTypes = make([]protoimpl.MessageInfo, 26)
+var file_char_char_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
 var file_char_char_proto_goTypes = []any{
 	(*ListHeroesRequest)(nil),                // 0: char.ListHeroesRequest
 	(*ListHeroesResponse)(nil),               // 1: char.ListHeroesResponse
@@ -1389,23 +1316,23 @@ var file_char_char_proto_goTypes = []any{
 	(*GetEquippedItemsResponse)(nil),         // 21: char.GetEquippedItemsResponse
 	(*GetEquipSlotsRequest)(nil),             // 22: char.GetEquipSlotsRequest
 	(*GetEquipSlotsResponse)(nil),            // 23: char.GetEquipSlotsResponse
-	(*PingRequest)(nil),                      // 24: char.PingRequest
-	(*PingResponse)(nil),                     // 25: char.PingResponse
-	(*repo.Hero)(nil),                        // 26: repo.Hero
-	(*repo.Character)(nil),                   // 27: repo.Character
-	(*repo.ItemInstance)(nil),                // 28: repo.ItemInstance
-	(*repo.EquipSlot)(nil),                   // 29: repo.EquipSlot
+	(*repo.Hero)(nil),                        // 24: repo.Hero
+	(*repo.Character)(nil),                   // 25: repo.Character
+	(*repo.ItemInstance)(nil),                // 26: repo.ItemInstance
+	(*repo.EquipSlot)(nil),                   // 27: repo.EquipSlot
+	(*health.HealthCheckRequest)(nil),        // 28: health.HealthCheckRequest
+	(*health.HealthCheckResponse)(nil),       // 29: health.HealthCheckResponse
 }
 var file_char_char_proto_depIdxs = []int32{
-	26, // 0: char.ListHeroesResponse.heroes:type_name -> repo.Hero
-	27, // 1: char.ListCharactersResponse.characters:type_name -> repo.Character
-	27, // 2: char.GetLastSelectedCharacterResponse.character:type_name -> repo.Character
-	27, // 3: char.GetCharacterResponse.character:type_name -> repo.Character
-	26, // 4: char.CreateCharacterRequest.hero:type_name -> repo.Hero
-	27, // 5: char.CreateCharacterResponse.character:type_name -> repo.Character
-	28, // 6: char.GetEquippedItemsResponse.itemInstances:type_name -> repo.ItemInstance
-	29, // 7: char.GetEquipSlotsResponse.slots:type_name -> repo.EquipSlot
-	24, // 8: char.Character.Ping:input_type -> char.PingRequest
+	24, // 0: char.ListHeroesResponse.heroes:type_name -> repo.Hero
+	25, // 1: char.ListCharactersResponse.characters:type_name -> repo.Character
+	25, // 2: char.GetLastSelectedCharacterResponse.character:type_name -> repo.Character
+	25, // 3: char.GetCharacterResponse.character:type_name -> repo.Character
+	24, // 4: char.CreateCharacterRequest.hero:type_name -> repo.Hero
+	25, // 5: char.CreateCharacterResponse.character:type_name -> repo.Character
+	26, // 6: char.GetEquippedItemsResponse.itemInstances:type_name -> repo.ItemInstance
+	27, // 7: char.GetEquipSlotsResponse.slots:type_name -> repo.EquipSlot
+	28, // 8: char.Character.Check:input_type -> health.HealthCheckRequest
 	0,  // 9: char.Character.ListHeroes:input_type -> char.ListHeroesRequest
 	2,  // 10: char.Character.ListCharacters:input_type -> char.ListCharactersRequest
 	4,  // 11: char.Character.SetSelectedCharacter:input_type -> char.SetSelectedCharacterRequest
@@ -1418,7 +1345,7 @@ var file_char_char_proto_depIdxs = []int32{
 	16, // 18: char.Character.EquipItem:input_type -> char.EquipItemRequest
 	18, // 19: char.Character.UnequipItem:input_type -> char.UnequipItemRequest
 	22, // 20: char.Character.GetEquipSlots:input_type -> char.GetEquipSlotsRequest
-	25, // 21: char.Character.Ping:output_type -> char.PingResponse
+	29, // 21: char.Character.Check:output_type -> health.HealthCheckResponse
 	1,  // 22: char.Character.ListHeroes:output_type -> char.ListHeroesResponse
 	3,  // 23: char.Character.ListCharacters:output_type -> char.ListCharactersResponse
 	5,  // 24: char.Character.SetSelectedCharacter:output_type -> char.SetSelectedCharacterResponse
@@ -1449,7 +1376,7 @@ func file_char_char_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_char_char_proto_rawDesc), len(file_char_char_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   26,
+			NumMessages:   24,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

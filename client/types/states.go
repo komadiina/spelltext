@@ -8,3 +8,9 @@ type NpcFightState struct {
 	Npc           *pbRepo.Npc
 	CurrentHealth int64
 }
+
+type PlayerAbilities struct {
+	available []*pbRepo.Ability
+	unlocked  []*pbRepo.Ability
+	upgraded  []*pbRepo.Ability
+}

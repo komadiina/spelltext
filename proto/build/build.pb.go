@@ -7,6 +7,7 @@
 package build
 
 import (
+	health "github.com/komadiina/spelltext/proto/health"
 	repo "github.com/komadiina/spelltext/proto/repo"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -67,10 +68,10 @@ func (x *ListAbilitiesRequest) GetCharacter() *repo.Character {
 }
 
 type ListAbilitiesResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Available     []*repo.Ability        `protobuf:"bytes,1,rep,name=available,proto3" json:"available,omitempty"`
-	Locked        []*repo.Ability        `protobuf:"bytes,2,rep,name=locked,proto3" json:"locked,omitempty"`
-	Upgraded      []*repo.Ability        `protobuf:"bytes,3,rep,name=upgraded,proto3" json:"upgraded,omitempty"`
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Upgraded      []*repo.PlayerAbilityTree `protobuf:"bytes,1,rep,name=upgraded,proto3" json:"upgraded,omitempty"`
+	Available     []*repo.Ability           `protobuf:"bytes,2,rep,name=available,proto3" json:"available,omitempty"`
+	Locked        []*repo.Ability           `protobuf:"bytes,3,rep,name=locked,proto3" json:"locked,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -105,6 +106,13 @@ func (*ListAbilitiesResponse) Descriptor() ([]byte, []int) {
 	return file_build_build_proto_rawDescGZIP(), []int{1}
 }
 
+func (x *ListAbilitiesResponse) GetUpgraded() []*repo.PlayerAbilityTree {
+	if x != nil {
+		return x.Upgraded
+	}
+	return nil
+}
+
 func (x *ListAbilitiesResponse) GetAvailable() []*repo.Ability {
 	if x != nil {
 		return x.Available
@@ -119,17 +127,11 @@ func (x *ListAbilitiesResponse) GetLocked() []*repo.Ability {
 	return nil
 }
 
-func (x *ListAbilitiesResponse) GetUpgraded() []*repo.Ability {
-	if x != nil {
-		return x.Upgraded
-	}
-	return nil
-}
-
 type UpgradeAbilityRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	CharacterId   uint64                 `protobuf:"varint,1,opt,name=character_id,json=characterId,proto3" json:"character_id,omitempty"`
 	AbilityId     uint64                 `protobuf:"varint,2,opt,name=ability_id,json=abilityId,proto3" json:"ability_id,omitempty"`
+	NewAbility    bool                   `protobuf:"varint,3,opt,name=new_ability,json=newAbility,proto3" json:"new_ability,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -178,6 +180,13 @@ func (x *UpgradeAbilityRequest) GetAbilityId() uint64 {
 	return 0
 }
 
+func (x *UpgradeAbilityRequest) GetNewAbility() bool {
+	if x != nil {
+		return x.NewAbility
+	}
+	return false
+}
+
 type UpgradeAbilityResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
@@ -222,99 +231,27 @@ func (x *UpgradeAbilityResponse) GetSuccess() bool {
 	return false
 }
 
-type PingRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *PingRequest) Reset() {
-	*x = PingRequest{}
-	mi := &file_build_build_proto_msgTypes[4]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *PingRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*PingRequest) ProtoMessage() {}
-
-func (x *PingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_build_build_proto_msgTypes[4]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use PingRequest.ProtoReflect.Descriptor instead.
-func (*PingRequest) Descriptor() ([]byte, []int) {
-	return file_build_build_proto_rawDescGZIP(), []int{4}
-}
-
-type PingResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *PingResponse) Reset() {
-	*x = PingResponse{}
-	mi := &file_build_build_proto_msgTypes[5]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *PingResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*PingResponse) ProtoMessage() {}
-
-func (x *PingResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_build_build_proto_msgTypes[5]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use PingResponse.ProtoReflect.Descriptor instead.
-func (*PingResponse) Descriptor() ([]byte, []int) {
-	return file_build_build_proto_rawDescGZIP(), []int{5}
-}
-
 var File_build_build_proto protoreflect.FileDescriptor
 
 const file_build_build_proto_rawDesc = "" +
 	"\n" +
-	"\x11build/build.proto\x12\x05build\x1a\x0frepo/repo.proto\"E\n" +
+	"\x11build/build.proto\x12\x05build\x1a\x0frepo/repo.proto\x1a\x13health/health.proto\"E\n" +
 	"\x14ListAbilitiesRequest\x12-\n" +
-	"\tcharacter\x18\x01 \x01(\v2\x0f.repo.CharacterR\tcharacter\"\x96\x01\n" +
-	"\x15ListAbilitiesResponse\x12+\n" +
-	"\tavailable\x18\x01 \x03(\v2\r.repo.AbilityR\tavailable\x12%\n" +
-	"\x06locked\x18\x02 \x03(\v2\r.repo.AbilityR\x06locked\x12)\n" +
-	"\bupgraded\x18\x03 \x03(\v2\r.repo.AbilityR\bupgraded\"Y\n" +
+	"\tcharacter\x18\x01 \x01(\v2\x0f.repo.CharacterR\tcharacter\"\xa0\x01\n" +
+	"\x15ListAbilitiesResponse\x123\n" +
+	"\bupgraded\x18\x01 \x03(\v2\x17.repo.PlayerAbilityTreeR\bupgraded\x12+\n" +
+	"\tavailable\x18\x02 \x03(\v2\r.repo.AbilityR\tavailable\x12%\n" +
+	"\x06locked\x18\x03 \x03(\v2\r.repo.AbilityR\x06locked\"z\n" +
 	"\x15UpgradeAbilityRequest\x12!\n" +
 	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\x12\x1d\n" +
 	"\n" +
-	"ability_id\x18\x02 \x01(\x04R\tabilityId\"2\n" +
+	"ability_id\x18\x02 \x01(\x04R\tabilityId\x12\x1f\n" +
+	"\vnew_ability\x18\x03 \x01(\bR\n" +
+	"newAbility\"2\n" +
 	"\x16UpgradeAbilityResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess\"\r\n" +
-	"\vPingRequest\"\x0e\n" +
-	"\fPingResponse2\xd3\x01\n" +
-	"\x05Build\x12/\n" +
-	"\x04Ping\x12\x12.build.PingRequest\x1a\x13.build.PingResponse\x12J\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess2\xe4\x01\n" +
+	"\x05Build\x12@\n" +
+	"\x05Check\x12\x1a.health.HealthCheckRequest\x1a\x1b.health.HealthCheckResponse\x12J\n" +
 	"\rListAbilities\x12\x1b.build.ListAbilitiesRequest\x1a\x1c.build.ListAbilitiesResponse\x12M\n" +
 	"\x0eUpgradeAbility\x12\x1c.build.UpgradeAbilityRequest\x1a\x1d.build.UpgradeAbilityResponseB8Z6github.com/komadiina/spelltext/proto/proto/build;buildb\x06proto3"
 
@@ -330,26 +267,27 @@ func file_build_build_proto_rawDescGZIP() []byte {
 	return file_build_build_proto_rawDescData
 }
 
-var file_build_build_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_build_build_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_build_build_proto_goTypes = []any{
-	(*ListAbilitiesRequest)(nil),   // 0: build.ListAbilitiesRequest
-	(*ListAbilitiesResponse)(nil),  // 1: build.ListAbilitiesResponse
-	(*UpgradeAbilityRequest)(nil),  // 2: build.UpgradeAbilityRequest
-	(*UpgradeAbilityResponse)(nil), // 3: build.UpgradeAbilityResponse
-	(*PingRequest)(nil),            // 4: build.PingRequest
-	(*PingResponse)(nil),           // 5: build.PingResponse
-	(*repo.Character)(nil),         // 6: repo.Character
-	(*repo.Ability)(nil),           // 7: repo.Ability
+	(*ListAbilitiesRequest)(nil),       // 0: build.ListAbilitiesRequest
+	(*ListAbilitiesResponse)(nil),      // 1: build.ListAbilitiesResponse
+	(*UpgradeAbilityRequest)(nil),      // 2: build.UpgradeAbilityRequest
+	(*UpgradeAbilityResponse)(nil),     // 3: build.UpgradeAbilityResponse
+	(*repo.Character)(nil),             // 4: repo.Character
+	(*repo.PlayerAbilityTree)(nil),     // 5: repo.PlayerAbilityTree
+	(*repo.Ability)(nil),               // 6: repo.Ability
+	(*health.HealthCheckRequest)(nil),  // 7: health.HealthCheckRequest
+	(*health.HealthCheckResponse)(nil), // 8: health.HealthCheckResponse
 }
 var file_build_build_proto_depIdxs = []int32{
-	6, // 0: build.ListAbilitiesRequest.character:type_name -> repo.Character
-	7, // 1: build.ListAbilitiesResponse.available:type_name -> repo.Ability
-	7, // 2: build.ListAbilitiesResponse.locked:type_name -> repo.Ability
-	7, // 3: build.ListAbilitiesResponse.upgraded:type_name -> repo.Ability
-	4, // 4: build.Build.Ping:input_type -> build.PingRequest
+	4, // 0: build.ListAbilitiesRequest.character:type_name -> repo.Character
+	5, // 1: build.ListAbilitiesResponse.upgraded:type_name -> repo.PlayerAbilityTree
+	6, // 2: build.ListAbilitiesResponse.available:type_name -> repo.Ability
+	6, // 3: build.ListAbilitiesResponse.locked:type_name -> repo.Ability
+	7, // 4: build.Build.Check:input_type -> health.HealthCheckRequest
 	0, // 5: build.Build.ListAbilities:input_type -> build.ListAbilitiesRequest
 	2, // 6: build.Build.UpgradeAbility:input_type -> build.UpgradeAbilityRequest
-	5, // 7: build.Build.Ping:output_type -> build.PingResponse
+	8, // 7: build.Build.Check:output_type -> health.HealthCheckResponse
 	1, // 8: build.Build.ListAbilities:output_type -> build.ListAbilitiesResponse
 	3, // 9: build.Build.UpgradeAbility:output_type -> build.UpgradeAbilityResponse
 	7, // [7:10] is the sub-list for method output_type
@@ -370,7 +308,7 @@ func file_build_build_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_build_build_proto_rawDesc), len(file_build_build_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -7,6 +7,7 @@
 package gamba
 
 import (
+	health "github.com/komadiina/spelltext/proto/health"
 	repo "github.com/komadiina/spelltext/proto/repo"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -286,83 +287,11 @@ func (x *OpenChestResponse) GetItem() *repo.Item {
 	return nil
 }
 
-type PingRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *PingRequest) Reset() {
-	*x = PingRequest{}
-	mi := &file_gamba_gamba_proto_msgTypes[6]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *PingRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*PingRequest) ProtoMessage() {}
-
-func (x *PingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_gamba_gamba_proto_msgTypes[6]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use PingRequest.ProtoReflect.Descriptor instead.
-func (*PingRequest) Descriptor() ([]byte, []int) {
-	return file_gamba_gamba_proto_rawDescGZIP(), []int{6}
-}
-
-type PingResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *PingResponse) Reset() {
-	*x = PingResponse{}
-	mi := &file_gamba_gamba_proto_msgTypes[7]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *PingResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*PingResponse) ProtoMessage() {}
-
-func (x *PingResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_gamba_gamba_proto_msgTypes[7]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use PingResponse.ProtoReflect.Descriptor instead.
-func (*PingResponse) Descriptor() ([]byte, []int) {
-	return file_gamba_gamba_proto_rawDescGZIP(), []int{7}
-}
-
 var File_gamba_gamba_proto protoreflect.FileDescriptor
 
 const file_gamba_gamba_proto_rawDesc = "" +
 	"\n" +
-	"\x11gamba/gamba.proto\x12\x05gamba\x1a\x0frepo/repo.proto\"\x12\n" +
+	"\x11gamba/gamba.proto\x12\x05gamba\x1a\x0frepo/repo.proto\x1a\x13health/health.proto\"\x12\n" +
 	"\x10GetChestsRequest\"=\n" +
 	"\x11GetChestsResponse\x12(\n" +
 	"\x06chests\x18\x01 \x03(\v2\x10.repo.GambaChestR\x06chests\"3\n" +
@@ -376,11 +305,9 @@ const file_gamba_gamba_proto_rawDesc = "" +
 	"\bchest_id\x18\x02 \x01(\x04R\achestId\"3\n" +
 	"\x11OpenChestResponse\x12\x1e\n" +
 	"\x04item\x18\x01 \x01(\v2\n" +
-	".repo.ItemR\x04item\"\r\n" +
-	"\vPingRequest\"\x0e\n" +
-	"\fPingResponse2\x8a\x02\n" +
-	"\x05Gamba\x12/\n" +
-	"\x04Ping\x12\x12.gamba.PingRequest\x1a\x13.gamba.PingResponse\x12>\n" +
+	".repo.ItemR\x04item2\x9b\x02\n" +
+	"\x05Gamba\x12@\n" +
+	"\x05Check\x12\x1a.health.HealthCheckRequest\x1a\x1b.health.HealthCheckResponse\x12>\n" +
 	"\tGetChests\x12\x17.gamba.GetChestsRequest\x1a\x18.gamba.GetChestsResponse\x12P\n" +
 	"\x0fGetChestDetails\x12\x1d.gamba.GetChestDetailsRequest\x1a\x1e.gamba.GetChestDetailsResponse\x12>\n" +
 	"\tOpenChest\x12\x17.gamba.OpenChestRequest\x1a\x18.gamba.OpenChestResponseB2Z0github.com/komadiina/spelltext/proto/gamba;gambab\x06proto3"
@@ -397,28 +324,28 @@ func file_gamba_gamba_proto_rawDescGZIP() []byte {
 	return file_gamba_gamba_proto_rawDescData
 }
 
-var file_gamba_gamba_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_gamba_gamba_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_gamba_gamba_proto_goTypes = []any{
-	(*GetChestsRequest)(nil),        // 0: gamba.GetChestsRequest
-	(*GetChestsResponse)(nil),       // 1: gamba.GetChestsResponse
-	(*GetChestDetailsRequest)(nil),  // 2: gamba.GetChestDetailsRequest
-	(*GetChestDetailsResponse)(nil), // 3: gamba.GetChestDetailsResponse
-	(*OpenChestRequest)(nil),        // 4: gamba.OpenChestRequest
-	(*OpenChestResponse)(nil),       // 5: gamba.OpenChestResponse
-	(*PingRequest)(nil),             // 6: gamba.PingRequest
-	(*PingResponse)(nil),            // 7: gamba.PingResponse
-	(*repo.GambaChest)(nil),         // 8: repo.GambaChest
-	(*repo.Item)(nil),               // 9: repo.Item
+	(*GetChestsRequest)(nil),           // 0: gamba.GetChestsRequest
+	(*GetChestsResponse)(nil),          // 1: gamba.GetChestsResponse
+	(*GetChestDetailsRequest)(nil),     // 2: gamba.GetChestDetailsRequest
+	(*GetChestDetailsResponse)(nil),    // 3: gamba.GetChestDetailsResponse
+	(*OpenChestRequest)(nil),           // 4: gamba.OpenChestRequest
+	(*OpenChestResponse)(nil),          // 5: gamba.OpenChestResponse
+	(*repo.GambaChest)(nil),            // 6: repo.GambaChest
+	(*repo.Item)(nil),                  // 7: repo.Item
+	(*health.HealthCheckRequest)(nil),  // 8: health.HealthCheckRequest
+	(*health.HealthCheckResponse)(nil), // 9: health.HealthCheckResponse
 }
 var file_gamba_gamba_proto_depIdxs = []int32{
-	8, // 0: gamba.GetChestsResponse.chests:type_name -> repo.GambaChest
-	9, // 1: gamba.GetChestDetailsResponse.items:type_name -> repo.Item
-	9, // 2: gamba.OpenChestResponse.item:type_name -> repo.Item
-	6, // 3: gamba.Gamba.Ping:input_type -> gamba.PingRequest
+	6, // 0: gamba.GetChestsResponse.chests:type_name -> repo.GambaChest
+	7, // 1: gamba.GetChestDetailsResponse.items:type_name -> repo.Item
+	7, // 2: gamba.OpenChestResponse.item:type_name -> repo.Item
+	8, // 3: gamba.Gamba.Check:input_type -> health.HealthCheckRequest
 	0, // 4: gamba.Gamba.GetChests:input_type -> gamba.GetChestsRequest
 	2, // 5: gamba.Gamba.GetChestDetails:input_type -> gamba.GetChestDetailsRequest
 	4, // 6: gamba.Gamba.OpenChest:input_type -> gamba.OpenChestRequest
-	7, // 7: gamba.Gamba.Ping:output_type -> gamba.PingResponse
+	9, // 7: gamba.Gamba.Check:output_type -> health.HealthCheckResponse
 	1, // 8: gamba.Gamba.GetChests:output_type -> gamba.GetChestsResponse
 	3, // 9: gamba.Gamba.GetChestDetails:output_type -> gamba.GetChestDetailsResponse
 	5, // 10: gamba.Gamba.OpenChest:output_type -> gamba.OpenChestResponse
@@ -440,7 +367,7 @@ func file_gamba_gamba_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_gamba_gamba_proto_rawDesc), len(file_gamba_gamba_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

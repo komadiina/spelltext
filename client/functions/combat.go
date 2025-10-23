@@ -2,6 +2,7 @@ package functions
 
 import (
 	"github.com/komadiina/spelltext/client/types"
+	pbBuild "github.com/komadiina/spelltext/proto/build"
 	pbCombat "github.com/komadiina/spelltext/proto/combat"
 	pbRepo "github.com/komadiina/spelltext/proto/repo"
 )
@@ -18,4 +19,13 @@ func GetAvailableNpcs(c *types.SpelltextClient) []*pbRepo.Npc {
 	}
 
 	return resp.GetNpcs()
+}
+
+func GetPlayerSpells(c *types.SpelltextClient) []*pbRepo.PlayerAbilityTree {
+	resp, err := c.Clients.BuildClient.ListAbilities(*c.Context, &pbBuild.ListAbilitiesRequest{Character: c.Storage.SelectedCharacter})
+	if err != nil {
+		return nil
+	}
+
+	return resp.Upgraded // alias, 'unlocked'
 }

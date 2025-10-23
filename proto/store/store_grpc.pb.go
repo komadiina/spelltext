@@ -8,6 +8,7 @@ package store
 
 import (
 	context "context"
+	health "github.com/komadiina/spelltext/proto/health"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -19,7 +20,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Store_Ping_FullMethodName            = "/store.Store/Ping"
+	Store_Check_FullMethodName           = "/store.Store/Check"
 	Store_ListVendors_FullMethodName     = "/store.Store/ListVendors"
 	Store_ListVendorItems_FullMethodName = "/store.Store/ListVendorItems"
 	Store_BuyItems_FullMethodName        = "/store.Store/BuyItems"
@@ -30,7 +31,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type StoreClient interface {
-	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
+	Check(ctx context.Context, in *health.HealthCheckRequest, opts ...grpc.CallOption) (*health.HealthCheckResponse, error)
 	ListVendors(ctx context.Context, in *StoreListVendorRequest, opts ...grpc.CallOption) (*StoreListVendorResponse, error)
 	ListVendorItems(ctx context.Context, in *StoreListVendorItemRequest, opts ...grpc.CallOption) (*ListVendorItemResponse, error)
 	BuyItems(ctx context.Context, in *BuyItemRequest, opts ...grpc.CallOption) (*BuyItemResponse, error)
@@ -45,10 +46,10 @@ func NewStoreClient(cc grpc.ClientConnInterface) StoreClient {
 	return &storeClient{cc}
 }
 
-func (c *storeClient) Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error) {
+func (c *storeClient) Check(ctx context.Context, in *health.HealthCheckRequest, opts ...grpc.CallOption) (*health.HealthCheckResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(PingResponse)
-	err := c.cc.Invoke(ctx, Store_Ping_FullMethodName, in, out, cOpts...)
+	out := new(health.HealthCheckResponse)
+	err := c.cc.Invoke(ctx, Store_Check_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -99,7 +100,7 @@ func (c *storeClient) SellItem(ctx context.Context, in *SellItemRequest, opts ..
 // All implementations must embed UnimplementedStoreServer
 // for forward compatibility.
 type StoreServer interface {
-	Ping(context.Context, *PingRequest) (*PingResponse, error)
+	Check(context.Context, *health.HealthCheckRequest) (*health.HealthCheckResponse, error)
 	ListVendors(context.Context, *StoreListVendorRequest) (*StoreListVendorResponse, error)
 	ListVendorItems(context.Context, *StoreListVendorItemRequest) (*ListVendorItemResponse, error)
 	BuyItems(context.Context, *BuyItemRequest) (*BuyItemResponse, error)
@@ -114,8 +115,8 @@ type StoreServer interface {
 // pointer dereference when methods are called.
 type UnimplementedStoreServer struct{}
 
-func (UnimplementedStoreServer) Ping(context.Context, *PingRequest) (*PingResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
+func (UnimplementedStoreServer) Check(context.Context, *health.HealthCheckRequest) (*health.HealthCheckResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Check not implemented")
 }
 func (UnimplementedStoreServer) ListVendors(context.Context, *StoreListVendorRequest) (*StoreListVendorResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListVendors not implemented")
@@ -150,20 +151,20 @@ func RegisterStoreServer(s grpc.ServiceRegistrar, srv StoreServer) {
 	s.RegisterService(&Store_ServiceDesc, srv)
 }
 
-func _Store_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PingRequest)
+func _Store_Check_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(health.HealthCheckRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(StoreServer).Ping(ctx, in)
+		return srv.(StoreServer).Check(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Store_Ping_FullMethodName,
+		FullMethod: Store_Check_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StoreServer).Ping(ctx, req.(*PingRequest))
+		return srv.(StoreServer).Check(ctx, req.(*health.HealthCheckRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -248,8 +249,8 @@ var Store_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*StoreServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Ping",
-			Handler:    _Store_Ping_Handler,
+			MethodName: "Check",
+			Handler:    _Store_Check_Handler,
 		},
 		{
 			MethodName: "ListVendors",

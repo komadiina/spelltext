@@ -7,6 +7,7 @@
 package inventory
 
 import (
+	health "github.com/komadiina/spelltext/proto/health"
 	repo "github.com/komadiina/spelltext/proto/repo"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -422,83 +423,11 @@ func (x *ListBackpackItemsResponse) GetItemInstances() []*repo.ItemInstance {
 	return nil
 }
 
-type PingRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *PingRequest) Reset() {
-	*x = PingRequest{}
-	mi := &file_inventory_inventory_proto_msgTypes[8]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *PingRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*PingRequest) ProtoMessage() {}
-
-func (x *PingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_inventory_inventory_proto_msgTypes[8]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use PingRequest.ProtoReflect.Descriptor instead.
-func (*PingRequest) Descriptor() ([]byte, []int) {
-	return file_inventory_inventory_proto_rawDescGZIP(), []int{8}
-}
-
-type PingResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *PingResponse) Reset() {
-	*x = PingResponse{}
-	mi := &file_inventory_inventory_proto_msgTypes[9]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *PingResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*PingResponse) ProtoMessage() {}
-
-func (x *PingResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_inventory_inventory_proto_msgTypes[9]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use PingResponse.ProtoReflect.Descriptor instead.
-func (*PingResponse) Descriptor() ([]byte, []int) {
-	return file_inventory_inventory_proto_rawDescGZIP(), []int{9}
-}
-
 var File_inventory_inventory_proto protoreflect.FileDescriptor
 
 const file_inventory_inventory_proto_rawDesc = "" +
 	"\n" +
-	"\x19inventory/inventory.proto\x12\tinventory\x1a\x0frepo/repo.proto\"S\n" +
+	"\x19inventory/inventory.proto\x12\tinventory\x1a\x0frepo/repo.proto\x1a\x13health/health.proto\"S\n" +
 	"\x17InventoryBalanceRequest\x12\x1a\n" +
 	"\busername\x18\x01 \x01(\tR\busername\x12\x1c\n" +
 	"\tcharacter\x18\x02 \x01(\tR\tcharacter\"F\n" +
@@ -520,11 +449,9 @@ const file_inventory_inventory_proto_rawDesc = "" +
 	"\x18ListBackpackItemsRequest\x12!\n" +
 	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\"V\n" +
 	"\x19ListBackpackItemsResponse\x129\n" +
-	"\x0eitem_instances\x18\x01 \x03(\v2\x12.repo.ItemInstanceR\ritemInstances\"\r\n" +
-	"\vPingRequest\"\x0e\n" +
-	"\fPingResponse2\xa3\x03\n" +
-	"\tInventory\x127\n" +
-	"\x04Ping\x12\x16.inventory.PingRequest\x1a\x17.inventory.PingResponse\x12U\n" +
+	"\x0eitem_instances\x18\x01 \x03(\v2\x12.repo.ItemInstanceR\ritemInstances2\xac\x03\n" +
+	"\tInventory\x12@\n" +
+	"\x05Check\x12\x1a.health.HealthCheckRequest\x1a\x1b.health.HealthCheckResponse\x12U\n" +
 	"\n" +
 	"GetBalance\x12\".inventory.InventoryBalanceRequest\x1a#.inventory.InventoryBalanceResponse\x12C\n" +
 	"\bSellItem\x12\x1a.inventory.SellItemRequest\x1a\x1b.inventory.SellItemResponse\x12a\n" +
@@ -543,7 +470,7 @@ func file_inventory_inventory_proto_rawDescGZIP() []byte {
 	return file_inventory_inventory_proto_rawDescData
 }
 
-var file_inventory_inventory_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_inventory_inventory_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_inventory_inventory_proto_goTypes = []any{
 	(*InventoryBalanceRequest)(nil),    // 0: inventory.InventoryBalanceRequest
 	(*InventoryBalanceResponse)(nil),   // 1: inventory.InventoryBalanceResponse
@@ -553,19 +480,19 @@ var file_inventory_inventory_proto_goTypes = []any{
 	(*AddItemsToBackpackResponse)(nil), // 5: inventory.AddItemsToBackpackResponse
 	(*ListBackpackItemsRequest)(nil),   // 6: inventory.ListBackpackItemsRequest
 	(*ListBackpackItemsResponse)(nil),  // 7: inventory.ListBackpackItemsResponse
-	(*PingRequest)(nil),                // 8: inventory.PingRequest
-	(*PingResponse)(nil),               // 9: inventory.PingResponse
-	(*repo.ItemInstance)(nil),          // 10: repo.ItemInstance
+	(*repo.ItemInstance)(nil),          // 8: repo.ItemInstance
+	(*health.HealthCheckRequest)(nil),  // 9: health.HealthCheckRequest
+	(*health.HealthCheckResponse)(nil), // 10: health.HealthCheckResponse
 }
 var file_inventory_inventory_proto_depIdxs = []int32{
-	10, // 0: inventory.SellItemRequest.item_instance:type_name -> repo.ItemInstance
-	10, // 1: inventory.ListBackpackItemsResponse.item_instances:type_name -> repo.ItemInstance
-	8,  // 2: inventory.Inventory.Ping:input_type -> inventory.PingRequest
+	8,  // 0: inventory.SellItemRequest.item_instance:type_name -> repo.ItemInstance
+	8,  // 1: inventory.ListBackpackItemsResponse.item_instances:type_name -> repo.ItemInstance
+	9,  // 2: inventory.Inventory.Check:input_type -> health.HealthCheckRequest
 	0,  // 3: inventory.Inventory.GetBalance:input_type -> inventory.InventoryBalanceRequest
 	2,  // 4: inventory.Inventory.SellItem:input_type -> inventory.SellItemRequest
 	4,  // 5: inventory.Inventory.AddItemsToBackpack:input_type -> inventory.AddItemsToBackpackRequest
 	6,  // 6: inventory.Inventory.ListBackpackItems:input_type -> inventory.ListBackpackItemsRequest
-	9,  // 7: inventory.Inventory.Ping:output_type -> inventory.PingResponse
+	10, // 7: inventory.Inventory.Check:output_type -> health.HealthCheckResponse
 	1,  // 8: inventory.Inventory.GetBalance:output_type -> inventory.InventoryBalanceResponse
 	3,  // 9: inventory.Inventory.SellItem:output_type -> inventory.SellItemResponse
 	5,  // 10: inventory.Inventory.AddItemsToBackpack:output_type -> inventory.AddItemsToBackpackResponse
@@ -588,7 +515,7 @@ func file_inventory_inventory_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_inventory_inventory_proto_rawDesc), len(file_inventory_inventory_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   10,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

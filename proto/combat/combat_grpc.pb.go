@@ -8,6 +8,7 @@ package combat
 
 import (
 	context "context"
+	health "github.com/komadiina/spelltext/proto/health"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -19,7 +20,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Combat_Ping_FullMethodName           = "/combat.Combat/Ping"
+	Combat_Check_FullMethodName          = "/combat.Combat/Check"
 	Combat_ListNpcs_FullMethodName       = "/combat.Combat/ListNpcs"
 	Combat_InitiateCombat_FullMethodName = "/combat.Combat/InitiateCombat"
 	Combat_ResolveCombat_FullMethodName  = "/combat.Combat/ResolveCombat"
@@ -29,7 +30,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CombatClient interface {
-	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
+	Check(ctx context.Context, in *health.HealthCheckRequest, opts ...grpc.CallOption) (*health.HealthCheckResponse, error)
 	ListNpcs(ctx context.Context, in *ListNpcsRequest, opts ...grpc.CallOption) (*ListNpcsResponse, error)
 	InitiateCombat(ctx context.Context, in *InitiateCombatRequest, opts ...grpc.CallOption) (*InitiateCombatResponse, error)
 	ResolveCombat(ctx context.Context, in *ResolveCombatRequest, opts ...grpc.CallOption) (*ResolveCombatResponse, error)
@@ -43,10 +44,10 @@ func NewCombatClient(cc grpc.ClientConnInterface) CombatClient {
 	return &combatClient{cc}
 }
 
-func (c *combatClient) Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error) {
+func (c *combatClient) Check(ctx context.Context, in *health.HealthCheckRequest, opts ...grpc.CallOption) (*health.HealthCheckResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(PingResponse)
-	err := c.cc.Invoke(ctx, Combat_Ping_FullMethodName, in, out, cOpts...)
+	out := new(health.HealthCheckResponse)
+	err := c.cc.Invoke(ctx, Combat_Check_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +88,7 @@ func (c *combatClient) ResolveCombat(ctx context.Context, in *ResolveCombatReque
 // All implementations must embed UnimplementedCombatServer
 // for forward compatibility.
 type CombatServer interface {
-	Ping(context.Context, *PingRequest) (*PingResponse, error)
+	Check(context.Context, *health.HealthCheckRequest) (*health.HealthCheckResponse, error)
 	ListNpcs(context.Context, *ListNpcsRequest) (*ListNpcsResponse, error)
 	InitiateCombat(context.Context, *InitiateCombatRequest) (*InitiateCombatResponse, error)
 	ResolveCombat(context.Context, *ResolveCombatRequest) (*ResolveCombatResponse, error)
@@ -101,8 +102,8 @@ type CombatServer interface {
 // pointer dereference when methods are called.
 type UnimplementedCombatServer struct{}
 
-func (UnimplementedCombatServer) Ping(context.Context, *PingRequest) (*PingResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
+func (UnimplementedCombatServer) Check(context.Context, *health.HealthCheckRequest) (*health.HealthCheckResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Check not implemented")
 }
 func (UnimplementedCombatServer) ListNpcs(context.Context, *ListNpcsRequest) (*ListNpcsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListNpcs not implemented")
@@ -134,20 +135,20 @@ func RegisterCombatServer(s grpc.ServiceRegistrar, srv CombatServer) {
 	s.RegisterService(&Combat_ServiceDesc, srv)
 }
 
-func _Combat_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PingRequest)
+func _Combat_Check_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(health.HealthCheckRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CombatServer).Ping(ctx, in)
+		return srv.(CombatServer).Check(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Combat_Ping_FullMethodName,
+		FullMethod: Combat_Check_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CombatServer).Ping(ctx, req.(*PingRequest))
+		return srv.(CombatServer).Check(ctx, req.(*health.HealthCheckRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -214,8 +215,8 @@ var Combat_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*CombatServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Ping",
-			Handler:    _Combat_Ping_Handler,
+			MethodName: "Check",
+			Handler:    _Combat_Check_Handler,
 		},
 		{
 			MethodName: "ListNpcs",

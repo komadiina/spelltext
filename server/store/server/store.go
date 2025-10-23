@@ -8,10 +8,12 @@ import (
 	sq "github.com/Masterminds/squirrel"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+	pbHealth "github.com/komadiina/spelltext/proto/health"
 	pbInventory "github.com/komadiina/spelltext/proto/inventory"
 	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	pb "github.com/komadiina/spelltext/proto/store"
 	"github.com/komadiina/spelltext/server/store/config"
+	health "github.com/komadiina/spelltext/utils"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 	"google.golang.org/grpc"
 )
@@ -26,11 +28,16 @@ type Clients struct {
 
 type StoreService struct {
 	pb.UnimplementedStoreServer
+	health.HealthCheckable
 	DbPool      *pgxpool.Pool
 	Config      *config.Config
 	Logger      *logging.Logger
 	Clients     *Clients
 	Connections *Connections
+}
+
+func (s *StoreService) Check(ctx context.Context, req *pbHealth.HealthCheckRequest) (*pbHealth.HealthCheckResponse, error) {
+	return &pbHealth.HealthCheckResponse{Status: pbHealth.HealthCheckResponse_SERVING}, nil
 }
 
 func (s *StoreService) ListVendors(ctx context.Context, req *pb.StoreListVendorRequest) (*pb.StoreListVendorResponse, error) {

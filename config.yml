@@ -61,6 +61,10 @@ authserver:
   authType: hash
   trust: true
 
+  healthCheckInterval: 5
+  maxReconnectAttempts: 1 # maxReconnectAttempts
+  backoff: 2
+
   charserver:
     port: 50054
 

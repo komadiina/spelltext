@@ -1,7 +1,7 @@
 client:
   nats_url: nats://127.0.0.1:4222
   max_wait_time: 5
-  audio_enabled: true
+  audio_enabled: false
   chat_port: 50051
   store_port: 50052
   inventory_port: 50053

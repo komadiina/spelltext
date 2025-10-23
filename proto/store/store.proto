@@ -3,6 +3,7 @@ package store;
 option go_package = "github.com/komadiina/spelltext/proto/store;store";
 
 import "repo/repo.proto";
+import "health/health.proto";
 
 message StoreListVendorRequest {
   string noop = 1;
@@ -54,11 +55,9 @@ message SellItemResponse {
   string message = 2;
 }
 
-message PingRequest {}
-message PingResponse {}
 
 service Store {
-  rpc Ping(PingRequest) returns (PingResponse);
+  rpc Check(health.HealthCheckRequest) returns (health.HealthCheckResponse);
   rpc ListVendors(StoreListVendorRequest) returns (StoreListVendorResponse);
   rpc ListVendorItems(StoreListVendorItemRequest) returns (ListVendorItemResponse);
   rpc BuyItems(BuyItemRequest) returns (BuyItemResponse);

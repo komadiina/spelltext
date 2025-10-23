@@ -1,1 +1,1 @@
-store/store.proto inventory/inventory.proto char/char.proto chat/chat.proto repo/repo.proto gamba/gamba.proto auth/auth.proto combat/combat.proto build/build.proto
+store/store.proto inventory/inventory.proto char/char.proto chat/chat.proto repo/repo.proto gamba/gamba.proto auth/auth.proto combat/combat.proto build/build.proto health/health.proto

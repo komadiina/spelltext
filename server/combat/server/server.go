@@ -7,16 +7,23 @@ import (
 	sq "github.com/Masterminds/squirrel"
 	"github.com/jackc/pgx/v5/pgxpool"
 	pb "github.com/komadiina/spelltext/proto/combat"
+	pbHealth "github.com/komadiina/spelltext/proto/health"
 	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	"github.com/komadiina/spelltext/server/combat/config"
+	health "github.com/komadiina/spelltext/utils"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 )
 
 type CombatService struct {
 	pb.UnimplementedCombatServer
+	health.HealthCheckable
 	DbPool *pgxpool.Pool
 	Config *config.Config
 	Logger *logging.Logger
+}
+
+func (s *CombatService) Check(ctx context.Context, req *pbHealth.HealthCheckRequest) (*pbHealth.HealthCheckResponse, error) {
+	return &pbHealth.HealthCheckResponse{Status: pbHealth.HealthCheckResponse_SERVING}, nil
 }
 
 func (s *CombatService) ListNpcs(ctx context.Context, req *pb.ListNpcsRequest) (*pb.ListNpcsResponse, error) {

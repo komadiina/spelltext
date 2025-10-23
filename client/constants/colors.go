@@ -21,7 +21,7 @@ var (
 	TEXT_COLOR_DAMAGE          = tcell.ColorIndianRed.String()
 	TEXT_COLOR_GOLD            = tcell.ColorYellow.String()
 	TEXT_COLOR_ARMOR           = tcell.ColorLightBlue.String()
-	TEXT_COLOR_SPELL_UNLOCKED  = tcell.ColorDarkSlateGrey.String()
+	TEXT_COLOR_SPELL_UNLOCKED  = tcell.ColorLightSlateGrey.String()
 	TEXT_COLOR_SPELL_AVAILABLE = tcell.ColorGreen.String()
 	TEXT_COLOR_SPELL_LOCKED    = tcell.ColorRed.String()
 )

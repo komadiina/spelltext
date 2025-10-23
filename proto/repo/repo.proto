@@ -283,6 +283,7 @@ message Update {
 message PlayerAbilityTree {
     uint64 character_id = 1;
     uint64 ability_id = 2;
+    uint64 level = 3;
 
     optional Character character = 20;
     Ability ability = 21;

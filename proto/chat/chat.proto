@@ -2,6 +2,8 @@ syntax = "proto3";
 package chat;
 option go_package = "github.com/komadiina/spelltext/proto/proto/chat;chat";
 
+import "health/health.proto";
+
 message ChatMessage {
   string sender = 1;
   string message = 2;
@@ -43,7 +45,7 @@ message PingRequest {}
 message PingResponse {}
 
 service Chat {
-  rpc Ping (PingRequest) returns (PingResponse);
+  rpc Check(health.HealthCheckRequest) returns (health.HealthCheckResponse);
   rpc SendChatMessage (SendChatMessageRequest) returns (SendChatMessageResponse);
   rpc JoinChatroom (JoinChatroomMessageRequest) returns (JoinChatroomMessageResponse);
   rpc LeaveChatroom (LeaveChatroomMessageRequest) returns (LeaveChatroomMessageResponse);

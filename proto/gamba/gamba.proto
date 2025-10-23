@@ -3,6 +3,7 @@ package gamba;
 option go_package = "github.com/komadiina/spelltext/proto/gamba;gamba";
 
 import "repo/repo.proto";
+import "health/health.proto";
 
 message GetChestsRequest {}
 
@@ -27,11 +28,9 @@ message OpenChestResponse {
     repo.Item item = 1;
 }
 
-message PingRequest {}
-message PingResponse {}
 
 service Gamba {
-    rpc Ping(PingRequest) returns (PingResponse);
+    rpc Check(health.HealthCheckRequest) returns (health.HealthCheckResponse);
     rpc GetChests(GetChestsRequest) returns (GetChestsResponse);
     rpc GetChestDetails(GetChestDetailsRequest) returns (GetChestDetailsResponse);
     rpc OpenChest(OpenChestRequest) returns (OpenChestResponse);

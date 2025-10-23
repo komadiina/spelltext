@@ -8,6 +8,7 @@ package gamba
 
 import (
 	context "context"
+	health "github.com/komadiina/spelltext/proto/health"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -19,7 +20,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Gamba_Ping_FullMethodName            = "/gamba.Gamba/Ping"
+	Gamba_Check_FullMethodName           = "/gamba.Gamba/Check"
 	Gamba_GetChests_FullMethodName       = "/gamba.Gamba/GetChests"
 	Gamba_GetChestDetails_FullMethodName = "/gamba.Gamba/GetChestDetails"
 	Gamba_OpenChest_FullMethodName       = "/gamba.Gamba/OpenChest"
@@ -29,7 +30,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GambaClient interface {
-	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
+	Check(ctx context.Context, in *health.HealthCheckRequest, opts ...grpc.CallOption) (*health.HealthCheckResponse, error)
 	GetChests(ctx context.Context, in *GetChestsRequest, opts ...grpc.CallOption) (*GetChestsResponse, error)
 	GetChestDetails(ctx context.Context, in *GetChestDetailsRequest, opts ...grpc.CallOption) (*GetChestDetailsResponse, error)
 	OpenChest(ctx context.Context, in *OpenChestRequest, opts ...grpc.CallOption) (*OpenChestResponse, error)
@@ -43,10 +44,10 @@ func NewGambaClient(cc grpc.ClientConnInterface) GambaClient {
 	return &gambaClient{cc}
 }
 
-func (c *gambaClient) Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error) {
+func (c *gambaClient) Check(ctx context.Context, in *health.HealthCheckRequest, opts ...grpc.CallOption) (*health.HealthCheckResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(PingResponse)
-	err := c.cc.Invoke(ctx, Gamba_Ping_FullMethodName, in, out, cOpts...)
+	out := new(health.HealthCheckResponse)
+	err := c.cc.Invoke(ctx, Gamba_Check_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +88,7 @@ func (c *gambaClient) OpenChest(ctx context.Context, in *OpenChestRequest, opts 
 // All implementations must embed UnimplementedGambaServer
 // for forward compatibility.
 type GambaServer interface {
-	Ping(context.Context, *PingRequest) (*PingResponse, error)
+	Check(context.Context, *health.HealthCheckRequest) (*health.HealthCheckResponse, error)
 	GetChests(context.Context, *GetChestsRequest) (*GetChestsResponse, error)
 	GetChestDetails(context.Context, *GetChestDetailsRequest) (*GetChestDetailsResponse, error)
 	OpenChest(context.Context, *OpenChestRequest) (*OpenChestResponse, error)
@@ -101,8 +102,8 @@ type GambaServer interface {
 // pointer dereference when methods are called.
 type UnimplementedGambaServer struct{}
 
-func (UnimplementedGambaServer) Ping(context.Context, *PingRequest) (*PingResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
+func (UnimplementedGambaServer) Check(context.Context, *health.HealthCheckRequest) (*health.HealthCheckResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Check not implemented")
 }
 func (UnimplementedGambaServer) GetChests(context.Context, *GetChestsRequest) (*GetChestsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetChests not implemented")
@@ -134,20 +135,20 @@ func RegisterGambaServer(s grpc.ServiceRegistrar, srv GambaServer) {
 	s.RegisterService(&Gamba_ServiceDesc, srv)
 }
 
-func _Gamba_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PingRequest)
+func _Gamba_Check_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(health.HealthCheckRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GambaServer).Ping(ctx, in)
+		return srv.(GambaServer).Check(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Gamba_Ping_FullMethodName,
+		FullMethod: Gamba_Check_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GambaServer).Ping(ctx, req.(*PingRequest))
+		return srv.(GambaServer).Check(ctx, req.(*health.HealthCheckRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -214,8 +215,8 @@ var Gamba_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*GambaServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Ping",
-			Handler:    _Gamba_Ping_Handler,
+			MethodName: "Check",
+			Handler:    _Gamba_Check_Handler,
 		},
 		{
 			MethodName: "GetChests",

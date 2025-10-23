@@ -7,6 +7,7 @@
 package chat
 
 import (
+	health "github.com/komadiina/spelltext/proto/health"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -469,7 +470,7 @@ var File_chat_chat_proto protoreflect.FileDescriptor
 
 const file_chat_chat_proto_rawDesc = "" +
 	"\n" +
-	"\x0fchat/chat.proto\x12\x04chat\"]\n" +
+	"\x0fchat/chat.proto\x12\x04chat\x1a\x13health/health.proto\"]\n" +
 	"\vChatMessage\x12\x16\n" +
 	"\x06sender\x18\x01 \x01(\tR\x06sender\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12\x1c\n" +
@@ -493,9 +494,9 @@ const file_chat_chat_proto_rawDesc = "" +
 	"\busername\x18\x01 \x01(\tR\busername\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\"\r\n" +
 	"\vPingRequest\"\x0e\n" +
-	"\fPingResponse2\xb2\x02\n" +
-	"\x04Chat\x12-\n" +
-	"\x04Ping\x12\x11.chat.PingRequest\x1a\x12.chat.PingResponse\x12N\n" +
+	"\fPingResponse2\xc5\x02\n" +
+	"\x04Chat\x12@\n" +
+	"\x05Check\x12\x1a.health.HealthCheckRequest\x1a\x1b.health.HealthCheckResponse\x12N\n" +
 	"\x0fSendChatMessage\x12\x1c.chat.SendChatMessageRequest\x1a\x1d.chat.SendChatMessageResponse\x12S\n" +
 	"\fJoinChatroom\x12 .chat.JoinChatroomMessageRequest\x1a!.chat.JoinChatroomMessageResponse\x12V\n" +
 	"\rLeaveChatroom\x12!.chat.LeaveChatroomMessageRequest\x1a\".chat.LeaveChatroomMessageResponseB6Z4github.com/komadiina/spelltext/proto/proto/chat;chatb\x06proto3"
@@ -523,21 +524,23 @@ var file_chat_chat_proto_goTypes = []any{
 	(*LeaveChatroomMessageResponse)(nil), // 6: chat.LeaveChatroomMessageResponse
 	(*PingRequest)(nil),                  // 7: chat.PingRequest
 	(*PingResponse)(nil),                 // 8: chat.PingResponse
+	(*health.HealthCheckRequest)(nil),    // 9: health.HealthCheckRequest
+	(*health.HealthCheckResponse)(nil),   // 10: health.HealthCheckResponse
 }
 var file_chat_chat_proto_depIdxs = []int32{
-	7, // 0: chat.Chat.Ping:input_type -> chat.PingRequest
-	1, // 1: chat.Chat.SendChatMessage:input_type -> chat.SendChatMessageRequest
-	3, // 2: chat.Chat.JoinChatroom:input_type -> chat.JoinChatroomMessageRequest
-	5, // 3: chat.Chat.LeaveChatroom:input_type -> chat.LeaveChatroomMessageRequest
-	8, // 4: chat.Chat.Ping:output_type -> chat.PingResponse
-	2, // 5: chat.Chat.SendChatMessage:output_type -> chat.SendChatMessageResponse
-	4, // 6: chat.Chat.JoinChatroom:output_type -> chat.JoinChatroomMessageResponse
-	6, // 7: chat.Chat.LeaveChatroom:output_type -> chat.LeaveChatroomMessageResponse
-	4, // [4:8] is the sub-list for method output_type
-	0, // [0:4] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	9,  // 0: chat.Chat.Check:input_type -> health.HealthCheckRequest
+	1,  // 1: chat.Chat.SendChatMessage:input_type -> chat.SendChatMessageRequest
+	3,  // 2: chat.Chat.JoinChatroom:input_type -> chat.JoinChatroomMessageRequest
+	5,  // 3: chat.Chat.LeaveChatroom:input_type -> chat.LeaveChatroomMessageRequest
+	10, // 4: chat.Chat.Check:output_type -> health.HealthCheckResponse
+	2,  // 5: chat.Chat.SendChatMessage:output_type -> chat.SendChatMessageResponse
+	4,  // 6: chat.Chat.JoinChatroom:output_type -> chat.JoinChatroomMessageResponse
+	6,  // 7: chat.Chat.LeaveChatroom:output_type -> chat.LeaveChatroomMessageResponse
+	4,  // [4:8] is the sub-list for method output_type
+	0,  // [0:4] is the sub-list for method input_type
+	0,  // [0:0] is the sub-list for extension type_name
+	0,  // [0:0] is the sub-list for extension extendee
+	0,  // [0:0] is the sub-list for field type_name
 }
 
 func init() { file_chat_chat_proto_init() }

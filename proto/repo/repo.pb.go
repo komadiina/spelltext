@@ -2433,6 +2433,7 @@ type PlayerAbilityTree struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	CharacterId   uint64                 `protobuf:"varint,1,opt,name=character_id,json=characterId,proto3" json:"character_id,omitempty"`
 	AbilityId     uint64                 `protobuf:"varint,2,opt,name=ability_id,json=abilityId,proto3" json:"ability_id,omitempty"`
+	Level         uint64                 `protobuf:"varint,3,opt,name=level,proto3" json:"level,omitempty"`
 	Character     *Character             `protobuf:"bytes,20,opt,name=character,proto3,oneof" json:"character,omitempty"`
 	Ability       *Ability               `protobuf:"bytes,21,opt,name=ability,proto3" json:"ability,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -2479,6 +2480,13 @@ func (x *PlayerAbilityTree) GetCharacterId() uint64 {
 func (x *PlayerAbilityTree) GetAbilityId() uint64 {
 	if x != nil {
 		return x.AbilityId
+	}
+	return 0
+}
+
+func (x *PlayerAbilityTree) GetLevel() uint64 {
+	if x != nil {
+		return x.Level
 	}
 	return 0
 }
@@ -2749,11 +2757,12 @@ const file_repo_repo_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\x12\x18\n" +
 	"\aversion\x18\x03 \x01(\tR\aversion\x12 \n" +
-	"\vdescription\x18\x04 \x01(\tR\vdescription\"\xc0\x01\n" +
+	"\vdescription\x18\x04 \x01(\tR\vdescription\"\xd6\x01\n" +
 	"\x11PlayerAbilityTree\x12!\n" +
 	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\x12\x1d\n" +
 	"\n" +
-	"ability_id\x18\x02 \x01(\x04R\tabilityId\x122\n" +
+	"ability_id\x18\x02 \x01(\x04R\tabilityId\x12\x14\n" +
+	"\x05level\x18\x03 \x01(\x04R\x05level\x122\n" +
 	"\tcharacter\x18\x14 \x01(\v2\x0f.repo.CharacterH\x00R\tcharacter\x88\x01\x01\x12'\n" +
 	"\aability\x18\x15 \x01(\v2\r.repo.AbilityR\aabilityB\f\n" +
 	"\n" +

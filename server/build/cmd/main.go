@@ -8,87 +8,18 @@ import (
 	"time"
 
 	"github.com/charmbracelet/log"
-	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgxpool"
 	pb "github.com/komadiina/spelltext/proto/build"
 	"github.com/komadiina/spelltext/proto/char"
 	"github.com/komadiina/spelltext/server/build/config"
+	"github.com/komadiina/spelltext/server/build/db"
+	"github.com/komadiina/spelltext/server/build/health"
 	"github.com/komadiina/spelltext/server/build/server"
+	"github.com/komadiina/spelltext/server/build/services"
+	"github.com/komadiina/spelltext/shared"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
-
-func InitializePool(s *server.BuildService, context context.Context, conninfo string, backoff time.Duration, maxRetries int, boFormula func(time.Duration) time.Duration) error {
-	try := 1
-	for {
-		conn, err := pgx.Connect(context, conninfo)
-
-		if err != nil && try >= maxRetries {
-			// conn not established, max retries exceeded
-			s.Logger.Fatal(err)
-		} else if err == nil && try < maxRetries {
-			// conn established within maxRetries
-			s.Logger.Info("pgpool connection established, creating pool..")
-			conn.Close(context)
-
-			pool, err := pgxpool.New(context, fmt.Sprintf(
-				"user=%s password=%s host=%s port=%d dbname=%s sslmode=%s",
-				s.Config.PgUser,
-				s.Config.PgPass,
-				s.Config.PgHost,
-				s.Config.PgPort,
-				s.Config.PgDbName,
-				s.Config.PgSSLMode,
-			))
-
-			if err != nil {
-				s.Logger.Fatal("unable to create pool", "reason", err)
-			} else {
-				s.Logger.Info("pgxpool (dpool, via pgpool-ii) initialized")
-			}
-
-			s.DbPool = pool
-
-			return nil
-		} else if err != nil && try < maxRetries {
-			// conn not established, backoff
-			s.Logger.Warn("failed to establish database connection, backing off...", "reason", err, "backoff_seconds", backoff.Seconds())
-			time.Sleep(backoff)
-			backoff = boFormula(backoff)
-			try++
-		}
-	}
-}
-
-func InitClientConn(target string, credentials grpc.DialOption, backoff int, maxRetries int) (*grpc.ClientConn, error) {
-	try := 1
-	for {
-		conn, err := grpc.NewClient(target, credentials)
-
-		if err != nil && try >= maxRetries {
-			return nil, err
-		} else if err == nil && try < maxRetries {
-			return conn, nil
-		} else if err != nil && try < maxRetries {
-			backoff *= 3
-			time.Sleep(time.Duration(backoff) * time.Second)
-			try++
-		}
-	}
-}
-
-const banner = `
-                _ _ _            _   
-               | | | |          | |  
- ___ _ __   ___| | | |_ _____  _| |_ 
-/ __| '_ \ / _ \ | | __/ _ \ \/ / __|
-\__ \ |_) |  __/ | | ||  __/>  <| |_ 
-|___/ .__/ \___|_|_|\__\___/_/\_\\__|
-    | |                              
-    |_|                              
-
-`
 
 var version = os.Getenv("VERSION")
 
@@ -98,7 +29,7 @@ func main() {
 	logging.Init(log.InfoLevel, "buildserver", false)
 	logger := logging.Get("buildserver", false)
 
-	logger.Infof("%s\n%s", banner, version)
+	logger.Infof("%s\n%s", shared.BANNER, version)
 
 	logger.Info("loading config...", "CONFIG_FILE", os.Getenv("CONFIG_FILE"))
 	cfg, err := config.LoadConfig()
@@ -119,7 +50,14 @@ func main() {
 	s := grpc.NewServer()
 	ss := server.BuildService{Config: cfg, Logger: logger}
 
-	conn, err := InitClientConn(fmt.Sprint("charserver:", cfg.CharacterServicePort), grpc.WithTransportCredentials(insecure.NewCredentials()), 5, 10)
+	target := fmt.Sprint("charserver:", cfg.CharacterServicePort)
+	conn, err := services.InitClientConn(
+		logger,
+		target,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		5,
+		10,
+	)
 	ss.Clients = &server.Clients{
 		Character: char.NewCharacterClient(conn),
 	}
@@ -127,6 +65,15 @@ func main() {
 		Character: conn,
 	}
 	defer conn.Close()
+
+	go health.InitMonitor(
+		&ss,
+		target,
+		ss.Clients.Character,
+		func(bs *server.BuildService, cc *grpc.ClientConn) {
+			bs.Clients.Character = char.NewCharacterClient(cc)
+		}).
+		Run(ctx)
 
 	conninfo := fmt.Sprintf(
 		"postgres://%s:%s@%s:%d/%s?sslmode=%s",
@@ -137,7 +84,7 @@ func main() {
 		cfg.PgDbName,
 		cfg.PgSSLMode,
 	)
-	err = InitializePool(&ss, ctx, conninfo, time.Second*5, 10, func(bo time.Duration) time.Duration {
+	err = db.InitializePool(&ss, ctx, conninfo, time.Second*5, 10, func(bo time.Duration) time.Duration {
 		return bo + time.Second*5
 	})
 
