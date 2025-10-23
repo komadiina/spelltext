@@ -47,9 +47,7 @@ func main() {
 	if err != nil {
 		logger.Fatal(err)
 	} else {
-		logger.Info("authserver config loaded.")
-		logger.Infof("conninfo=%v:%v@%v:%v/%v?sslMode=%v, port=%d",
-			cfg.PgUser, cfg.PgPass, cfg.PgHost, cfg.PgPort, cfg.PgDbName, cfg.PgSSLMode, cfg.ServicePort)
+		logger.Infof("authserver config loaded: %+v", cfg)
 	}
 
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", cfg.ServicePort))
@@ -61,9 +59,10 @@ func main() {
 	s := grpc.NewServer()
 	ss := server.AuthService{Config: cfg, Logger: logger}
 
+	target := fmt.Sprintf("charserver:%d", cfg.CharacterServicePort)
 	clientConn, err := services.InitClientConn(
 		logger,
-		fmt.Sprintf("charserver:%d", cfg.CharPort),
+		target,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		5,
 		10,
@@ -82,10 +81,11 @@ func main() {
 
 	go health.InitMonitor(
 		&ss,
-		fmt.Sprintf("%s:%d", "charserver", cfg.CharPort),
+		target,
 		ss.Clients.Character,
 		func(s *server.AuthService, conn *grpc.ClientConn) {
 			s.Clients.Character = pbChar.NewCharacterClient(conn)
+			ss.Logger.Infof("server is back up, healthy. service=%s", target)
 		}).
 		Run(ctx)
 

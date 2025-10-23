@@ -72,6 +72,7 @@ func main() {
 		ss.Clients.Character,
 		func(bs *server.BuildService, cc *grpc.ClientConn) {
 			bs.Clients.Character = char.NewCharacterClient(cc)
+			ss.Logger.Infof("server is back up, healthy. service=%s", target)
 		}).
 		Run(ctx)
 

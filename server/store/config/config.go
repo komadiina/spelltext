@@ -1,6 +1,10 @@
 package config
 
-import "github.com/komadiina/spelltext/shared/config"
+import (
+	inv "github.com/komadiina/spelltext/server/inventory/config"
+	"github.com/komadiina/spelltext/shared/config"
+	"github.com/komadiina/spelltext/shared/config/pgconfig"
+)
 
 type Config struct {
 	ServicePort          int    `yaml:"port" env:"PORT" env-default:"50052"`
@@ -18,13 +22,19 @@ type Config struct {
 
 func LoadConfig() (*Config, error) {
 	var cfg struct {
-		Root Config `yaml:"storeserver"`
+		Root      Config          `yaml:"storeserver"`
+		Inventory inv.Config      `yaml:"inventoryserver"`
+		Postgres  pgconfig.Config `yaml:"postgres"`
 	}
 
 	err := config.LoadConfig(&cfg)
 	if err != nil {
 		return nil, err
 	}
+
+	cfg.Root.InventoryServicePort = cfg.Inventory.ServicePort
+	cfg.Root.PgHost = cfg.Postgres.Host
+	cfg.Root.PgPort = cfg.Postgres.Port
 
 	return &cfg.Root, nil
 }

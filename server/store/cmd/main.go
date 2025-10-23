@@ -76,6 +76,7 @@ func main() {
 		ss.Clients.Inventory,
 		func(ss *server.StoreService, cc *grpc.ClientConn) {
 			ss.Connections.Inventory = cc
+			ss.Logger.Infof("server is back up, healthy. service=%s", target)
 		}).
 		Run(ctx)
 

@@ -12,6 +12,7 @@ import (
 	pbInventory "github.com/komadiina/spelltext/proto/inventory"
 	"github.com/komadiina/spelltext/server/gamba/config"
 	"github.com/komadiina/spelltext/server/gamba/db"
+	"github.com/komadiina/spelltext/server/gamba/health"
 	"github.com/komadiina/spelltext/server/gamba/server"
 	"github.com/komadiina/spelltext/server/gamba/services"
 	"github.com/komadiina/spelltext/shared"
@@ -50,7 +51,14 @@ func main() {
 	ss := server.GambaService{Config: cfg, Logger: logger}
 
 	// init inventory clientConn
-	clientConn, err := services.InitClientConn(logger, fmt.Sprint("inventoryserver:", cfg.InventoryServicePort), grpc.WithTransportCredentials(insecure.NewCredentials()), 5, 10)
+	target := fmt.Sprint("inventoryserver:", cfg.InventoryServicePort)
+	clientConn, err := services.InitClientConn(
+		logger,
+		target,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		5,
+		10)
+
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -62,6 +70,16 @@ func main() {
 		Inventory: pbInventory.NewInventoryClient(clientConn),
 	}
 	defer ss.Connections.Inventory.Close()
+
+	go health.InitMonitor(
+		&ss,
+		target,
+		ss.Clients.Inventory,
+		func(ss *server.GambaService, cc *grpc.ClientConn) {
+			ss.Connections.Inventory = cc
+			ss.Logger.Infof("server is back up, healthy. service=%s", target)
+		}).
+		Run(ctx)
 
 	conninfo := fmt.Sprintf(
 		"postgres://%s:%s@%s:%d/%s?sslmode=%s",

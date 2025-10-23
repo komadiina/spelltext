@@ -31,7 +31,7 @@ func InitMonitor(
 
 				if err != nil && try >= s.Config.MaxReconnAttempts {
 					return err
-				} else if err == nil && try <= s.Config.MaxReconnAttempts {
+				} else if err == nil && conn != nil && try <= s.Config.MaxReconnAttempts {
 					s.Logger.Infof("reconnected to %s successfully", target)
 					onReconnect(s, conn)
 					return nil

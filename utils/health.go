@@ -37,7 +37,7 @@ func (m *HealthMonitor) Run(ctx context.Context) {
 			return
 
 		case <-time.After(m.Interval):
-			resp, err := m.Checker.Check(ctx, &pbHealth.HealthCheckRequest{})
+			_, err := m.Checker.Check(ctx, &pbHealth.HealthCheckRequest{})
 
 			if err != nil {
 				m.Logger.Error("server timeout", "reason", err)
@@ -61,7 +61,6 @@ func (m *HealthMonitor) Run(ctx context.Context) {
 			} else {
 				// healthy, so reset retries
 				retries = m.RetryLimit
-				m.Logger.Info("server is back up, healthy. service=%s, status=%v", m.Target, resp.Status)
 			}
 		}
 	}
