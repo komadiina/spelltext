@@ -8,6 +8,7 @@ package chat
 
 import (
 	context "context"
+	health "github.com/komadiina/spelltext/proto/health"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -19,6 +20,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
+	Chat_Check_FullMethodName           = "/chat.Chat/Check"
 	Chat_SendChatMessage_FullMethodName = "/chat.Chat/SendChatMessage"
 	Chat_JoinChatroom_FullMethodName    = "/chat.Chat/JoinChatroom"
 	Chat_LeaveChatroom_FullMethodName   = "/chat.Chat/LeaveChatroom"
@@ -28,6 +30,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ChatClient interface {
+	Check(ctx context.Context, in *health.HealthCheckRequest, opts ...grpc.CallOption) (*health.HealthCheckResponse, error)
 	SendChatMessage(ctx context.Context, in *SendChatMessageRequest, opts ...grpc.CallOption) (*SendChatMessageResponse, error)
 	JoinChatroom(ctx context.Context, in *JoinChatroomMessageRequest, opts ...grpc.CallOption) (*JoinChatroomMessageResponse, error)
 	LeaveChatroom(ctx context.Context, in *LeaveChatroomMessageRequest, opts ...grpc.CallOption) (*LeaveChatroomMessageResponse, error)
@@ -39,6 +42,16 @@ type chatClient struct {
 
 func NewChatClient(cc grpc.ClientConnInterface) ChatClient {
 	return &chatClient{cc}
+}
+
+func (c *chatClient) Check(ctx context.Context, in *health.HealthCheckRequest, opts ...grpc.CallOption) (*health.HealthCheckResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(health.HealthCheckResponse)
+	err := c.cc.Invoke(ctx, Chat_Check_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *chatClient) SendChatMessage(ctx context.Context, in *SendChatMessageRequest, opts ...grpc.CallOption) (*SendChatMessageResponse, error) {
@@ -75,6 +88,7 @@ func (c *chatClient) LeaveChatroom(ctx context.Context, in *LeaveChatroomMessage
 // All implementations must embed UnimplementedChatServer
 // for forward compatibility.
 type ChatServer interface {
+	Check(context.Context, *health.HealthCheckRequest) (*health.HealthCheckResponse, error)
 	SendChatMessage(context.Context, *SendChatMessageRequest) (*SendChatMessageResponse, error)
 	JoinChatroom(context.Context, *JoinChatroomMessageRequest) (*JoinChatroomMessageResponse, error)
 	LeaveChatroom(context.Context, *LeaveChatroomMessageRequest) (*LeaveChatroomMessageResponse, error)
@@ -88,6 +102,9 @@ type ChatServer interface {
 // pointer dereference when methods are called.
 type UnimplementedChatServer struct{}
 
+func (UnimplementedChatServer) Check(context.Context, *health.HealthCheckRequest) (*health.HealthCheckResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Check not implemented")
+}
 func (UnimplementedChatServer) SendChatMessage(context.Context, *SendChatMessageRequest) (*SendChatMessageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendChatMessage not implemented")
 }
@@ -116,6 +133,24 @@ func RegisterChatServer(s grpc.ServiceRegistrar, srv ChatServer) {
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&Chat_ServiceDesc, srv)
+}
+
+func _Chat_Check_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(health.HealthCheckRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ChatServer).Check(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Chat_Check_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ChatServer).Check(ctx, req.(*health.HealthCheckRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _Chat_SendChatMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -179,6 +214,10 @@ var Chat_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "chat.Chat",
 	HandlerType: (*ChatServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Check",
+			Handler:    _Chat_Check_Handler,
+		},
 		{
 			MethodName: "SendChatMessage",
 			Handler:    _Chat_SendChatMessage_Handler,

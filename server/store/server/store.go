@@ -8,10 +8,12 @@ import (
 	sq "github.com/Masterminds/squirrel"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+	pbHealth "github.com/komadiina/spelltext/proto/health"
 	pbInventory "github.com/komadiina/spelltext/proto/inventory"
 	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	pb "github.com/komadiina/spelltext/proto/store"
 	"github.com/komadiina/spelltext/server/store/config"
+	health "github.com/komadiina/spelltext/utils"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 	"google.golang.org/grpc"
 )
@@ -26,6 +28,7 @@ type Clients struct {
 
 type StoreService struct {
 	pb.UnimplementedStoreServer
+	health.HealthCheckable
 	DbPool      *pgxpool.Pool
 	Config      *config.Config
 	Logger      *logging.Logger
@@ -33,52 +36,8 @@ type StoreService struct {
 	Connections *Connections
 }
 
-func tryConnect(s *StoreService, context context.Context, conninfo string, backoff time.Duration, maxRetries int, boFormula func(time.Duration) time.Duration) (pgx.Conn, error) {
-	try := 1
-	for {
-		conn, err := pgx.Connect(context, conninfo)
-
-		if err != nil && try >= maxRetries {
-			// conn not established, max retries exceeded
-			s.Logger.Fatal(err)
-		} else if err == nil && try < maxRetries {
-			// conn established within maxRetries
-			s.Logger.Info("pgpool connection established")
-			return *conn, nil
-		} else if err != nil && try < maxRetries {
-			// conn not established, backoff
-			s.Logger.Warn("failed to establish database connection, backing off...", "reason", err, "backoff_seconds", backoff.Seconds())
-			time.Sleep(backoff)
-			backoff = boFormula(backoff)
-			try++
-		}
-	}
-}
-
-func (s *StoreService) GetConn(ctx context.Context) *pgx.Conn {
-	conninfo := fmt.Sprintf(
-		"postgres://%s:%s@%s:%d/%s?sslmode=%s",
-		s.Config.PgUser,
-		s.Config.PgPass,
-		s.Config.PgHost,
-		s.Config.PgPort,
-		s.Config.PgDbName,
-		s.Config.PgSSLMode,
-	)
-
-	backoff := time.Second * 5 // secs
-	time.Sleep(backoff)
-
-	conn, err := tryConnect(s, ctx, conninfo, backoff, 5, func(backoff time.Duration) time.Duration {
-		backoff = backoff + time.Second*5
-		return backoff
-	})
-
-	if err != nil {
-		return nil
-	}
-
-	return &conn
+func (s *StoreService) Check(ctx context.Context, req *pbHealth.HealthCheckRequest) (*pbHealth.HealthCheckResponse, error) {
+	return &pbHealth.HealthCheckResponse{Status: pbHealth.HealthCheckResponse_SERVING}, nil
 }
 
 func (s *StoreService) ListVendors(ctx context.Context, req *pb.StoreListVendorRequest) (*pb.StoreListVendorResponse, error) {
@@ -94,10 +53,10 @@ func (s *StoreService) ListVendors(ctx context.Context, req *pb.StoreListVendorR
 		return nil, err
 	}
 
-	var vendors []*pb.Vendor
+	var vendors []*pbRepo.Vendor
 	for rows.Next() {
-		v := &pb.Vendor{}
-		err := rows.Scan(&v.VendorId, &v.VendorName, &v.VendorWareDescription)
+		v := &pbRepo.Vendor{}
+		err := rows.Scan(&v.Id, &v.Name, &v.WareShorthand)
 
 		if err != nil {
 			s.Logger.Error("failed to scan", "err", err)
@@ -122,22 +81,14 @@ func (s *StoreService) ListVendorItems(ctx context.Context, req *pb.StoreListVen
 		s.Logger.Error("failed to build cte", "err", err)
 		return nil, err
 	}
-	prefix := fmt.Sprintf("WITH v_filt AS (%s)", cteSql)
+	prefix := fmt.Sprintf("WITH vendors_filtered AS (%s)", cteSql)
 
 	query := sq.
-		Select("templ.id, templ.name, templ.item_type_id," +
-			"templ.description, templ.gold_price, templ.buyable_with_tokens," +
-			"COALESCE(i.prefix, '') AS prefix," +
-			"COALESCE(i.suffix, '') AS suffix," +
-			"v_filt.code, COALESCE(templ.token_price, 0)," +
-			"COALESCE(i.health, 0) AS health," +
-			"COALESCE(i.power, 0) AS power," +
-			"COALESCE(i.strength, 0) AS strength," +
-			"COALESCE(i.spellpower, 0) AS spellpower," +
-			"COALESCE(i.bonus_damage, 0) AS bonus_damage," +
-			"COALESCE(i.bonus_armor, 0) AS bonus_armor").
+		Select("i.*, templ.*, it.*, es.*").
 		From("item_templates AS templ").
-		InnerJoin("v_filt ON v_filt.item_type_id = templ.item_type_id").
+		InnerJoin("vendors_filtered ON vendors_filtered.item_type_id = templ.item_type_id").
+		InnerJoin("item_types as it on it.id = templ.item_type_id").
+		InnerJoin("equip_slots as es on es.id = templ.equip_slot_id").
 		LeftJoin("items AS i ON i.item_template_id = templ.id")
 
 	sql, _, err := query.ToSql()
@@ -153,26 +104,40 @@ func (s *StoreService) ListVendorItems(ctx context.Context, req *pb.StoreListVen
 		return nil, err
 	}
 
-	var items []*pb.Item
+	var items []*pbRepo.Item
 	for rows.Next() {
-		it := &pb.Item{}
+		var foo *any
+		i := &pbRepo.Item{}
+		templ := &pbRepo.ItemTemplate{}
+		es := &pbRepo.EquipSlot{}
+		it := &pbRepo.ItemType{}
+
 		err := rows.Scan(
+			&i.Id,
+			&i.Prefix,
+			&i.Suffix,
+			&i.ItemTemplateId,
+			&i.Health,
+			&i.Power,
+			&i.Strength,
+			&i.Spellpower,
+			&i.BonusDamage,
+			&i.BonusArmor,
+			&templ.Id,
+			&templ.Name,
+			&templ.ItemTypeId,
+			&templ.EquipSlotId,
+			&templ.Description,
+			&templ.GoldPrice,
+			&templ.BuyableWithTokens,
+			&templ.TokenPrice,
+			&foo, // metadata, unnecessary atm
+			&es.Id,
+			&es.Code,
+			&es.Name,
 			&it.Id,
+			&it.Code,
 			&it.Name,
-			&it.ItemTypeId,
-			&it.Description,
-			&it.GoldPrice,
-			&it.BuyableWithTokens,
-			&it.Prefix,
-			&it.Suffix,
-			&it.ItemTypeCode,
-			&it.TokenPrice,
-			&it.Health,
-			&it.Power,
-			&it.Strength,
-			&it.Spellpower,
-			&it.BonusDamage,
-			&it.BonusArmor,
 		)
 
 		if err != nil {
@@ -180,15 +145,14 @@ func (s *StoreService) ListVendorItems(ctx context.Context, req *pb.StoreListVen
 			return nil, err
 		}
 
-		items = append(items, it)
+		templ.EquipSlot = es
+		templ.ItemType = it
+		i.ItemTemplate = templ
+
+		items = append(items, i)
 	}
 
 	return &pb.ListVendorItemResponse{Items: items, TotalCount: -1}, nil
-}
-
-func (s *StoreService) AddItem(ctx context.Context, req *pb.AddItemRequest) (*pb.AddItemResponse, error) {
-	s.Logger.Warn("unimplemented method called (AddItem)")
-	return nil, nil
 }
 
 func (s *StoreService) BuyItems(ctx context.Context, req *pb.BuyItemRequest) (*pb.BuyItemResponse, error) {
@@ -235,11 +199,11 @@ func (s *StoreService) BuyItems(ctx context.Context, req *pb.BuyItemRequest) (*p
 		return nil, err
 	}
 
-	var items []*pb.Item
+	var items []*pbRepo.Item
 	for rows.Next() {
-		item := &pb.Item{}
+		item := &pbRepo.Item{}
 
-		err := rows.Scan(&item.Id, &item.GoldPrice, &item.ItemTemplateId)
+		err := rows.Scan(&item.Id, &item.ItemTemplate.GoldPrice, &item.ItemTemplateId)
 		if err != nil {
 			s.Logger.Error(err)
 			return errResp, err
@@ -250,7 +214,7 @@ func (s *StoreService) BuyItems(ctx context.Context, req *pb.BuyItemRequest) (*p
 
 	var sum uint64 = 0
 	for _, item := range items {
-		sum += item.GetGoldPrice()
+		sum += item.ItemTemplate.GetGoldPrice()
 	}
 
 	if sum > c.Gold {

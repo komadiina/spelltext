@@ -13,14 +13,14 @@ import (
 	"github.com/rivo/tview"
 )
 
-func UpdateBasket(basket *[]*pbStore.Item, tv *tview.TextView, c *types.SpelltextClient) {
+func UpdateBasket(basket *[]*pbRepo.Item, tv *tview.TextView, c *types.SpelltextClient) {
 	var totalGold uint64 = 0
 	for _, item := range *basket {
-		totalGold += item.GetGoldPrice()
+		totalGold += item.ItemTemplate.GoldPrice
 	}
 
 	color := "yellow"
-	if totalGold > c.AppStorage[constants.SELECTED_CHARACTER].(*pbRepo.Character).GetGold() {
+	if totalGold > c.Storage.SelectedCharacter.Gold {
 		color = "red"
 	}
 
@@ -31,7 +31,7 @@ func AddVendorPage(c *types.SpelltextClient) {
 	onClose := func() {}
 
 	c.PageManager.RegisterFactory(constants.PAGE_VENDOR, func() tview.Primitive {
-		if c.AppStorage[constants.SELECTED_CHARACTER] == nil {
+		if c.Storage.SelectedCharacter == nil {
 			f := tview.NewFlex().SetFullScreen(true)
 			f.SetBorder(true).SetBorderPadding(1, 1, 5, 5).SetTitle(" [::b]hello?[::-] ")
 
@@ -39,27 +39,29 @@ func AddVendorPage(c *types.SpelltextClient) {
 				SetText("no character selected. select a character from the character page, and come back... dummy"), 0, 1, false)
 		}
 
-		basket := make([]*pbStore.Item, 0)
+		basket := make([]*pbRepo.Item, 0)
 		totals := tview.NewFlex().SetDirection(tview.FlexRow)
 		basketPrice := tview.NewTextView().SetDynamicColors(true).SetText(`basket price: [yellow]0g[""]`)
-		basketPrice.SetBorder(true).SetBorderPadding(1, 1, 2, 2)
+		basketPrice.SetBorder(true).SetBorderPadding(0, 0, 2, 2)
 
-		availableGold := tview.NewTextView().SetDynamicColors(true).SetText(fmt.Sprintf(`available gold: [yellow]%d[""]`, c.AppStorage[constants.SELECTED_CHARACTER].(*pbRepo.Character).GetGold()))
-		availableGold.SetBorder(true).SetBorderPadding(1, 1, 2, 2)
+		availableGold := tview.
+			NewTextView().
+			SetDynamicColors(true).
+			SetText(fmt.Sprintf(`available gold: [yellow]%d[""]`, c.Storage.SelectedCharacter.Gold))
+		availableGold.SetBorder(true).SetBorderPadding(0, 0, 2, 2)
 
-		totals.AddItem(basketPrice, 5, 1, false).AddItem(availableGold, 5, 1, false)
+		totals.AddItem(basketPrice, 3, 1, false).AddItem(availableGold, 3, 1, false)
 
 		vendor := tview.NewTextView().
 			SetDynamicColors(true).
-			SetText(fmt.Sprintf(`[blue]%v[""]'s wares`, c.AppStorage[constants.SELECTED_VENDOR_NAME]))
+			SetText(fmt.Sprintf(`[blue]%v[""]'s wares`, c.Storage.SelectedVendor.Name))
 
-		flex := STNewFlex().AddItem(vendor, 1, 1, false).SetDirection(tview.FlexRow)
-		flex.SetBorder(true).SetTitle(fmt.Sprintf(" [::b]vendor - %s[::-] ", c.AppStorage[constants.SELECTED_VENDOR_NAME]))
+		flex := utils.STNewFlex().AddItem(vendor, 1, 1, false).SetDirection(tview.FlexRow)
+		flex.SetBorder(true).SetTitle(fmt.Sprintf(" [::b]vendor - %s[::-] ", c.Storage.SelectedVendor.Name))
 
 		flex.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 			if event.Key() == tcell.KeyCtrlB {
-				c.Logger.Info("cashing out", "len(basket)", len(basket))
-				char := c.AppStorage[constants.SELECTED_CHARACTER].(*pbRepo.Character)
+				char := c.Storage.SelectedCharacter
 				if err := functions.BuyItems(basket, char, c); err != nil {
 					c.Logger.Error(err)
 				}
@@ -71,14 +73,14 @@ func AddVendorPage(c *types.SpelltextClient) {
 					})
 				}()
 
-				char = c.AppStorage[constants.SELECTED_CHARACTER].(*pbRepo.Character)
+				char = c.Storage.SelectedCharacter
 				m := utils.CreateModal(
 					"purchase successful",
 					fmt.Sprintf("you've bought %d items (remaining gold: %d)", len(basket), char.GetGold()),
 					c,
 					nil,
 				)
-				basket = make([]*pbStore.Item, 0)
+				basket = make([]*pbRepo.Item, 0)
 
 				c.App.SetRoot(m, true).EnableMouse(true)
 			}
@@ -101,7 +103,7 @@ func AddVendorPage(c *types.SpelltextClient) {
 		resp, err := c.Clients.StoreClient.ListVendorItems(
 			*c.Context,
 			&pbStore.StoreListVendorItemRequest{
-				VendorId: c.AppStorage[constants.SELECTED_VENDOR_ID].(uint64),
+				VendorId: c.Storage.SelectedVendor.Id,
 			},
 		)
 
@@ -160,24 +162,15 @@ func AddVendorPage(c *types.SpelltextClient) {
 		table.SetEvaluateAllRows(true)
 		table.SetBorderPadding(1, 1, 5, 5)
 
-		guide := tview.NewFlex().
-			SetDirection(tview.FlexColumn).
-			AddItem(tview.NewTextView().SetText(" [::b]keymap legend[::-]: "), 0, 1, false)
-
-		guide.SetBorder(true)
-
-		add, len := utils.AddNavGuide("enter", "add to basket")
-		guide.AddItem(add, len, 1, false)
-
-		buy, len := utils.AddNavGuide("ctrl+b", "buy")
-		guide.AddItem(buy, len, 1, false)
-
-		back, len := utils.AddNavGuide("esc", "back")
-		guide.AddItem(back, len, 1, false)
+		guide := utils.CreateGuide([]*types.UnusableHotkey{
+			{Key: "enter", Desc: "add to basket"},
+			{Key: "ctrl+b", Desc: "buy"},
+			{Key: "esc", Desc: "back"},
+		}, true)
 
 		flex = flex.
-			AddItem(table, 0, 1, true).
-			AddItem(totals, 0, 1, false).
+			AddItem(table, 0, 5, true).
+			AddItem(totals, 6, 1, false).
 			AddItem(guide, 3, 1, false).
 			SetFullScreen(true)
 

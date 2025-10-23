@@ -7,7 +7,6 @@ CREATE TABLE users (
   PRIMARY KEY (id)
 );
 
-create unique index idx_users_id on users (id);
 CREATE UNIQUE INDEX idx_users_username ON users (username);
 
 -- alter table users replica identity full;

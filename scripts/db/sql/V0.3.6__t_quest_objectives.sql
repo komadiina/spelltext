@@ -5,4 +5,6 @@ create table quest_objective (
     foreign key (npc_id) references npcs (id)
 );  
 
+create index idx_quest_objective_quest_id on quest_objective (quest_id);
+create index idx_quest_objective_npc_id on quest_objective (npc_id);
 -- alter table quest_objective replica identity full;

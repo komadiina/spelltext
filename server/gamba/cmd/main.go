@@ -8,68 +8,18 @@ import (
 	"time"
 
 	"github.com/charmbracelet/log"
-	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgxpool"
 	pb "github.com/komadiina/spelltext/proto/gamba"
+	pbInventory "github.com/komadiina/spelltext/proto/inventory"
 	"github.com/komadiina/spelltext/server/gamba/config"
+	"github.com/komadiina/spelltext/server/gamba/db"
+	"github.com/komadiina/spelltext/server/gamba/health"
 	"github.com/komadiina/spelltext/server/gamba/server"
+	"github.com/komadiina/spelltext/server/gamba/services"
+	"github.com/komadiina/spelltext/shared"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
-
-const banner = `
-                _ _ _            _   
-               | | | |          | |  
- ___ _ __   ___| | | |_ _____  _| |_ 
-/ __| '_ \ / _ \ | | __/ _ \ \/ / __|
-\__ \ |_) |  __/ | | ||  __/>  <| |_ 
-|___/ .__/ \___|_|_|\__\___/_/\_\\__|
-    | |                              
-    |_|                              
-
-`
-
-func InitializePool(s *server.GambaService, context context.Context, conninfo string, backoff time.Duration, maxRetries int, boFormula func(time.Duration) time.Duration) error {
-	try := 1
-	for {
-		conn, err := pgx.Connect(context, conninfo)
-
-		if err != nil && try >= maxRetries {
-			// conn not established, max retries exceeded
-			s.Logger.Fatal(err)
-		} else if err == nil && try < maxRetries {
-			// conn established within maxRetries
-			s.Logger.Info("pgpool connection established, creating pool..")
-			conn.Close(context)
-
-			pool, err := pgxpool.New(context, fmt.Sprintf(
-				"user=%s password=%s host=%s port=%d dbname=%s sslmode=%s pool_max_conns=10 pool_min_conns=3 pool_health_check_period=30s",
-				s.Config.PgUser,
-				s.Config.PgPass,
-				s.Config.PgHost,
-				s.Config.PgPort,
-				s.Config.PgDbName,
-				s.Config.PgSSLMode,
-			))
-
-			if err != nil {
-				s.Logger.Fatal("unable to create pool", "reason", err)
-			} else {
-				s.Logger.Info("pgxpool (dpool, via pgpool-ii) initialized")
-			}
-
-			s.DbPool = pool
-
-			return nil
-		} else if err != nil && try < maxRetries {
-			// conn not established, backoff
-			s.Logger.Warn("failed to establish database connection, backing off...", "reason", err, "backoff_seconds", backoff.Seconds())
-			time.Sleep(backoff)
-			backoff = boFormula(backoff)
-			try++
-		}
-	}
-}
 
 var version = os.Getenv("VERSION")
 
@@ -79,7 +29,7 @@ func main() {
 	logging.Init(log.InfoLevel, "gambaserver", false)
 	logger := logging.Get("gambaserver", false)
 
-	logger.Infof(`%s%sversion=%s`, banner, "\n", version)
+	logger.Infof(`%s%sversion=%s`, shared.BANNER, "\n", version)
 
 	logger.Info("loading config...", "CONFIG_FILE", os.Getenv("CONFIG_FILE"))
 	cfg, err := config.LoadConfig()
@@ -100,6 +50,37 @@ func main() {
 	s := grpc.NewServer()
 	ss := server.GambaService{Config: cfg, Logger: logger}
 
+	// init inventory clientConn
+	target := fmt.Sprint("inventoryserver:", cfg.InventoryServicePort)
+	clientConn, err := services.InitClientConn(
+		logger,
+		target,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		5,
+		10)
+
+	if err != nil {
+		logger.Fatal(err)
+	}
+
+	ss.Connections = &server.Connections{
+		Inventory: clientConn,
+	}
+	ss.Clients = &server.Clients{
+		Inventory: pbInventory.NewInventoryClient(clientConn),
+	}
+	defer ss.Connections.Inventory.Close()
+
+	go health.InitMonitor(
+		&ss,
+		target,
+		ss.Clients.Inventory,
+		func(ss *server.GambaService, cc *grpc.ClientConn) {
+			ss.Connections.Inventory = cc
+			ss.Logger.Infof("server is back up, healthy. service=%s", target)
+		}).
+		Run(ctx)
+
 	conninfo := fmt.Sprintf(
 		"postgres://%s:%s@%s:%d/%s?sslmode=%s",
 		cfg.PgUser,
@@ -109,7 +90,7 @@ func main() {
 		cfg.PgDbName,
 		cfg.PgSSLMode,
 	)
-	err = InitializePool(&ss, ctx, conninfo, time.Second*5, 10, func(bo time.Duration) time.Duration {
+	err = db.InitializePool(&ss, ctx, conninfo, time.Second*5, 10, func(bo time.Duration) time.Duration {
 		return bo + time.Second*5
 	})
 

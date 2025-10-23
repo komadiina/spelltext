@@ -8,6 +8,7 @@ package char
 
 import (
 	context "context"
+	health "github.com/komadiina/spelltext/proto/health"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -19,6 +20,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
+	Character_Check_FullMethodName                    = "/char.Character/Check"
 	Character_ListHeroes_FullMethodName               = "/char.Character/ListHeroes"
 	Character_ListCharacters_FullMethodName           = "/char.Character/ListCharacters"
 	Character_SetSelectedCharacter_FullMethodName     = "/char.Character/SetSelectedCharacter"
@@ -37,6 +39,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CharacterClient interface {
+	Check(ctx context.Context, in *health.HealthCheckRequest, opts ...grpc.CallOption) (*health.HealthCheckResponse, error)
 	ListHeroes(ctx context.Context, in *ListHeroesRequest, opts ...grpc.CallOption) (*ListHeroesResponse, error)
 	ListCharacters(ctx context.Context, in *ListCharactersRequest, opts ...grpc.CallOption) (*ListCharactersResponse, error)
 	SetSelectedCharacter(ctx context.Context, in *SetSelectedCharacterRequest, opts ...grpc.CallOption) (*SetSelectedCharacterResponse, error)
@@ -57,6 +60,16 @@ type characterClient struct {
 
 func NewCharacterClient(cc grpc.ClientConnInterface) CharacterClient {
 	return &characterClient{cc}
+}
+
+func (c *characterClient) Check(ctx context.Context, in *health.HealthCheckRequest, opts ...grpc.CallOption) (*health.HealthCheckResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(health.HealthCheckResponse)
+	err := c.cc.Invoke(ctx, Character_Check_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *characterClient) ListHeroes(ctx context.Context, in *ListHeroesRequest, opts ...grpc.CallOption) (*ListHeroesResponse, error) {
@@ -183,6 +196,7 @@ func (c *characterClient) GetEquipSlots(ctx context.Context, in *GetEquipSlotsRe
 // All implementations must embed UnimplementedCharacterServer
 // for forward compatibility.
 type CharacterServer interface {
+	Check(context.Context, *health.HealthCheckRequest) (*health.HealthCheckResponse, error)
 	ListHeroes(context.Context, *ListHeroesRequest) (*ListHeroesResponse, error)
 	ListCharacters(context.Context, *ListCharactersRequest) (*ListCharactersResponse, error)
 	SetSelectedCharacter(context.Context, *SetSelectedCharacterRequest) (*SetSelectedCharacterResponse, error)
@@ -205,6 +219,9 @@ type CharacterServer interface {
 // pointer dereference when methods are called.
 type UnimplementedCharacterServer struct{}
 
+func (UnimplementedCharacterServer) Check(context.Context, *health.HealthCheckRequest) (*health.HealthCheckResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Check not implemented")
+}
 func (UnimplementedCharacterServer) ListHeroes(context.Context, *ListHeroesRequest) (*ListHeroesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListHeroes not implemented")
 }
@@ -260,6 +277,24 @@ func RegisterCharacterServer(s grpc.ServiceRegistrar, srv CharacterServer) {
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&Character_ServiceDesc, srv)
+}
+
+func _Character_Check_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(health.HealthCheckRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CharacterServer).Check(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Character_Check_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CharacterServer).Check(ctx, req.(*health.HealthCheckRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _Character_ListHeroes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -485,6 +520,10 @@ var Character_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "char.Character",
 	HandlerType: (*CharacterServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Check",
+			Handler:    _Character_Check_Handler,
+		},
 		{
 			MethodName: "ListHeroes",
 			Handler:    _Character_ListHeroes_Handler,

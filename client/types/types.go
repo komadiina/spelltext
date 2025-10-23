@@ -7,11 +7,13 @@ import (
 	"github.com/komadiina/spelltext/client/config"
 	"github.com/komadiina/spelltext/client/factory"
 	pbAuth "github.com/komadiina/spelltext/proto/auth"
+	pbBuild "github.com/komadiina/spelltext/proto/build"
 	pbChar "github.com/komadiina/spelltext/proto/char"
 	pbChat "github.com/komadiina/spelltext/proto/chat"
 	pbCombat "github.com/komadiina/spelltext/proto/combat"
 	pbGamba "github.com/komadiina/spelltext/proto/gamba"
 	pbInventory "github.com/komadiina/spelltext/proto/inventory"
+	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	pbStore "github.com/komadiina/spelltext/proto/store"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 	"github.com/nats-io/nats.go"
@@ -25,6 +27,7 @@ type SpelltextClient struct {
 	Nats         *nats.Conn
 	App          *tview.Application
 	AppStorage   map[string]any
+	Storage      *AppStorage
 	PageManager  *factory.PageManager
 	User         *SpelltextUser
 	Clients      *Clients
@@ -33,6 +36,20 @@ type SpelltextClient struct {
 	AudioManager *audio.Manager
 
 	NavigateTo func(pageKey string)
+}
+
+type Ministate struct {
+	Username   string
+	CurrentNpc *pbRepo.Npc
+	FightState *NpcFightState
+}
+
+type AppStorage struct {
+	Ministate         *Ministate
+	CurrentUser       *pbRepo.User
+	SelectedCharacter *pbRepo.Character
+	SelectedVendor    *pbRepo.Vendor
+	EquipSlots        []*pbRepo.EquipSlot
 }
 
 type SpelltextUser struct {
@@ -52,6 +69,7 @@ type Clients struct {
 	GambaClient     pbGamba.GambaClient
 	AuthClient      pbAuth.AuthClient
 	CombatClient    pbCombat.CombatClient
+	BuildClient     pbBuild.BuildClient
 }
 
 type Connections struct {
@@ -62,6 +80,7 @@ type Connections struct {
 	Gamba     *grpc.ClientConn
 	Auth      *grpc.ClientConn
 	Combat    *grpc.ClientConn
+	Build     *grpc.ClientConn
 }
 
 type NavigableForm struct {
@@ -84,4 +103,9 @@ type CharacterStats struct {
 	Spellpower   int64
 	Armor        int64
 	Damage       int64
+}
+
+type UnusableHotkey struct {
+	Key  string
+	Desc string
 }

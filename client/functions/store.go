@@ -6,7 +6,7 @@ import (
 	"github.com/gdamore/tcell/v2"
 	"github.com/komadiina/spelltext/client/constants"
 	"github.com/komadiina/spelltext/client/utils"
-	pb "github.com/komadiina/spelltext/proto/store"
+	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	"github.com/rivo/tview"
 )
 
@@ -28,14 +28,14 @@ func setCell(table *tview.Table, row int, column int, content string, color tcel
 	return table
 }
 
-func MakeVendorTableRow(row int, item *pb.Item, table *tview.Table) *tview.Table {
+func MakeVendorTableRow(row int, item *pbRepo.Item, table *tview.Table) *tview.Table {
 	table = setCell(
 		table, row, 0, utils.GetItemName(item), constants.COLOR_NAME, true,
 		true,
 	)
 
 	table = setCell(
-		table, row, 1, fmt.Sprint(item.GetGoldPrice())+"g", constants.COLOR_PRICE, true,
+		table, row, 1, fmt.Sprint(item.ItemTemplate.GoldPrice)+"g", constants.COLOR_PRICE, true,
 		false,
 	)
 

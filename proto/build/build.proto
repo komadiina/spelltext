@@ -1,0 +1,32 @@
+syntax = "proto3";
+package build;
+option go_package = "github.com/komadiina/spelltext/proto/proto/build;build";
+
+import "repo/repo.proto";
+import "health/health.proto";
+
+message ListAbilitiesRequest {
+    repo.Character character = 1;
+}
+
+message ListAbilitiesResponse {
+    repeated repo.PlayerAbilityTree upgraded = 1;
+    repeated repo.Ability available = 2;
+    repeated repo.Ability locked = 3;
+}
+
+message UpgradeAbilityRequest {
+    uint64 character_id = 1;
+    uint64 ability_id = 2;
+    bool new_ability = 3;
+}
+
+message UpgradeAbilityResponse {
+    bool success = 1;
+}
+
+service Build {
+    rpc Check(health.HealthCheckRequest) returns (health.HealthCheckResponse);
+    rpc ListAbilities(ListAbilitiesRequest) returns (ListAbilitiesResponse);
+    rpc UpgradeAbility(UpgradeAbilityRequest) returns (UpgradeAbilityResponse);
+}

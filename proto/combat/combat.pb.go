@@ -7,6 +7,7 @@
 package combat
 
 import (
+	health "github.com/komadiina/spelltext/proto/health"
 	repo "github.com/komadiina/spelltext/proto/repo"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -339,7 +340,7 @@ var File_combat_combat_proto protoreflect.FileDescriptor
 
 const file_combat_combat_proto_rawDesc = "" +
 	"\n" +
-	"\x13combat/combat.proto\x12\x06combat\x1a\x0frepo/repo.proto\"S\n" +
+	"\x13combat/combat.proto\x12\x06combat\x1a\x0frepo/repo.proto\x1a\x13health/health.proto\"S\n" +
 	"\x15InitiateCombatRequest\x12!\n" +
 	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\x12\x17\n" +
 	"\anpc_ids\x18\x02 \x03(\x04R\x06npcIds\"7\n" +
@@ -359,8 +360,9 @@ const file_combat_combat_proto_rawDesc = "" +
 	"\x0fListNpcsRequest\x12!\n" +
 	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\"1\n" +
 	"\x10ListNpcsResponse\x12\x1d\n" +
-	"\x04npcs\x18\x01 \x03(\v2\t.repo.NpcR\x04npcs2\xe6\x01\n" +
-	"\x06Combat\x12=\n" +
+	"\x04npcs\x18\x01 \x03(\v2\t.repo.NpcR\x04npcs2\xa8\x02\n" +
+	"\x06Combat\x12@\n" +
+	"\x05Check\x12\x1a.health.HealthCheckRequest\x1a\x1b.health.HealthCheckResponse\x12=\n" +
 	"\bListNpcs\x12\x17.combat.ListNpcsRequest\x1a\x18.combat.ListNpcsResponse\x12O\n" +
 	"\x0eInitiateCombat\x12\x1d.combat.InitiateCombatRequest\x1a\x1e.combat.InitiateCombatResponse\x12L\n" +
 	"\rResolveCombat\x12\x1c.combat.ResolveCombatRequest\x1a\x1d.combat.ResolveCombatResponseB4Z2github.com/komadiina/spelltext/proto/combat;combatb\x06proto3"
@@ -379,27 +381,31 @@ func file_combat_combat_proto_rawDescGZIP() []byte {
 
 var file_combat_combat_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_combat_combat_proto_goTypes = []any{
-	(*InitiateCombatRequest)(nil),  // 0: combat.InitiateCombatRequest
-	(*InitiateCombatResponse)(nil), // 1: combat.InitiateCombatResponse
-	(*ResolveCombatRequest)(nil),   // 2: combat.ResolveCombatRequest
-	(*ResolveCombatResponse)(nil),  // 3: combat.ResolveCombatResponse
-	(*ListNpcsRequest)(nil),        // 4: combat.ListNpcsRequest
-	(*ListNpcsResponse)(nil),       // 5: combat.ListNpcsResponse
-	(*repo.Npc)(nil),               // 6: repo.Npc
-	(*repo.Item)(nil),              // 7: repo.Item
+	(*InitiateCombatRequest)(nil),      // 0: combat.InitiateCombatRequest
+	(*InitiateCombatResponse)(nil),     // 1: combat.InitiateCombatResponse
+	(*ResolveCombatRequest)(nil),       // 2: combat.ResolveCombatRequest
+	(*ResolveCombatResponse)(nil),      // 3: combat.ResolveCombatResponse
+	(*ListNpcsRequest)(nil),            // 4: combat.ListNpcsRequest
+	(*ListNpcsResponse)(nil),           // 5: combat.ListNpcsResponse
+	(*repo.Npc)(nil),                   // 6: repo.Npc
+	(*repo.Item)(nil),                  // 7: repo.Item
+	(*health.HealthCheckRequest)(nil),  // 8: health.HealthCheckRequest
+	(*health.HealthCheckResponse)(nil), // 9: health.HealthCheckResponse
 }
 var file_combat_combat_proto_depIdxs = []int32{
 	6, // 0: combat.InitiateCombatResponse.npcs:type_name -> repo.Npc
 	7, // 1: combat.ResolveCombatResponse.items_gained:type_name -> repo.Item
 	6, // 2: combat.ListNpcsResponse.npcs:type_name -> repo.Npc
-	4, // 3: combat.Combat.ListNpcs:input_type -> combat.ListNpcsRequest
-	0, // 4: combat.Combat.InitiateCombat:input_type -> combat.InitiateCombatRequest
-	2, // 5: combat.Combat.ResolveCombat:input_type -> combat.ResolveCombatRequest
-	5, // 6: combat.Combat.ListNpcs:output_type -> combat.ListNpcsResponse
-	1, // 7: combat.Combat.InitiateCombat:output_type -> combat.InitiateCombatResponse
-	3, // 8: combat.Combat.ResolveCombat:output_type -> combat.ResolveCombatResponse
-	6, // [6:9] is the sub-list for method output_type
-	3, // [3:6] is the sub-list for method input_type
+	8, // 3: combat.Combat.Check:input_type -> health.HealthCheckRequest
+	4, // 4: combat.Combat.ListNpcs:input_type -> combat.ListNpcsRequest
+	0, // 5: combat.Combat.InitiateCombat:input_type -> combat.InitiateCombatRequest
+	2, // 6: combat.Combat.ResolveCombat:input_type -> combat.ResolveCombatRequest
+	9, // 7: combat.Combat.Check:output_type -> health.HealthCheckResponse
+	5, // 8: combat.Combat.ListNpcs:output_type -> combat.ListNpcsResponse
+	1, // 9: combat.Combat.InitiateCombat:output_type -> combat.InitiateCombatResponse
+	3, // 10: combat.Combat.ResolveCombat:output_type -> combat.ResolveCombatResponse
+	7, // [7:11] is the sub-list for method output_type
+	3, // [3:7] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name
 	3, // [3:3] is the sub-list for extension extendee
 	0, // [0:3] is the sub-list for field type_name

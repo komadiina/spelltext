@@ -1,0 +1,48 @@
+{
+    "abilities": [
+        {
+            "id": 1,
+            "name": "TEST_NO_BONUS",
+            "description": "Ability 1 description",
+            "type": "offensive",
+            "talent_point_cost": 1,
+            "power_cost": 0,
+            "base_damage": 10,
+            "strength_multiplier": 0.0,
+            "spellpower_multiplier": 0.0,
+            "st_mult_pl": 0.0,
+            "sp_mult_pl": 0.0
+        },
+        {
+            "id": 2,
+            "name": "TEST_SP_BONUS",
+            "description": "Ability 2 description",
+            "type": "defensive",
+            "talent_point_cost": 1,
+            "power_cost": 0,
+            "base_damage": 100,
+            "strength_multiplier": 0.0,
+            "spellpower_multiplier": 1.0,
+            "st_mult_pl": 0.0,
+            "sp_mult_pl": 0.0
+        },
+        {
+            "id": 3,
+            "name": "TEST_SP_BONUS",
+            "description": "Ability 3 description",
+            "type": "passive",
+            "talent_point_cost": 1,
+            "power_cost": 0,
+            "base_damage": 0,
+            "strength_multiplier": 1.0,
+            "spellpower_multiplier": 0.0,
+            "st_mult_pl": 0.0,
+            "sp_mult_pl": 0.0
+        },
+        {
+            "id": 4,
+            "name": "Fireball",
+            "description": "blast your enemies for "
+        }
+    ]
+}

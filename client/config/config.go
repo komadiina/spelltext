@@ -13,6 +13,7 @@ type Config struct {
 	GambaPort       int    `yaml:"gamba_port" env:"GAMBA_PORT" env-default:"50055"`
 	AuthPort        int    `yaml:"auth_port" env:"AUTH_PORT" env-default:"50056"`
 	CombatPort      int    `yaml:"combat_port" env:"COMBAT_PORT" env-default:"50057"`
+	BuildPort       int    `yaml:"build_port" env:"BUILD_PORT" env-default:"50058"`
 }
 
 func LoadConfig() (*Config, error) {

@@ -3,6 +3,7 @@ package combat;
 option go_package = "github.com/komadiina/spelltext/proto/combat;combat";
 
 import "repo/repo.proto";
+import "health/health.proto";
 
 message InitiateCombatRequest {
     uint64 character_id = 1;
@@ -35,7 +36,9 @@ message ListNpcsResponse {
     repeated repo.Npc npcs = 1;
 }
 
+
 service Combat {
+    rpc Check(health.HealthCheckRequest) returns (health.HealthCheckResponse);
     rpc ListNpcs(ListNpcsRequest) returns (ListNpcsResponse);
     rpc InitiateCombat(InitiateCombatRequest) returns (InitiateCombatResponse);
     rpc ResolveCombat(ResolveCombatRequest) returns (ResolveCombatResponse);

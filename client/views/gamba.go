@@ -8,7 +8,6 @@ import (
 	"github.com/komadiina/spelltext/client/functions"
 	types "github.com/komadiina/spelltext/client/types"
 	"github.com/komadiina/spelltext/client/utils"
-	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	"github.com/rivo/tview"
 )
 
@@ -21,7 +20,7 @@ func AddGambaPage(c *types.SpelltextClient) {
 			SetFullScreen(true)
 		flex.SetBorder(true).SetBorderPadding(1, 1, 5, 5).SetTitle(" [::b]gamba[::-] ")
 
-		if c.AppStorage[constants.SELECTED_CHARACTER] == nil {
+		if c.Storage.SelectedCharacter == nil {
 			f := tview.NewFlex().SetFullScreen(true)
 			f.SetBorder(true).SetBorderPadding(1, 1, 5, 5).SetTitle(" hello? ")
 
@@ -47,7 +46,7 @@ func AddGambaPage(c *types.SpelltextClient) {
 					SetText(
 						fmt.Sprintf(
 							"available gold: %dg",
-							c.AppStorage[constants.SELECTED_CHARACTER].(*pbRepo.Character).GetGold(),
+							c.Storage.SelectedCharacter.GetGold(),
 						))
 
 				availableGold.SetBorder(true).SetBorderPadding(1, 1, 2, 2)
@@ -75,7 +74,6 @@ func AddGambaPage(c *types.SpelltextClient) {
 						if err != nil {
 							c.Logger.Error(err)
 						} else {
-							c.Logger.Info(res)
 							availableGold = utils.UpdateGold(availableGold, "available gold: %dg", -int64(resp.Chests[row-1].GoldPrice), c)
 							reward.SetText(
 								fmt.Sprintf(

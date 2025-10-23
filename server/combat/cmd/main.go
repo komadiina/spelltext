@@ -61,7 +61,7 @@ func InitializePool(s *server.CombatService, context context.Context, conninfo s
 			s.DbPool = pool
 
 			return nil
-		} else if err != nil && try < maxRetries {
+		} else {
 			// conn not established, backoff
 			s.Logger.Warn("failed to establish database connection, backing off...", "reason", err, "backoff_seconds", backoff.Seconds())
 			time.Sleep(backoff)
@@ -101,7 +101,7 @@ func main() {
 	ss := server.CombatService{Config: cfg, Logger: logger}
 
 	conninfo := fmt.Sprintf(
-		"user=%s password=%s host=%s port=%d dbname=%s sslmode=%s pool_max_conns=10 pool_min_conns=3 pool_health_check_period=30s",
+		"user=%s password=%s host=%s port=%d dbname=%s sslmode=%s",
 		cfg.PgUser,
 		cfg.PgPass,
 		cfg.PgHost,

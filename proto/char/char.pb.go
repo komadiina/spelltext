@@ -7,6 +7,7 @@
 package char
 
 import (
+	health "github.com/komadiina/spelltext/proto/health"
 	repo "github.com/komadiina/spelltext/proto/repo"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -1194,7 +1195,7 @@ var File_char_char_proto protoreflect.FileDescriptor
 
 const file_char_char_proto_rawDesc = "" +
 	"\n" +
-	"\x0fchar/char.proto\x12\x04char\x1a\x0frepo/repo.proto\"\x13\n" +
+	"\x0fchar/char.proto\x12\x04char\x1a\x0frepo/repo.proto\x1a\x13health/health.proto\"\x13\n" +
 	"\x11ListHeroesRequest\"8\n" +
 	"\x12ListHeroesResponse\x12\"\n" +
 	"\x06heroes\x18\x01 \x03(\v2\n" +
@@ -1260,8 +1261,9 @@ const file_char_char_proto_rawDesc = "" +
 	"\ritemInstances\x18\x01 \x03(\v2\x12.repo.ItemInstanceR\ritemInstances\"\x16\n" +
 	"\x14GetEquipSlotsRequest\">\n" +
 	"\x15GetEquipSlotsResponse\x12%\n" +
-	"\x05slots\x18\x01 \x03(\v2\x0f.repo.EquipSlotR\x05slots2\xad\a\n" +
-	"\tCharacter\x12?\n" +
+	"\x05slots\x18\x01 \x03(\v2\x0f.repo.EquipSlotR\x05slots2\xef\a\n" +
+	"\tCharacter\x12@\n" +
+	"\x05Check\x12\x1a.health.HealthCheckRequest\x1a\x1b.health.HealthCheckResponse\x12?\n" +
 	"\n" +
 	"ListHeroes\x12\x17.char.ListHeroesRequest\x1a\x18.char.ListHeroesResponse\x12K\n" +
 	"\x0eListCharacters\x12\x1b.char.ListCharactersRequest\x1a\x1c.char.ListCharactersResponse\x12]\n" +
@@ -1318,6 +1320,8 @@ var file_char_char_proto_goTypes = []any{
 	(*repo.Character)(nil),                   // 25: repo.Character
 	(*repo.ItemInstance)(nil),                // 26: repo.ItemInstance
 	(*repo.EquipSlot)(nil),                   // 27: repo.EquipSlot
+	(*health.HealthCheckRequest)(nil),        // 28: health.HealthCheckRequest
+	(*health.HealthCheckResponse)(nil),       // 29: health.HealthCheckResponse
 }
 var file_char_char_proto_depIdxs = []int32{
 	24, // 0: char.ListHeroesResponse.heroes:type_name -> repo.Hero
@@ -1328,32 +1332,34 @@ var file_char_char_proto_depIdxs = []int32{
 	25, // 5: char.CreateCharacterResponse.character:type_name -> repo.Character
 	26, // 6: char.GetEquippedItemsResponse.itemInstances:type_name -> repo.ItemInstance
 	27, // 7: char.GetEquipSlotsResponse.slots:type_name -> repo.EquipSlot
-	0,  // 8: char.Character.ListHeroes:input_type -> char.ListHeroesRequest
-	2,  // 9: char.Character.ListCharacters:input_type -> char.ListCharactersRequest
-	4,  // 10: char.Character.SetSelectedCharacter:input_type -> char.SetSelectedCharacterRequest
-	6,  // 11: char.Character.GetLastSelectedCharacter:input_type -> char.GetLastSelectedCharacterRequest
-	8,  // 12: char.Character.GetCharacter:input_type -> char.GetCharacterRequest
-	10, // 13: char.Character.CreateCharacter:input_type -> char.CreateCharacterRequest
-	12, // 14: char.Character.DeleteCharacter:input_type -> char.DeleteCharacterRequest
-	20, // 15: char.Character.GetEquippedItems:input_type -> char.GetEquippedItemsRequest
-	14, // 16: char.Character.ToggleEquip:input_type -> char.ToggleEquipRequest
-	16, // 17: char.Character.EquipItem:input_type -> char.EquipItemRequest
-	18, // 18: char.Character.UnequipItem:input_type -> char.UnequipItemRequest
-	22, // 19: char.Character.GetEquipSlots:input_type -> char.GetEquipSlotsRequest
-	1,  // 20: char.Character.ListHeroes:output_type -> char.ListHeroesResponse
-	3,  // 21: char.Character.ListCharacters:output_type -> char.ListCharactersResponse
-	5,  // 22: char.Character.SetSelectedCharacter:output_type -> char.SetSelectedCharacterResponse
-	7,  // 23: char.Character.GetLastSelectedCharacter:output_type -> char.GetLastSelectedCharacterResponse
-	9,  // 24: char.Character.GetCharacter:output_type -> char.GetCharacterResponse
-	11, // 25: char.Character.CreateCharacter:output_type -> char.CreateCharacterResponse
-	13, // 26: char.Character.DeleteCharacter:output_type -> char.DeleteCharacterResponse
-	21, // 27: char.Character.GetEquippedItems:output_type -> char.GetEquippedItemsResponse
-	15, // 28: char.Character.ToggleEquip:output_type -> char.ToggleEquipResponse
-	17, // 29: char.Character.EquipItem:output_type -> char.EquipItemResponse
-	19, // 30: char.Character.UnequipItem:output_type -> char.UnequipItemResponse
-	23, // 31: char.Character.GetEquipSlots:output_type -> char.GetEquipSlotsResponse
-	20, // [20:32] is the sub-list for method output_type
-	8,  // [8:20] is the sub-list for method input_type
+	28, // 8: char.Character.Check:input_type -> health.HealthCheckRequest
+	0,  // 9: char.Character.ListHeroes:input_type -> char.ListHeroesRequest
+	2,  // 10: char.Character.ListCharacters:input_type -> char.ListCharactersRequest
+	4,  // 11: char.Character.SetSelectedCharacter:input_type -> char.SetSelectedCharacterRequest
+	6,  // 12: char.Character.GetLastSelectedCharacter:input_type -> char.GetLastSelectedCharacterRequest
+	8,  // 13: char.Character.GetCharacter:input_type -> char.GetCharacterRequest
+	10, // 14: char.Character.CreateCharacter:input_type -> char.CreateCharacterRequest
+	12, // 15: char.Character.DeleteCharacter:input_type -> char.DeleteCharacterRequest
+	20, // 16: char.Character.GetEquippedItems:input_type -> char.GetEquippedItemsRequest
+	14, // 17: char.Character.ToggleEquip:input_type -> char.ToggleEquipRequest
+	16, // 18: char.Character.EquipItem:input_type -> char.EquipItemRequest
+	18, // 19: char.Character.UnequipItem:input_type -> char.UnequipItemRequest
+	22, // 20: char.Character.GetEquipSlots:input_type -> char.GetEquipSlotsRequest
+	29, // 21: char.Character.Check:output_type -> health.HealthCheckResponse
+	1,  // 22: char.Character.ListHeroes:output_type -> char.ListHeroesResponse
+	3,  // 23: char.Character.ListCharacters:output_type -> char.ListCharactersResponse
+	5,  // 24: char.Character.SetSelectedCharacter:output_type -> char.SetSelectedCharacterResponse
+	7,  // 25: char.Character.GetLastSelectedCharacter:output_type -> char.GetLastSelectedCharacterResponse
+	9,  // 26: char.Character.GetCharacter:output_type -> char.GetCharacterResponse
+	11, // 27: char.Character.CreateCharacter:output_type -> char.CreateCharacterResponse
+	13, // 28: char.Character.DeleteCharacter:output_type -> char.DeleteCharacterResponse
+	21, // 29: char.Character.GetEquippedItems:output_type -> char.GetEquippedItemsResponse
+	15, // 30: char.Character.ToggleEquip:output_type -> char.ToggleEquipResponse
+	17, // 31: char.Character.EquipItem:output_type -> char.EquipItemResponse
+	19, // 32: char.Character.UnequipItem:output_type -> char.UnequipItemResponse
+	23, // 33: char.Character.GetEquipSlots:output_type -> char.GetEquipSlotsResponse
+	21, // [21:34] is the sub-list for method output_type
+	8,  // [8:21] is the sub-list for method input_type
 	8,  // [8:8] is the sub-list for extension type_name
 	8,  // [8:8] is the sub-list for extension extendee
 	0,  // [0:8] is the sub-list for field type_name

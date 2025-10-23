@@ -1,0 +1,9 @@
+insert into npc_loot_tables (npc_template_id, item_id, chance, quantity) values (1, 1, 0.5, 1);
+insert into npc_loot_tables (npc_template_id, item_id, chance, quantity) values (1, 7, 1.0, 1);
+insert into npc_loot_tables (npc_template_id, item_id, chance, quantity) values (1, 13, 1.0, 1);
+insert into npc_loot_tables (npc_template_id, item_id, chance, quantity) values (2, 2, 1.0, 1);
+insert into npc_loot_tables (npc_template_id, item_id, chance, quantity) values (2, 3, 1.0, 1);
+insert into npc_loot_tables (npc_template_id, item_id, chance, quantity) values (2, 4, 1.0, 1);
+insert into npc_loot_tables (npc_template_id, item_id, chance, quantity) values (2, 16, 1.0, 1);
+insert into npc_loot_tables (npc_template_id, item_id, chance, quantity) values (3, 3, 1.0, 2);
+insert into npc_loot_tables (npc_template_id, item_id, chance, quantity) values (3, 16, 1.0, 1);

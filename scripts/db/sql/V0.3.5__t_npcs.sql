@@ -6,10 +6,12 @@ create table npcs (
 
     health_multiplier float not null default 1.0,
     damage_multiplier float not null default 1.0,
+    -- level int not null, -- not used here, but embedded by combatservice within minlevel <> maxlevel
 
     foreign key (template_id) references npc_templates (id)
 );
 
 create index idx_npcs_id on npcs (id);
+create index idx_npc_template_id on npcs (template_id);
 
 -- alter table npcs replica identity full;

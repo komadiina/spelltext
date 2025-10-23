@@ -10,10 +10,11 @@ create table abilities (
 
     -- scaling formula: base*(player_str*str_mult + player_sp*sp_mult)
     strength_multiplier float not null default 1.0,
-    spellpower_multiplier float not null default 1.0 
+    spellpower_multiplier float not null default 1.0,
+
+    str_mult_pl float not null default 0.1, -- 0.1 = 10% increase in multi per level
+    sp_mult_pl float not null default 0.1, -- 0.1 = 10% increase in multi per level
+    min_level int not null default 1
 );
 
-create index idx_abilities_id on abilities (id);
 create index idx_abilities_type on abilities (type);
-
--- alter table abilities replica identity full;

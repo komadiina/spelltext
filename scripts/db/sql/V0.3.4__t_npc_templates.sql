@@ -1,6 +1,7 @@
 create table npc_templates (
     id serial primary key,
     name varchar(64) not null,
+    description varchar(255) not null default 'empty description',
 
     min_level int not null,
     max_level int not null,
@@ -10,6 +11,7 @@ create table npc_templates (
     base_xp_reward int not null,
 
     drop_item_id int,
+    gold_reward int not null default 10,
     
     constraint xp_reward_positive check (base_xp_reward > 0),
     constraint valid_level check (min_level <= max_level)

@@ -8,8 +8,10 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	pb "github.com/komadiina/spelltext/proto/auth"
 	pbChar "github.com/komadiina/spelltext/proto/char"
+	pbHealth "github.com/komadiina/spelltext/proto/health"
 	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	"github.com/komadiina/spelltext/server/auth/config"
+	health "github.com/komadiina/spelltext/utils"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 	"google.golang.org/grpc"
 )
@@ -24,11 +26,16 @@ type Connections struct {
 
 type AuthService struct {
 	pb.UnimplementedAuthServer
+	health.HealthCheckable
 	DbPool      *pgxpool.Pool
 	Config      *config.Config
 	Logger      *logging.Logger
 	Clients     *Clients
 	Connections *Connections
+}
+
+func (s *AuthService) Check(ctx context.Context, req *pbHealth.HealthCheckRequest) (*pbHealth.HealthCheckResponse, error) {
+	return &pbHealth.HealthCheckResponse{Status: pbHealth.HealthCheckResponse_SERVING}, nil
 }
 
 func (s *AuthService) setDefaultCharacter(u *pbRepo.User, ctx context.Context) (*pbRepo.Character, error) {

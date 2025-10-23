@@ -7,6 +7,4 @@ create table gamba_chest_contents (
     primary key (gamba_chest_id, item_id)
 );
 
-create index idx_gamba_chest_contents_item_id on gamba_chest_contents (item_id);
-
 alter table gamba_chest_contents replica identity full;

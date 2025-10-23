@@ -8,17 +8,24 @@ import (
 	sq "github.com/Masterminds/squirrel"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+	pbHealth "github.com/komadiina/spelltext/proto/health"
 	pb "github.com/komadiina/spelltext/proto/inventory"
 	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	"github.com/komadiina/spelltext/server/inventory/config"
+	health "github.com/komadiina/spelltext/utils"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 )
 
 type InventoryService struct {
 	pb.UnimplementedInventoryServer
+	health.HealthCheckable
 	DbPool *pgxpool.Pool
 	Config *config.Config
 	Logger *logging.Logger
+}
+
+func (s *InventoryService) Check(ctx context.Context, req *pbHealth.HealthCheckRequest) (*pbHealth.HealthCheckResponse, error) {
+	return &pbHealth.HealthCheckResponse{Status: pbHealth.HealthCheckResponse_SERVING}, nil
 }
 
 func tryConnect(s *InventoryService, context context.Context, conninfo string, backoff time.Duration, maxRetries int, boFormula func(time.Duration) time.Duration) (pgx.Conn, error) {
@@ -33,7 +40,7 @@ func tryConnect(s *InventoryService, context context.Context, conninfo string, b
 			// conn established within maxRetries
 			s.Logger.Info("pgpool connection established")
 			return *conn, nil
-		} else if err != nil && try < maxRetries {
+		} else {
 			// conn not established, backoff
 			s.Logger.Warn("failed to establish database connection, backing off...", "reason", err, "backoff_seconds", backoff.Seconds())
 			time.Sleep(backoff)
@@ -72,12 +79,53 @@ func (s *InventoryService) GetConn(ctx context.Context) *pgx.Conn {
 }
 
 func (s *InventoryService) SellItem(ctx context.Context, req *pb.SellItemRequest) (*pb.SellItemResponse, error) {
-	s.Logger.Warn("unimplemented method called.", "method", "SellItem")
-	return &pb.SellItemResponse{Success: false, Message: "unimplemented"}, nil
+	// delete entry from `item_instances` table, add item instance gold to character.gold
+	batch := pgx.Batch{}
+	sql, _, err := sq.
+		Delete("item_instances").
+		Where("item_instance_id = $1").
+		PlaceholderFormat(sq.Dollar).
+		ToSql()
+
+	if err != nil {
+		s.Logger.Error(err)
+		return nil, err
+	}
+
+	batch.Queue(sql, req.ItemInstance.ItemInstanceId)
+
+	// _, err = s.DbPool.Exec(ctx, sql, req.ItemInstance.ItemInstanceId)
+	// if err != nil {
+	// 	s.Logger.Error(err)
+	// 	return nil, err
+	// }
+
+	// update character gold
+	sql, _, err = sq.
+		Update("characters").
+		Set("gold", sq.Expr("gold + $1")).
+		Where("character_id = $2").
+		PlaceholderFormat(sq.Dollar).
+		ToSql()
+
+	if err != nil {
+		s.Logger.Error(err)
+		return nil, err
+	}
+
+	batch.Queue(sql, req.ItemInstance.Item.ItemTemplate.GoldPrice, req.CharacterId)
+
+	err = s.DbPool.SendBatch(ctx, &batch).Close()
+	if err != nil {
+		s.Logger.Error(err)
+		return nil, err
+	}
+
+	return &pb.SellItemResponse{Success: true}, nil
 }
 
 func (s *InventoryService) GetBalance(ctx context.Context, req *pb.InventoryBalanceRequest) (*pb.InventoryBalanceResponse, error) {
-	s.Logger.Warn("unimplemented method called.", "method", "SellItem")
+	s.Logger.Warn("unimplemented method called.", "method", "GetBalance")
 	return &pb.InventoryBalanceResponse{Gold: 0, Tokens: 0}, nil
 }
 

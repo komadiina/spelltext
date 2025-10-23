@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"maps"
 	"slices"
-	"strings"
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/komadiina/spelltext/client/constants"
@@ -64,7 +63,7 @@ func RenderCharactersList(
 		stored = append(stored, character)
 
 		characters.AddItem("-> "+character.CharacterName, "", 0, func() {
-			c.AppStorage[constants.SELECTED_CHARACTER] = character
+			c.Storage.SelectedCharacter = character
 
 			mod := tview.NewModal().
 				SetText(fmt.Sprintf("character: %s", character.CharacterName)).
@@ -74,7 +73,7 @@ func RenderCharactersList(
 				switch buttonIndex {
 				case 0: // select
 					functions.SetSelectedCharacter(character, c)
-					c.AppStorage[constants.SELECTED_CHARACTER] = character
+					c.Storage.SelectedCharacter = character
 					c.App.SetRoot(c.PageManager.Pages, true).EnableMouse(true)
 					selected.SetText(fmt.Sprintf(`+++ currently selected: [orange]%s[""] (lv. %d %s)`, character.CharacterName, character.Level, character.Hero.Name))
 					return
@@ -111,7 +110,7 @@ func RenderCharactersList(
 
 	characters.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		if event.Key() == tcell.KeyCtrlA {
-			c.Logger.Info("create character command pressed.")
+			c.PageManager.Push(constants.PAGE_CREATE_CHARACTER, false)
 		}
 
 		return event
@@ -150,20 +149,11 @@ func RenderDetailsPane() (*tview.Flex, *CharacterDetailsView) {
 }
 
 func RenderGuide() *tview.Flex {
-	guide := tview.NewFlex().
-		SetDirection(tview.FlexColumn).
-		AddItem(tview.NewTextView().SetText(" keymap legend: "), 0, 1, false)
-	guide.SetBorder(true)
-
-	back, length := utils.AddNavGuide("esc", "back")
-	guide.AddItem(back, length, 1, false)
-
-	add, length := utils.AddNavGuide("ctrl+a", "create new character")
-	guide.AddItem(add, length, 1, false)
-
-	enter, length := utils.AddNavGuide("enter", "character menu")
-	guide.AddItem(enter, length, 1, false)
-	return guide
+	return utils.CreateGuide([]*types.UnusableHotkey{
+		{Key: "ctrl+a", Desc: "new character"},
+		{Key: "enter", Desc: "select"},
+		{Key: "tab", Desc: "navigate"},
+	}, true)
 }
 
 func RenderEquipmentPane(c *types.SpelltextClient, charSelected *pbRepo.Character) *tview.Flex {
@@ -182,20 +172,25 @@ func RenderEquipmentPane(c *types.SpelltextClient, charSelected *pbRepo.Characte
 		return cmp.Compare(a.Id, b.Id)
 	})
 
+	totals := RenderTotalsPane(c, equipped)
+	bonusesPane := RenderBonusesPane(equipped)
+
+	itemInfo := tview.NewTextView().SetDynamicColors(true)
 	root := tview.NewTreeNode("quick inventory")
 	tree := tview.NewTreeView().
 		SetRoot(root).
 		SetCurrentNode(root)
-	tree = RenderQuickInventoryTree(c, charSelected, equipSlots, tree, root, grouped, sortedKeys)
 
-	equipmentPane.AddItem(tree, 0, 2, true)
+	tree = RenderQuickInventoryTree(c, charSelected, equipSlots, tree, root, grouped, sortedKeys, itemInfo, totals)
 
-	totals := RenderTotalsPane(equipped)
-	bonusesPane := RenderBonusesPane(equipped)
+	flexLeft := tview.NewFlex().SetDirection(tview.FlexRow)
+	flexLeft.AddItem(itemInfo, 2, 1, false)
+	flexLeft.AddItem(tree, 0, 2, true)
+	equipmentPane.AddItem(flexLeft, 0, 2, true)
 
 	bonusesPane.
 		AddItem(nil, 0, 1, false).
-		AddItem(totals, 3, 1, false)
+		AddItem(totals, 4, 1, false)
 
 	equipmentPane.AddItem(bonusesPane, 0, 3, false)
 	return equipmentPane
@@ -209,6 +204,8 @@ func RenderQuickInventoryTree(
 	root *tview.TreeNode,
 	grouped map[*pbRepo.EquipSlot][]*pbRepo.ItemInstance,
 	sortedKeys []*pbRepo.EquipSlot,
+	itemInfo *tview.TextView,
+	totals *tview.Flex,
 ) *tview.TreeView {
 	for _, slotKey := range sortedKeys {
 		color := "#dedede"
@@ -222,8 +219,8 @@ func RenderQuickInventoryTree(
 			child := tview.
 				NewTreeNode(fmt.Sprintf(`[%s]%s[""]`, color, name)).
 				SetSelectable(true)
+			child.SetReference(instance)
 			child.SetSelectedFunc(func() {
-				c.Logger.Infof("selected: %v", utils.GetFullItemName(instance.GetItem()))
 				functions.ToggleEquip(
 					instance,
 					c,
@@ -231,13 +228,31 @@ func RenderQuickInventoryTree(
 					instance.Item.ItemTemplate.EquipSlot,
 					true,
 				)
-				// TODO: refresh equipped items
+
+				// TODO: implement update equipped logic locally
+				equipped := functions.GetEquippedItems(c)
+				totals = RenderTotalsPane(c, equipped)
 			})
+
+			node.SetSelectable(true).SetSelectedFunc(func() {
+				functions.ToggleEquip(instance, c, charSelected, instance.Item.ItemTemplate.EquipSlot, false)
+			})
+
 			node.AddChild(child)
 		}
 
 		root.AddChild(node)
 	}
+
+	tree.SetChangedFunc(func(node *tview.TreeNode) {
+		ref := node.GetReference()
+		if ref == nil {
+			return
+		}
+
+		instance := ref.(*pbRepo.ItemInstance)
+		itemInfo.SetText(utils.GetItemStats(instance.Item))
+	})
 
 	return tree
 }
@@ -251,70 +266,10 @@ func RenderBonusesPane(equipped []*pbRepo.ItemInstance) *tview.Flex {
 		return cmp.Compare(a.Item.ItemTemplate.EquipSlotId, b.Item.ItemTemplate.EquipSlotId)
 	})
 
-	discardEmpty := func(eq *pbRepo.ItemInstance) string {
-		sb := strings.Builder{}
-
-		if eq.Item.Health != 0 {
-			sgn := "+"
-			if eq.Item.Health < 0 {
-				sgn = ""
-			}
-
-			sb.WriteString(fmt.Sprintf(`[%s]%s%d HP[""], `, constants.TEXT_COLOR_HEALTH, sgn, eq.Item.Health))
-		}
-
-		if eq.Item.Power != 0 {
-			sgn := "+"
-			if eq.Item.Power < 0 {
-				sgn = ""
-			}
-
-			sb.WriteString(fmt.Sprintf(`[%s]%s%d PWR[""], `, constants.TEXT_COLOR_POWER, sgn, eq.Item.Power))
-		}
-
-		if eq.Item.Strength != 0 {
-			sgn := "+"
-			if eq.Item.Strength < 0 {
-				sgn = ""
-			}
-
-			sb.WriteString(fmt.Sprintf(`[%s]%s%d STR[""], `, constants.TEXT_COLOR_STRENGTH, sgn, eq.Item.Strength))
-		}
-
-		if eq.Item.Spellpower != 0 {
-			sgn := "+"
-			if eq.Item.Spellpower < 0 {
-				sgn = ""
-			}
-
-			sb.WriteString(fmt.Sprintf(`[%s]%s%d SP[""], `, constants.TEXT_COLOR_SPELLPOWER, sgn, eq.Item.Spellpower))
-		}
-
-		if eq.Item.BonusDamage != 0 {
-			sgn := "+"
-			if eq.Item.BonusDamage < 0 {
-				sgn = ""
-			}
-
-			sb.WriteString(fmt.Sprintf(`[%s]%s%d DMG[""], `, constants.TEXT_COLOR_DAMAGE, sgn, eq.Item.BonusDamage))
-		}
-
-		if eq.Item.BonusArmor != 0 {
-			sgn := "+"
-			if eq.Item.BonusArmor < 0 {
-				sgn = ""
-			}
-
-			sb.WriteString(fmt.Sprintf(`[%s]%s%d ARM[""], `, constants.TEXT_COLOR_ARMOR, sgn, eq.Item.BonusArmor))
-		}
-
-		return sb.String()[:len(sb.String())-2]
-	}
-
 	for _, eqi := range equipped {
 		es := "[" + eqi.GetItem().GetItemTemplate().GetEquipSlot().GetName() + "]" // escape tview color parsing
 		tv := tview.NewTextView().SetDynamicColors(true)
-		stats := discardEmpty(eqi)
+		stats := utils.GetItemStats(eqi.Item)
 		str := fmt.Sprintf(`[::b]%s[::-] %s%s[::i]%s[::-]`,
 			tview.Escape(es), utils.GetFullItemName(eqi.GetItem()), "\n\t", stats,
 		)
@@ -326,8 +281,8 @@ func RenderBonusesPane(equipped []*pbRepo.ItemInstance) *tview.Flex {
 	return bonusesPane
 }
 
-func RenderTotalsPane(equipped []*pbRepo.ItemInstance) *tview.Flex {
-	totalsPane := tview.NewFlex().SetDirection(tview.FlexColumn)
+func RenderTotalsPane(c *types.SpelltextClient, equipped []*pbRepo.ItemInstance) *tview.Flex {
+	totalsPane := tview.NewFlex().SetDirection(tview.FlexRow)
 	totalsPane.SetBorder(true).SetBorderPadding(0, 0, 2, 2).SetTitle(" [::b]totals[::-] ")
 	totalsPane.SetTitleColor(tcell.ColorCadetBlue)
 
@@ -340,7 +295,12 @@ func RenderTotalsPane(equipped []*pbRepo.ItemInstance) *tview.Flex {
 		Damage:       tview.NewTextView().SetDynamicColors(true),
 	}
 
-	cstats := &types.CharacterStats{}
+	cstats := &types.CharacterStats{
+		HealthPoints: c.Storage.SelectedCharacter.Hero.BaseHealth,
+		PowerPoints:  c.Storage.SelectedCharacter.Hero.BasePower,
+		Strength:     c.Storage.SelectedCharacter.Hero.BaseStrength,
+		Spellpower:   c.Storage.SelectedCharacter.Hero.BaseSpellpower,
+	}
 	for _, eqi := range equipped {
 		cstats = sumStats(eqi, cstats)
 	}
@@ -353,12 +313,16 @@ func RenderTotalsPane(equipped []*pbRepo.ItemInstance) *tview.Flex {
 	totals.Damage.SetText(fmt.Sprintf(`[%s]DMG[""]: %d`, constants.TEXT_COLOR_DAMAGE, cstats.Damage))
 
 	totalsPane.
-		AddItem(totals.HealthPoints, 0, 1, false).
-		AddItem(totals.PowerPoints, 0, 1, false).
-		AddItem(totals.Strength, 0, 1, false).
-		AddItem(totals.Spellpower, 0, 1, false).
-		AddItem(totals.Armor, 0, 1, false).
-		AddItem(totals.Damage, 0, 1, false)
+		AddItem(
+			tview.NewFlex().SetDirection(tview.FlexColumn).
+				AddItem(totals.HealthPoints, 0, 1, false).
+				AddItem(totals.PowerPoints, 0, 1, false).
+				AddItem(totals.Strength, 0, 1, false), 0, 1, false).
+		AddItem(
+			tview.NewFlex().SetDirection(tview.FlexColumn).
+				AddItem(totals.Spellpower, 0, 1, false).
+				AddItem(totals.Armor, 0, 1, false).
+				AddItem(totals.Damage, 0, 1, false), 0, 1, false)
 
 	return totalsPane
 }
@@ -373,7 +337,6 @@ func SetFlexInputHandler(flex *tview.Flex, equipmentPane *tview.Flex, characters
 				c.App.SetFocus(equipmentPane)
 			}
 		} else if event.Key() == tcell.KeyCtrlA {
-			c.Logger.Info("create character command pressed.")
 		}
 		return event
 	})
@@ -398,8 +361,8 @@ func AddCharacterPage(c *types.SpelltextClient) {
 			}
 		}
 
-		charSelected, ok := c.AppStorage[constants.SELECTED_CHARACTER].(*pbRepo.Character)
-		if !ok {
+		charSelected := c.Storage.SelectedCharacter
+		if charSelected == nil {
 			charSelected = &pbRepo.Character{Hero: &pbRepo.Hero{Name: "none selected.."}}
 		}
 		selected := tview.NewTextView().

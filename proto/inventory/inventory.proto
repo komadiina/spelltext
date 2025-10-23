@@ -3,6 +3,7 @@ package inventory;
 option go_package = "github.com/komadiina/spelltext/proto/inventory;inventory";
 
 import "repo/repo.proto";
+import "health/health.proto";
 
 message InventoryBalanceRequest {
   string username = 1;
@@ -15,9 +16,8 @@ message InventoryBalanceResponse {
 }
 
 message SellItemRequest {
-  string username = 1;
-  string character = 2;
-  uint64 item_id = 3;
+  uint64 character_id = 1;
+  repo.ItemInstance item_instance = 2;
 }
 
 message SellItemResponse {
@@ -44,6 +44,7 @@ message ListBackpackItemsResponse {
 }
 
 service Inventory {
+  rpc Check(health.HealthCheckRequest) returns (health.HealthCheckResponse);
   rpc GetBalance(InventoryBalanceRequest) returns (InventoryBalanceResponse);
   rpc SellItem(SellItemRequest) returns (SellItemResponse);
   rpc AddItemsToBackpack(AddItemsToBackpackRequest) returns (AddItemsToBackpackResponse);

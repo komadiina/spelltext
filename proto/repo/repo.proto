@@ -101,6 +101,7 @@ message Character {
     uint64 points_power = 10;
     uint64 points_strength = 11;
     uint64 points_spellpower = 12;
+    uint64 unspent_points = 13;
 
     Hero hero = 20;
     User user = 21;
@@ -207,12 +208,14 @@ message PlayerCompletedQuests {
 message NpcTemplate {
     uint64 id = 1;
     string name = 2;
-    uint32 min_level = 3;
-    uint32 max_level = 4;
-    uint64 health_points = 5;
-    uint64 base_damage = 6;
-    uint64 base_xp_reward = 7;
-    uint64 drop_item_id = 8;
+    string description = 3;
+    uint32 min_level = 4;
+    uint32 max_level = 5;
+    uint64 health_points = 6;
+    uint64 base_damage = 7;
+    uint64 base_xp_reward = 8;
+    uint64 drop_item_id = 9;
+    uint64 gold_reward = 10;
 
     Item drop_item = 20;
 }
@@ -224,6 +227,7 @@ message Npc {
     uint64 template_id = 4;
     float health_multiplier = 5;
     float damage_multiplier = 6;
+    uint32 level = 7;
 
     NpcTemplate npc_template = 20;
 }
@@ -246,6 +250,27 @@ message Ability {
     uint64 base_damage = 7;
     float strength_multiplier = 8;
     float spellpower_multiplier = 9;
+    float st_mult_perlevel = 10;
+    float sp_mult_perlevel = 11;
+    uint64 min_level = 12;
+}
+
+message NpcLootTable {
+    uint64 npc_template_id = 1;
+    uint64 item_id = 2;
+    float chance = 3;
+    uint32 quantity = 4;
+
+    NpcTemplate npc_template = 20;
+    Item item = 21;
+}
+
+message NpcAbility {
+    uint64 npc_id = 1;
+    uint64 ability_id = 2;
+
+    Npc npc = 20;
+    Ability ability = 21;
 }
 
 message Update {
@@ -253,4 +278,13 @@ message Update {
     string title = 2;
     string version = 3;
     string description = 4;
+}
+
+message PlayerAbilityTree {
+    uint64 character_id = 1;
+    uint64 ability_id = 2;
+    uint64 level = 3;
+
+    optional Character character = 20;
+    Ability ability = 21;
 }

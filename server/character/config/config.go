@@ -1,6 +1,9 @@
 package config
 
-import "github.com/komadiina/spelltext/shared/config"
+import (
+	"github.com/komadiina/spelltext/shared/config"
+	"github.com/komadiina/spelltext/shared/config/pgconfig"
+)
 
 type Config struct {
 	ServicePort int    `yaml:"port" env:"PORT" env-default:"50054"`
@@ -14,13 +17,17 @@ type Config struct {
 
 func LoadConfig() (*Config, error) {
 	var cfg struct {
-		Root Config `yaml:"charserver"`
+		Root     Config          `yaml:"charserver"`
+		Postgres pgconfig.Config `yaml:"postgres"`
 	}
 
 	err := config.LoadConfig(&cfg)
 	if err != nil {
 		return nil, err
 	}
+
+	cfg.Root.PgHost = cfg.Postgres.Host
+	cfg.Root.PgPort = cfg.Postgres.Port
 
 	return &cfg.Root, nil
 }

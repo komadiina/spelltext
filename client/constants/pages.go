@@ -14,6 +14,8 @@ const (
 	PAGE_CHAT             = "pg-chat"
 	PAGE_LOGIN            = "pg-login"
 	PAGE_CREATE_CHARACTER = "pg-create-character"
+	PAGE_FIGHT            = "pg-fight"
+	PAGE_ABILITY          = "pg-ability"
 )
 
 const (

@@ -53,7 +53,7 @@ func MakeChestTableRow(row int, chest *pbRepo.GambaChest, table *tview.Table) *t
 }
 
 func OpenChest(chest *pbRepo.GambaChest, c *types.SpelltextClient) (*pbGamba.OpenChestResponse, error) {
-	char := c.AppStorage[constants.SELECTED_CHARACTER].(*pbRepo.Character)
+	char := c.Storage.SelectedCharacter
 	if char.Gold < chest.GoldPrice {
 		err := fmt.Errorf("unable to open chest, insufficient balance: need=>%dg, have=%dg", chest.GetGoldPrice(), char.GetGold())
 		c.Logger.Error(err)

@@ -12,7 +12,7 @@ import (
 )
 
 func GetBackpackItems(c *types.SpelltextClient) *pbInventory.ListBackpackItemsResponse {
-	char := c.AppStorage[constants.SELECTED_CHARACTER].(*pbRepo.Character)
+	char := c.Storage.SelectedCharacter
 	req := &pbInventory.ListBackpackItemsRequest{CharacterId: char.GetCharacterId()}
 	resp, err := c.Clients.InventoryClient.ListBackpackItems(*c.Context, req) // TODO: move from pbRepo.Item to pbRepo.ItemInstance
 	if err != nil {
@@ -69,4 +69,10 @@ func MakeInventoryTableRow(row int, item *pbRepo.Item, c *types.SpelltextClient,
 	)
 
 	return t
+}
+
+func SellItem(c *types.SpelltextClient, inst *pbRepo.ItemInstance) error {
+	req := &pbInventory.SellItemRequest{CharacterId: c.Storage.SelectedCharacter.GetCharacterId(), ItemInstance: inst}
+	_, err := c.Clients.InventoryClient.SellItem(*c.Context, req)
+	return err
 }

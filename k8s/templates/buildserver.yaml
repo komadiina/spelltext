@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: buildserver
+  namespace: spelltext
+  labels: 
+    app: buildserver
+
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: buildserver
+  template:
+    metadata:
+      labels:
+        app: buildserver
+    spec:
+      containers:
+      - name: buildserver
+        image: {{ .Values.buildserver.image | toString }}
+        imagePullPolicy: Always
+        ports:
+          - containerPort: {{ .Values.buildserver.containerPort }}
+            name: {{ .Values.buildserver.portName }}
+            protocol: {{ .Values.buildserver.protocol }}
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.buildserver.containerPort }}
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.buildserver.containerPort }}
+          initialDelaySeconds: 15
+          periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: buildserver
+  namespace: spelltext
+  labels:
+    app: buildserver
+spec:
+  type: ClusterIP
+  selector:
+    app: buildserver
+  ports:
+    - name: {{ .Values.buildserver.portName }}
+      port: {{ .Values.buildserver.port }}
+      targetPort: {{ .Values.buildserver.targetPort }}
+      protocol: {{ .Values.buildserver.protocol }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: buildserver-ingress
+  namespace: spelltext
+  labels:
+    app: buildserver
+spec:
+  type: LoadBalancer
+  selector:
+    app: buildserver
+  ports:
+    - name: {{ .Values.buildserver.portName }}
+      port: {{ .Values.buildserver.port }}
+      targetPort: {{ .Values.buildserver.targetPort }}
+      protocol: {{ .Values.buildserver.protocol }}

@@ -6,6 +6,7 @@ import (
 	"github.com/komadiina/spelltext/client/constants"
 	"github.com/komadiina/spelltext/client/functions"
 	types "github.com/komadiina/spelltext/client/types"
+	"github.com/komadiina/spelltext/client/utils"
 	"github.com/rivo/tview"
 )
 
@@ -30,14 +31,14 @@ func AddLoginPage(c *types.SpelltextClient) {
 				password = strings.Trim(text, " ")
 			}).
 			AddButton("login", func() {
-				functions.LoginUser(c, username.GetText(), password)
-				c.AppStorage[constants.CURRENT_USER_NAME] = username.GetText()
-				c.Logger.Info("user logged in", "username", username.GetText())
+				uname := strings.ToLower(username.GetText())
+				functions.LoginUser(c, uname, password)
+				c.Storage.Ministate.Username = uname
 				functions.SetLastSelectedCharacter(c)
 				c.PageManager.Push(constants.PAGE_MAINMENU, false)
 			})
 
-		flex := STNewFlex().AddItem(form, 0, 1, true)
+		flex := utils.STNewFlex().AddItem(form, 0, 1, true)
 		flex.SetBorder(true).SetTitle(" [::b]login[::-] ")
 
 		return flex
