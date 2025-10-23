@@ -12,6 +12,7 @@ create table characters (
   points_power int not null,
   points_strength int not null,
   points_spellpower int not null,
+  unspent_points int not null default 1,
 
   foreign key (hero_id) references heroes (id),
   foreign key (user_id) references users (id) on delete cascade,

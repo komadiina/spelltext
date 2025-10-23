@@ -1,4 +1,4 @@
-package views
+package utils
 
 import "github.com/rivo/tview"
 

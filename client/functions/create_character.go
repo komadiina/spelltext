@@ -30,3 +30,13 @@ func CreateCharacter(char *pbRepo.Character, c *types.SpelltextClient) error {
 
 	return nil
 }
+
+func ListHeroes(c *types.SpelltextClient) []*pbRepo.Hero {
+	resp, err := c.Clients.CharacterClient.ListHeroes(*c.Context, &pbChar.ListHeroesRequest{})
+	if err != nil {
+		c.Logger.Error(err)
+		return nil
+	}
+
+	return resp.GetHeroes()
+}

@@ -19,6 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
+	Chat_Ping_FullMethodName            = "/chat.Chat/Ping"
 	Chat_SendChatMessage_FullMethodName = "/chat.Chat/SendChatMessage"
 	Chat_JoinChatroom_FullMethodName    = "/chat.Chat/JoinChatroom"
 	Chat_LeaveChatroom_FullMethodName   = "/chat.Chat/LeaveChatroom"
@@ -28,6 +29,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ChatClient interface {
+	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
 	SendChatMessage(ctx context.Context, in *SendChatMessageRequest, opts ...grpc.CallOption) (*SendChatMessageResponse, error)
 	JoinChatroom(ctx context.Context, in *JoinChatroomMessageRequest, opts ...grpc.CallOption) (*JoinChatroomMessageResponse, error)
 	LeaveChatroom(ctx context.Context, in *LeaveChatroomMessageRequest, opts ...grpc.CallOption) (*LeaveChatroomMessageResponse, error)
@@ -39,6 +41,16 @@ type chatClient struct {
 
 func NewChatClient(cc grpc.ClientConnInterface) ChatClient {
 	return &chatClient{cc}
+}
+
+func (c *chatClient) Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PingResponse)
+	err := c.cc.Invoke(ctx, Chat_Ping_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *chatClient) SendChatMessage(ctx context.Context, in *SendChatMessageRequest, opts ...grpc.CallOption) (*SendChatMessageResponse, error) {
@@ -75,6 +87,7 @@ func (c *chatClient) LeaveChatroom(ctx context.Context, in *LeaveChatroomMessage
 // All implementations must embed UnimplementedChatServer
 // for forward compatibility.
 type ChatServer interface {
+	Ping(context.Context, *PingRequest) (*PingResponse, error)
 	SendChatMessage(context.Context, *SendChatMessageRequest) (*SendChatMessageResponse, error)
 	JoinChatroom(context.Context, *JoinChatroomMessageRequest) (*JoinChatroomMessageResponse, error)
 	LeaveChatroom(context.Context, *LeaveChatroomMessageRequest) (*LeaveChatroomMessageResponse, error)
@@ -88,6 +101,9 @@ type ChatServer interface {
 // pointer dereference when methods are called.
 type UnimplementedChatServer struct{}
 
+func (UnimplementedChatServer) Ping(context.Context, *PingRequest) (*PingResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
+}
 func (UnimplementedChatServer) SendChatMessage(context.Context, *SendChatMessageRequest) (*SendChatMessageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendChatMessage not implemented")
 }
@@ -116,6 +132,24 @@ func RegisterChatServer(s grpc.ServiceRegistrar, srv ChatServer) {
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&Chat_ServiceDesc, srv)
+}
+
+func _Chat_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ChatServer).Ping(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Chat_Ping_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ChatServer).Ping(ctx, req.(*PingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _Chat_SendChatMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -179,6 +213,10 @@ var Chat_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "chat.Chat",
 	HandlerType: (*ChatServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Ping",
+			Handler:    _Chat_Ping_Handler,
+		},
 		{
 			MethodName: "SendChatMessage",
 			Handler:    _Chat_SendChatMessage_Handler,

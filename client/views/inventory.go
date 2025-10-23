@@ -7,6 +7,7 @@ import (
 	"github.com/komadiina/spelltext/client/constants"
 	"github.com/komadiina/spelltext/client/functions"
 	types "github.com/komadiina/spelltext/client/types"
+	"github.com/komadiina/spelltext/client/utils"
 	"github.com/rivo/tview"
 )
 
@@ -29,7 +30,6 @@ func AddInventoryPage(c *types.SpelltextClient) {
 
 		itemInstances := functions.GetBackpackItems(c).GetItemInstances()
 
-
 		if len(itemInstances) == 0 {
 			flex.AddItem(tview.NewTextView().SetText("no items in backpack").SetWrap(true).SetWordWrap(true), 0, 1, false)
 		} else {
@@ -44,13 +44,34 @@ func AddInventoryPage(c *types.SpelltextClient) {
 					SetDoneFunc(func(key tcell.Key) {
 						switch key {
 						case tcell.KeyEscape:
-							c.PageManager.Pop() // todo: move focus to flex
+							c.PageManager.Pop()
 						case tcell.KeyEnter:
 							table.SetSelectable(true, false)
 						}
 					}).
 					SetSelectedFunc(func(row, column int) {
 						table.SetSelectable(true, false)
+						// open modal [sell, cancel]
+						modal := tview.NewModal().
+							SetText(
+								fmt.Sprintf("do you want to sell %s?\nyou gain: [%s]%d[::-] gold",
+									utils.GetFullItemName(instance.Item),
+									constants.COLOR_GOLD,
+									instance.Item.ItemTemplate.GoldPrice)).
+							AddButtons([]string{"sell", "cancel"}).
+							SetDoneFunc(func(buttonIndex int, buttonLabel string) {
+								if buttonLabel == "sell" {
+									functions.SellItem(c, instance)
+									c.App.SetRoot(c.PageManager.Pages, true).EnableMouse(true)
+
+									// force refresh :(
+									c.PageManager.Pop()
+									c.PageManager.Push(constants.PAGE_INVENTORY, false)
+								} else {
+									c.App.SetRoot(c.PageManager.Pages, true).EnableMouse(true)
+								}
+							})
+						c.App.SetRoot(modal, true).EnableMouse(true)
 					})
 				table.SetEvaluateAllRows(true)
 				table.SetBorderPadding(1, 1, 5, 5)

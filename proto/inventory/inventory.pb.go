@@ -128,9 +128,8 @@ func (x *InventoryBalanceResponse) GetTokens() uint64 {
 
 type SellItemRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
-	Character     string                 `protobuf:"bytes,2,opt,name=character,proto3" json:"character,omitempty"`
-	ItemId        uint64                 `protobuf:"varint,3,opt,name=item_id,json=itemId,proto3" json:"item_id,omitempty"`
+	CharacterId   uint64                 `protobuf:"varint,1,opt,name=character_id,json=characterId,proto3" json:"character_id,omitempty"`
+	ItemInstance  *repo.ItemInstance     `protobuf:"bytes,2,opt,name=item_instance,json=itemInstance,proto3" json:"item_instance,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -165,25 +164,18 @@ func (*SellItemRequest) Descriptor() ([]byte, []int) {
 	return file_inventory_inventory_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *SellItemRequest) GetUsername() string {
+func (x *SellItemRequest) GetCharacterId() uint64 {
 	if x != nil {
-		return x.Username
-	}
-	return ""
-}
-
-func (x *SellItemRequest) GetCharacter() string {
-	if x != nil {
-		return x.Character
-	}
-	return ""
-}
-
-func (x *SellItemRequest) GetItemId() uint64 {
-	if x != nil {
-		return x.ItemId
+		return x.CharacterId
 	}
 	return 0
+}
+
+func (x *SellItemRequest) GetItemInstance() *repo.ItemInstance {
+	if x != nil {
+		return x.ItemInstance
+	}
+	return nil
 }
 
 type SellItemResponse struct {
@@ -430,6 +422,78 @@ func (x *ListBackpackItemsResponse) GetItemInstances() []*repo.ItemInstance {
 	return nil
 }
 
+type PingRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PingRequest) Reset() {
+	*x = PingRequest{}
+	mi := &file_inventory_inventory_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PingRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PingRequest) ProtoMessage() {}
+
+func (x *PingRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_inventory_inventory_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PingRequest.ProtoReflect.Descriptor instead.
+func (*PingRequest) Descriptor() ([]byte, []int) {
+	return file_inventory_inventory_proto_rawDescGZIP(), []int{8}
+}
+
+type PingResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PingResponse) Reset() {
+	*x = PingResponse{}
+	mi := &file_inventory_inventory_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PingResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PingResponse) ProtoMessage() {}
+
+func (x *PingResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_inventory_inventory_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PingResponse.ProtoReflect.Descriptor instead.
+func (*PingResponse) Descriptor() ([]byte, []int) {
+	return file_inventory_inventory_proto_rawDescGZIP(), []int{9}
+}
+
 var File_inventory_inventory_proto protoreflect.FileDescriptor
 
 const file_inventory_inventory_proto_rawDesc = "" +
@@ -440,11 +504,10 @@ const file_inventory_inventory_proto_rawDesc = "" +
 	"\tcharacter\x18\x02 \x01(\tR\tcharacter\"F\n" +
 	"\x18InventoryBalanceResponse\x12\x12\n" +
 	"\x04gold\x18\x01 \x01(\x04R\x04gold\x12\x16\n" +
-	"\x06tokens\x18\x02 \x01(\x04R\x06tokens\"d\n" +
-	"\x0fSellItemRequest\x12\x1a\n" +
-	"\busername\x18\x01 \x01(\tR\busername\x12\x1c\n" +
-	"\tcharacter\x18\x02 \x01(\tR\tcharacter\x12\x17\n" +
-	"\aitem_id\x18\x03 \x01(\x04R\x06itemId\"F\n" +
+	"\x06tokens\x18\x02 \x01(\x04R\x06tokens\"m\n" +
+	"\x0fSellItemRequest\x12!\n" +
+	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\x127\n" +
+	"\ritem_instance\x18\x02 \x01(\v2\x12.repo.ItemInstanceR\fitemInstance\"F\n" +
 	"\x10SellItemResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\"j\n" +
@@ -457,8 +520,11 @@ const file_inventory_inventory_proto_rawDesc = "" +
 	"\x18ListBackpackItemsRequest\x12!\n" +
 	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\"V\n" +
 	"\x19ListBackpackItemsResponse\x129\n" +
-	"\x0eitem_instances\x18\x01 \x03(\v2\x12.repo.ItemInstanceR\ritemInstances2\xea\x02\n" +
-	"\tInventory\x12U\n" +
+	"\x0eitem_instances\x18\x01 \x03(\v2\x12.repo.ItemInstanceR\ritemInstances\"\r\n" +
+	"\vPingRequest\"\x0e\n" +
+	"\fPingResponse2\xa3\x03\n" +
+	"\tInventory\x127\n" +
+	"\x04Ping\x12\x16.inventory.PingRequest\x1a\x17.inventory.PingResponse\x12U\n" +
 	"\n" +
 	"GetBalance\x12\".inventory.InventoryBalanceRequest\x1a#.inventory.InventoryBalanceResponse\x12C\n" +
 	"\bSellItem\x12\x1a.inventory.SellItemRequest\x1a\x1b.inventory.SellItemResponse\x12a\n" +
@@ -477,7 +543,7 @@ func file_inventory_inventory_proto_rawDescGZIP() []byte {
 	return file_inventory_inventory_proto_rawDescData
 }
 
-var file_inventory_inventory_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_inventory_inventory_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_inventory_inventory_proto_goTypes = []any{
 	(*InventoryBalanceRequest)(nil),    // 0: inventory.InventoryBalanceRequest
 	(*InventoryBalanceResponse)(nil),   // 1: inventory.InventoryBalanceResponse
@@ -487,23 +553,28 @@ var file_inventory_inventory_proto_goTypes = []any{
 	(*AddItemsToBackpackResponse)(nil), // 5: inventory.AddItemsToBackpackResponse
 	(*ListBackpackItemsRequest)(nil),   // 6: inventory.ListBackpackItemsRequest
 	(*ListBackpackItemsResponse)(nil),  // 7: inventory.ListBackpackItemsResponse
-	(*repo.ItemInstance)(nil),          // 8: repo.ItemInstance
+	(*PingRequest)(nil),                // 8: inventory.PingRequest
+	(*PingResponse)(nil),               // 9: inventory.PingResponse
+	(*repo.ItemInstance)(nil),          // 10: repo.ItemInstance
 }
 var file_inventory_inventory_proto_depIdxs = []int32{
-	8, // 0: inventory.ListBackpackItemsResponse.item_instances:type_name -> repo.ItemInstance
-	0, // 1: inventory.Inventory.GetBalance:input_type -> inventory.InventoryBalanceRequest
-	2, // 2: inventory.Inventory.SellItem:input_type -> inventory.SellItemRequest
-	4, // 3: inventory.Inventory.AddItemsToBackpack:input_type -> inventory.AddItemsToBackpackRequest
-	6, // 4: inventory.Inventory.ListBackpackItems:input_type -> inventory.ListBackpackItemsRequest
-	1, // 5: inventory.Inventory.GetBalance:output_type -> inventory.InventoryBalanceResponse
-	3, // 6: inventory.Inventory.SellItem:output_type -> inventory.SellItemResponse
-	5, // 7: inventory.Inventory.AddItemsToBackpack:output_type -> inventory.AddItemsToBackpackResponse
-	7, // 8: inventory.Inventory.ListBackpackItems:output_type -> inventory.ListBackpackItemsResponse
-	5, // [5:9] is the sub-list for method output_type
-	1, // [1:5] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	10, // 0: inventory.SellItemRequest.item_instance:type_name -> repo.ItemInstance
+	10, // 1: inventory.ListBackpackItemsResponse.item_instances:type_name -> repo.ItemInstance
+	8,  // 2: inventory.Inventory.Ping:input_type -> inventory.PingRequest
+	0,  // 3: inventory.Inventory.GetBalance:input_type -> inventory.InventoryBalanceRequest
+	2,  // 4: inventory.Inventory.SellItem:input_type -> inventory.SellItemRequest
+	4,  // 5: inventory.Inventory.AddItemsToBackpack:input_type -> inventory.AddItemsToBackpackRequest
+	6,  // 6: inventory.Inventory.ListBackpackItems:input_type -> inventory.ListBackpackItemsRequest
+	9,  // 7: inventory.Inventory.Ping:output_type -> inventory.PingResponse
+	1,  // 8: inventory.Inventory.GetBalance:output_type -> inventory.InventoryBalanceResponse
+	3,  // 9: inventory.Inventory.SellItem:output_type -> inventory.SellItemResponse
+	5,  // 10: inventory.Inventory.AddItemsToBackpack:output_type -> inventory.AddItemsToBackpackResponse
+	7,  // 11: inventory.Inventory.ListBackpackItems:output_type -> inventory.ListBackpackItemsResponse
+	7,  // [7:12] is the sub-list for method output_type
+	2,  // [2:7] is the sub-list for method input_type
+	2,  // [2:2] is the sub-list for extension type_name
+	2,  // [2:2] is the sub-list for extension extendee
+	0,  // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_inventory_inventory_proto_init() }
@@ -517,7 +588,7 @@ func file_inventory_inventory_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_inventory_inventory_proto_rawDesc), len(file_inventory_inventory_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -27,7 +27,11 @@ message OpenChestResponse {
     repo.Item item = 1;
 }
 
+message PingRequest {}
+message PingResponse {}
+
 service Gamba {
+    rpc Ping(PingRequest) returns (PingResponse);
     rpc GetChests(GetChestsRequest) returns (GetChestsResponse);
     rpc GetChestDetails(GetChestDetailsRequest) returns (GetChestDetailsResponse);
     rpc OpenChest(OpenChestRequest) returns (OpenChestResponse);

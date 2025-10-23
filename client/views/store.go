@@ -31,10 +31,10 @@ func AddStorePage(c *types.SpelltextClient) {
 			list.AddItem("woah...", "stock is empty. at the moment.", 'e', func() { onClose() })
 		} else {
 			for _, vendor := range resp.Vendors {
-				list.AddItem("> "+vendor.GetVendorName(), vendor.GetVendorWareDescription()+"\r\n", 0, func() {
+				list.AddItem("> "+vendor.Name, vendor.WareShorthand+"\r\n", 0, func() {
 					c.Storage.SelectedVendor = &pbRepo.Vendor{
-						Id:   vendor.VendorId,
-						Name: vendor.VendorName,
+						Id:   vendor.Id,
+						Name: vendor.Name,
 					}
 					c.NavigateTo(constants.PAGE_VENDOR)
 				})
@@ -46,7 +46,7 @@ func AddStorePage(c *types.SpelltextClient) {
 			{Key: "↑/↓", Desc: "navigate"},
 			{Key: "enter", Desc: "select"},
 			{Key: "esc", Desc: "back"},
-		})
+		}, true)
 
 		flex = flex.
 			SetDirection(tview.FlexRow).

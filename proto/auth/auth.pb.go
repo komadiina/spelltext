@@ -254,6 +254,78 @@ func (x *RegisterResponse) GetUser() *repo.User {
 	return nil
 }
 
+type PingRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PingRequest) Reset() {
+	*x = PingRequest{}
+	mi := &file_auth_auth_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PingRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PingRequest) ProtoMessage() {}
+
+func (x *PingRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_auth_auth_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PingRequest.ProtoReflect.Descriptor instead.
+func (*PingRequest) Descriptor() ([]byte, []int) {
+	return file_auth_auth_proto_rawDescGZIP(), []int{4}
+}
+
+type PingResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PingResponse) Reset() {
+	*x = PingResponse{}
+	mi := &file_auth_auth_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PingResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PingResponse) ProtoMessage() {}
+
+func (x *PingResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_auth_auth_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PingResponse.ProtoReflect.Descriptor instead.
+func (*PingResponse) Descriptor() ([]byte, []int) {
+	return file_auth_auth_proto_rawDescGZIP(), []int{5}
+}
+
 var File_auth_auth_proto protoreflect.FileDescriptor
 
 const file_auth_auth_proto_rawDesc = "" +
@@ -275,8 +347,11 @@ const file_auth_auth_proto_rawDesc = "" +
 	"\x10RegisterResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x1e\n" +
 	"\x04user\x18\x02 \x01(\v2\n" +
-	".repo.UserR\x04user2s\n" +
-	"\x04Auth\x120\n" +
+	".repo.UserR\x04user\"\r\n" +
+	"\vPingRequest\"\x0e\n" +
+	"\fPingResponse2\xa2\x01\n" +
+	"\x04Auth\x12-\n" +
+	"\x04Ping\x12\x11.auth.PingRequest\x1a\x12.auth.PingResponse\x120\n" +
 	"\x05Login\x12\x12.auth.LoginRequest\x1a\x13.auth.LoginResponse\x129\n" +
 	"\bRegister\x12\x15.auth.RegisterRequest\x1a\x16.auth.RegisterResponseB6Z4github.com/komadiina/spelltext/proto/proto/auth;authb\x06proto3"
 
@@ -292,25 +367,29 @@ func file_auth_auth_proto_rawDescGZIP() []byte {
 	return file_auth_auth_proto_rawDescData
 }
 
-var file_auth_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_auth_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_auth_auth_proto_goTypes = []any{
 	(*LoginRequest)(nil),     // 0: auth.LoginRequest
 	(*LoginResponse)(nil),    // 1: auth.LoginResponse
 	(*RegisterRequest)(nil),  // 2: auth.RegisterRequest
 	(*RegisterResponse)(nil), // 3: auth.RegisterResponse
-	(*repo.User)(nil),        // 4: repo.User
-	(*repo.Character)(nil),   // 5: repo.Character
+	(*PingRequest)(nil),      // 4: auth.PingRequest
+	(*PingResponse)(nil),     // 5: auth.PingResponse
+	(*repo.User)(nil),        // 6: repo.User
+	(*repo.Character)(nil),   // 7: repo.Character
 }
 var file_auth_auth_proto_depIdxs = []int32{
-	4, // 0: auth.LoginResponse.user:type_name -> repo.User
-	5, // 1: auth.LoginResponse.character:type_name -> repo.Character
-	4, // 2: auth.RegisterResponse.user:type_name -> repo.User
-	0, // 3: auth.Auth.Login:input_type -> auth.LoginRequest
-	2, // 4: auth.Auth.Register:input_type -> auth.RegisterRequest
-	1, // 5: auth.Auth.Login:output_type -> auth.LoginResponse
-	3, // 6: auth.Auth.Register:output_type -> auth.RegisterResponse
-	5, // [5:7] is the sub-list for method output_type
-	3, // [3:5] is the sub-list for method input_type
+	6, // 0: auth.LoginResponse.user:type_name -> repo.User
+	7, // 1: auth.LoginResponse.character:type_name -> repo.Character
+	6, // 2: auth.RegisterResponse.user:type_name -> repo.User
+	4, // 3: auth.Auth.Ping:input_type -> auth.PingRequest
+	0, // 4: auth.Auth.Login:input_type -> auth.LoginRequest
+	2, // 5: auth.Auth.Register:input_type -> auth.RegisterRequest
+	5, // 6: auth.Auth.Ping:output_type -> auth.PingResponse
+	1, // 7: auth.Auth.Login:output_type -> auth.LoginResponse
+	3, // 8: auth.Auth.Register:output_type -> auth.RegisterResponse
+	6, // [6:9] is the sub-list for method output_type
+	3, // [3:6] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name
 	3, // [3:3] is the sub-list for extension extendee
 	0, // [0:3] is the sub-list for field type_name
@@ -327,7 +406,7 @@ func file_auth_auth_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_auth_auth_proto_rawDesc), len(file_auth_auth_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

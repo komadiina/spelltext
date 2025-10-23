@@ -4,5 +4,7 @@
 - combatserver: **implement 1v1 turn-based player-npc combat**
   - table `npc_loot_tables` - use it instead of embedded one-item-per-npc approach (in table `npc_templates`)
 - ~~progserver: implement questing system~~ - delayed further down the roadmap
+- health check ping between service dependents
+- enemy level xp/damage scaling
 - system: loki + grafana for logging - **urgent**
 - ~~final: proper database pre-seed, apply persistence~~

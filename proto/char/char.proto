@@ -112,7 +112,12 @@ message GetEquipSlotsResponse {
     repeated repo.EquipSlot slots = 1;
 }
 
+
+message PingRequest {}
+message PingResponse {}
+
 service Character {
+    rpc Ping                     (PingRequest)                      returns (PingResponse);
     rpc ListHeroes               (ListHeroesRequest)                returns (ListHeroesResponse);
     rpc ListCharacters           (ListCharactersRequest)            returns (ListCharactersResponse);
     rpc SetSelectedCharacter     (SetSelectedCharacterRequest)      returns (SetSelectedCharacterResponse);

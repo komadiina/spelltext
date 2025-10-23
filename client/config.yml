@@ -1,4 +1,12 @@
 client:
   nats_url: nats://127.0.0.1:4222
   max_wait_time: 5
-  audio_enabled: false
+  audio_enabled: true
+  chat_port: 50051
+  store_port: 50052
+  inventory_port: 50053
+  char_port: 50054
+  gamba_port: 50055
+  auth_port: 50056
+  combat_port: 50057
+  build_port: 50058

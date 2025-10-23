@@ -137,6 +137,13 @@ func main() {
 	}
 	defer ss.Connections.Character.Close()
 
+	// init periodical healthcheck
+	go func() {
+		for {
+			break
+		}
+	}()
+
 	conninfo := fmt.Sprintf(
 		"postgres://%s:%s@%s:%d/%s?sslmode=%s",
 		cfg.PgUser,

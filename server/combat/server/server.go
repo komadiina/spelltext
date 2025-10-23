@@ -42,6 +42,7 @@ func (s *CombatService) ListNpcs(ctx context.Context, req *pb.ListNpcsRequest) (
 		s.Logger.Error(err)
 		return nil, err
 	}
+	defer rows.Close()
 
 	var npcs []*pbRepo.Npc
 	for rows.Next() {

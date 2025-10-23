@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: combatserver
+  namespace: spelltext
+  labels: 
+    app: combatserver
+
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: combatserver
+  template:
+    metadata:
+      labels:
+        app: combatserver
+    spec:
+      containers:
+      - name: combatserver
+        image: {{ .Values.combatserver.image | toString }}
+        imagePullPolicy: Always
+        ports:
+          - containerPort: {{ .Values.combatserver.containerPort }}
+            name: {{ .Values.combatserver.portName }}
+            protocol: {{ .Values.combatserver.protocol }}
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.combatserver.containerPort }}
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.combatserver.containerPort }}
+          initialDelaySeconds: 15
+          periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: combatserver
+  namespace: spelltext
+  labels:
+    app: combatserver
+spec:
+  type: ClusterIP
+  selector:
+    app: combatserver
+  ports:
+    - name: {{ .Values.combatserver.portName }}
+      port: {{ .Values.combatserver.port }}
+      targetPort: {{ .Values.combatserver.targetPort }}
+      protocol: {{ .Values.combatserver.protocol }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: combatserver-ingress
+  namespace: spelltext
+  labels:
+    app: combatserver
+spec:
+  type: LoadBalancer
+  selector:
+    app: combatserver
+  ports:
+    - name: {{ .Values.combatserver.portName }}
+      port: {{ .Values.combatserver.port }}
+      targetPort: {{ .Values.combatserver.targetPort }}
+      protocol: {{ .Values.combatserver.protocol }}

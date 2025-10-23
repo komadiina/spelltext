@@ -35,7 +35,11 @@ message ListNpcsResponse {
     repeated repo.Npc npcs = 1;
 }
 
+message PingRequest {}
+message PingResponse {}
+
 service Combat {
+    rpc Ping(PingRequest) returns (PingResponse);
     rpc ListNpcs(ListNpcsRequest) returns (ListNpcsResponse);
     rpc InitiateCombat(InitiateCombatRequest) returns (InitiateCombatResponse);
     rpc ResolveCombat(ResolveCombatRequest) returns (ResolveCombatResponse);

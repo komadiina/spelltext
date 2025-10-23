@@ -1,0 +1,48 @@
+{
+    "abilities": [
+        {
+            "id": 1,
+            "name": "no_bonus",
+            "description": "Ability 1 description",
+            "type": "offensive",
+            "talent_point_cost": 1,
+            "power_cost": 0,
+            "base_damage": 10,
+            "strength_multiplier": 0.0,
+            "spellpower_multiplier": 0.0
+        },
+        {
+            "id": 2,
+            "name": "sp_bonus",
+            "description": "Ability 2 description",
+            "type": "defensive",
+            "talent_point_cost": 1,
+            "power_cost": 0,
+            "base_damage": 100,
+            "strength_multiplier": 0.0,
+            "spellpower_multiplier": 1.0
+        },
+        {
+            "id": 3,
+            "name": "str_bonus",
+            "description": "Ability 3 description",
+            "type": "passive",
+            "talent_point_cost": 1,
+            "power_cost": 0,
+            "base_damage": 0,
+            "strength_multiplier": 1.0,
+            "spellpower_multiplier": 0.0
+        },
+        {
+            "id": 4,
+            "name": "attack",
+            "description": "Ability 4 description",
+            "type": "offensive",
+            "talent_point_cost": 1,
+            "power_cost": 1,
+            "base_damage": 10,
+            "strength_multiplier": 0.0,
+            "spellpower_multiplier": 0.0
+        }
+    ]
+}

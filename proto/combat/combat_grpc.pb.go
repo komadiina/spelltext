@@ -19,6 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
+	Combat_Ping_FullMethodName           = "/combat.Combat/Ping"
 	Combat_ListNpcs_FullMethodName       = "/combat.Combat/ListNpcs"
 	Combat_InitiateCombat_FullMethodName = "/combat.Combat/InitiateCombat"
 	Combat_ResolveCombat_FullMethodName  = "/combat.Combat/ResolveCombat"
@@ -28,6 +29,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CombatClient interface {
+	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
 	ListNpcs(ctx context.Context, in *ListNpcsRequest, opts ...grpc.CallOption) (*ListNpcsResponse, error)
 	InitiateCombat(ctx context.Context, in *InitiateCombatRequest, opts ...grpc.CallOption) (*InitiateCombatResponse, error)
 	ResolveCombat(ctx context.Context, in *ResolveCombatRequest, opts ...grpc.CallOption) (*ResolveCombatResponse, error)
@@ -39,6 +41,16 @@ type combatClient struct {
 
 func NewCombatClient(cc grpc.ClientConnInterface) CombatClient {
 	return &combatClient{cc}
+}
+
+func (c *combatClient) Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PingResponse)
+	err := c.cc.Invoke(ctx, Combat_Ping_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *combatClient) ListNpcs(ctx context.Context, in *ListNpcsRequest, opts ...grpc.CallOption) (*ListNpcsResponse, error) {
@@ -75,6 +87,7 @@ func (c *combatClient) ResolveCombat(ctx context.Context, in *ResolveCombatReque
 // All implementations must embed UnimplementedCombatServer
 // for forward compatibility.
 type CombatServer interface {
+	Ping(context.Context, *PingRequest) (*PingResponse, error)
 	ListNpcs(context.Context, *ListNpcsRequest) (*ListNpcsResponse, error)
 	InitiateCombat(context.Context, *InitiateCombatRequest) (*InitiateCombatResponse, error)
 	ResolveCombat(context.Context, *ResolveCombatRequest) (*ResolveCombatResponse, error)
@@ -88,6 +101,9 @@ type CombatServer interface {
 // pointer dereference when methods are called.
 type UnimplementedCombatServer struct{}
 
+func (UnimplementedCombatServer) Ping(context.Context, *PingRequest) (*PingResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
+}
 func (UnimplementedCombatServer) ListNpcs(context.Context, *ListNpcsRequest) (*ListNpcsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListNpcs not implemented")
 }
@@ -116,6 +132,24 @@ func RegisterCombatServer(s grpc.ServiceRegistrar, srv CombatServer) {
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&Combat_ServiceDesc, srv)
+}
+
+func _Combat_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CombatServer).Ping(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Combat_Ping_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CombatServer).Ping(ctx, req.(*PingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _Combat_ListNpcs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -179,6 +213,10 @@ var Combat_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "combat.Combat",
 	HandlerType: (*CombatServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Ping",
+			Handler:    _Combat_Ping_Handler,
+		},
 		{
 			MethodName: "ListNpcs",
 			Handler:    _Combat_ListNpcs_Handler,

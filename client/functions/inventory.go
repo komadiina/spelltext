@@ -70,3 +70,9 @@ func MakeInventoryTableRow(row int, item *pbRepo.Item, c *types.SpelltextClient,
 
 	return t
 }
+
+func SellItem(c *types.SpelltextClient, inst *pbRepo.ItemInstance) error {
+	req := &pbInventory.SellItemRequest{CharacterId: c.Storage.SelectedCharacter.GetCharacterId(), ItemInstance: inst}
+	_, err := c.Clients.InventoryClient.SellItem(*c.Context, req)
+	return err
+}

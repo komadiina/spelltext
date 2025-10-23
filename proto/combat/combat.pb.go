@@ -335,6 +335,78 @@ func (x *ListNpcsResponse) GetNpcs() []*repo.Npc {
 	return nil
 }
 
+type PingRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PingRequest) Reset() {
+	*x = PingRequest{}
+	mi := &file_combat_combat_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PingRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PingRequest) ProtoMessage() {}
+
+func (x *PingRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_combat_combat_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PingRequest.ProtoReflect.Descriptor instead.
+func (*PingRequest) Descriptor() ([]byte, []int) {
+	return file_combat_combat_proto_rawDescGZIP(), []int{6}
+}
+
+type PingResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PingResponse) Reset() {
+	*x = PingResponse{}
+	mi := &file_combat_combat_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PingResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PingResponse) ProtoMessage() {}
+
+func (x *PingResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_combat_combat_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PingResponse.ProtoReflect.Descriptor instead.
+func (*PingResponse) Descriptor() ([]byte, []int) {
+	return file_combat_combat_proto_rawDescGZIP(), []int{7}
+}
+
 var File_combat_combat_proto protoreflect.FileDescriptor
 
 const file_combat_combat_proto_rawDesc = "" +
@@ -359,8 +431,11 @@ const file_combat_combat_proto_rawDesc = "" +
 	"\x0fListNpcsRequest\x12!\n" +
 	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\"1\n" +
 	"\x10ListNpcsResponse\x12\x1d\n" +
-	"\x04npcs\x18\x01 \x03(\v2\t.repo.NpcR\x04npcs2\xe6\x01\n" +
-	"\x06Combat\x12=\n" +
+	"\x04npcs\x18\x01 \x03(\v2\t.repo.NpcR\x04npcs\"\r\n" +
+	"\vPingRequest\"\x0e\n" +
+	"\fPingResponse2\x99\x02\n" +
+	"\x06Combat\x121\n" +
+	"\x04Ping\x12\x13.combat.PingRequest\x1a\x14.combat.PingResponse\x12=\n" +
 	"\bListNpcs\x12\x17.combat.ListNpcsRequest\x1a\x18.combat.ListNpcsResponse\x12O\n" +
 	"\x0eInitiateCombat\x12\x1d.combat.InitiateCombatRequest\x1a\x1e.combat.InitiateCombatResponse\x12L\n" +
 	"\rResolveCombat\x12\x1c.combat.ResolveCombatRequest\x1a\x1d.combat.ResolveCombatResponseB4Z2github.com/komadiina/spelltext/proto/combat;combatb\x06proto3"
@@ -377,7 +452,7 @@ func file_combat_combat_proto_rawDescGZIP() []byte {
 	return file_combat_combat_proto_rawDescData
 }
 
-var file_combat_combat_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_combat_combat_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_combat_combat_proto_goTypes = []any{
 	(*InitiateCombatRequest)(nil),  // 0: combat.InitiateCombatRequest
 	(*InitiateCombatResponse)(nil), // 1: combat.InitiateCombatResponse
@@ -385,21 +460,25 @@ var file_combat_combat_proto_goTypes = []any{
 	(*ResolveCombatResponse)(nil),  // 3: combat.ResolveCombatResponse
 	(*ListNpcsRequest)(nil),        // 4: combat.ListNpcsRequest
 	(*ListNpcsResponse)(nil),       // 5: combat.ListNpcsResponse
-	(*repo.Npc)(nil),               // 6: repo.Npc
-	(*repo.Item)(nil),              // 7: repo.Item
+	(*PingRequest)(nil),            // 6: combat.PingRequest
+	(*PingResponse)(nil),           // 7: combat.PingResponse
+	(*repo.Npc)(nil),               // 8: repo.Npc
+	(*repo.Item)(nil),              // 9: repo.Item
 }
 var file_combat_combat_proto_depIdxs = []int32{
-	6, // 0: combat.InitiateCombatResponse.npcs:type_name -> repo.Npc
-	7, // 1: combat.ResolveCombatResponse.items_gained:type_name -> repo.Item
-	6, // 2: combat.ListNpcsResponse.npcs:type_name -> repo.Npc
-	4, // 3: combat.Combat.ListNpcs:input_type -> combat.ListNpcsRequest
-	0, // 4: combat.Combat.InitiateCombat:input_type -> combat.InitiateCombatRequest
-	2, // 5: combat.Combat.ResolveCombat:input_type -> combat.ResolveCombatRequest
-	5, // 6: combat.Combat.ListNpcs:output_type -> combat.ListNpcsResponse
-	1, // 7: combat.Combat.InitiateCombat:output_type -> combat.InitiateCombatResponse
-	3, // 8: combat.Combat.ResolveCombat:output_type -> combat.ResolveCombatResponse
-	6, // [6:9] is the sub-list for method output_type
-	3, // [3:6] is the sub-list for method input_type
+	8, // 0: combat.InitiateCombatResponse.npcs:type_name -> repo.Npc
+	9, // 1: combat.ResolveCombatResponse.items_gained:type_name -> repo.Item
+	8, // 2: combat.ListNpcsResponse.npcs:type_name -> repo.Npc
+	6, // 3: combat.Combat.Ping:input_type -> combat.PingRequest
+	4, // 4: combat.Combat.ListNpcs:input_type -> combat.ListNpcsRequest
+	0, // 5: combat.Combat.InitiateCombat:input_type -> combat.InitiateCombatRequest
+	2, // 6: combat.Combat.ResolveCombat:input_type -> combat.ResolveCombatRequest
+	7, // 7: combat.Combat.Ping:output_type -> combat.PingResponse
+	5, // 8: combat.Combat.ListNpcs:output_type -> combat.ListNpcsResponse
+	1, // 9: combat.Combat.InitiateCombat:output_type -> combat.InitiateCombatResponse
+	3, // 10: combat.Combat.ResolveCombat:output_type -> combat.ResolveCombatResponse
+	7, // [7:11] is the sub-list for method output_type
+	3, // [3:7] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name
 	3, // [3:3] is the sub-list for extension extendee
 	0, // [0:3] is the sub-list for field type_name
@@ -416,7 +495,7 @@ func file_combat_combat_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_combat_combat_proto_rawDesc), len(file_combat_combat_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

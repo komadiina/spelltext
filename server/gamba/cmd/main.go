@@ -11,10 +11,12 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	pb "github.com/komadiina/spelltext/proto/gamba"
+	pbInventory "github.com/komadiina/spelltext/proto/inventory"
 	"github.com/komadiina/spelltext/server/gamba/config"
 	"github.com/komadiina/spelltext/server/gamba/server"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 const banner = `
@@ -71,6 +73,23 @@ func InitializePool(s *server.GambaService, context context.Context, conninfo st
 	}
 }
 
+func InitClientConn(target string, credentials grpc.DialOption, backoff int, maxRetries int) (*grpc.ClientConn, error) {
+	try := 1
+	for {
+		conn, err := grpc.NewClient(target, credentials)
+
+		if err != nil && try >= maxRetries {
+			return nil, err
+		} else if err == nil && try < maxRetries {
+			return conn, nil
+		} else if err != nil && try < maxRetries {
+			backoff *= 3
+			time.Sleep(time.Duration(backoff) * time.Second)
+			try++
+		}
+	}
+}
+
 var version = os.Getenv("VERSION")
 
 func main() {
@@ -99,6 +118,20 @@ func main() {
 
 	s := grpc.NewServer()
 	ss := server.GambaService{Config: cfg, Logger: logger}
+
+	// init inventory clientConn
+	clientConn, err := InitClientConn(fmt.Sprint("inventoryserver:", cfg.InventoryServicePort), grpc.WithTransportCredentials(insecure.NewCredentials()), 5, 10)
+	if err != nil {
+		logger.Fatal(err)
+	}
+
+	ss.Connections = &server.Connections{
+		Inventory: clientConn,
+	}
+	ss.Clients = &server.Clients{
+		Inventory: pbInventory.NewInventoryClient(clientConn),
+	}
+	defer ss.Connections.Inventory.Close()
 
 	conninfo := fmt.Sprintf(
 		"postgres://%s:%s@%s:%d/%s?sslmode=%s",

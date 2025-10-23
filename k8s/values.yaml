@@ -46,21 +46,18 @@ postgresql-ha:
       01-add_pgpool_users.sh: |
         #!/bin/sh
         echo "[initdbScripts] initializing pgpool users..."
-
         pg_enc -m --config-file="/opt/bitnami/pgpool/conf/pgpool.conf" -u postgres changeme
-        echo "[initdbScripts] user 'postgres' created..."
         pg_enc -m --config-file="/opt/bitnami/pgpool/conf/pgpool.conf" -u repmgr changeme
-        echo "[initdbScripts] user 'repmgr' created..."
-
         pg_enc -m --config-file="/opt/bitnami/pgpool/conf/pgpool.conf" -u superuser changeme
         pg_enc -m --config-file="/opt/bitnami/pgpool/conf/pgpool.conf" -u storeuser changeme
         pg_enc -m --config-file="/opt/bitnami/pgpool/conf/pgpool.conf" -u inventoryuser changeme
         pg_enc -m --config-file="/opt/bitnami/pgpool/conf/pgpool.conf" -u charuser changeme
         pg_enc -m --config-file="/opt/bitnami/pgpool/conf/pgpool.conf" -u gambauser changeme
         pg_enc -m --config-file="/opt/bitnami/pgpool/conf/pgpool.conf" -u chatuser changeme
-        pg_enc -m --config-file="/opt/bitnami/pgpool/conf/pgpool.conf" -u superuser changeme
+        pg_enc -m --config-file="/opt/bitnami/pgpool/conf/pgpool.conf" -u authuser changeme
+        pg_enc -m --config-file="/opt/bitnami/pgpool/conf/pgpool.conf" -u builduser changeme
+        pg_enc -m --config-file="/opt/bitnami/pgpool/conf/pgpool.conf" -u combatuser changeme
         pgpool -a /opt/bitnami/pgpool/conf/pool_hba.conf reload || true
-
     replicaCount: 1
     adminUsername: "user"
     adminPassword: "changeme"
@@ -94,8 +91,17 @@ postgresql-ha:
         psql -U postgres -d postgres -c "CREATE USER storeuser WITH LOGIN PASSWORD 'changeme';"
         psql -U postgres -d spelltext -c "GRANT ALL PRIVILEGES ON SCHEMA public TO storeuser;"
 
-        psql -U postgres -d spelltext -c "GRANT pg_read_all_data TO inventoryuser, charuser, gambauser, chatuser, storeuser;"
-        psql -U postgres -d spelltext -c "GRANT pg_write_all_data TO inventoryuser, charuser, gambauser, chatuser, storeuser;"
+        psql -U postgres -d postgres -c "CREATE USER authuser WITH LOGIN PASSWORD 'changeme';"
+        psql -U postgres -d postgres -c "GRANT ALL PRIVILEGES ON SCHEMA public TO authuser;"
+
+        psql -U postgres -d postgres -c "CREATE USER combatuser WITH LOGIN PASSWORD 'changeme';"
+        psql -U postgres -d postgres -c "GRANT ALL PRIVILEGES ON SCHEMA public TO combatuser;"
+
+        psql -U postgres -d postgres -c "CREATE USER builduser WITH LOGIN PASSWORD 'changeme';"
+        psql -U postgres -d postgres -c "GRANT ALL PRIVILEGES ON SCHEMA public TO builduser;"
+
+        psql -U postgres -d spelltext -c "GRANT pg_read_all_data TO inventoryuser, charuser, gambauser, chatuser, storeuser, authuser, combatuser, builduser;"
+        psql -U postgres -d spelltext -c "GRANT pg_write_all_data TO inventoryuser, charuser, gambauser, chatuser, storeuser, authuser, combatuser, builduser;"
 
         psql -U postgres -d postgres -c "ALTER SYSTEM SET wal_level = logical;"
         psql -U postgres -d postgres -c "SELECT pg_reload_conf();"
@@ -157,4 +163,22 @@ authserver:
   portName: "grpc"
   containerPort: 50056
   targetPort: 50056
+  protocol: "TCP"
+
+combatserver:
+  enabled: true
+  image: "ghcr.io/komadiina/spelltext/combatserver:latest"
+  port: 50057
+  portName: "grpc"
+  containerPort: 50057
+  targetPort: 50057
+  protocol: "TCP"
+
+buildserver:
+  enabled: true
+  image: "ghcr.io/komadiina/spelltext/buildserver:latest"
+  port: 50058
+  portName: "grpc"
+  containerPort: 50058
+  targetPort: 50058
   protocol: "TCP"

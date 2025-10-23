@@ -8,14 +8,15 @@ import (
 	"github.com/komadiina/spelltext/client/functions"
 	types "github.com/komadiina/spelltext/client/types"
 	"github.com/komadiina/spelltext/client/utils"
+	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	pbStore "github.com/komadiina/spelltext/proto/store"
 	"github.com/rivo/tview"
 )
 
-func UpdateBasket(basket *[]*pbStore.Item, tv *tview.TextView, c *types.SpelltextClient) {
+func UpdateBasket(basket *[]*pbRepo.Item, tv *tview.TextView, c *types.SpelltextClient) {
 	var totalGold uint64 = 0
 	for _, item := range *basket {
-		totalGold += item.GetGoldPrice()
+		totalGold += item.ItemTemplate.GoldPrice
 	}
 
 	color := "yellow"
@@ -38,24 +39,24 @@ func AddVendorPage(c *types.SpelltextClient) {
 				SetText("no character selected. select a character from the character page, and come back... dummy"), 0, 1, false)
 		}
 
-		basket := make([]*pbStore.Item, 0)
+		basket := make([]*pbRepo.Item, 0)
 		totals := tview.NewFlex().SetDirection(tview.FlexRow)
 		basketPrice := tview.NewTextView().SetDynamicColors(true).SetText(`basket price: [yellow]0g[""]`)
-		basketPrice.SetBorder(true).SetBorderPadding(1, 1, 2, 2)
+		basketPrice.SetBorder(true).SetBorderPadding(0, 0, 2, 2)
 
 		availableGold := tview.
 			NewTextView().
 			SetDynamicColors(true).
 			SetText(fmt.Sprintf(`available gold: [yellow]%d[""]`, c.Storage.SelectedCharacter.Gold))
-		availableGold.SetBorder(true).SetBorderPadding(1, 1, 2, 2)
+		availableGold.SetBorder(true).SetBorderPadding(0, 0, 2, 2)
 
-		totals.AddItem(basketPrice, 5, 1, false).AddItem(availableGold, 5, 1, false)
+		totals.AddItem(basketPrice, 3, 1, false).AddItem(availableGold, 3, 1, false)
 
 		vendor := tview.NewTextView().
 			SetDynamicColors(true).
 			SetText(fmt.Sprintf(`[blue]%v[""]'s wares`, c.Storage.SelectedVendor.Name))
 
-		flex := STNewFlex().AddItem(vendor, 1, 1, false).SetDirection(tview.FlexRow)
+		flex := utils.STNewFlex().AddItem(vendor, 1, 1, false).SetDirection(tview.FlexRow)
 		flex.SetBorder(true).SetTitle(fmt.Sprintf(" [::b]vendor - %s[::-] ", c.Storage.SelectedVendor.Name))
 
 		flex.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
@@ -79,7 +80,7 @@ func AddVendorPage(c *types.SpelltextClient) {
 					c,
 					nil,
 				)
-				basket = make([]*pbStore.Item, 0)
+				basket = make([]*pbRepo.Item, 0)
 
 				c.App.SetRoot(m, true).EnableMouse(true)
 			}
@@ -165,11 +166,11 @@ func AddVendorPage(c *types.SpelltextClient) {
 			{Key: "enter", Desc: "add to basket"},
 			{Key: "ctrl+b", Desc: "buy"},
 			{Key: "esc", Desc: "back"},
-		})
+		}, true)
 
 		flex = flex.
-			AddItem(table, 0, 1, true).
-			AddItem(totals, 0, 1, false).
+			AddItem(table, 0, 5, true).
+			AddItem(totals, 6, 1, false).
 			AddItem(guide, 3, 1, false).
 			SetFullScreen(true)
 

@@ -12,19 +12,63 @@ import (
 	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	"github.com/komadiina/spelltext/server/character/config"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
+	healthpb "google.golang.org/grpc/health/grpc_health_v1"
 )
 
 type CharacterService struct {
 	pb.UnimplementedCharacterServer
+	healthpb.UnimplementedHealthServer
 	DbPool *pgxpool.Pool
 	Config *config.Config
 	Logger *logging.Logger
 }
 
-func (s *CharacterService) ListHeroes(ctx context.Context, req *pb.ListHeroesRequest) (*pb.ListHeroesResponse, error) {
-	s.Logger.Warn("unimplemented method called", "name", "ListHeroes")
+func (s *CharacterService) Check(ctx context.Context, req *healthpb.HealthCheckRequest) (*healthpb.HealthCheckResponse, error) {
+	return &healthpb.HealthCheckResponse{Status: healthpb.HealthCheckResponse_SERVING}, nil
+}
 
-	return nil, nil
+func (s *CharacterService) ListHeroes(ctx context.Context, req *pb.ListHeroesRequest) (*pb.ListHeroesResponse, error) {
+	sql, _, err := sq.Select("*").From("heroes").ToSql()
+
+	if err != nil {
+		s.Logger.Error(err)
+		return nil, err
+	}
+
+	rows, err := s.DbPool.Query(ctx, sql)
+	if err != nil {
+		s.Logger.Error(err)
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	var heroes []*pbRepo.Hero
+	for rows.Next() {
+		h := &pbRepo.Hero{}
+
+		err := rows.Scan(
+			&h.Id,
+			&h.Name,
+			&h.BaseHealth,
+			&h.BasePower,
+			&h.BaseStrength,
+			&h.BaseSpellpower,
+			&h.HealthPerLevel,
+			&h.PowerPerLevel,
+			&h.StrengthPerLevel,
+			&h.SpellpowerPerLevel,
+		)
+
+		if err != nil {
+			s.Logger.Error(err)
+			return nil, err
+		}
+
+		heroes = append(heroes, h)
+	}
+
+	return &pb.ListHeroesResponse{Heroes: heroes}, nil
 }
 
 func (s *CharacterService) ListCharacters(ctx context.Context, req *pb.ListCharactersRequest) (*pb.ListCharactersResponse, error) {
@@ -50,6 +94,10 @@ func (s *CharacterService) ListCharacters(ctx context.Context, req *pb.ListChara
 
 	sql := fmt.Sprintf("WITH u_filt AS (%s) %s", cte, query)
 	rows, err := s.DbPool.Query(ctx, sql, req.GetUsername(), req.GetUsername())
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
 
 	var characters []*pbRepo.Character
 	for rows.Next() {
@@ -69,6 +117,7 @@ func (s *CharacterService) ListCharacters(ctx context.Context, req *pb.ListChara
 			&c.PointsPower,
 			&c.PointsStrength,
 			&c.PointsSpellpower,
+			&c.UnspentPoints,
 			&h.Id,
 			&h.Name,
 			&h.BaseHealth,
@@ -136,6 +185,7 @@ func (s *CharacterService) GetLastSelectedCharacter(ctx context.Context, req *pb
 		s.Logger.Error(err)
 		return nil, err
 	}
+	defer rows.Close()
 
 	var characters []*pbRepo.Character
 	for rows.Next() {
@@ -155,6 +205,7 @@ func (s *CharacterService) GetLastSelectedCharacter(ctx context.Context, req *pb
 			&c.PointsPower,
 			&c.PointsStrength,
 			&c.PointsSpellpower,
+			&c.UnspentPoints,
 			&h.Id,
 			&h.Name,
 			&h.BaseHealth,
@@ -208,6 +259,7 @@ func (s *CharacterService) GetLastSelectedCharacter(ctx context.Context, req *pb
 			&c.PointsPower,
 			&c.PointsStrength,
 			&c.PointsSpellpower,
+			&c.UnspentPoints,
 			&h.Id,
 			&h.Name,
 			&h.BaseHealth,
@@ -266,6 +318,7 @@ func (s *CharacterService) GetCharacter(ctx context.Context, req *pb.GetCharacte
 		&c.PointsPower,
 		&c.PointsStrength,
 		&c.PointsSpellpower,
+		&c.UnspentPoints,
 		&h.Id,
 		&h.Name,
 		&h.BaseHealth,
@@ -339,6 +392,7 @@ func (s *CharacterService) CreateCharacter(ctx context.Context, req *pb.CreateCh
 		&c.PointsPower,
 		&c.PointsStrength,
 		&c.PointsSpellpower,
+		&c.UnspentPoints,
 		&h.Id,
 		&h.Name,
 		&h.BaseHealth,
@@ -367,6 +421,7 @@ func (s *CharacterService) CreateCharacter(ctx context.Context, req *pb.CreateCh
 		s.Logger.Error(err)
 		return nil, err
 	}
+	defer rows.Close()
 
 	var equipSlots []*pbRepo.EquipSlot
 	for rows.Next() {
@@ -434,6 +489,7 @@ func (s *CharacterService) GetEquippedItems(ctx context.Context, req *pb.GetEqui
 		s.Logger.Error(err)
 		return nil, err
 	}
+	defer rows.Close()
 
 	var itemInstances []*pbRepo.ItemInstance
 	for rows.Next() {
@@ -505,7 +561,7 @@ func (s *CharacterService) EquipItem(ctx context.Context, req *pb.EquipItemReque
 		s.Logger.Error(err)
 		return nil, err
 	}
-	
+
 	_, err = s.DbPool.Exec(ctx, sql, req.ItemInstanceId, req.CharacterId, req.EquipSlotId)
 	if err != nil {
 		s.Logger.Error(err)
@@ -573,6 +629,7 @@ func (s *CharacterService) GetEquipSlots(ctx context.Context, req *pb.GetEquipSl
 		s.Logger.Error(err)
 		return nil, err
 	}
+	defer rows.Close()
 
 	var equipSlots []*pbRepo.EquipSlot
 	for rows.Next() {

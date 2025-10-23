@@ -7,6 +7,7 @@ import (
 	"github.com/komadiina/spelltext/client/config"
 	"github.com/komadiina/spelltext/client/factory"
 	pbAuth "github.com/komadiina/spelltext/proto/auth"
+	pbBuild "github.com/komadiina/spelltext/proto/build"
 	pbChar "github.com/komadiina/spelltext/proto/char"
 	pbChat "github.com/komadiina/spelltext/proto/chat"
 	pbCombat "github.com/komadiina/spelltext/proto/combat"
@@ -40,6 +41,7 @@ type SpelltextClient struct {
 type Ministate struct {
 	Username   string
 	CurrentNpc *pbRepo.Npc
+	FightState *NpcFightState
 }
 
 type AppStorage struct {
@@ -67,6 +69,7 @@ type Clients struct {
 	GambaClient     pbGamba.GambaClient
 	AuthClient      pbAuth.AuthClient
 	CombatClient    pbCombat.CombatClient
+	BuildClient     pbBuild.BuildClient
 }
 
 type Connections struct {
@@ -77,6 +80,7 @@ type Connections struct {
 	Gamba     *grpc.ClientConn
 	Auth      *grpc.ClientConn
 	Combat    *grpc.ClientConn
+	Build     *grpc.ClientConn
 }
 
 type NavigableForm struct {

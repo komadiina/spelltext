@@ -19,6 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
+	Gamba_Ping_FullMethodName            = "/gamba.Gamba/Ping"
 	Gamba_GetChests_FullMethodName       = "/gamba.Gamba/GetChests"
 	Gamba_GetChestDetails_FullMethodName = "/gamba.Gamba/GetChestDetails"
 	Gamba_OpenChest_FullMethodName       = "/gamba.Gamba/OpenChest"
@@ -28,6 +29,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GambaClient interface {
+	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
 	GetChests(ctx context.Context, in *GetChestsRequest, opts ...grpc.CallOption) (*GetChestsResponse, error)
 	GetChestDetails(ctx context.Context, in *GetChestDetailsRequest, opts ...grpc.CallOption) (*GetChestDetailsResponse, error)
 	OpenChest(ctx context.Context, in *OpenChestRequest, opts ...grpc.CallOption) (*OpenChestResponse, error)
@@ -39,6 +41,16 @@ type gambaClient struct {
 
 func NewGambaClient(cc grpc.ClientConnInterface) GambaClient {
 	return &gambaClient{cc}
+}
+
+func (c *gambaClient) Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PingResponse)
+	err := c.cc.Invoke(ctx, Gamba_Ping_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *gambaClient) GetChests(ctx context.Context, in *GetChestsRequest, opts ...grpc.CallOption) (*GetChestsResponse, error) {
@@ -75,6 +87,7 @@ func (c *gambaClient) OpenChest(ctx context.Context, in *OpenChestRequest, opts 
 // All implementations must embed UnimplementedGambaServer
 // for forward compatibility.
 type GambaServer interface {
+	Ping(context.Context, *PingRequest) (*PingResponse, error)
 	GetChests(context.Context, *GetChestsRequest) (*GetChestsResponse, error)
 	GetChestDetails(context.Context, *GetChestDetailsRequest) (*GetChestDetailsResponse, error)
 	OpenChest(context.Context, *OpenChestRequest) (*OpenChestResponse, error)
@@ -88,6 +101,9 @@ type GambaServer interface {
 // pointer dereference when methods are called.
 type UnimplementedGambaServer struct{}
 
+func (UnimplementedGambaServer) Ping(context.Context, *PingRequest) (*PingResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
+}
 func (UnimplementedGambaServer) GetChests(context.Context, *GetChestsRequest) (*GetChestsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetChests not implemented")
 }
@@ -116,6 +132,24 @@ func RegisterGambaServer(s grpc.ServiceRegistrar, srv GambaServer) {
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&Gamba_ServiceDesc, srv)
+}
+
+func _Gamba_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GambaServer).Ping(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Gamba_Ping_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GambaServer).Ping(ctx, req.(*PingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _Gamba_GetChests_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -179,6 +213,10 @@ var Gamba_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "gamba.Gamba",
 	HandlerType: (*GambaServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Ping",
+			Handler:    _Gamba_Ping_Handler,
+		},
 		{
 			MethodName: "GetChests",
 			Handler:    _Gamba_GetChests_Handler,

@@ -21,6 +21,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 
 	pbAuth "github.com/komadiina/spelltext/proto/auth"
+	pbBuild "github.com/komadiina/spelltext/proto/build"
 	pbChar "github.com/komadiina/spelltext/proto/char"
 	pbChat "github.com/komadiina/spelltext/proto/chat"
 	pbCombat "github.com/komadiina/spelltext/proto/combat"
@@ -57,6 +58,7 @@ func InitializePages(client *types.SpelltextClient) {
 	views.AddVendorPage(client)
 	views.AddCreateCharacterPage(client)
 	views.AddFightPage(client)
+	views.AddAbilityPage(client)
 }
 
 func InitializeClients(c *types.SpelltextClient) {
@@ -127,17 +129,34 @@ func InitializeClients(c *types.SpelltextClient) {
 		c.Clients.CombatClient = pbCombat.NewCombatClient(conn)
 		c.Connections.Combat = conn
 	}
+
+	// build
+	conn, err = grpc.NewClient(host(c.Config.BuildPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		c.Logger.Error("failed to init build client", "reason", err)
+	} else {
+		c.Clients.BuildClient = pbBuild.NewBuildClient(conn)
+		c.Connections.Build = conn
+	}
 }
 
 func closeClients(c *types.SpelltextClient) {
+	// logging helper func
+	f := func(err error) {
+		if err != nil {
+			c.Logger.Error(err)
+		}
+	}
+
 	if c.Clients != nil {
-		c.Connections.Chat.Close()
-		c.Connections.Store.Close()
-		c.Connections.Inventory.Close()
-		c.Connections.Character.Close()
-		c.Connections.Gamba.Close()
-		c.Connections.Auth.Close()
-		c.Connections.Combat.Close()
+		f(c.Connections.Chat.Close())
+		f(c.Connections.Store.Close())
+		f(c.Connections.Inventory.Close())
+		f(c.Connections.Character.Close())
+		f(c.Connections.Gamba.Close())
+		f(c.Connections.Auth.Close())
+		f(c.Connections.Combat.Close())
+		f(c.Connections.Build.Close())
 	}
 }
 

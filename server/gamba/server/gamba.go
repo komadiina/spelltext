@@ -14,13 +14,29 @@ import (
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	healthpb "google.golang.org/grpc/health/grpc_health_v1"
 )
+
+type Connections struct {
+	Inventory *grpc.ClientConn
+}
+
+type Clients struct {
+	Inventory pbInventory.InventoryClient
+}
 
 type GambaService struct {
 	pb.UnimplementedGambaServer
-	DbPool *pgxpool.Pool
-	Config *config.Config
-	Logger *logging.Logger
+	healthpb.UnimplementedHealthServer
+	DbPool      *pgxpool.Pool
+	Config      *config.Config
+	Logger      *logging.Logger
+	Clients     *Clients
+	Connections *Connections
+}
+
+func (s *GambaService) Check(ctx context.Context, req *healthpb.HealthCheckRequest) (*healthpb.HealthCheckResponse, error) {
+	return &healthpb.HealthCheckResponse{Status: healthpb.HealthCheckResponse_SERVING}, nil
 }
 
 func (s *GambaService) GetChests(ctx context.Context, req *pb.GetChestsRequest) (*pb.GetChestsResponse, error) {
@@ -39,6 +55,7 @@ func (s *GambaService) GetChests(ctx context.Context, req *pb.GetChestsRequest) 
 		s.Logger.Error("failed to run query", "err", err)
 		return nil, err
 	}
+	defer rows.Close()
 
 	var gchests []*pbRepo.GambaChest
 	for rows.Next() {
@@ -84,6 +101,7 @@ func (s *GambaService) OpenChest(ctx context.Context, req *pb.OpenChestRequest) 
 		s.Logger.Error("failed to run query", "err", err)
 		return nil, err
 	}
+	defer rows.Close()
 
 	char := &pbRepo.Character{}
 	gc := &pbRepo.GambaChest{}
@@ -117,6 +135,11 @@ func (s *GambaService) OpenChest(ctx context.Context, req *pb.OpenChestRequest) 
 
 	var items []*pbRepo.Item
 	rows, err = s.DbPool.Query(ctx, sql, req.ChestId)
+	if err != nil {
+		s.Logger.Error(err)
+		return nil, err
+	}
+	defer rows.Close()
 	for rows.Next() {
 		var foo *any
 		it := &pbRepo.ItemTemplate{}
@@ -167,6 +190,12 @@ func (s *GambaService) OpenChest(ctx context.Context, req *pb.OpenChestRequest) 
 	// create a new item instance
 	sql = "INSERT INTO item_instances (item_id, owner_character_id) VALUES ($1, $2) RETURNING item_instance_id"
 	rows, err = s.DbPool.Query(ctx, sql, reward.GetId(), req.GetCharacterId())
+	if err != nil {
+		s.Logger.Error(err)
+		return nil, err
+	}
+	defer rows.Close()
+
 	var instanceId uint64 = 0
 	for rows.Next() {
 		err = rows.Scan(&instanceId)

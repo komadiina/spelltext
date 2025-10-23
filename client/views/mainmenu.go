@@ -19,6 +19,7 @@ func AddMainmenuPage(c *types.SpelltextClient) {
 		list.
 			SetHighlightFullLine(true).
 			AddItem("- character", "preview your characters", 'a', func() { c.NavigateTo(constants.PAGE_CHARACTER) }).
+			AddItem("- talents", "create a sick build", 't', func() { c.NavigateTo(constants.PAGE_ABILITY) }).
 			AddItem("- inventory", "peek at what's in your bags", 'i', func() { c.NavigateTo(constants.PAGE_INVENTORY) }).
 			// AddItem("- progress", "see what you've accomplished", 'p', func() { c.NavigateTo(constants.PAGE_PROGRESS) }).
 			AddItem("- combat", "THE proving grounds", 'c', func() { c.NavigateTo(constants.PAGE_COMBAT) }).
@@ -32,6 +33,7 @@ func AddMainmenuPage(c *types.SpelltextClient) {
 
 		guide := utils.CreateGuide([]*types.UnusableHotkey{
 			{Key: "a", Desc: "character"},
+			{Key: "t", Desc: "talents"},
 			{Key: "i", Desc: "inventory"},
 			// {Key: "p", Desc: "progress"},
 			{Key: "b", Desc: "combat"},
@@ -39,7 +41,7 @@ func AddMainmenuPage(c *types.SpelltextClient) {
 			{Key: "g", Desc: "gamble"},
 			{Key: "y", Desc: "chat"},
 			{Key: "q", Desc: "quit"},
-		})
+		}, false)
 
 		f2 := tview.NewFlex().
 			SetDirection(tview.FlexRow).

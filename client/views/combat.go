@@ -64,7 +64,7 @@ func AddCombatPage(c *types.SpelltextClient) {
 			{Key: "↑/↓", Desc: "navigate"},
 			{Key: "enter", Desc: "select"},
 			{Key: "esc", Desc: "back"},
-		})
+		}, true)
 
 		flex.
 			AddItem(flexTop, 0, 1, true).

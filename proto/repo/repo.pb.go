@@ -795,6 +795,7 @@ type Character struct {
 	PointsPower      uint64                 `protobuf:"varint,10,opt,name=points_power,json=pointsPower,proto3" json:"points_power,omitempty"`
 	PointsStrength   uint64                 `protobuf:"varint,11,opt,name=points_strength,json=pointsStrength,proto3" json:"points_strength,omitempty"`
 	PointsSpellpower uint64                 `protobuf:"varint,12,opt,name=points_spellpower,json=pointsSpellpower,proto3" json:"points_spellpower,omitempty"`
+	UnspentPoints    uint64                 `protobuf:"varint,13,opt,name=unspent_points,json=unspentPoints,proto3" json:"unspent_points,omitempty"`
 	Hero             *Hero                  `protobuf:"bytes,20,opt,name=hero,proto3" json:"hero,omitempty"`
 	User             *User                  `protobuf:"bytes,21,opt,name=user,proto3" json:"user,omitempty"`
 	unknownFields    protoimpl.UnknownFields
@@ -911,6 +912,13 @@ func (x *Character) GetPointsStrength() uint64 {
 func (x *Character) GetPointsSpellpower() uint64 {
 	if x != nil {
 		return x.PointsSpellpower
+	}
+	return 0
+}
+
+func (x *Character) GetUnspentPoints() uint64 {
+	if x != nil {
+		return x.UnspentPoints
 	}
 	return 0
 }
@@ -2080,6 +2088,9 @@ type Ability struct {
 	BaseDamage           uint64                 `protobuf:"varint,7,opt,name=base_damage,json=baseDamage,proto3" json:"base_damage,omitempty"`
 	StrengthMultiplier   float32                `protobuf:"fixed32,8,opt,name=strength_multiplier,json=strengthMultiplier,proto3" json:"strength_multiplier,omitempty"`
 	SpellpowerMultiplier float32                `protobuf:"fixed32,9,opt,name=spellpower_multiplier,json=spellpowerMultiplier,proto3" json:"spellpower_multiplier,omitempty"`
+	StMultPerlevel       float32                `protobuf:"fixed32,10,opt,name=st_mult_perlevel,json=stMultPerlevel,proto3" json:"st_mult_perlevel,omitempty"`
+	SpMultPerlevel       float32                `protobuf:"fixed32,11,opt,name=sp_mult_perlevel,json=spMultPerlevel,proto3" json:"sp_mult_perlevel,omitempty"`
+	MinLevel             uint64                 `protobuf:"varint,12,opt,name=min_level,json=minLevel,proto3" json:"min_level,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -2177,6 +2188,179 @@ func (x *Ability) GetSpellpowerMultiplier() float32 {
 	return 0
 }
 
+func (x *Ability) GetStMultPerlevel() float32 {
+	if x != nil {
+		return x.StMultPerlevel
+	}
+	return 0
+}
+
+func (x *Ability) GetSpMultPerlevel() float32 {
+	if x != nil {
+		return x.SpMultPerlevel
+	}
+	return 0
+}
+
+func (x *Ability) GetMinLevel() uint64 {
+	if x != nil {
+		return x.MinLevel
+	}
+	return 0
+}
+
+type NpcLootTable struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	NpcTemplateId uint64                 `protobuf:"varint,1,opt,name=npc_template_id,json=npcTemplateId,proto3" json:"npc_template_id,omitempty"`
+	ItemId        uint64                 `protobuf:"varint,2,opt,name=item_id,json=itemId,proto3" json:"item_id,omitempty"`
+	Chance        float32                `protobuf:"fixed32,3,opt,name=chance,proto3" json:"chance,omitempty"`
+	Quantity      uint32                 `protobuf:"varint,4,opt,name=quantity,proto3" json:"quantity,omitempty"`
+	NpcTemplate   *NpcTemplate           `protobuf:"bytes,20,opt,name=npc_template,json=npcTemplate,proto3" json:"npc_template,omitempty"`
+	Item          *Item                  `protobuf:"bytes,21,opt,name=item,proto3" json:"item,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *NpcLootTable) Reset() {
+	*x = NpcLootTable{}
+	mi := &file_repo_repo_proto_msgTypes[25]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *NpcLootTable) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*NpcLootTable) ProtoMessage() {}
+
+func (x *NpcLootTable) ProtoReflect() protoreflect.Message {
+	mi := &file_repo_repo_proto_msgTypes[25]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use NpcLootTable.ProtoReflect.Descriptor instead.
+func (*NpcLootTable) Descriptor() ([]byte, []int) {
+	return file_repo_repo_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *NpcLootTable) GetNpcTemplateId() uint64 {
+	if x != nil {
+		return x.NpcTemplateId
+	}
+	return 0
+}
+
+func (x *NpcLootTable) GetItemId() uint64 {
+	if x != nil {
+		return x.ItemId
+	}
+	return 0
+}
+
+func (x *NpcLootTable) GetChance() float32 {
+	if x != nil {
+		return x.Chance
+	}
+	return 0
+}
+
+func (x *NpcLootTable) GetQuantity() uint32 {
+	if x != nil {
+		return x.Quantity
+	}
+	return 0
+}
+
+func (x *NpcLootTable) GetNpcTemplate() *NpcTemplate {
+	if x != nil {
+		return x.NpcTemplate
+	}
+	return nil
+}
+
+func (x *NpcLootTable) GetItem() *Item {
+	if x != nil {
+		return x.Item
+	}
+	return nil
+}
+
+type NpcAbility struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	NpcId         uint64                 `protobuf:"varint,1,opt,name=npc_id,json=npcId,proto3" json:"npc_id,omitempty"`
+	AbilityId     uint64                 `protobuf:"varint,2,opt,name=ability_id,json=abilityId,proto3" json:"ability_id,omitempty"`
+	Npc           *Npc                   `protobuf:"bytes,20,opt,name=npc,proto3" json:"npc,omitempty"`
+	Ability       *Ability               `protobuf:"bytes,21,opt,name=ability,proto3" json:"ability,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *NpcAbility) Reset() {
+	*x = NpcAbility{}
+	mi := &file_repo_repo_proto_msgTypes[26]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *NpcAbility) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*NpcAbility) ProtoMessage() {}
+
+func (x *NpcAbility) ProtoReflect() protoreflect.Message {
+	mi := &file_repo_repo_proto_msgTypes[26]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use NpcAbility.ProtoReflect.Descriptor instead.
+func (*NpcAbility) Descriptor() ([]byte, []int) {
+	return file_repo_repo_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *NpcAbility) GetNpcId() uint64 {
+	if x != nil {
+		return x.NpcId
+	}
+	return 0
+}
+
+func (x *NpcAbility) GetAbilityId() uint64 {
+	if x != nil {
+		return x.AbilityId
+	}
+	return 0
+}
+
+func (x *NpcAbility) GetNpc() *Npc {
+	if x != nil {
+		return x.Npc
+	}
+	return nil
+}
+
+func (x *NpcAbility) GetAbility() *Ability {
+	if x != nil {
+		return x.Ability
+	}
+	return nil
+}
+
 type Update struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -2189,7 +2373,7 @@ type Update struct {
 
 func (x *Update) Reset() {
 	*x = Update{}
-	mi := &file_repo_repo_proto_msgTypes[25]
+	mi := &file_repo_repo_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2201,7 +2385,7 @@ func (x *Update) String() string {
 func (*Update) ProtoMessage() {}
 
 func (x *Update) ProtoReflect() protoreflect.Message {
-	mi := &file_repo_repo_proto_msgTypes[25]
+	mi := &file_repo_repo_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2214,7 +2398,7 @@ func (x *Update) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Update.ProtoReflect.Descriptor instead.
 func (*Update) Descriptor() ([]byte, []int) {
-	return file_repo_repo_proto_rawDescGZIP(), []int{25}
+	return file_repo_repo_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *Update) GetId() uint64 {
@@ -2243,6 +2427,74 @@ func (x *Update) GetDescription() string {
 		return x.Description
 	}
 	return ""
+}
+
+type PlayerAbilityTree struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	CharacterId   uint64                 `protobuf:"varint,1,opt,name=character_id,json=characterId,proto3" json:"character_id,omitempty"`
+	AbilityId     uint64                 `protobuf:"varint,2,opt,name=ability_id,json=abilityId,proto3" json:"ability_id,omitempty"`
+	Character     *Character             `protobuf:"bytes,20,opt,name=character,proto3,oneof" json:"character,omitempty"`
+	Ability       *Ability               `protobuf:"bytes,21,opt,name=ability,proto3" json:"ability,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PlayerAbilityTree) Reset() {
+	*x = PlayerAbilityTree{}
+	mi := &file_repo_repo_proto_msgTypes[28]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PlayerAbilityTree) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PlayerAbilityTree) ProtoMessage() {}
+
+func (x *PlayerAbilityTree) ProtoReflect() protoreflect.Message {
+	mi := &file_repo_repo_proto_msgTypes[28]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PlayerAbilityTree.ProtoReflect.Descriptor instead.
+func (*PlayerAbilityTree) Descriptor() ([]byte, []int) {
+	return file_repo_repo_proto_rawDescGZIP(), []int{28}
+}
+
+func (x *PlayerAbilityTree) GetCharacterId() uint64 {
+	if x != nil {
+		return x.CharacterId
+	}
+	return 0
+}
+
+func (x *PlayerAbilityTree) GetAbilityId() uint64 {
+	if x != nil {
+		return x.AbilityId
+	}
+	return 0
+}
+
+func (x *PlayerAbilityTree) GetCharacter() *Character {
+	if x != nil {
+		return x.Character
+	}
+	return nil
+}
+
+func (x *PlayerAbilityTree) GetAbility() *Ability {
+	if x != nil {
+		return x.Ability
+	}
+	return nil
 }
 
 var File_repo_repo_proto protoreflect.FileDescriptor
@@ -2333,7 +2585,7 @@ const file_repo_repo_proto_rawDesc = "" +
 	" \x01(\x03R\n" +
 	"bonusArmor\x12\x12\n" +
 	"\x04uses\x18\v \x01(\x04R\x04uses\x12I\n" +
-	"\x13consumable_template\x18\x14 \x01(\v2\x18.repo.ConsumableTemplateR\x12consumableTemplate\"\xc7\x03\n" +
+	"\x13consumable_template\x18\x14 \x01(\v2\x18.repo.ConsumableTemplateR\x12consumableTemplate\"\xee\x03\n" +
 	"\tCharacter\x12!\n" +
 	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\x04R\x06userId\x12\x17\n" +
@@ -2349,7 +2601,8 @@ const file_repo_repo_proto_rawDesc = "" +
 	"\fpoints_power\x18\n" +
 	" \x01(\x04R\vpointsPower\x12'\n" +
 	"\x0fpoints_strength\x18\v \x01(\x04R\x0epointsStrength\x12+\n" +
-	"\x11points_spellpower\x18\f \x01(\x04R\x10pointsSpellpower\x12\x1e\n" +
+	"\x11points_spellpower\x18\f \x01(\x04R\x10pointsSpellpower\x12%\n" +
+	"\x0eunspent_points\x18\r \x01(\x04R\runspentPoints\x12\x1e\n" +
 	"\x04hero\x18\x14 \x01(\v2\n" +
 	".repo.HeroR\x04hero\x12\x1e\n" +
 	"\x04user\x18\x15 \x01(\v2\n" +
@@ -2460,7 +2713,7 @@ const file_repo_repo_proto_rawDesc = "" +
 	"\bquest_id\x18\x01 \x01(\x04R\aquestId\x12\x15\n" +
 	"\x06npc_id\x18\x02 \x01(\x04R\x05npcId\x12!\n" +
 	"\x05quest\x18\x14 \x01(\v2\v.repo.QuestR\x05quest\x12\x1b\n" +
-	"\x03npc\x18\x15 \x01(\v2\t.repo.NpcR\x03npc\"\xb5\x02\n" +
+	"\x03npc\x18\x15 \x01(\v2\t.repo.NpcR\x03npc\"\xa6\x03\n" +
 	"\aAbility\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
@@ -2472,12 +2725,39 @@ const file_repo_repo_proto_rawDesc = "" +
 	"\vbase_damage\x18\a \x01(\x04R\n" +
 	"baseDamage\x12/\n" +
 	"\x13strength_multiplier\x18\b \x01(\x02R\x12strengthMultiplier\x123\n" +
-	"\x15spellpower_multiplier\x18\t \x01(\x02R\x14spellpowerMultiplier\"j\n" +
+	"\x15spellpower_multiplier\x18\t \x01(\x02R\x14spellpowerMultiplier\x12(\n" +
+	"\x10st_mult_perlevel\x18\n" +
+	" \x01(\x02R\x0estMultPerlevel\x12(\n" +
+	"\x10sp_mult_perlevel\x18\v \x01(\x02R\x0espMultPerlevel\x12\x1b\n" +
+	"\tmin_level\x18\f \x01(\x04R\bminLevel\"\xd9\x01\n" +
+	"\fNpcLootTable\x12&\n" +
+	"\x0fnpc_template_id\x18\x01 \x01(\x04R\rnpcTemplateId\x12\x17\n" +
+	"\aitem_id\x18\x02 \x01(\x04R\x06itemId\x12\x16\n" +
+	"\x06chance\x18\x03 \x01(\x02R\x06chance\x12\x1a\n" +
+	"\bquantity\x18\x04 \x01(\rR\bquantity\x124\n" +
+	"\fnpc_template\x18\x14 \x01(\v2\x11.repo.NpcTemplateR\vnpcTemplate\x12\x1e\n" +
+	"\x04item\x18\x15 \x01(\v2\n" +
+	".repo.ItemR\x04item\"\x88\x01\n" +
+	"\n" +
+	"NpcAbility\x12\x15\n" +
+	"\x06npc_id\x18\x01 \x01(\x04R\x05npcId\x12\x1d\n" +
+	"\n" +
+	"ability_id\x18\x02 \x01(\x04R\tabilityId\x12\x1b\n" +
+	"\x03npc\x18\x14 \x01(\v2\t.repo.NpcR\x03npc\x12'\n" +
+	"\aability\x18\x15 \x01(\v2\r.repo.AbilityR\aability\"j\n" +
 	"\x06Update\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\x12\x18\n" +
 	"\aversion\x18\x03 \x01(\tR\aversion\x12 \n" +
-	"\vdescription\x18\x04 \x01(\tR\vdescriptionB0Z.github.com/komadiina/spelltext/proto/repo;repob\x06proto3"
+	"\vdescription\x18\x04 \x01(\tR\vdescription\"\xc0\x01\n" +
+	"\x11PlayerAbilityTree\x12!\n" +
+	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\x12\x1d\n" +
+	"\n" +
+	"ability_id\x18\x02 \x01(\x04R\tabilityId\x122\n" +
+	"\tcharacter\x18\x14 \x01(\v2\x0f.repo.CharacterH\x00R\tcharacter\x88\x01\x01\x12'\n" +
+	"\aability\x18\x15 \x01(\v2\r.repo.AbilityR\aabilityB\f\n" +
+	"\n" +
+	"_characterB0Z.github.com/komadiina/spelltext/proto/repo;repob\x06proto3"
 
 var (
 	file_repo_repo_proto_rawDescOnce sync.Once
@@ -2491,7 +2771,7 @@ func file_repo_repo_proto_rawDescGZIP() []byte {
 	return file_repo_repo_proto_rawDescData
 }
 
-var file_repo_repo_proto_msgTypes = make([]protoimpl.MessageInfo, 26)
+var file_repo_repo_proto_msgTypes = make([]protoimpl.MessageInfo, 29)
 var file_repo_repo_proto_goTypes = []any{
 	(*User)(nil),                           // 0: repo.User
 	(*Hero)(nil),                           // 1: repo.Hero
@@ -2518,7 +2798,10 @@ var file_repo_repo_proto_goTypes = []any{
 	(*Npc)(nil),                            // 22: repo.Npc
 	(*QuestObjective)(nil),                 // 23: repo.QuestObjective
 	(*Ability)(nil),                        // 24: repo.Ability
-	(*Update)(nil),                         // 25: repo.Update
+	(*NpcLootTable)(nil),                   // 25: repo.NpcLootTable
+	(*NpcAbility)(nil),                     // 26: repo.NpcAbility
+	(*Update)(nil),                         // 27: repo.Update
+	(*PlayerAbilityTree)(nil),              // 28: repo.PlayerAbilityTree
 }
 var file_repo_repo_proto_depIdxs = []int32{
 	3,  // 0: repo.ItemTemplate.equip_slot:type_name -> repo.EquipSlot
@@ -2546,11 +2829,17 @@ var file_repo_repo_proto_depIdxs = []int32{
 	21, // 22: repo.Npc.npc_template:type_name -> repo.NpcTemplate
 	17, // 23: repo.QuestObjective.quest:type_name -> repo.Quest
 	22, // 24: repo.QuestObjective.npc:type_name -> repo.Npc
-	25, // [25:25] is the sub-list for method output_type
-	25, // [25:25] is the sub-list for method input_type
-	25, // [25:25] is the sub-list for extension type_name
-	25, // [25:25] is the sub-list for extension extendee
-	0,  // [0:25] is the sub-list for field type_name
+	21, // 25: repo.NpcLootTable.npc_template:type_name -> repo.NpcTemplate
+	6,  // 26: repo.NpcLootTable.item:type_name -> repo.Item
+	22, // 27: repo.NpcAbility.npc:type_name -> repo.Npc
+	24, // 28: repo.NpcAbility.ability:type_name -> repo.Ability
+	8,  // 29: repo.PlayerAbilityTree.character:type_name -> repo.Character
+	24, // 30: repo.PlayerAbilityTree.ability:type_name -> repo.Ability
+	31, // [31:31] is the sub-list for method output_type
+	31, // [31:31] is the sub-list for method input_type
+	31, // [31:31] is the sub-list for extension type_name
+	31, // [31:31] is the sub-list for extension extendee
+	0,  // [0:31] is the sub-list for field type_name
 }
 
 func init() { file_repo_repo_proto_init() }
@@ -2558,13 +2847,14 @@ func file_repo_repo_proto_init() {
 	if File_repo_repo_proto != nil {
 		return
 	}
+	file_repo_repo_proto_msgTypes[28].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_repo_repo_proto_rawDesc), len(file_repo_repo_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   26,
+			NumMessages:   29,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

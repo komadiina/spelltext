@@ -13,6 +13,9 @@ storeserver:
   pgDbName: spelltext
   pgSslMode: disable
 
+  inventoryserver:
+    port: 50053
+
 inventoryserver:
   port: 50053
   pgUser: inventoryuser
@@ -43,9 +46,12 @@ gambaserver:
   pgDbName: spelltext
   pgSslMode: disable
 
+  inventoryserver:
+    port: 50053
+
 authserver:
   port: 50056
-  pgUser: storeuser
+  pgUser: authuser
   pgPass: changeme
   # pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
   pgHost: postgres
@@ -60,10 +66,23 @@ authserver:
 
 combatserver:
   port: 50057
-  pgUser: storeuser
+  pgUser: combatuser
   pgPass: changeme
   # pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
   pgHost: postgres
   pgPort: 5432
   pgDbName: spelltext
   pgSslMode: disable
+
+buildserver:
+  port: 50058
+  pgUser: builduser
+  pgPass: changeme
+  # pgHost: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
+  pgHost: postgres
+  pgPort: 5432
+  pgDbName: spelltext
+  pgSslMode: disable
+
+  charserver:
+    port: 50054

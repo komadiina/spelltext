@@ -13,6 +13,10 @@ func AddFightPage(c *types.SpelltextClient) {
 		flex.SetBorder(true).SetBorderPadding(1, 1, 5, 5).SetTitle(" [::b]fight[::-] ")
 
 		npc := c.Storage.Ministate.CurrentNpc
+		c.Storage.Ministate.FightState = &types.NpcFightState{
+			Npc: npc, CurrentHealth: int64(npc.NpcTemplate.HealthPoints) * int64(npc.HealthMultiplier),
+		}
+
 		npcDetails := tview.NewFlex().SetDirection(tview.FlexRow)
 		npcDetails.SetBorder(true).SetBorderPadding(1, 1, 5, 5).SetTitle(" [::b]npc details[::-] ")
 		nameTv := tview.NewTextView().SetText(utils.BoldText(utils.GetFullNpcName(npc))).SetDynamicColors(true)
@@ -23,6 +27,7 @@ func AddFightPage(c *types.SpelltextClient) {
 			AddItem(descTv, 1, 1, false)
 
 		flex.AddItem(npcDetails, 6, 1, false)
+
 		return flex
 	}, nil, func() {})
 }

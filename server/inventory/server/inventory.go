@@ -72,12 +72,53 @@ func (s *InventoryService) GetConn(ctx context.Context) *pgx.Conn {
 }
 
 func (s *InventoryService) SellItem(ctx context.Context, req *pb.SellItemRequest) (*pb.SellItemResponse, error) {
-	s.Logger.Warn("unimplemented method called.", "method", "SellItem")
-	return &pb.SellItemResponse{Success: false, Message: "unimplemented"}, nil
+	// delete entry from `item_instances` table, add item instance gold to character.gold
+	batch := pgx.Batch{}
+	sql, _, err := sq.
+		Delete("item_instances").
+		Where("item_instance_id = $1").
+		PlaceholderFormat(sq.Dollar).
+		ToSql()
+
+	if err != nil {
+		s.Logger.Error(err)
+		return nil, err
+	}
+
+	batch.Queue(sql, req.ItemInstance.ItemInstanceId)
+
+	// _, err = s.DbPool.Exec(ctx, sql, req.ItemInstance.ItemInstanceId)
+	// if err != nil {
+	// 	s.Logger.Error(err)
+	// 	return nil, err
+	// }
+
+	// update character gold
+	sql, _, err = sq.
+		Update("characters").
+		Set("gold", sq.Expr("gold + $1")).
+		Where("character_id = $2").
+		PlaceholderFormat(sq.Dollar).
+		ToSql()
+
+	if err != nil {
+		s.Logger.Error(err)
+		return nil, err
+	}
+
+	batch.Queue(sql, req.ItemInstance.Item.ItemTemplate.GoldPrice, req.CharacterId)
+
+	err = s.DbPool.SendBatch(ctx, &batch).Close()
+	if err != nil {
+		s.Logger.Error(err)
+		return nil, err
+	}
+
+	return &pb.SellItemResponse{Success: true}, nil
 }
 
 func (s *InventoryService) GetBalance(ctx context.Context, req *pb.InventoryBalanceRequest) (*pb.InventoryBalanceResponse, error) {
-	s.Logger.Warn("unimplemented method called.", "method", "SellItem")
+	s.Logger.Warn("unimplemented method called.", "method", "GetBalance")
 	return &pb.InventoryBalanceResponse{Gold: 0, Tokens: 0}, nil
 }
 

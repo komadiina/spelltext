@@ -16,10 +16,17 @@ func AddNavGuide(shortcut string, name string) (*tview.TextView, int) {
 	return tv, len(str)
 }
 
-func CreateGuide(hotkeys []*types.UnusableHotkey) *tview.Flex {
+func CreateGuide(hotkeys []*types.UnusableHotkey, displayPretext bool) *tview.Flex {
+	var headerText string
+	if !displayPretext {
+		headerText = ""
+	} else {
+		headerText = " shortcuts: "
+	}
+
 	guide := tview.NewFlex().
 		SetDirection(tview.FlexColumn).
-		AddItem(tview.NewTextView().SetText(" keymap legend: "), 0, 1, false)
+		AddItem(tview.NewTextView().SetText(headerText), 0, 1, false)
 
 	for _, hotkey := range hotkeys {
 		gd, len := AddNavGuide(hotkey.Key, hotkey.Desc)
@@ -69,4 +76,12 @@ func UpdateCharacterFunc(char *pbRepo.Character, c *types.SpelltextClient, f fun
 
 func BoldText(text string) string {
 	return fmt.Sprint("[::b]", text, "[::-]")
+}
+
+func ToColorTag(color string) string {
+	return fmt.Sprint("[", color, "]")
+}
+
+func PaintText(color string, text string) string {
+	return fmt.Sprint(ToColorTag(color), text, "[::-]")
 }

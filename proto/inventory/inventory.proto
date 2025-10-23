@@ -15,9 +15,8 @@ message InventoryBalanceResponse {
 }
 
 message SellItemRequest {
-  string username = 1;
-  string character = 2;
-  uint64 item_id = 3;
+  uint64 character_id = 1;
+  repo.ItemInstance item_instance = 2;
 }
 
 message SellItemResponse {
@@ -43,7 +42,12 @@ message ListBackpackItemsResponse {
   repeated repo.ItemInstance item_instances = 1;
 }
 
+
+message PingRequest {}
+message PingResponse {}
+
 service Inventory {
+  rpc Ping(PingRequest) returns (PingResponse);
   rpc GetBalance(InventoryBalanceRequest) returns (InventoryBalanceResponse);
   rpc SellItem(SellItemRequest) returns (SellItemResponse);
   rpc AddItemsToBackpack(AddItemsToBackpackRequest) returns (AddItemsToBackpackResponse);

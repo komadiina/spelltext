@@ -6,6 +6,7 @@ import (
 	"github.com/komadiina/spelltext/client/constants"
 	"github.com/komadiina/spelltext/client/functions"
 	types "github.com/komadiina/spelltext/client/types"
+	"github.com/komadiina/spelltext/client/utils"
 	"github.com/rivo/tview"
 )
 
@@ -37,7 +38,7 @@ func AddLoginPage(c *types.SpelltextClient) {
 				c.PageManager.Push(constants.PAGE_MAINMENU, false)
 			})
 
-		flex := STNewFlex().AddItem(form, 0, 1, true)
+		flex := utils.STNewFlex().AddItem(form, 0, 1, true)
 		flex.SetBorder(true).SetTitle(" [::b]login[::-] ")
 
 		return flex

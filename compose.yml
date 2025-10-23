@@ -118,6 +118,23 @@ services:
     depends_on:
       - postgres
 
+  buildserver:
+    build:
+      context: .
+      dockerfile: server/build/Dockerfile
+    volumes:
+      - ./logs/buildserver:/logs
+    ports:
+      - "50058:50058"
+    networks:
+      - spelltext
+    develop:
+      watch:
+        - action: "restart"
+          path: "./server/build"
+    depends_on:
+      - postgres
+
   spelltext-nats:
     image: nats
     command: ["-js"]

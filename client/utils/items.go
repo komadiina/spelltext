@@ -6,14 +6,13 @@ import (
 
 	"github.com/komadiina/spelltext/client/constants"
 	pbRepo "github.com/komadiina/spelltext/proto/repo"
-	pb "github.com/komadiina/spelltext/proto/store"
 )
 
 func GetFullItemName(item *pbRepo.Item) string {
 	return strings.Trim(fmt.Sprintf("%s %s %s", item.GetPrefix(), item.GetItemTemplate().GetName(), item.GetSuffix()), " ")
 }
 
-func GetItemName(item *pb.Item) string {
+func GetItemName(item *pbRepo.Item) string {
 	var prefix string = ""
 	var suffix string = ""
 
@@ -29,7 +28,7 @@ func GetItemName(item *pb.Item) string {
 		suffix = " " + item.GetSuffix()
 	}
 
-	return fmt.Sprintf("%s%s%s", prefix, item.GetName(), suffix)
+	return fmt.Sprintf("%s%s%s", prefix, item.ItemTemplate.Name, suffix)
 }
 
 func GetItemStats(item *pbRepo.Item) string {

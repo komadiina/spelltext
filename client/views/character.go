@@ -110,6 +110,7 @@ func RenderCharactersList(
 
 	characters.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		if event.Key() == tcell.KeyCtrlA {
+			c.PageManager.Push(constants.PAGE_CREATE_CHARACTER, false)
 		}
 
 		return event
@@ -152,7 +153,7 @@ func RenderGuide() *tview.Flex {
 		{Key: "ctrl+a", Desc: "new character"},
 		{Key: "enter", Desc: "select"},
 		{Key: "tab", Desc: "navigate"},
-	})
+	}, true)
 }
 
 func RenderEquipmentPane(c *types.SpelltextClient, charSelected *pbRepo.Character) *tview.Flex {
@@ -171,7 +172,7 @@ func RenderEquipmentPane(c *types.SpelltextClient, charSelected *pbRepo.Characte
 		return cmp.Compare(a.Id, b.Id)
 	})
 
-	totals := RenderTotalsPane(equipped)
+	totals := RenderTotalsPane(c, equipped)
 	bonusesPane := RenderBonusesPane(equipped)
 
 	itemInfo := tview.NewTextView().SetDynamicColors(true)
@@ -189,7 +190,7 @@ func RenderEquipmentPane(c *types.SpelltextClient, charSelected *pbRepo.Characte
 
 	bonusesPane.
 		AddItem(nil, 0, 1, false).
-		AddItem(totals, 3, 1, false)
+		AddItem(totals, 4, 1, false)
 
 	equipmentPane.AddItem(bonusesPane, 0, 3, false)
 	return equipmentPane
@@ -230,13 +231,13 @@ func RenderQuickInventoryTree(
 
 				// TODO: implement update equipped logic locally
 				equipped := functions.GetEquippedItems(c)
-				totals = RenderTotalsPane(equipped)
+				totals = RenderTotalsPane(c, equipped)
 			})
 
 			node.SetSelectable(true).SetSelectedFunc(func() {
 				functions.ToggleEquip(instance, c, charSelected, instance.Item.ItemTemplate.EquipSlot, false)
 			})
-			
+
 			node.AddChild(child)
 		}
 
@@ -280,8 +281,8 @@ func RenderBonusesPane(equipped []*pbRepo.ItemInstance) *tview.Flex {
 	return bonusesPane
 }
 
-func RenderTotalsPane(equipped []*pbRepo.ItemInstance) *tview.Flex {
-	totalsPane := tview.NewFlex().SetDirection(tview.FlexColumn)
+func RenderTotalsPane(c *types.SpelltextClient, equipped []*pbRepo.ItemInstance) *tview.Flex {
+	totalsPane := tview.NewFlex().SetDirection(tview.FlexRow)
 	totalsPane.SetBorder(true).SetBorderPadding(0, 0, 2, 2).SetTitle(" [::b]totals[::-] ")
 	totalsPane.SetTitleColor(tcell.ColorCadetBlue)
 
@@ -294,7 +295,12 @@ func RenderTotalsPane(equipped []*pbRepo.ItemInstance) *tview.Flex {
 		Damage:       tview.NewTextView().SetDynamicColors(true),
 	}
 
-	cstats := &types.CharacterStats{}
+	cstats := &types.CharacterStats{
+		HealthPoints: c.Storage.SelectedCharacter.Hero.BaseHealth,
+		PowerPoints:  c.Storage.SelectedCharacter.Hero.BasePower,
+		Strength:     c.Storage.SelectedCharacter.Hero.BaseStrength,
+		Spellpower:   c.Storage.SelectedCharacter.Hero.BaseSpellpower,
+	}
 	for _, eqi := range equipped {
 		cstats = sumStats(eqi, cstats)
 	}
@@ -307,12 +313,16 @@ func RenderTotalsPane(equipped []*pbRepo.ItemInstance) *tview.Flex {
 	totals.Damage.SetText(fmt.Sprintf(`[%s]DMG[""]: %d`, constants.TEXT_COLOR_DAMAGE, cstats.Damage))
 
 	totalsPane.
-		AddItem(totals.HealthPoints, 0, 1, false).
-		AddItem(totals.PowerPoints, 0, 1, false).
-		AddItem(totals.Strength, 0, 1, false).
-		AddItem(totals.Spellpower, 0, 1, false).
-		AddItem(totals.Armor, 0, 1, false).
-		AddItem(totals.Damage, 0, 1, false)
+		AddItem(
+			tview.NewFlex().SetDirection(tview.FlexColumn).
+				AddItem(totals.HealthPoints, 0, 1, false).
+				AddItem(totals.PowerPoints, 0, 1, false).
+				AddItem(totals.Strength, 0, 1, false), 0, 1, false).
+		AddItem(
+			tview.NewFlex().SetDirection(tview.FlexColumn).
+				AddItem(totals.Spellpower, 0, 1, false).
+				AddItem(totals.Armor, 0, 1, false).
+				AddItem(totals.Damage, 0, 1, false), 0, 1, false)
 
 	return totalsPane
 }
