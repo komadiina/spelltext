@@ -62,6 +62,21 @@ jobs:
           github_token: ${{secrets.GITHUB_TOKEN}}
           dockerfile: server/auth/Dockerfile
 
+
+      - name: build & push server/build
+        uses: macbre/push-to-ghcr@master
+        with:
+          image_name: ${{github.repository}}/buildserver
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          dockerfile: server/build/Dockerfile
+      
+      - name: build & push server/combat
+        uses: macbre/push-to-ghcr@master
+        with:
+          image_name: ${{github.repository}}/combatserver
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          dockerfile: server/combat/Dockerfile
+
       - name: build & push scripts/db (flyway)
         uses: macbre/push-to-ghcr@master
         with:
