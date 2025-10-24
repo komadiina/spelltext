@@ -1,9 +1,9 @@
 # spelltext - usage
 requirements:
-- go `1.25.0` toolchain (possibly compatible with `1.24.x`)
+- go `>=1.23.0` toolchain
 - docker `28.3.2` (tested on build rev. `578ccf6`)
+- helm `3.19.0` (goVersion: `1.24.7`)
 - (opt) minikube `1.35.0` (compatible with `1.33.0`)
-- (opt) helm `3.19.0` (goVersion: `1.24.7`)
 
 # contents
 - [spelltext - usage](#spelltext---usage)
