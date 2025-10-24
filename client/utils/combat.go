@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/komadiina/spelltext/client/constants"
+	"github.com/komadiina/spelltext/client/types"
 	pbRepo "github.com/komadiina/spelltext/proto/repo"
 )
 
@@ -24,4 +25,21 @@ level: [white]%d[""]
 		constants.TEXT_COLOR_DAMAGE,
 		int(float32(npc.NpcTemplate.BaseDamage)*npc.DamageMultiplier))
 
+}
+
+func GetDisplayStatsPlayer(c *types.SpelltextClient) *[]uint64 {
+	
+	arr := make([]uint64, 0)
+	arr = append(arr, uint64(c.Storage.CharacterStats.HealthPoints))
+	arr = append(arr, uint64(c.Storage.CharacterStats.PowerPoints))
+	return &arr
+}
+
+func GetDisplayStatsNpc(npc *pbRepo.Npc) *[]uint64 {
+	arr := make([]uint64, 0)
+	arr = append(arr,
+		uint64(float32(npc.NpcTemplate.HealthPoints)*npc.HealthMultiplier),
+		uint64(float32(npc.NpcTemplate.BaseDamage)*npc.DamageMultiplier),
+	)
+	return &arr
 }

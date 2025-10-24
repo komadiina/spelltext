@@ -32,24 +32,16 @@ type CharacterStatsView struct {
 	Damage       *tview.TextView
 }
 
+var statsChanged bool = false
+
+var onClose = func(*types.SpelltextClient) {}
+
 func (d *CharacterDetailsView) Update(c *pbRepo.Character) {
 	d.Name.SetText(fmt.Sprintf("name: %s", c.CharacterName))
 	d.Level.SetText(fmt.Sprintf(`level: [blue]%d[""]`, c.Level))
 	d.Class.SetText(fmt.Sprintf(`class: %s`, c.Hero.Name))
 	d.Currency.SetText(fmt.Sprintf(`[yellow]%dg[""] | [orange]%dt[""]`, c.Gold, c.Tokens))
 }
-
-func sumStats(inst *pbRepo.ItemInstance, cstats *types.CharacterStats) *types.CharacterStats {
-	return &types.CharacterStats{
-		HealthPoints: cstats.HealthPoints + inst.Item.Health,
-		PowerPoints:  cstats.PowerPoints + inst.Item.Power,
-		Strength:     cstats.Strength + inst.Item.Strength,
-		Spellpower:   cstats.Spellpower + inst.Item.Spellpower,
-		Armor:        cstats.Armor + inst.Item.BonusArmor,
-		Damage:       cstats.Damage + inst.Item.BonusDamage,
-	}
-}
-
 func RenderCharactersList(
 	details *CharacterDetailsView,
 	chars *pb.ListCharactersResponse,
@@ -229,6 +221,8 @@ func RenderQuickInventoryTree(
 					true,
 				)
 
+				statsChanged = true
+
 				// TODO: implement update equipped logic locally
 				equipped := functions.GetEquippedItems(c)
 				totals = RenderTotalsPane(c, equipped)
@@ -295,15 +289,15 @@ func RenderTotalsPane(c *types.SpelltextClient, equipped []*pbRepo.ItemInstance)
 		Damage:       tview.NewTextView().SetDynamicColors(true),
 	}
 
-	cstats := &types.CharacterStats{
-		HealthPoints: c.Storage.SelectedCharacter.Hero.BaseHealth,
-		PowerPoints:  c.Storage.SelectedCharacter.Hero.BasePower,
-		Strength:     c.Storage.SelectedCharacter.Hero.BaseStrength,
-		Spellpower:   c.Storage.SelectedCharacter.Hero.BaseSpellpower,
+	// change CloserFunc here so i dont have to re-fetch nor re-store equipped items
+	onClose = func(c *types.SpelltextClient) {
+		c.Logger.Info("saving stats...")
+		cstats := functions.CalculateStats(equipped, c)
+		c.Storage.CharacterStats = cstats
 	}
-	for _, eqi := range equipped {
-		cstats = sumStats(eqi, cstats)
-	}
+
+	cstats := functions.CalculateStats(equipped, c)
+	c.Storage.CharacterStats = cstats
 
 	totals.HealthPoints.SetText(fmt.Sprintf(`[%s]HP[""]: %d`, constants.TEXT_COLOR_HEALTH, cstats.HealthPoints))
 	totals.PowerPoints.SetText(fmt.Sprintf(`[%s]PWR[""]: %d`, constants.TEXT_COLOR_POWER, cstats.PowerPoints))
@@ -343,7 +337,6 @@ func SetFlexInputHandler(flex *tview.Flex, equipmentPane *tview.Flex, characters
 }
 
 func AddCharacterPage(c *types.SpelltextClient) {
-	onClose := func() {}
 
 	c.PageManager.RegisterFactory(constants.PAGE_CHARACTER, func() tview.Primitive {
 		flex := tview.NewFlex().SetDirection(tview.FlexRow)
@@ -390,5 +383,5 @@ func AddCharacterPage(c *types.SpelltextClient) {
 			AddItem(guide, 3, 1, false)
 
 		return flex
-	}, nil, onClose)
+	}, nil, func() { onClose(c) })
 }

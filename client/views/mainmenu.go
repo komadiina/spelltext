@@ -2,18 +2,27 @@ package views
 
 import (
 	"fmt"
+	"sync"
 
 	"github.com/komadiina/spelltext/client/constants"
+	"github.com/komadiina/spelltext/client/preload"
 	types "github.com/komadiina/spelltext/client/types"
 	"github.com/komadiina/spelltext/client/utils"
 	"github.com/rivo/tview"
 )
 
+var once sync.Once
+
 func AddMainmenuPage(c *types.SpelltextClient) {
 	c.PageManager.RegisterFactory(constants.PAGE_MAINMENU, func() tview.Primitive {
+		once.Do(func() {
+			// preload everything necessary for the client after logging in (gathered required data)
+			preload.Preload(c)
+		})
+
 		banner := tview.NewTextView().
 			SetDynamicColors(true).
-			SetText(fmt.Sprintf(`> welcome back, adventurer! [blue]%s[""] - isn't it?`, c.User.Username))
+			SetText(fmt.Sprintf(`> welcome back, adventurer! [blue]%s[""] - isn't it?`, c.Storage.CurrentUser.Username))
 
 		list := tview.NewList()
 		list.

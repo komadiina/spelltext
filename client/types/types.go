@@ -29,7 +29,6 @@ type SpelltextClient struct {
 	AppStorage   map[string]any
 	Storage      *AppStorage
 	PageManager  *factory.PageManager
-	User         *SpelltextUser
 	Clients      *Clients
 	Connections  *Connections
 	Context      *context.Context
@@ -50,15 +49,7 @@ type AppStorage struct {
 	SelectedCharacter *pbRepo.Character
 	SelectedVendor    *pbRepo.Vendor
 	EquipSlots        []*pbRepo.EquipSlot
-}
-
-type SpelltextUser struct {
-	Username string
-}
-
-type ContextDef struct {
-	Context context.Context
-	Cancel  context.CancelFunc
+	CharacterStats    *CharacterStats
 }
 
 type Clients struct {
@@ -83,17 +74,9 @@ type Connections struct {
 	Build     *grpc.ClientConn
 }
 
-type NavigableForm struct {
-	tview.Form
-}
-
-type NavigableFormButton struct {
-	tview.Button
-
-	LeftNbr   *tview.Button
-	TopNbr    *tview.Button
-	RightNbr  *tview.Button
-	BottomNbr *tview.Button
+type UnusableHotkey struct {
+	Key  string
+	Desc string
 }
 
 type CharacterStats struct {
@@ -105,7 +88,13 @@ type CharacterStats struct {
 	Damage       int64
 }
 
-type UnusableHotkey struct {
-	Key  string
-	Desc string
+type EntityStatusFrame struct {
+	Health    uint64
+	Power     uint64
+	BarHealth *tview.TextView
+	BarPower  *tview.TextView
+	FlHealth  *tview.Flex
+	FlPower   *tview.Flex
+	FlTextual *tview.Flex
+	Refresh   func(newHp int, newPwr int)
 }
