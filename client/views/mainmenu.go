@@ -27,15 +27,17 @@ func AddMainmenuPage(c *types.SpelltextClient) {
 		list := tview.NewList()
 		list.
 			SetHighlightFullLine(true).
-			AddItem("- character", "preview your characters", 'a', func() { c.NavigateTo(constants.PAGE_CHARACTER) }).
-			AddItem("- talents", "create a sick build", 't', func() { c.NavigateTo(constants.PAGE_ABILITY) }).
-			AddItem("- inventory", "peek at what's in your bags", 'i', func() { c.NavigateTo(constants.PAGE_INVENTORY) }).
+			AddItem("- character ", "preview your characters", 'a', func() { c.NavigateTo(constants.PAGE_CHARACTER) }).
+			AddItem("- talents ", "create a sick build", 't', func() { c.NavigateTo(constants.PAGE_ABILITY) }).
+			AddItem("- inventory ", "peek at what's in your bags", 'i', func() { c.NavigateTo(constants.PAGE_INVENTORY) }).
 			// AddItem("- progress", "see what you've accomplished", 'p', func() { c.NavigateTo(constants.PAGE_PROGRESS) }).
-			AddItem("- combat", "THE proving grounds", 'c', func() { c.NavigateTo(constants.PAGE_COMBAT) }).
-			AddItem("- store", "buy some mighty goods", 's', func() { c.NavigateTo(constants.PAGE_STORE) }).
-			AddItem("- gamba", "gold gold gold\n\n\n", 'g', func() { c.NavigateTo(constants.PAGE_GAMBA) }).
-			AddItem("- chat", "talk to some peeps", 'y', func() { c.NavigateTo(constants.PAGE_CHAT) }).
-			AddItem("- quit", "done for today?", 'q', func() { c.App.Stop() })
+			AddItem("- combat ", "THE proving grounds", 'c', func() { c.NavigateTo(constants.PAGE_COMBAT) }).
+			AddItem("- store ", "buy some mighty goods", 's', func() { c.NavigateTo(constants.PAGE_STORE) }).
+			AddItem("- gamba ", "gold gold gold\n\n\n", 'g', func() { c.NavigateTo(constants.PAGE_GAMBA) }).
+			AddItem("- chat ", "talk to some peeps", 'y', func() { c.NavigateTo(constants.PAGE_CHAT) }).
+			AddItem("- settings ", "tweak a bit", '.', func() { c.NavigateTo(constants.PAGE_SETTINGS) }).
+			AddItem("- quit ", "done for today?", 'q', func() { c.App.Stop() })
+
 		list.SetBorder(true).SetBorderPadding(1, 1, 5, 5)
 
 		updates := tview.NewBox().SetTitle(" [::b]updates[::-] ").SetBorder(true).SetBorderPadding(1, 1, 5, 5)

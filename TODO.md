@@ -5,7 +5,9 @@
   - ~~table `npc_loot_tables` - use it instead of embedded one-item-per-npc approach (in table `npc_templates`)~~
 - ~~progserver: implement questing system~~ - delayed further down the roadmap
 - ~~health check ping between service dependents~~
-- enemy level xp/damage scaling
-- armory/character: update `QuickInventoryTree` and `EquippedItems` on: **character change**, **item equip**
-- system: loki + grafana for logging - **urgent**
 - ~~final: proper database pre-seed, apply persistence~~
+- enemy level xp/damage scaling
+- armory/character: update `QuickInventoryTree` and `EquippedItems` on: **character change**, **item equip** - hard asf, cba, delay it
+- add minlevel item requirement (e.g. `items`.`level_req` => `... level_req int not null default 1, ...`)
+- system: loki + grafana for logging - **urgent**
+- stress test script (per-service: methods that invoke db, and create stress test endpoints (foo grpc endpoints)) via `grpcurl`

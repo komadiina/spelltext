@@ -16,6 +16,8 @@ const (
 	PAGE_CREATE_CHARACTER = "pg-create-character"
 	PAGE_FIGHT            = "pg-fight"
 	PAGE_ABILITY          = "pg-ability"
+	PAGE_SETTINGS         = "pg-settings"
+	PAGE_ERROR            = "pg-error"
 )
 
 const (

@@ -52,16 +52,17 @@ func AddInventoryPage(c *types.SpelltextClient) {
 					SetSelectedFunc(func(row, column int) {
 						table.SetSelectable(true, false)
 						// open modal [sell, cancel]
+						r, _ := table.GetSelection()
 						modal := tview.NewModal().
 							SetText(
 								fmt.Sprintf("do you want to sell %s?\nyou gain: [%s]%d[::-] gold",
-									utils.GetFullItemName(instance.Item),
+									utils.GetFullItemName(itemInstances[r-1].Item),
 									constants.COLOR_GOLD,
-									instance.Item.ItemTemplate.GoldPrice)).
+									itemInstances[r-1].Item.ItemTemplate.GoldPrice)).
 							AddButtons([]string{"sell", "cancel"}).
 							SetDoneFunc(func(buttonIndex int, buttonLabel string) {
 								if buttonLabel == "sell" {
-									functions.SellItem(c, instance)
+									functions.SellItem(c, itemInstances[r-1])
 									c.App.SetRoot(c.PageManager.Pages, true).EnableMouse(true)
 
 									// force refresh :(

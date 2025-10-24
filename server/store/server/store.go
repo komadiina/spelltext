@@ -156,8 +156,8 @@ func (s *StoreService) ListVendorItems(ctx context.Context, req *pb.StoreListVen
 }
 
 func (s *StoreService) BuyItems(ctx context.Context, req *pb.BuyItemRequest) (*pb.BuyItemResponse, error) {
-	s.Logger.Info(s.DbPool.Config())
 	s.Logger.Debugf("BuyItems(%+v)", req)
+
 	start := time.Now()
 
 	errResp := &pb.BuyItemResponse{Success: false, Message: "error ocurred"}
@@ -177,7 +177,7 @@ func (s *StoreService) BuyItems(ctx context.Context, req *pb.BuyItemRequest) (*p
 			return errResp, err
 		}
 	}
-	rows.Close()
+	defer rows.Close()
 
 	// get item gold prices
 	sql, args, err := sq.
@@ -198,16 +198,19 @@ func (s *StoreService) BuyItems(ctx context.Context, req *pb.BuyItemRequest) (*p
 		s.Logger.Error(err)
 		return nil, err
 	}
+	defer rows.Close()
 
 	var items []*pbRepo.Item
 	for rows.Next() {
 		item := &pbRepo.Item{}
+		it := &pbRepo.ItemTemplate{}
 
-		err := rows.Scan(&item.Id, &item.ItemTemplate.GoldPrice, &item.ItemTemplateId)
+		err := rows.Scan(&item.Id, &it.GoldPrice, &item.ItemTemplateId)
 		if err != nil {
 			s.Logger.Error(err)
 			return errResp, err
 		}
+		item.ItemTemplate = it
 
 		items = append(items, item)
 	}
@@ -218,7 +221,7 @@ func (s *StoreService) BuyItems(ctx context.Context, req *pb.BuyItemRequest) (*p
 	}
 
 	if sum > c.Gold {
-		s.Logger.Infof("character %s overbought attempt, gold_amount=%d, character_gold=%d", c.CharacterName, sum, c.Gold)
+		s.Logger.Debugf("character %s overbought attempt, gold_amount=%d, character_gold=%d", c.CharacterName, sum, c.Gold)
 		return &pb.BuyItemResponse{Success: false, Message: "not enough gold"}, fmt.Errorf("overbuy attempt")
 	}
 
@@ -267,7 +270,7 @@ func (s *StoreService) BuyItems(ctx context.Context, req *pb.BuyItemRequest) (*p
 		return errResp, err
 	}
 
-	s.Logger.Infof("finished, start=%v, t=%v", start.Format(time.RFC3339), time.Since(start))
+	s.Logger.Debugf("finished, start=%v, t=%v", start.Format(time.RFC3339), time.Since(start))
 
 	return &pb.BuyItemResponse{Success: true, Message: "items bought & added to inventory"}, nil
 }

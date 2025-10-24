@@ -1795,7 +1795,6 @@ type NpcTemplate struct {
 	HealthPoints  uint64                 `protobuf:"varint,6,opt,name=health_points,json=healthPoints,proto3" json:"health_points,omitempty"`
 	BaseDamage    uint64                 `protobuf:"varint,7,opt,name=base_damage,json=baseDamage,proto3" json:"base_damage,omitempty"`
 	BaseXpReward  uint64                 `protobuf:"varint,8,opt,name=base_xp_reward,json=baseXpReward,proto3" json:"base_xp_reward,omitempty"`
-	DropItemId    uint64                 `protobuf:"varint,9,opt,name=drop_item_id,json=dropItemId,proto3" json:"drop_item_id,omitempty"`
 	GoldReward    uint64                 `protobuf:"varint,10,opt,name=gold_reward,json=goldReward,proto3" json:"gold_reward,omitempty"`
 	DropItem      *Item                  `protobuf:"bytes,20,opt,name=drop_item,json=dropItem,proto3" json:"drop_item,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -1884,13 +1883,6 @@ func (x *NpcTemplate) GetBaseDamage() uint64 {
 func (x *NpcTemplate) GetBaseXpReward() uint64 {
 	if x != nil {
 		return x.BaseXpReward
-	}
-	return 0
-}
-
-func (x *NpcTemplate) GetDropItemId() uint64 {
-	if x != nil {
-		return x.DropItemId
 	}
 	return 0
 }
@@ -2689,7 +2681,7 @@ const file_repo_repo_proto_rawDesc = "" +
 	"\x15PlayerCompletedQuests\x12!\n" +
 	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\x12\x19\n" +
 	"\bquest_id\x18\x02 \x01(\x04R\aquestId\x12!\n" +
-	"\x05quest\x18\x14 \x01(\v2\v.repo.QuestR\x05quest\"\xe5\x02\n" +
+	"\x05quest\x18\x14 \x01(\v2\v.repo.QuestR\x05quest\"\xc3\x02\n" +
 	"\vNpcTemplate\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
@@ -2699,9 +2691,7 @@ const file_repo_repo_proto_rawDesc = "" +
 	"\rhealth_points\x18\x06 \x01(\x04R\fhealthPoints\x12\x1f\n" +
 	"\vbase_damage\x18\a \x01(\x04R\n" +
 	"baseDamage\x12$\n" +
-	"\x0ebase_xp_reward\x18\b \x01(\x04R\fbaseXpReward\x12 \n" +
-	"\fdrop_item_id\x18\t \x01(\x04R\n" +
-	"dropItemId\x12\x1f\n" +
+	"\x0ebase_xp_reward\x18\b \x01(\x04R\fbaseXpReward\x12\x1f\n" +
 	"\vgold_reward\x18\n" +
 	" \x01(\x04R\n" +
 	"goldReward\x12'\n" +

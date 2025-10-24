@@ -2,6 +2,8 @@ package views
 
 import (
 	"fmt"
+	"math/rand"
+	"time"
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/komadiina/spelltext/client/constants"
@@ -16,6 +18,8 @@ import (
 
 func AddFightPage(c *types.SpelltextClient) {
 	c.PageManager.RegisterFactory(constants.PAGE_FIGHT, func() tview.Primitive {
+		rand.Seed(time.Now().UnixNano()) // deprecated but good enough
+
 		var turnStarted bool = false
 		var finished bool = false
 
@@ -100,8 +104,9 @@ func AddFightPage(c *types.SpelltextClient) {
 		plAbList.SetBorder(true).SetBorderPadding(1, 1, 5, 5)
 
 		for _, ab := range playerAbilities {
-			plAbList.AddItem("> "+ab.GetName(), "", 0, func() {
+			plAbList.AddItem("> "+ab.GetName()+" ", "", 0, func() { // " " for a bit more visual clarity
 				if turnStarted == false && finished == false {
+					// todo: refactor all this to `functions` package
 					if ab.PowerCost > uint64(c.Storage.Ministate.FightState.PlayerCurrentPower) {
 						c.Logger.Warnf("unable to cast spell: not enough power. (cost=%d, have=%d)", ab.PowerCost, c.Storage.Ministate.FightState.PlayerCurrentPower)
 						return

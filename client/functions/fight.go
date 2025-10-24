@@ -131,9 +131,22 @@ func CombatLogTurn(cb *tview.TextView, initiator string, spellName string, destE
 	cb.ScrollToEnd()
 }
 
+func GetSpellDetailsShort(ability *pbRepo.Ability) string {
+	return fmt.Sprintf(
+		`[%s][::b]%s[::-][""][white][""]%s%s%s%sbase damage: [%s]%d[""][white][""]%spower cost: [%s]%d[""][white][""]`,
+		constants.TEXT_COLOR_GOLD,
+		ability.Name, "\n",
+		ability.Description, "\n", "\n",
+		constants.TEXT_COLOR_DAMAGE, ability.BaseDamage, "\n",
+		constants.TEXT_COLOR_POWER, ability.PowerCost,
+	)
+}
+
 func PlayerAttack(c *types.SpelltextClient, ab *pbRepo.Ability, fightState *types.CbFightState) uint64 {
 	char := c.Storage.CharacterStats
 	level := c.Storage.SelectedCharacter.Level
+
+	variation := 0.06
 
 	dmg := ab.BaseDamage
 
@@ -142,6 +155,11 @@ func PlayerAttack(c *types.SpelltextClient, ab *pbRepo.Ability, fightState *type
 
 	strCoeff := uint64(ab.StrengthMultiplier)*uint64(char.Strength) + uint64(ab.StMultPerlevel)*uint64(level)
 	dmg += strCoeff
+
+	lower, upper := float64(dmg)-(float64(dmg)*variation), float64(dmg)+(float64(dmg)*variation)
+	dmg = uint64(rand.Intn(int(upper)-int(lower)+1) + int(lower))
+
+	c.Logger.Info("", "lower", lower, "upper", upper, "dmg", dmg)
 
 	if fightState.NpcCurrentHealth <= int64(dmg) {
 		fightState.NpcCurrentHealth = 0
@@ -169,6 +187,7 @@ func CalculateNpcDamage(npc *pbRepo.Npc) uint64 {
 
 func NpcAttack(c *types.SpelltextClient, npc *pbRepo.Npc) uint64 {
 	dmg := CalculateNpcDamage(npc)
+
 	if uint64(c.Storage.Ministate.FightState.PlayerCurrentHealth) < dmg { // overflow waiting to happen :))
 		c.Storage.Ministate.FightState.PlayerCurrentHealth = 0
 	} else {
@@ -181,9 +200,12 @@ func NpcAttack(c *types.SpelltextClient, npc *pbRepo.Npc) uint64 {
 func CalculateNpcStats(npc *pbRepo.Npc) *types.EntityStats {
 	return &types.EntityStats{
 		HealthPoints: int64(float32(npc.NpcTemplate.HealthPoints) * float32(npc.HealthMultiplier)),
+		Damage:       int64(float32(npc.NpcTemplate.BaseDamage) * float32(npc.DamageMultiplier)),
 	}
 }
 
-func SubmitLoss(c *types.SpelltextClient) {}
+func SubmitLoss(c *types.SpelltextClient) {
+	
+}
 
 func SubmitWin(c *types.SpelltextClient) {}

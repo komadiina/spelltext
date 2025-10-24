@@ -47,17 +47,6 @@ func GetSpellDetails(ability *pbRepo.Ability) string {
 	)
 }
 
-func GetSpellDetailsShort(ability *pbRepo.Ability) string {
-	return fmt.Sprintf(
-		`[%s][::b]%s[::-][""][white][""]%s%s%s%sbase damage: [%s]%d[""][white][""]%spower cost: [%s]%d[""][white][""]`,
-		constants.TEXT_COLOR_GOLD,
-		ability.Name, "\n",
-		ability.Description, "\n", "\n",
-		constants.TEXT_COLOR_DAMAGE, ability.BaseDamage, "\n",
-		constants.TEXT_COLOR_POWER, ability.PowerCost,
-	)
-}
-
 func GetSpellDetailsHelp() string {
 	return fmt.Sprintf(
 		`coefficients: how much [%s]strength[""][white][""] and [%s]spellpower[""][white][""] affect the output damage of the spell.

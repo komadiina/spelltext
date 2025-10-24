@@ -74,28 +74,14 @@ func (s *CharacterService) ListHeroes(ctx context.Context, req *pb.ListHeroesReq
 }
 
 func (s *CharacterService) ListCharacters(ctx context.Context, req *pb.ListCharactersRequest) (*pb.ListCharactersResponse, error) {
-	cte, _, err := sq.Select("u.id AS id, u.username AS username").
-		From("users AS u").
-		Where("u.username LIKE $1").
-		ToSql()
+	sql, _, err := sq.
+		Select("c.*, h.*").
+		From("users as u").
+		InnerJoin("characters as c on c.user_id = u.id").
+		InnerJoin("heroes as h on h.id = c.hero_id").
+		Where("u.username LIKE $1").ToSql()
 
-	if err != nil {
-		s.Logger.Error("failed to build cte", "err", err)
-		return nil, nil
-	}
-
-	query, _, err := sq.Select("c.*, h.*").
-		From("characters AS c").
-		InnerJoin("u_filt ON u_filt.username LIKE $2").
-		InnerJoin("heroes AS h ON h.id = c.character_id").ToSql()
-
-	if err != nil {
-		s.Logger.Error("failed to build query", "err", err)
-		return nil, nil
-	}
-
-	sql := fmt.Sprintf("WITH u_filt AS (%s) %s", cte, query)
-	rows, err := s.DbPool.Query(ctx, sql, req.GetUsername(), req.GetUsername())
+	rows, err := s.DbPool.Query(ctx, sql, req.GetUsername())
 	if err != nil {
 		return nil, err
 	}

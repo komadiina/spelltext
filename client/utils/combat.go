@@ -28,8 +28,8 @@ level: [white]%d[""]
 }
 
 func GetDisplayStatsPlayer(c *types.SpelltextClient) *[]uint64 {
-	
 	arr := make([]uint64, 0)
+	c.Logger.Debug(c.Storage.CharacterStats)
 	arr = append(arr, uint64(c.Storage.CharacterStats.HealthPoints))
 	arr = append(arr, uint64(c.Storage.CharacterStats.PowerPoints))
 	return &arr
