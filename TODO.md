@@ -2,9 +2,10 @@
 - ~~charserver: add equipment introspective~~
   - ~~fix character update on DeleteCharacter invocation~~
 - combatserver: **implement 1v1 turn-based player-npc combat**
-  - table `npc_loot_tables` - use it instead of embedded one-item-per-npc approach (in table `npc_templates`)
+  - ~~table `npc_loot_tables` - use it instead of embedded one-item-per-npc approach (in table `npc_templates`)~~
 - ~~progserver: implement questing system~~ - delayed further down the roadmap
-- health check ping between service dependents
+- ~~health check ping between service dependents~~
 - enemy level xp/damage scaling
+- armory/character: update `QuickInventoryTree` and `EquippedItems` on: **character change**, **item equip**
 - system: loki + grafana for logging - **urgent**
 - ~~final: proper database pre-seed, apply persistence~~

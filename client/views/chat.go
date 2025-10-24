@@ -41,8 +41,8 @@ func AddChatPage(c *types.SpelltextClient) {
 	c.PageManager.RegisterFactory(constants.PAGE_CHAT, func() tview.Primitive {
 		chat := tview.NewTextView().
 			SetTextAlign(tview.AlignLeft).
+			SetDynamicColors(true).
 			ScrollToEnd()
-		chat.SetDynamicColors(true)
 
 		js, err := c.Nats.JetStream()
 		if err != nil {

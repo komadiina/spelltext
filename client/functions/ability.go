@@ -9,15 +9,15 @@ import (
 	pbRepo "github.com/komadiina/spelltext/proto/repo"
 )
 
-func GetAbilities(c *types.SpelltextClient) (*pbBuild.ListAbilitiesResponse, error) {
+func GetAbilities(c *types.SpelltextClient) *pbBuild.ListAbilitiesResponse {
 	req := &pbBuild.ListAbilitiesRequest{Character: c.Storage.SelectedCharacter}
 	abilities, err := c.Clients.BuildClient.ListAbilities(*c.Context, req)
 	if err != nil {
 		c.Logger.Error(err)
-		return nil, err
+		return nil
 	}
 
-	return abilities, nil
+	return abilities
 }
 
 // func GetPlayerAbilities(c *types.SpelltextClient) []*pbRepo.PlayerAbilityTree {
@@ -44,6 +44,17 @@ func GetSpellDetails(ability *pbRepo.Ability) string {
 		constants.TEXT_COLOR_SPELLPOWER, ability.SpellpowerMultiplier*100.0, ability.SpMultPerlevel*100.0, "\n",
 		ability.TalentPointCost,
 		"\n++++++++++++++++++++++++++++++",
+	)
+}
+
+func GetSpellDetailsShort(ability *pbRepo.Ability) string {
+	return fmt.Sprintf(
+		`[%s][::b]%s[::-][""][white][""]%s%s%s%sbase damage: [%s]%d[""][white][""]%spower cost: [%s]%d[""][white][""]`,
+		constants.TEXT_COLOR_GOLD,
+		ability.Name, "\n",
+		ability.Description, "\n", "\n",
+		constants.TEXT_COLOR_DAMAGE, ability.BaseDamage, "\n",
+		constants.TEXT_COLOR_POWER, ability.PowerCost,
 	)
 }
 

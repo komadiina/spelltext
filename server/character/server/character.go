@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
@@ -343,10 +344,12 @@ func (s *CharacterService) GetCharacter(ctx context.Context, req *pb.GetCharacte
 }
 
 func (s *CharacterService) CreateCharacter(ctx context.Context, req *pb.CreateCharacterRequest) (*pb.CreateCharacterResponse, error) {
+	capitalizedName := fmt.Sprint(strings.ToUpper(req.Name[:1]), req.Name[1:])
+
 	sql, args, err := sq.
 		Insert("characters").
 		Columns("user_id", "character_name", "hero_id", "level", "exp", "gold", "tokens", "points_health", "points_power", "points_strength", "points_spellpower").
-		Values(req.GetUserId(), req.GetName(), req.GetHero().GetId(), 1, 1, 50, 0, 0, 0, 0, 0).
+		Values(req.GetUserId(), capitalizedName, req.GetHero().GetId(), 1, 1, 50, 0, 0, 0, 0, 0).
 		Suffix("RETURNING character_id").
 		PlaceholderFormat(sq.Dollar).
 		ToSql()

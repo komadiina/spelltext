@@ -123,8 +123,8 @@ func ToggleEquip(item *pbRepo.ItemInstance, c *types.SpelltextClient, char *pbRe
 	return nil
 }
 
-func sumStats(inst *pbRepo.ItemInstance, cstats *types.CharacterStats) *types.CharacterStats {
-	return &types.CharacterStats{
+func sumStats(inst *pbRepo.ItemInstance, cstats *types.EntityStats) *types.EntityStats {
+	return &types.EntityStats{
 		HealthPoints: cstats.HealthPoints + inst.Item.Health,
 		PowerPoints:  cstats.PowerPoints + inst.Item.Power,
 		Strength:     cstats.Strength + inst.Item.Strength,
@@ -134,8 +134,8 @@ func sumStats(inst *pbRepo.ItemInstance, cstats *types.CharacterStats) *types.Ch
 	}
 }
 
-func CalculateStats(equipped []*pbRepo.ItemInstance, c *types.SpelltextClient) *types.CharacterStats {
-	cstats := &types.CharacterStats{
+func CalculateStats(equipped []*pbRepo.ItemInstance, c *types.SpelltextClient) *types.EntityStats {
+	cstats := &types.EntityStats{
 		HealthPoints: c.Storage.SelectedCharacter.Hero.BaseHealth +
 			int64(c.Storage.SelectedCharacter.Hero.HealthPerLevel)*int64(c.Storage.SelectedCharacter.Level),
 

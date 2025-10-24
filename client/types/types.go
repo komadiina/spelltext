@@ -40,7 +40,7 @@ type SpelltextClient struct {
 type Ministate struct {
 	Username   string
 	CurrentNpc *pbRepo.Npc
-	FightState *NpcFightState
+	FightState *CbFightState
 }
 
 type AppStorage struct {
@@ -49,7 +49,8 @@ type AppStorage struct {
 	SelectedCharacter *pbRepo.Character
 	SelectedVendor    *pbRepo.Vendor
 	EquipSlots        []*pbRepo.EquipSlot
-	CharacterStats    *CharacterStats
+	CharacterStats    *EntityStats
+	SpellProcs        map[uint64]*SpellProc
 }
 
 type Clients struct {
@@ -79,7 +80,7 @@ type UnusableHotkey struct {
 	Desc string
 }
 
-type CharacterStats struct {
+type EntityStats struct {
 	HealthPoints int64
 	PowerPoints  int64
 	Strength     int64
@@ -89,12 +90,19 @@ type CharacterStats struct {
 }
 
 type EntityStatusFrame struct {
-	Health    uint64
-	Power     uint64
-	BarHealth *tview.TextView
-	BarPower  *tview.TextView
-	FlHealth  *tview.Flex
-	FlPower   *tview.Flex
-	FlTextual *tview.Flex
-	Refresh   func(newHp int, newPwr int)
+	Health      uint64
+	Power       uint64
+	BarHealth   *tview.TextView
+	BarPower    *tview.TextView
+	InfoTextual *tview.TextView
+	FlHealth    *tview.Flex
+	FlPower     *tview.Flex
+	FlTextual   *tview.Flex
 }
+
+type SpellProc struct {
+	Ability     *pbRepo.Ability
+	OnActivated func(*SpelltextClient)
+}
+
+type SpellProcMap map[uint64]*SpellProc
