@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
@@ -73,28 +74,14 @@ func (s *CharacterService) ListHeroes(ctx context.Context, req *pb.ListHeroesReq
 }
 
 func (s *CharacterService) ListCharacters(ctx context.Context, req *pb.ListCharactersRequest) (*pb.ListCharactersResponse, error) {
-	cte, _, err := sq.Select("u.id AS id, u.username AS username").
-		From("users AS u").
-		Where("u.username LIKE $1").
-		ToSql()
+	sql, _, err := sq.
+		Select("c.*, h.*").
+		From("users as u").
+		InnerJoin("characters as c on c.user_id = u.id").
+		InnerJoin("heroes as h on h.id = c.hero_id").
+		Where("u.username LIKE $1").ToSql()
 
-	if err != nil {
-		s.Logger.Error("failed to build cte", "err", err)
-		return nil, nil
-	}
-
-	query, _, err := sq.Select("c.*, h.*").
-		From("characters AS c").
-		InnerJoin("u_filt ON u_filt.username LIKE $2").
-		InnerJoin("heroes AS h ON h.id = c.character_id").ToSql()
-
-	if err != nil {
-		s.Logger.Error("failed to build query", "err", err)
-		return nil, nil
-	}
-
-	sql := fmt.Sprintf("WITH u_filt AS (%s) %s", cte, query)
-	rows, err := s.DbPool.Query(ctx, sql, req.GetUsername(), req.GetUsername())
+	rows, err := s.DbPool.Query(ctx, sql, req.GetUsername())
 	if err != nil {
 		return nil, err
 	}
@@ -343,10 +330,12 @@ func (s *CharacterService) GetCharacter(ctx context.Context, req *pb.GetCharacte
 }
 
 func (s *CharacterService) CreateCharacter(ctx context.Context, req *pb.CreateCharacterRequest) (*pb.CreateCharacterResponse, error) {
+	capitalizedName := fmt.Sprint(strings.ToUpper(req.Name[:1]), req.Name[1:])
+
 	sql, args, err := sq.
 		Insert("characters").
 		Columns("user_id", "character_name", "hero_id", "level", "exp", "gold", "tokens", "points_health", "points_power", "points_strength", "points_spellpower").
-		Values(req.GetUserId(), req.GetName(), req.GetHero().GetId(), 1, 1, 50, 0, 0, 0, 0, 0).
+		Values(req.GetUserId(), capitalizedName, req.GetHero().GetId(), 1, 1, 50, 0, 0, 0, 0, 0).
 		Suffix("RETURNING character_id").
 		PlaceholderFormat(sq.Dollar).
 		ToSql()

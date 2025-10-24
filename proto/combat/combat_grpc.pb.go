@@ -20,10 +20,10 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Combat_Check_FullMethodName          = "/combat.Combat/Check"
-	Combat_ListNpcs_FullMethodName       = "/combat.Combat/ListNpcs"
-	Combat_InitiateCombat_FullMethodName = "/combat.Combat/InitiateCombat"
-	Combat_ResolveCombat_FullMethodName  = "/combat.Combat/ResolveCombat"
+	Combat_Check_FullMethodName      = "/combat.Combat/Check"
+	Combat_ListNpcs_FullMethodName   = "/combat.Combat/ListNpcs"
+	Combat_SubmitLoss_FullMethodName = "/combat.Combat/SubmitLoss"
+	Combat_SubmitWin_FullMethodName  = "/combat.Combat/SubmitWin"
 )
 
 // CombatClient is the client API for Combat service.
@@ -32,8 +32,8 @@ const (
 type CombatClient interface {
 	Check(ctx context.Context, in *health.HealthCheckRequest, opts ...grpc.CallOption) (*health.HealthCheckResponse, error)
 	ListNpcs(ctx context.Context, in *ListNpcsRequest, opts ...grpc.CallOption) (*ListNpcsResponse, error)
-	InitiateCombat(ctx context.Context, in *InitiateCombatRequest, opts ...grpc.CallOption) (*InitiateCombatResponse, error)
-	ResolveCombat(ctx context.Context, in *ResolveCombatRequest, opts ...grpc.CallOption) (*ResolveCombatResponse, error)
+	SubmitLoss(ctx context.Context, in *SubmitLossRequest, opts ...grpc.CallOption) (*SubmitLossResponse, error)
+	SubmitWin(ctx context.Context, in *SubmitWinRequest, opts ...grpc.CallOption) (*SubmitWinResponse, error)
 }
 
 type combatClient struct {
@@ -64,20 +64,20 @@ func (c *combatClient) ListNpcs(ctx context.Context, in *ListNpcsRequest, opts .
 	return out, nil
 }
 
-func (c *combatClient) InitiateCombat(ctx context.Context, in *InitiateCombatRequest, opts ...grpc.CallOption) (*InitiateCombatResponse, error) {
+func (c *combatClient) SubmitLoss(ctx context.Context, in *SubmitLossRequest, opts ...grpc.CallOption) (*SubmitLossResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(InitiateCombatResponse)
-	err := c.cc.Invoke(ctx, Combat_InitiateCombat_FullMethodName, in, out, cOpts...)
+	out := new(SubmitLossResponse)
+	err := c.cc.Invoke(ctx, Combat_SubmitLoss_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *combatClient) ResolveCombat(ctx context.Context, in *ResolveCombatRequest, opts ...grpc.CallOption) (*ResolveCombatResponse, error) {
+func (c *combatClient) SubmitWin(ctx context.Context, in *SubmitWinRequest, opts ...grpc.CallOption) (*SubmitWinResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ResolveCombatResponse)
-	err := c.cc.Invoke(ctx, Combat_ResolveCombat_FullMethodName, in, out, cOpts...)
+	out := new(SubmitWinResponse)
+	err := c.cc.Invoke(ctx, Combat_SubmitWin_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -90,8 +90,8 @@ func (c *combatClient) ResolveCombat(ctx context.Context, in *ResolveCombatReque
 type CombatServer interface {
 	Check(context.Context, *health.HealthCheckRequest) (*health.HealthCheckResponse, error)
 	ListNpcs(context.Context, *ListNpcsRequest) (*ListNpcsResponse, error)
-	InitiateCombat(context.Context, *InitiateCombatRequest) (*InitiateCombatResponse, error)
-	ResolveCombat(context.Context, *ResolveCombatRequest) (*ResolveCombatResponse, error)
+	SubmitLoss(context.Context, *SubmitLossRequest) (*SubmitLossResponse, error)
+	SubmitWin(context.Context, *SubmitWinRequest) (*SubmitWinResponse, error)
 	mustEmbedUnimplementedCombatServer()
 }
 
@@ -108,11 +108,11 @@ func (UnimplementedCombatServer) Check(context.Context, *health.HealthCheckReque
 func (UnimplementedCombatServer) ListNpcs(context.Context, *ListNpcsRequest) (*ListNpcsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListNpcs not implemented")
 }
-func (UnimplementedCombatServer) InitiateCombat(context.Context, *InitiateCombatRequest) (*InitiateCombatResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method InitiateCombat not implemented")
+func (UnimplementedCombatServer) SubmitLoss(context.Context, *SubmitLossRequest) (*SubmitLossResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitLoss not implemented")
 }
-func (UnimplementedCombatServer) ResolveCombat(context.Context, *ResolveCombatRequest) (*ResolveCombatResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ResolveCombat not implemented")
+func (UnimplementedCombatServer) SubmitWin(context.Context, *SubmitWinRequest) (*SubmitWinResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitWin not implemented")
 }
 func (UnimplementedCombatServer) mustEmbedUnimplementedCombatServer() {}
 func (UnimplementedCombatServer) testEmbeddedByValue()                {}
@@ -171,38 +171,38 @@ func _Combat_ListNpcs_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Combat_InitiateCombat_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(InitiateCombatRequest)
+func _Combat_SubmitLoss_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SubmitLossRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CombatServer).InitiateCombat(ctx, in)
+		return srv.(CombatServer).SubmitLoss(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Combat_InitiateCombat_FullMethodName,
+		FullMethod: Combat_SubmitLoss_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CombatServer).InitiateCombat(ctx, req.(*InitiateCombatRequest))
+		return srv.(CombatServer).SubmitLoss(ctx, req.(*SubmitLossRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Combat_ResolveCombat_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ResolveCombatRequest)
+func _Combat_SubmitWin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SubmitWinRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CombatServer).ResolveCombat(ctx, in)
+		return srv.(CombatServer).SubmitWin(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Combat_ResolveCombat_FullMethodName,
+		FullMethod: Combat_SubmitWin_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CombatServer).ResolveCombat(ctx, req.(*ResolveCombatRequest))
+		return srv.(CombatServer).SubmitWin(ctx, req.(*SubmitWinRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -223,12 +223,12 @@ var Combat_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Combat_ListNpcs_Handler,
 		},
 		{
-			MethodName: "InitiateCombat",
-			Handler:    _Combat_InitiateCombat_Handler,
+			MethodName: "SubmitLoss",
+			Handler:    _Combat_SubmitLoss_Handler,
 		},
 		{
-			MethodName: "ResolveCombat",
-			Handler:    _Combat_ResolveCombat_Handler,
+			MethodName: "SubmitWin",
+			Handler:    _Combat_SubmitWin_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

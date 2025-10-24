@@ -77,7 +77,7 @@ func AddGambaPage(c *types.SpelltextClient) {
 							availableGold = utils.UpdateGold(availableGold, "available gold: %dg", -int64(resp.Chests[row-1].GoldPrice), c)
 							reward.SetText(
 								fmt.Sprintf(
-									`you won: [yellow]%s[""]! was it worth it?`,
+									`you won: [yellow]%s[""][white][""]! was it worth it?`,
 									utils.GetFullItemName(res.GetItem()),
 								))
 						}

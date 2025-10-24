@@ -41,6 +41,7 @@ func AddCreateCharacterPage(c *types.SpelltextClient) {
 				generics.Map(heroes, func(h *pbRepo.Hero) string { return h.Name }),
 				0,
 				func(option string, optionIndex int) {
+					c.Logger.Debugf("%d %+v", optionIndex, heroes[optionIndex])
 					newCharacter.Hero = heroes[optionIndex]
 					heroDetails.SetText(newCharacter.Hero.Name)
 				}).

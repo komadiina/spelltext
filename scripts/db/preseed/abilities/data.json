@@ -10,7 +10,7 @@
             "base_damage": 10,
             "strength_multiplier": 0.0,
             "spellpower_multiplier": 0.0,
-            "st_mult_pl": 0.0,
+            "str_mult_pl": 0.0,
             "sp_mult_pl": 0.0
         },
         {
@@ -23,12 +23,12 @@
             "base_damage": 100,
             "strength_multiplier": 0.0,
             "spellpower_multiplier": 1.0,
-            "st_mult_pl": 0.0,
+            "str_mult_pl": 0.0,
             "sp_mult_pl": 0.0
         },
         {
             "id": 3,
-            "name": "TEST_SP_BONUS",
+            "name": "TEST_STR_BONUS",
             "description": "Ability 3 description",
             "type": "passive",
             "talent_point_cost": 1,
@@ -36,13 +36,105 @@
             "base_damage": 0,
             "strength_multiplier": 1.0,
             "spellpower_multiplier": 0.0,
-            "st_mult_pl": 0.0,
+            "str_mult_pl": 0.0,
             "sp_mult_pl": 0.0
         },
+
         {
             "id": 4,
             "name": "Fireball",
-            "description": "blast your enemies for "
+            "description": "blast your enemies for 10 damage + 35% spellpower (10% spellpower bonus per level)",
+            "type": "offensive",
+            "talent_point_cost": 1,
+            "power_cost": 0,
+            "base_damage": 10,
+            "strength_multiplier": 0.0,
+            "spellpower_multiplier": 0.35,
+            "str_mult_pl": 0.0,
+            "sp_mult_pl": 0.1
+        },
+        {
+            "id": 5,
+            "name": "Frostbolt",
+            "description": "freeze your enemies for 10 damage + 35% spellpower (10% spellpower bonus per level)",
+            "type": "offensive",
+            "talent_point_cost": 1,
+            "power_cost": 0,
+            "base_damage": 10,
+            "strength_multiplier": 0.0,
+            "spellpower_multiplier": 0.35,
+            "str_mult_pl": 0.0,
+            "sp_mult_pl": 0.1
+        },
+        {
+            "name": "Celestial Flare",
+            "type": "offensive"
+        },
+        {
+            "name": "Lightning Strike"
+        },
+        {
+            "name": "Arcane Bolt"
+        },
+        {
+            "name": "Shadow Strike"
+        },
+
+        {
+            "name": "Rend"
+        },
+        {
+            "name": "Iron Fist"
+        },
+        {
+            "name": "Headbutt"
+        },
+        {
+            "name": "Pierce"
+        },
+        {
+            "name": "Colossal Smash"
+        },
+        {
+            "name": "Titan's Fury"
+        },
+
+        {
+            "name": "Holy Smite"
+        },
+        {
+            "name": "Godbolt"
+        },
+        {
+            "name": "Radiant Vow"
+        },
+        {
+            "name": "Seraph's Wrath"
+        },
+        {
+            "name": "Purging Flame"
+        },
+        {
+            "name": "Hammer of Justice"
+        },
+
+        {
+            "name": "Blade Flurry"
+        },
+        {
+            "name": "Shadowfang's Bite"
+        },
+        {
+            "name": "Venomstrike"
+        },
+        {
+            "name": "Poisonsting"
+        },
+        {
+            "name": "Umbral Glaive"
+        },
+        {
+            "name": "Crimson Mirage"
         }
     ]
 }

@@ -23,230 +23,6 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type InitiateCombatRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	CharacterId   uint64                 `protobuf:"varint,1,opt,name=character_id,json=characterId,proto3" json:"character_id,omitempty"`
-	NpcIds        []uint64               `protobuf:"varint,2,rep,packed,name=npc_ids,json=npcIds,proto3" json:"npc_ids,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *InitiateCombatRequest) Reset() {
-	*x = InitiateCombatRequest{}
-	mi := &file_combat_combat_proto_msgTypes[0]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *InitiateCombatRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*InitiateCombatRequest) ProtoMessage() {}
-
-func (x *InitiateCombatRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_combat_combat_proto_msgTypes[0]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use InitiateCombatRequest.ProtoReflect.Descriptor instead.
-func (*InitiateCombatRequest) Descriptor() ([]byte, []int) {
-	return file_combat_combat_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *InitiateCombatRequest) GetCharacterId() uint64 {
-	if x != nil {
-		return x.CharacterId
-	}
-	return 0
-}
-
-func (x *InitiateCombatRequest) GetNpcIds() []uint64 {
-	if x != nil {
-		return x.NpcIds
-	}
-	return nil
-}
-
-type InitiateCombatResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Npcs          []*repo.Npc            `protobuf:"bytes,1,rep,name=npcs,proto3" json:"npcs,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *InitiateCombatResponse) Reset() {
-	*x = InitiateCombatResponse{}
-	mi := &file_combat_combat_proto_msgTypes[1]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *InitiateCombatResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*InitiateCombatResponse) ProtoMessage() {}
-
-func (x *InitiateCombatResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_combat_combat_proto_msgTypes[1]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use InitiateCombatResponse.ProtoReflect.Descriptor instead.
-func (*InitiateCombatResponse) Descriptor() ([]byte, []int) {
-	return file_combat_combat_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *InitiateCombatResponse) GetNpcs() []*repo.Npc {
-	if x != nil {
-		return x.Npcs
-	}
-	return nil
-}
-
-type ResolveCombatRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	CharacterId   uint64                 `protobuf:"varint,1,opt,name=character_id,json=characterId,proto3" json:"character_id,omitempty"`
-	NpcIds        []uint64               `protobuf:"varint,2,rep,packed,name=npc_ids,json=npcIds,proto3" json:"npc_ids,omitempty"`
-	Wins          []bool                 `protobuf:"varint,3,rep,packed,name=wins,proto3" json:"wins,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ResolveCombatRequest) Reset() {
-	*x = ResolveCombatRequest{}
-	mi := &file_combat_combat_proto_msgTypes[2]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ResolveCombatRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ResolveCombatRequest) ProtoMessage() {}
-
-func (x *ResolveCombatRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_combat_combat_proto_msgTypes[2]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ResolveCombatRequest.ProtoReflect.Descriptor instead.
-func (*ResolveCombatRequest) Descriptor() ([]byte, []int) {
-	return file_combat_combat_proto_rawDescGZIP(), []int{2}
-}
-
-func (x *ResolveCombatRequest) GetCharacterId() uint64 {
-	if x != nil {
-		return x.CharacterId
-	}
-	return 0
-}
-
-func (x *ResolveCombatRequest) GetNpcIds() []uint64 {
-	if x != nil {
-		return x.NpcIds
-	}
-	return nil
-}
-
-func (x *ResolveCombatRequest) GetWins() []bool {
-	if x != nil {
-		return x.Wins
-	}
-	return nil
-}
-
-type ResolveCombatResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	XpGained      uint64                 `protobuf:"varint,1,opt,name=xp_gained,json=xpGained,proto3" json:"xp_gained,omitempty"`
-	GoldGained    uint64                 `protobuf:"varint,2,opt,name=gold_gained,json=goldGained,proto3" json:"gold_gained,omitempty"`
-	TokensGained  uint64                 `protobuf:"varint,3,opt,name=tokens_gained,json=tokensGained,proto3" json:"tokens_gained,omitempty"`
-	ItemsGained   []*repo.Item           `protobuf:"bytes,4,rep,name=items_gained,json=itemsGained,proto3" json:"items_gained,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ResolveCombatResponse) Reset() {
-	*x = ResolveCombatResponse{}
-	mi := &file_combat_combat_proto_msgTypes[3]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ResolveCombatResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ResolveCombatResponse) ProtoMessage() {}
-
-func (x *ResolveCombatResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_combat_combat_proto_msgTypes[3]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ResolveCombatResponse.ProtoReflect.Descriptor instead.
-func (*ResolveCombatResponse) Descriptor() ([]byte, []int) {
-	return file_combat_combat_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *ResolveCombatResponse) GetXpGained() uint64 {
-	if x != nil {
-		return x.XpGained
-	}
-	return 0
-}
-
-func (x *ResolveCombatResponse) GetGoldGained() uint64 {
-	if x != nil {
-		return x.GoldGained
-	}
-	return 0
-}
-
-func (x *ResolveCombatResponse) GetTokensGained() uint64 {
-	if x != nil {
-		return x.TokensGained
-	}
-	return 0
-}
-
-func (x *ResolveCombatResponse) GetItemsGained() []*repo.Item {
-	if x != nil {
-		return x.ItemsGained
-	}
-	return nil
-}
-
 type ListNpcsRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// lists npc's whose min_level < character.level < max_level
@@ -257,7 +33,7 @@ type ListNpcsRequest struct {
 
 func (x *ListNpcsRequest) Reset() {
 	*x = ListNpcsRequest{}
-	mi := &file_combat_combat_proto_msgTypes[4]
+	mi := &file_combat_combat_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -269,7 +45,7 @@ func (x *ListNpcsRequest) String() string {
 func (*ListNpcsRequest) ProtoMessage() {}
 
 func (x *ListNpcsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_combat_combat_proto_msgTypes[4]
+	mi := &file_combat_combat_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -282,7 +58,7 @@ func (x *ListNpcsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListNpcsRequest.ProtoReflect.Descriptor instead.
 func (*ListNpcsRequest) Descriptor() ([]byte, []int) {
-	return file_combat_combat_proto_rawDescGZIP(), []int{4}
+	return file_combat_combat_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *ListNpcsRequest) GetCharacterId() uint64 {
@@ -292,16 +68,68 @@ func (x *ListNpcsRequest) GetCharacterId() uint64 {
 	return 0
 }
 
+type NpcListItem struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Npc           *repo.Npc              `protobuf:"bytes,1,opt,name=npc,proto3" json:"npc,omitempty"`
+	Drops         []*repo.Item           `protobuf:"bytes,2,rep,name=drops,proto3" json:"drops,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *NpcListItem) Reset() {
+	*x = NpcListItem{}
+	mi := &file_combat_combat_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *NpcListItem) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*NpcListItem) ProtoMessage() {}
+
+func (x *NpcListItem) ProtoReflect() protoreflect.Message {
+	mi := &file_combat_combat_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use NpcListItem.ProtoReflect.Descriptor instead.
+func (*NpcListItem) Descriptor() ([]byte, []int) {
+	return file_combat_combat_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *NpcListItem) GetNpc() *repo.Npc {
+	if x != nil {
+		return x.Npc
+	}
+	return nil
+}
+
+func (x *NpcListItem) GetDrops() []*repo.Item {
+	if x != nil {
+		return x.Drops
+	}
+	return nil
+}
+
 type ListNpcsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Npcs          []*repo.Npc            `protobuf:"bytes,1,rep,name=npcs,proto3" json:"npcs,omitempty"`
+	Npcs          []*NpcListItem         `protobuf:"bytes,1,rep,name=npcs,proto3" json:"npcs,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *ListNpcsResponse) Reset() {
 	*x = ListNpcsResponse{}
-	mi := &file_combat_combat_proto_msgTypes[5]
+	mi := &file_combat_combat_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -313,7 +141,7 @@ func (x *ListNpcsResponse) String() string {
 func (*ListNpcsResponse) ProtoMessage() {}
 
 func (x *ListNpcsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_combat_combat_proto_msgTypes[5]
+	mi := &file_combat_combat_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -326,12 +154,238 @@ func (x *ListNpcsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListNpcsResponse.ProtoReflect.Descriptor instead.
 func (*ListNpcsResponse) Descriptor() ([]byte, []int) {
+	return file_combat_combat_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *ListNpcsResponse) GetNpcs() []*NpcListItem {
+	if x != nil {
+		return x.Npcs
+	}
+	return nil
+}
+
+type SubmitLossRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	CharacterId   uint64                 `protobuf:"varint,1,opt,name=character_id,json=characterId,proto3" json:"character_id,omitempty"`
+	NpcId         uint64                 `protobuf:"varint,2,opt,name=npc_id,json=npcId,proto3" json:"npc_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubmitLossRequest) Reset() {
+	*x = SubmitLossRequest{}
+	mi := &file_combat_combat_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubmitLossRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubmitLossRequest) ProtoMessage() {}
+
+func (x *SubmitLossRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_combat_combat_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubmitLossRequest.ProtoReflect.Descriptor instead.
+func (*SubmitLossRequest) Descriptor() ([]byte, []int) {
+	return file_combat_combat_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *SubmitLossRequest) GetCharacterId() uint64 {
+	if x != nil {
+		return x.CharacterId
+	}
+	return 0
+}
+
+func (x *SubmitLossRequest) GetNpcId() uint64 {
+	if x != nil {
+		return x.NpcId
+	}
+	return 0
+}
+
+type SubmitLossResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Ack           bool                   `protobuf:"varint,1,opt,name=ack,proto3" json:"ack,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubmitLossResponse) Reset() {
+	*x = SubmitLossResponse{}
+	mi := &file_combat_combat_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubmitLossResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubmitLossResponse) ProtoMessage() {}
+
+func (x *SubmitLossResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_combat_combat_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubmitLossResponse.ProtoReflect.Descriptor instead.
+func (*SubmitLossResponse) Descriptor() ([]byte, []int) {
+	return file_combat_combat_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *SubmitLossResponse) GetAck() bool {
+	if x != nil {
+		return x.Ack
+	}
+	return false
+}
+
+type SubmitWinRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	CharacterId   uint64                 `protobuf:"varint,1,opt,name=character_id,json=characterId,proto3" json:"character_id,omitempty"`
+	NpcId         uint64                 `protobuf:"varint,2,opt,name=npc_id,json=npcId,proto3" json:"npc_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubmitWinRequest) Reset() {
+	*x = SubmitWinRequest{}
+	mi := &file_combat_combat_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubmitWinRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubmitWinRequest) ProtoMessage() {}
+
+func (x *SubmitWinRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_combat_combat_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubmitWinRequest.ProtoReflect.Descriptor instead.
+func (*SubmitWinRequest) Descriptor() ([]byte, []int) {
 	return file_combat_combat_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *ListNpcsResponse) GetNpcs() []*repo.Npc {
+func (x *SubmitWinRequest) GetCharacterId() uint64 {
 	if x != nil {
-		return x.Npcs
+		return x.CharacterId
+	}
+	return 0
+}
+
+func (x *SubmitWinRequest) GetNpcId() uint64 {
+	if x != nil {
+		return x.NpcId
+	}
+	return 0
+}
+
+type SubmitWinResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// if winning the combat results in a level up
+	LevelUp      bool            `protobuf:"varint,1,opt,name=level_up,json=levelUp,proto3" json:"level_up,omitempty"`
+	NewCharacter *repo.Character `protobuf:"bytes,2,opt,name=new_character,json=newCharacter,proto3,oneof" json:"new_character,omitempty"` // if level_up==true, client updates the selectedCharacter to this value
+	// rewards, serves as information for client
+	GoldReward    []*repo.Item `protobuf:"bytes,3,rep,name=gold_reward,json=goldReward,proto3" json:"gold_reward,omitempty"`
+	XpReward      []*repo.Item `protobuf:"bytes,4,rep,name=xp_reward,json=xpReward,proto3" json:"xp_reward,omitempty"`
+	ItemReward    []*repo.Item `protobuf:"bytes,5,rep,name=item_reward,json=itemReward,proto3" json:"item_reward,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubmitWinResponse) Reset() {
+	*x = SubmitWinResponse{}
+	mi := &file_combat_combat_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubmitWinResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubmitWinResponse) ProtoMessage() {}
+
+func (x *SubmitWinResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_combat_combat_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubmitWinResponse.ProtoReflect.Descriptor instead.
+func (*SubmitWinResponse) Descriptor() ([]byte, []int) {
+	return file_combat_combat_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *SubmitWinResponse) GetLevelUp() bool {
+	if x != nil {
+		return x.LevelUp
+	}
+	return false
+}
+
+func (x *SubmitWinResponse) GetNewCharacter() *repo.Character {
+	if x != nil {
+		return x.NewCharacter
+	}
+	return nil
+}
+
+func (x *SubmitWinResponse) GetGoldReward() []*repo.Item {
+	if x != nil {
+		return x.GoldReward
+	}
+	return nil
+}
+
+func (x *SubmitWinResponse) GetXpReward() []*repo.Item {
+	if x != nil {
+		return x.XpReward
+	}
+	return nil
+}
+
+func (x *SubmitWinResponse) GetItemReward() []*repo.Item {
+	if x != nil {
+		return x.ItemReward
 	}
 	return nil
 }
@@ -340,32 +394,41 @@ var File_combat_combat_proto protoreflect.FileDescriptor
 
 const file_combat_combat_proto_rawDesc = "" +
 	"\n" +
-	"\x13combat/combat.proto\x12\x06combat\x1a\x0frepo/repo.proto\x1a\x13health/health.proto\"S\n" +
-	"\x15InitiateCombatRequest\x12!\n" +
-	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\x12\x17\n" +
-	"\anpc_ids\x18\x02 \x03(\x04R\x06npcIds\"7\n" +
-	"\x16InitiateCombatResponse\x12\x1d\n" +
-	"\x04npcs\x18\x01 \x03(\v2\t.repo.NpcR\x04npcs\"f\n" +
-	"\x14ResolveCombatRequest\x12!\n" +
-	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\x12\x17\n" +
-	"\anpc_ids\x18\x02 \x03(\x04R\x06npcIds\x12\x12\n" +
-	"\x04wins\x18\x03 \x03(\bR\x04wins\"\xa9\x01\n" +
-	"\x15ResolveCombatResponse\x12\x1b\n" +
-	"\txp_gained\x18\x01 \x01(\x04R\bxpGained\x12\x1f\n" +
-	"\vgold_gained\x18\x02 \x01(\x04R\n" +
-	"goldGained\x12#\n" +
-	"\rtokens_gained\x18\x03 \x01(\x04R\ftokensGained\x12-\n" +
-	"\fitems_gained\x18\x04 \x03(\v2\n" +
-	".repo.ItemR\vitemsGained\"4\n" +
+	"\x13combat/combat.proto\x12\x06combat\x1a\x0frepo/repo.proto\x1a\x13health/health.proto\"4\n" +
 	"\x0fListNpcsRequest\x12!\n" +
-	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\"1\n" +
-	"\x10ListNpcsResponse\x12\x1d\n" +
-	"\x04npcs\x18\x01 \x03(\v2\t.repo.NpcR\x04npcs2\xa8\x02\n" +
+	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\"L\n" +
+	"\vNpcListItem\x12\x1b\n" +
+	"\x03npc\x18\x01 \x01(\v2\t.repo.NpcR\x03npc\x12 \n" +
+	"\x05drops\x18\x02 \x03(\v2\n" +
+	".repo.ItemR\x05drops\";\n" +
+	"\x10ListNpcsResponse\x12'\n" +
+	"\x04npcs\x18\x01 \x03(\v2\x13.combat.NpcListItemR\x04npcs\"M\n" +
+	"\x11SubmitLossRequest\x12!\n" +
+	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\x12\x15\n" +
+	"\x06npc_id\x18\x02 \x01(\x04R\x05npcId\"&\n" +
+	"\x12SubmitLossResponse\x12\x10\n" +
+	"\x03ack\x18\x01 \x01(\bR\x03ack\"L\n" +
+	"\x10SubmitWinRequest\x12!\n" +
+	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\x12\x15\n" +
+	"\x06npc_id\x18\x02 \x01(\x04R\x05npcId\"\xfe\x01\n" +
+	"\x11SubmitWinResponse\x12\x19\n" +
+	"\blevel_up\x18\x01 \x01(\bR\alevelUp\x129\n" +
+	"\rnew_character\x18\x02 \x01(\v2\x0f.repo.CharacterH\x00R\fnewCharacter\x88\x01\x01\x12+\n" +
+	"\vgold_reward\x18\x03 \x03(\v2\n" +
+	".repo.ItemR\n" +
+	"goldReward\x12'\n" +
+	"\txp_reward\x18\x04 \x03(\v2\n" +
+	".repo.ItemR\bxpReward\x12+\n" +
+	"\vitem_reward\x18\x05 \x03(\v2\n" +
+	".repo.ItemR\n" +
+	"itemRewardB\x10\n" +
+	"\x0e_new_character2\x90\x02\n" +
 	"\x06Combat\x12@\n" +
 	"\x05Check\x12\x1a.health.HealthCheckRequest\x1a\x1b.health.HealthCheckResponse\x12=\n" +
-	"\bListNpcs\x12\x17.combat.ListNpcsRequest\x1a\x18.combat.ListNpcsResponse\x12O\n" +
-	"\x0eInitiateCombat\x12\x1d.combat.InitiateCombatRequest\x1a\x1e.combat.InitiateCombatResponse\x12L\n" +
-	"\rResolveCombat\x12\x1c.combat.ResolveCombatRequest\x1a\x1d.combat.ResolveCombatResponseB4Z2github.com/komadiina/spelltext/proto/combat;combatb\x06proto3"
+	"\bListNpcs\x12\x17.combat.ListNpcsRequest\x1a\x18.combat.ListNpcsResponse\x12C\n" +
+	"\n" +
+	"SubmitLoss\x12\x19.combat.SubmitLossRequest\x1a\x1a.combat.SubmitLossResponse\x12@\n" +
+	"\tSubmitWin\x12\x18.combat.SubmitWinRequest\x1a\x19.combat.SubmitWinResponseB4Z2github.com/komadiina/spelltext/proto/combat;combatb\x06proto3"
 
 var (
 	file_combat_combat_proto_rawDescOnce sync.Once
@@ -379,36 +442,42 @@ func file_combat_combat_proto_rawDescGZIP() []byte {
 	return file_combat_combat_proto_rawDescData
 }
 
-var file_combat_combat_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_combat_combat_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_combat_combat_proto_goTypes = []any{
-	(*InitiateCombatRequest)(nil),      // 0: combat.InitiateCombatRequest
-	(*InitiateCombatResponse)(nil),     // 1: combat.InitiateCombatResponse
-	(*ResolveCombatRequest)(nil),       // 2: combat.ResolveCombatRequest
-	(*ResolveCombatResponse)(nil),      // 3: combat.ResolveCombatResponse
-	(*ListNpcsRequest)(nil),            // 4: combat.ListNpcsRequest
-	(*ListNpcsResponse)(nil),           // 5: combat.ListNpcsResponse
-	(*repo.Npc)(nil),                   // 6: repo.Npc
-	(*repo.Item)(nil),                  // 7: repo.Item
-	(*health.HealthCheckRequest)(nil),  // 8: health.HealthCheckRequest
-	(*health.HealthCheckResponse)(nil), // 9: health.HealthCheckResponse
+	(*ListNpcsRequest)(nil),            // 0: combat.ListNpcsRequest
+	(*NpcListItem)(nil),                // 1: combat.NpcListItem
+	(*ListNpcsResponse)(nil),           // 2: combat.ListNpcsResponse
+	(*SubmitLossRequest)(nil),          // 3: combat.SubmitLossRequest
+	(*SubmitLossResponse)(nil),         // 4: combat.SubmitLossResponse
+	(*SubmitWinRequest)(nil),           // 5: combat.SubmitWinRequest
+	(*SubmitWinResponse)(nil),          // 6: combat.SubmitWinResponse
+	(*repo.Npc)(nil),                   // 7: repo.Npc
+	(*repo.Item)(nil),                  // 8: repo.Item
+	(*repo.Character)(nil),             // 9: repo.Character
+	(*health.HealthCheckRequest)(nil),  // 10: health.HealthCheckRequest
+	(*health.HealthCheckResponse)(nil), // 11: health.HealthCheckResponse
 }
 var file_combat_combat_proto_depIdxs = []int32{
-	6, // 0: combat.InitiateCombatResponse.npcs:type_name -> repo.Npc
-	7, // 1: combat.ResolveCombatResponse.items_gained:type_name -> repo.Item
-	6, // 2: combat.ListNpcsResponse.npcs:type_name -> repo.Npc
-	8, // 3: combat.Combat.Check:input_type -> health.HealthCheckRequest
-	4, // 4: combat.Combat.ListNpcs:input_type -> combat.ListNpcsRequest
-	0, // 5: combat.Combat.InitiateCombat:input_type -> combat.InitiateCombatRequest
-	2, // 6: combat.Combat.ResolveCombat:input_type -> combat.ResolveCombatRequest
-	9, // 7: combat.Combat.Check:output_type -> health.HealthCheckResponse
-	5, // 8: combat.Combat.ListNpcs:output_type -> combat.ListNpcsResponse
-	1, // 9: combat.Combat.InitiateCombat:output_type -> combat.InitiateCombatResponse
-	3, // 10: combat.Combat.ResolveCombat:output_type -> combat.ResolveCombatResponse
-	7, // [7:11] is the sub-list for method output_type
-	3, // [3:7] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	7,  // 0: combat.NpcListItem.npc:type_name -> repo.Npc
+	8,  // 1: combat.NpcListItem.drops:type_name -> repo.Item
+	1,  // 2: combat.ListNpcsResponse.npcs:type_name -> combat.NpcListItem
+	9,  // 3: combat.SubmitWinResponse.new_character:type_name -> repo.Character
+	8,  // 4: combat.SubmitWinResponse.gold_reward:type_name -> repo.Item
+	8,  // 5: combat.SubmitWinResponse.xp_reward:type_name -> repo.Item
+	8,  // 6: combat.SubmitWinResponse.item_reward:type_name -> repo.Item
+	10, // 7: combat.Combat.Check:input_type -> health.HealthCheckRequest
+	0,  // 8: combat.Combat.ListNpcs:input_type -> combat.ListNpcsRequest
+	3,  // 9: combat.Combat.SubmitLoss:input_type -> combat.SubmitLossRequest
+	5,  // 10: combat.Combat.SubmitWin:input_type -> combat.SubmitWinRequest
+	11, // 11: combat.Combat.Check:output_type -> health.HealthCheckResponse
+	2,  // 12: combat.Combat.ListNpcs:output_type -> combat.ListNpcsResponse
+	4,  // 13: combat.Combat.SubmitLoss:output_type -> combat.SubmitLossResponse
+	6,  // 14: combat.Combat.SubmitWin:output_type -> combat.SubmitWinResponse
+	11, // [11:15] is the sub-list for method output_type
+	7,  // [7:11] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_combat_combat_proto_init() }
@@ -416,13 +485,14 @@ func file_combat_combat_proto_init() {
 	if File_combat_combat_proto != nil {
 		return
 	}
+	file_combat_combat_proto_msgTypes[6].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_combat_combat_proto_rawDesc), len(file_combat_combat_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -7,6 +7,7 @@ import (
 	"github.com/komadiina/spelltext/client/functions"
 	types "github.com/komadiina/spelltext/client/types"
 	"github.com/komadiina/spelltext/client/utils"
+	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	"github.com/rivo/tview"
 )
 
@@ -18,7 +19,7 @@ func AddLoginPage(c *types.SpelltextClient) {
 		username := tview.NewInputField().
 			SetLabel("username: ").
 			SetFieldWidth(len(header2)).
-			SetChangedFunc(func(text string) { *c.User = functions.GetUserByUsername(strings.ToLower(text)) })
+			SetChangedFunc(func(text string) { c.Storage.CurrentUser = &pbRepo.User{Username: text} })
 
 		var password string
 

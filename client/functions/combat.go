@@ -5,6 +5,7 @@ import (
 	pbBuild "github.com/komadiina/spelltext/proto/build"
 	pbCombat "github.com/komadiina/spelltext/proto/combat"
 	pbRepo "github.com/komadiina/spelltext/proto/repo"
+	"github.com/komadiina/spelltext/utils"
 )
 
 func GetAvailableNpcs(c *types.SpelltextClient) []*pbRepo.Npc {
@@ -18,7 +19,7 @@ func GetAvailableNpcs(c *types.SpelltextClient) []*pbRepo.Npc {
 		return nil
 	}
 
-	return resp.GetNpcs()
+	return utils.Map(resp.Npcs, func(nli *pbCombat.NpcListItem) *pbRepo.Npc { return nli.GetNpc() })
 }
 
 func GetPlayerSpells(c *types.SpelltextClient) []*pbRepo.PlayerAbilityTree {

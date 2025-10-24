@@ -14,6 +14,8 @@ func CreateCharacter(char *pbRepo.Character, c *types.SpelltextClient) error {
 		UserId: c.Storage.CurrentUser.GetId(),
 	}
 
+	c.Logger.Debug(req)
+
 	resp, err := c.Clients.CharacterClient.CreateCharacter(*c.Context, req)
 	if err != nil {
 		c.Logger.Error(err)

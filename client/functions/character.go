@@ -9,7 +9,8 @@ import (
 )
 
 func GetCharacters(uid uint64, c *types.SpelltextClient) (*pb.ListCharactersResponse, error) {
-	resp, err := c.Clients.CharacterClient.ListCharacters(*c.Context, &pb.ListCharactersRequest{Username: c.User.Username})
+	req := &pb.ListCharactersRequest{Username: c.Storage.CurrentUser.Username}
+	resp, err := c.Clients.CharacterClient.ListCharacters(*c.Context, req)
 	if err != nil {
 		return nil, err
 	}
@@ -62,6 +63,8 @@ func RefreshCharacter(char *pbRepo.Character, c *types.SpelltextClient) error {
 }
 
 func GetEquippedItems(c *types.SpelltextClient) []*pbRepo.ItemInstance {
+	c.Logger.Debugf("getting equipped items for character_id=%d", c.Storage.SelectedCharacter.GetCharacterId())
+
 	req := &pb.GetEquippedItemsRequest{
 		CharacterId: c.Storage.SelectedCharacter.GetCharacterId(),
 	}
@@ -120,4 +123,40 @@ func ToggleEquip(item *pbRepo.ItemInstance, c *types.SpelltextClient, char *pbRe
 	}
 
 	return nil
+}
+
+func sumStats(inst *pbRepo.ItemInstance, cstats *types.EntityStats) *types.EntityStats {
+	return &types.EntityStats{
+		HealthPoints: cstats.HealthPoints + inst.Item.Health,
+		PowerPoints:  cstats.PowerPoints + inst.Item.Power,
+		Strength:     cstats.Strength + inst.Item.Strength,
+		Spellpower:   cstats.Spellpower + inst.Item.Spellpower,
+		Armor:        cstats.Armor + inst.Item.BonusArmor,
+		Damage:       cstats.Damage + inst.Item.BonusDamage,
+	}
+}
+
+func CalculateStats(equipped []*pbRepo.ItemInstance, c *types.SpelltextClient) *types.EntityStats {
+	cstats := &types.EntityStats{
+		HealthPoints: c.Storage.SelectedCharacter.Hero.BaseHealth +
+			int64(c.Storage.SelectedCharacter.Hero.HealthPerLevel)*int64(c.Storage.SelectedCharacter.Level),
+
+		PowerPoints: c.Storage.SelectedCharacter.Hero.BasePower +
+			int64(c.Storage.SelectedCharacter.Hero.PowerPerLevel)*int64(c.Storage.SelectedCharacter.Level),
+
+		Strength: c.Storage.SelectedCharacter.Hero.BaseStrength +
+			int64(c.Storage.SelectedCharacter.Hero.StrengthPerLevel)*int64(c.Storage.SelectedCharacter.Level),
+
+		Spellpower: c.Storage.SelectedCharacter.Hero.BaseSpellpower +
+			int64(c.Storage.SelectedCharacter.Hero.SpellpowerPerLevel)*int64(c.Storage.SelectedCharacter.Level),
+
+		Armor:  0,
+		Damage: 0,
+	}
+
+	for _, eqi := range equipped {
+		cstats = sumStats(eqi, cstats)
+	}
+
+	return cstats
 }

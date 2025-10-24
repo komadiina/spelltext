@@ -29,7 +29,6 @@ type SpelltextClient struct {
 	AppStorage   map[string]any
 	Storage      *AppStorage
 	PageManager  *factory.PageManager
-	User         *SpelltextUser
 	Clients      *Clients
 	Connections  *Connections
 	Context      *context.Context
@@ -41,7 +40,7 @@ type SpelltextClient struct {
 type Ministate struct {
 	Username   string
 	CurrentNpc *pbRepo.Npc
-	FightState *NpcFightState
+	FightState *CbFightState
 }
 
 type AppStorage struct {
@@ -50,15 +49,8 @@ type AppStorage struct {
 	SelectedCharacter *pbRepo.Character
 	SelectedVendor    *pbRepo.Vendor
 	EquipSlots        []*pbRepo.EquipSlot
-}
-
-type SpelltextUser struct {
-	Username string
-}
-
-type ContextDef struct {
-	Context context.Context
-	Cancel  context.CancelFunc
+	CharacterStats    *EntityStats
+	SpellProcs        map[uint64]*SpellProc
 }
 
 type Clients struct {
@@ -83,20 +75,12 @@ type Connections struct {
 	Build     *grpc.ClientConn
 }
 
-type NavigableForm struct {
-	tview.Form
+type UnusableHotkey struct {
+	Key  string
+	Desc string
 }
 
-type NavigableFormButton struct {
-	tview.Button
-
-	LeftNbr   *tview.Button
-	TopNbr    *tview.Button
-	RightNbr  *tview.Button
-	BottomNbr *tview.Button
-}
-
-type CharacterStats struct {
+type EntityStats struct {
 	HealthPoints int64
 	PowerPoints  int64
 	Strength     int64
@@ -105,7 +89,20 @@ type CharacterStats struct {
 	Damage       int64
 }
 
-type UnusableHotkey struct {
-	Key  string
-	Desc string
+type EntityStatusFrame struct {
+	Health      uint64
+	Power       uint64
+	BarHealth   *tview.TextView
+	BarPower    *tview.TextView
+	InfoTextual *tview.TextView
+	FlHealth    *tview.Flex
+	FlPower     *tview.Flex
+	FlTextual   *tview.Flex
 }
+
+type SpellProc struct {
+	Ability     *pbRepo.Ability
+	OnActivated func(*SpelltextClient)
+}
+
+type SpellProcMap map[uint64]*SpellProc

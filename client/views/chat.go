@@ -17,7 +17,7 @@ import (
 func SendMessage(content string, c *types.SpelltextClient) {
 	_, err := c.Clients.ChatClient.SendChatMessage(
 		*c.Context, &pb.SendChatMessageRequest{
-			Sender:  c.User.Username,
+			Sender:  c.Storage.CurrentUser.Username,
 			Message: content,
 		})
 
@@ -28,19 +28,21 @@ func SendMessage(content string, c *types.SpelltextClient) {
 }
 
 func JoinChatroom(c *types.SpelltextClient) {
-	c.Clients.ChatClient.JoinChatroom(*c.Context, &pb.JoinChatroomMessageRequest{Username: c.User.Username})
+	req := &pb.JoinChatroomMessageRequest{Username: c.Storage.CurrentUser.Username}
+	c.Clients.ChatClient.JoinChatroom(*c.Context, req)
 }
 
 func LeaveChatroom(c *types.SpelltextClient) {
-	c.Clients.ChatClient.LeaveChatroom(*c.Context, &pb.LeaveChatroomMessageRequest{Username: c.User.Username})
+	req := &pb.LeaveChatroomMessageRequest{Username: c.Storage.CurrentUser.Username}
+	c.Clients.ChatClient.LeaveChatroom(*c.Context, req)
 }
 
 func AddChatPage(c *types.SpelltextClient) {
 	c.PageManager.RegisterFactory(constants.PAGE_CHAT, func() tview.Primitive {
 		chat := tview.NewTextView().
 			SetTextAlign(tview.AlignLeft).
+			SetDynamicColors(true).
 			ScrollToEnd()
-		chat.SetDynamicColors(true)
 
 		js, err := c.Nats.JetStream()
 		if err != nil {

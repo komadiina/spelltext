@@ -13,6 +13,7 @@ import (
 	"github.com/komadiina/spelltext/client/utils"
 	pb "github.com/komadiina/spelltext/proto/char"
 	pbRepo "github.com/komadiina/spelltext/proto/repo"
+	stUtils "github.com/komadiina/spelltext/utils"
 	"github.com/rivo/tview"
 )
 
@@ -32,22 +33,16 @@ type CharacterStatsView struct {
 	Damage       *tview.TextView
 }
 
+var statsChanged bool = false
+var onClose = func(*types.SpelltextClient) {}
+var equipmentPane *tview.Flex = nil
+var detailsPane *tview.Flex = nil
+
 func (d *CharacterDetailsView) Update(c *pbRepo.Character) {
 	d.Name.SetText(fmt.Sprintf("name: %s", c.CharacterName))
 	d.Level.SetText(fmt.Sprintf(`level: [blue]%d[""]`, c.Level))
 	d.Class.SetText(fmt.Sprintf(`class: %s`, c.Hero.Name))
 	d.Currency.SetText(fmt.Sprintf(`[yellow]%dg[""] | [orange]%dt[""]`, c.Gold, c.Tokens))
-}
-
-func sumStats(inst *pbRepo.ItemInstance, cstats *types.CharacterStats) *types.CharacterStats {
-	return &types.CharacterStats{
-		HealthPoints: cstats.HealthPoints + inst.Item.Health,
-		PowerPoints:  cstats.PowerPoints + inst.Item.Power,
-		Strength:     cstats.Strength + inst.Item.Strength,
-		Spellpower:   cstats.Spellpower + inst.Item.Spellpower,
-		Armor:        cstats.Armor + inst.Item.BonusArmor,
-		Damage:       cstats.Damage + inst.Item.BonusDamage,
-	}
 }
 
 func RenderCharactersList(
@@ -74,6 +69,7 @@ func RenderCharactersList(
 				case 0: // select
 					functions.SetSelectedCharacter(character, c)
 					c.Storage.SelectedCharacter = character
+					c.Storage.CharacterStats = functions.CalculateStats(functions.GetEquippedItems(c), c) // recalculate stats
 					c.App.SetRoot(c.PageManager.Pages, true).EnableMouse(true)
 					selected.SetText(fmt.Sprintf(`+++ currently selected: [orange]%s[""] (lv. %d %s)`, character.CharacterName, character.Level, character.Hero.Name))
 					return
@@ -105,6 +101,7 @@ func RenderCharactersList(
 	details.Update(stored[0])
 
 	characters.SetChangedFunc(func(index int, mainText, secondaryText string, shortcut rune) {
+		c.Logger.Info(stored)
 		details.Update(stored[index])
 	})
 
@@ -126,7 +123,7 @@ func RenderCharactersList(
 }
 
 func RenderDetailsPane() (*tview.Flex, *CharacterDetailsView) {
-	detailsPane := tview.NewFlex().SetDirection(tview.FlexRow)
+	detailsPane = tview.NewFlex().SetDirection(tview.FlexRow)
 	detailsPane.SetTitleColor(tcell.ColorCadetBlue)
 	details := CharacterDetailsView{
 		tview.NewTextView().SetDynamicColors(true),
@@ -157,7 +154,7 @@ func RenderGuide() *tview.Flex {
 }
 
 func RenderEquipmentPane(c *types.SpelltextClient, charSelected *pbRepo.Character) *tview.Flex {
-	equipmentPane := tview.NewFlex().SetDirection(tview.FlexColumn)
+	equipmentPane = tview.NewFlex().SetDirection(tview.FlexColumn)
 	equipmentPane.SetTitleColor(tcell.ColorCadetBlue)
 
 	equipmentPane.SetBorder(true).SetBorderPadding(1, 1, 2, 2).SetTitle(" [::b]equipment[::-] ")
@@ -229,6 +226,8 @@ func RenderQuickInventoryTree(
 					true,
 				)
 
+				statsChanged = true
+
 				// TODO: implement update equipped logic locally
 				equipped := functions.GetEquippedItems(c)
 				totals = RenderTotalsPane(c, equipped)
@@ -295,15 +294,14 @@ func RenderTotalsPane(c *types.SpelltextClient, equipped []*pbRepo.ItemInstance)
 		Damage:       tview.NewTextView().SetDynamicColors(true),
 	}
 
-	cstats := &types.CharacterStats{
-		HealthPoints: c.Storage.SelectedCharacter.Hero.BaseHealth,
-		PowerPoints:  c.Storage.SelectedCharacter.Hero.BasePower,
-		Strength:     c.Storage.SelectedCharacter.Hero.BaseStrength,
-		Spellpower:   c.Storage.SelectedCharacter.Hero.BaseSpellpower,
+	// change CloserFunc here so i dont have to re-fetch nor re-store equipped items
+	onClose = func(c *types.SpelltextClient) {
+		cstats := functions.CalculateStats(functions.GetEquippedItems(c), c)
+		c.Storage.CharacterStats = cstats
 	}
-	for _, eqi := range equipped {
-		cstats = sumStats(eqi, cstats)
-	}
+
+	cstats := functions.CalculateStats(equipped, c)
+	c.Storage.CharacterStats = cstats
 
 	totals.HealthPoints.SetText(fmt.Sprintf(`[%s]HP[""]: %d`, constants.TEXT_COLOR_HEALTH, cstats.HealthPoints))
 	totals.PowerPoints.SetText(fmt.Sprintf(`[%s]PWR[""]: %d`, constants.TEXT_COLOR_POWER, cstats.PowerPoints))
@@ -343,8 +341,6 @@ func SetFlexInputHandler(flex *tview.Flex, equipmentPane *tview.Flex, characters
 }
 
 func AddCharacterPage(c *types.SpelltextClient) {
-	onClose := func() {}
-
 	c.PageManager.RegisterFactory(constants.PAGE_CHARACTER, func() tview.Primitive {
 		flex := tview.NewFlex().SetDirection(tview.FlexRow)
 		flex.SetBorder(true).SetBorderPadding(1, 1, 5, 5).SetTitle(" [::b]character[::-] ")
@@ -354,11 +350,12 @@ func AddCharacterPage(c *types.SpelltextClient) {
 
 		var uid uint64 = 1 // TODO
 		chars, err := functions.GetCharacters(uid, c)
+		c.Logger.Debug(stUtils.Map(chars.Characters, func(char *pbRepo.Character) string {
+			return fmt.Sprintf("cname=%s hid=%d hname=%s", char.CharacterName, char.HeroId, char.Hero.Name)
+		}))
 		if err != nil {
 			c.Logger.Error(err)
-			chars = &pb.ListCharactersResponse{
-				Characters: make([]*pbRepo.Character, 0),
-			}
+			return utils.GenerateErrorPage(c)
 		}
 
 		charSelected := c.Storage.SelectedCharacter
@@ -375,7 +372,7 @@ func AddCharacterPage(c *types.SpelltextClient) {
 		characters := RenderCharactersList(details, chars, []*pbRepo.Character{}, selected, c)
 
 		guide := RenderGuide()
-		equipmentPane := RenderEquipmentPane(c, charSelected)
+		equipmentPane = RenderEquipmentPane(c, charSelected)
 		SetFlexInputHandler(flex, equipmentPane, characters, c)
 
 		flex.
@@ -390,5 +387,5 @@ func AddCharacterPage(c *types.SpelltextClient) {
 			AddItem(guide, 3, 1, false)
 
 		return flex
-	}, nil, onClose)
+	}, nil, func() { onClose(c) })
 }

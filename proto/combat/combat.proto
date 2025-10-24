@@ -5,41 +5,48 @@ option go_package = "github.com/komadiina/spelltext/proto/combat;combat";
 import "repo/repo.proto";
 import "health/health.proto";
 
-message InitiateCombatRequest {
-    uint64 character_id = 1;
-    repeated uint64 npc_ids = 2;
-}
-
-message InitiateCombatResponse {
-    repeated repo.Npc npcs = 1;
-}
-
-message ResolveCombatRequest {
-    uint64 character_id = 1;
-    repeated uint64 npc_ids = 2;
-    repeated bool wins = 3;
-}
-
-message ResolveCombatResponse {
-    uint64 xp_gained = 1;
-    uint64 gold_gained = 2;
-    uint64 tokens_gained = 3;
-    repeated repo.Item items_gained = 4;
-}
-
 message ListNpcsRequest {
     // lists npc's whose min_level < character.level < max_level
     uint64 character_id = 1;
 }
 
-message ListNpcsResponse {
-    repeated repo.Npc npcs = 1;
+message NpcListItem {
+    repo.Npc npc = 1;
+    repeated repo.Item drops = 2;
 }
 
+message ListNpcsResponse {
+    repeated NpcListItem npcs = 1;
+}
+
+message SubmitLossRequest {
+    uint64 character_id = 1;
+    uint64 npc_id = 2;
+}
+
+message SubmitLossResponse {
+    bool ack = 1;
+}
+
+message SubmitWinRequest {
+    uint64 character_id = 1;
+    uint64 npc_id = 2;
+}
+
+message SubmitWinResponse {
+    // if winning the combat results in a level up
+    bool level_up = 1;
+    optional repo.Character new_character = 2; // if level_up==true, client updates the selectedCharacter to this value
+
+    // rewards, serves as information for client
+    repeated repo.Item gold_reward = 3;
+    repeated repo.Item xp_reward = 4;
+    repeated repo.Item item_reward = 5;
+}
 
 service Combat {
     rpc Check(health.HealthCheckRequest) returns (health.HealthCheckResponse);
     rpc ListNpcs(ListNpcsRequest) returns (ListNpcsResponse);
-    rpc InitiateCombat(InitiateCombatRequest) returns (InitiateCombatResponse);
-    rpc ResolveCombat(ResolveCombatRequest) returns (ResolveCombatResponse);
+    rpc SubmitLoss(SubmitLossRequest) returns (SubmitLossResponse);
+    rpc SubmitWin(SubmitWinRequest) returns (SubmitWinResponse);
 }

@@ -9,15 +9,15 @@ import (
 	pbRepo "github.com/komadiina/spelltext/proto/repo"
 )
 
-func GetAbilities(c *types.SpelltextClient) (*pbBuild.ListAbilitiesResponse, error) {
+func GetAbilities(c *types.SpelltextClient) *pbBuild.ListAbilitiesResponse {
 	req := &pbBuild.ListAbilitiesRequest{Character: c.Storage.SelectedCharacter}
 	abilities, err := c.Clients.BuildClient.ListAbilities(*c.Context, req)
 	if err != nil {
 		c.Logger.Error(err)
-		return nil, err
+		return nil
 	}
 
-	return abilities, nil
+	return abilities
 }
 
 // func GetPlayerAbilities(c *types.SpelltextClient) []*pbRepo.PlayerAbilityTree {

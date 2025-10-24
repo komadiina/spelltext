@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"net"
 	"os"
@@ -53,7 +52,6 @@ func main() {
 	}
 
 	logger.Info(fmt.Sprintf("Starting %s v%s...", "chatserver", version))
-	flag.Parse()
 
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", cfg.Port))
 	if err != nil {

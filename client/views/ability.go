@@ -55,16 +55,12 @@ func AddAbilityPage(c *types.SpelltextClient) {
 
 		tvInfo := tview.NewTextView().SetDynamicColors(true)
 
-		resp, _ := functions.GetAbilities(c)
+		resp := functions.GetAbilities(c)
 		available, locked, upgraded := resp.Available, resp.Locked, resp.Upgraded
 
-		// _upgraded := []*pbRepo.Ability{}
 		_upgraded := generics.Map(upgraded, func(a *pbRepo.PlayerAbilityTree) *pbRepo.Ability { return a.Ability })
-		// for _, u := range upgraded {
-		// 	_upgraded = append(_upgraded, u.Ability)
-		// }
 
-		all := append([]*pbRepo.Ability{}, append(available, append(locked, _upgraded...)...)...) // xdddd
+		all := append([]*pbRepo.Ability{}, append(_upgraded, append(available, locked...)...)...) // xdddd
 
 		callback := func(a *pbRepo.Ability, _ int, newAbility bool) {
 			if err := functions.UpgradeAbility(c, a, newAbility); err != nil {

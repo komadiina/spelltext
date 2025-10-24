@@ -31,7 +31,6 @@ func AddCombatPage(c *types.SpelltextClient) {
 		} else {
 			for _, npc := range npcs {
 				list.AddItem("> "+utils.GetFullNpcName(npc), npc.NpcTemplate.Description, 0, func() {
-					c.Logger.Info("npc selected", "npc", npc)
 					c.Storage.Ministate.CurrentNpc = npc
 					c.PageManager.Push(constants.PAGE_FIGHT, false)
 				})
