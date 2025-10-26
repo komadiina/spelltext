@@ -27,7 +27,7 @@ $ minikube start
 $ helm install spelltext k8s/ -f k8s/values.yaml -n spelltext --create-namespace
 $ kubectl config set-context --current --namespace=spelltext
 $ minikube tunnel # occupies terminal
-$ kubectl port-forward pods/spelltext-nats 4222:4222 # also occupies terminal
+$ kubectl port-forward pods/spelltext-nats 4222:4222 # also occupies terminal, todo: implement serviceip & loadbalancer (helps with nats quorum impl)
 
 # run client:
 $ cd client 

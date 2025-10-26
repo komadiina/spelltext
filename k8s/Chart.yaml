@@ -14,3 +14,7 @@ dependencies:
     version: 16.3.2
     repository: "https://charts.bitnami.com/bitnami"
     condition: postgresql-ha.enabled
+  - name: loki-stack
+    version: 2.10.2
+    repository: "https://grafana.github.io/helm-charts"
+    condition: grafana-loki-stack.enabled
