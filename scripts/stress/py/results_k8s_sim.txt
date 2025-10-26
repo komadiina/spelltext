@@ -1,0 +1,84 @@
+ognjen@DESKTOP-54BBRFB MINGW64 ~/Desktop/Moje/Faks/diplomski/scripts/stress (dev-docker)
+$ py stresstest.py -n 650 -i 20
+initialized stresstest.py (n_calls=650, interval=0.02, connect_timeout=1)
+> stress testing svc chatserver (4 methods)
+> stress testing svc storeserver (3 methods)
+> stress testing svc inventoryserver (3 methods)
+> stress testing svc charserver (5 methods)
+> stress testing svc gambaserver (4 methods)
+> stress testing svc authserver (2 methods)
+> stress testing svc combatserver (4 methods)
+> stress testing svc buildserver (3 methods)
+> finished!
+> total calls: 18200
+> total time taken: 242.9685s
+> average grpcurl overhead: 26.17ms
+
+> per-service time taken:
+service            duration (s)
+---------------  --------------
+charserver                41.59
+buildserver               24.93
+combatserver              33.99
+storeserver               25.31
+chatserver                33.56
+gambaserver               41.12
+inventoryserver           26.7
+authserver                15.77
+
+> per-service method call details:
+service          method                  avg (ms)
+---------------  --------------------  ----------
+charserver       GetCharacter             127.783
+charserver       Check                    130.623
+charserver       SetSelectedCharacter     126.323
+charserver       ListHeroes               129.071
+charserver       ListCharacters           126.075
+buildserver      ListAbilities            124.832
+buildserver      UpgradeAbility           130.125
+buildserver      Check                    128.597
+combatserver     SubmitWin                136.262
+combatserver     ListNpcs                 126.498
+combatserver     SubmitLoss               130.062
+combatserver     Check                    130.123
+storeserver      ListVendors              131.157
+storeserver      ListVendorItems          128.282
+storeserver      Check                    129.954
+chatserver       JoinChatroom             128.803
+chatserver       SendChatMessage          131.943
+chatserver       Check                    128.363
+chatserver       LeaveChatroom            127.174
+gambaserver      Check                    130.117
+gambaserver      OpenChest                203.922
+gambaserver      GetChestDetails          170.091
+gambaserver      GetChests                128.418
+inventoryserver  GetBalance               155.068
+inventoryserver  Check                    127.658
+inventoryserver  ListBackpackItems        127.989
+authserver       Check                    130.065
+authserver       Login                    112.6
+
+> heaviest methods:
+service          method             duration (ms)
+---------------  ---------------  ---------------
+charserver       Check                      84905
+buildserver      UpgradeAbility             84581
+combatserver     SubmitWin                  88570
+storeserver      ListVendors                85252
+chatserver       SendChatMessage            85763
+gambaserver      OpenChest                 132549
+inventoryserver  GetBalance                100794
+authserver       Check                      84542
+
+> per-service deviation:
+service            deviation (%)
+---------------  ---------------
+charserver                 36.95
+buildserver               -17.91
+combatserver               11.92
+storeserver               -16.66
+chatserver                 10.49
+gambaserver                35.38
+inventoryserver           -12.1
+authserver                -48.07
+> results written to [./results.csv]

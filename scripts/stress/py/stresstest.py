@@ -9,7 +9,7 @@ from grpcmetrics import GRPCMetrics
 SERVICES = {}
 results = []
 n_calls = 50
-interval = 10 / 1000  # 10ms
+interval = 10  # 10ms
 connect_timeout = 1  # seconds
 
 
@@ -87,7 +87,7 @@ if __name__ == "__main__":
         "-i",
         "--interval",
         type=float,
-        default=interval,
+        default=interval / 1000,
         help=f"interval between calls, in milliseconds. default={interval}",
     )
     parser.add_argument(
