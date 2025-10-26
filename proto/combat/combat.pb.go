@@ -318,8 +318,8 @@ type SubmitWinResponse struct {
 	LevelUp      bool            `protobuf:"varint,1,opt,name=level_up,json=levelUp,proto3" json:"level_up,omitempty"`
 	NewCharacter *repo.Character `protobuf:"bytes,2,opt,name=new_character,json=newCharacter,proto3,oneof" json:"new_character,omitempty"` // if level_up==true, client updates the selectedCharacter to this value
 	// rewards, serves as information for client
-	GoldReward    []*repo.Item `protobuf:"bytes,3,rep,name=gold_reward,json=goldReward,proto3" json:"gold_reward,omitempty"`
-	XpReward      []*repo.Item `protobuf:"bytes,4,rep,name=xp_reward,json=xpReward,proto3" json:"xp_reward,omitempty"`
+	GoldReward    uint64       `protobuf:"varint,3,opt,name=gold_reward,json=goldReward,proto3" json:"gold_reward,omitempty"`
+	XpReward      uint64       `protobuf:"varint,4,opt,name=xp_reward,json=xpReward,proto3" json:"xp_reward,omitempty"`
 	ItemReward    []*repo.Item `protobuf:"bytes,5,rep,name=item_reward,json=itemReward,proto3" json:"item_reward,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -369,18 +369,18 @@ func (x *SubmitWinResponse) GetNewCharacter() *repo.Character {
 	return nil
 }
 
-func (x *SubmitWinResponse) GetGoldReward() []*repo.Item {
+func (x *SubmitWinResponse) GetGoldReward() uint64 {
 	if x != nil {
 		return x.GoldReward
 	}
-	return nil
+	return 0
 }
 
-func (x *SubmitWinResponse) GetXpReward() []*repo.Item {
+func (x *SubmitWinResponse) GetXpReward() uint64 {
 	if x != nil {
 		return x.XpReward
 	}
-	return nil
+	return 0
 }
 
 func (x *SubmitWinResponse) GetItemReward() []*repo.Item {
@@ -410,15 +410,13 @@ const file_combat_combat_proto_rawDesc = "" +
 	"\x03ack\x18\x01 \x01(\bR\x03ack\"L\n" +
 	"\x10SubmitWinRequest\x12!\n" +
 	"\fcharacter_id\x18\x01 \x01(\x04R\vcharacterId\x12\x15\n" +
-	"\x06npc_id\x18\x02 \x01(\x04R\x05npcId\"\xfe\x01\n" +
+	"\x06npc_id\x18\x02 \x01(\x04R\x05npcId\"\xe6\x01\n" +
 	"\x11SubmitWinResponse\x12\x19\n" +
 	"\blevel_up\x18\x01 \x01(\bR\alevelUp\x129\n" +
-	"\rnew_character\x18\x02 \x01(\v2\x0f.repo.CharacterH\x00R\fnewCharacter\x88\x01\x01\x12+\n" +
-	"\vgold_reward\x18\x03 \x03(\v2\n" +
-	".repo.ItemR\n" +
-	"goldReward\x12'\n" +
-	"\txp_reward\x18\x04 \x03(\v2\n" +
-	".repo.ItemR\bxpReward\x12+\n" +
+	"\rnew_character\x18\x02 \x01(\v2\x0f.repo.CharacterH\x00R\fnewCharacter\x88\x01\x01\x12\x1f\n" +
+	"\vgold_reward\x18\x03 \x01(\x04R\n" +
+	"goldReward\x12\x1b\n" +
+	"\txp_reward\x18\x04 \x01(\x04R\bxpReward\x12+\n" +
 	"\vitem_reward\x18\x05 \x03(\v2\n" +
 	".repo.ItemR\n" +
 	"itemRewardB\x10\n" +
@@ -462,22 +460,20 @@ var file_combat_combat_proto_depIdxs = []int32{
 	8,  // 1: combat.NpcListItem.drops:type_name -> repo.Item
 	1,  // 2: combat.ListNpcsResponse.npcs:type_name -> combat.NpcListItem
 	9,  // 3: combat.SubmitWinResponse.new_character:type_name -> repo.Character
-	8,  // 4: combat.SubmitWinResponse.gold_reward:type_name -> repo.Item
-	8,  // 5: combat.SubmitWinResponse.xp_reward:type_name -> repo.Item
-	8,  // 6: combat.SubmitWinResponse.item_reward:type_name -> repo.Item
-	10, // 7: combat.Combat.Check:input_type -> health.HealthCheckRequest
-	0,  // 8: combat.Combat.ListNpcs:input_type -> combat.ListNpcsRequest
-	3,  // 9: combat.Combat.SubmitLoss:input_type -> combat.SubmitLossRequest
-	5,  // 10: combat.Combat.SubmitWin:input_type -> combat.SubmitWinRequest
-	11, // 11: combat.Combat.Check:output_type -> health.HealthCheckResponse
-	2,  // 12: combat.Combat.ListNpcs:output_type -> combat.ListNpcsResponse
-	4,  // 13: combat.Combat.SubmitLoss:output_type -> combat.SubmitLossResponse
-	6,  // 14: combat.Combat.SubmitWin:output_type -> combat.SubmitWinResponse
-	11, // [11:15] is the sub-list for method output_type
-	7,  // [7:11] is the sub-list for method input_type
-	7,  // [7:7] is the sub-list for extension type_name
-	7,  // [7:7] is the sub-list for extension extendee
-	0,  // [0:7] is the sub-list for field type_name
+	8,  // 4: combat.SubmitWinResponse.item_reward:type_name -> repo.Item
+	10, // 5: combat.Combat.Check:input_type -> health.HealthCheckRequest
+	0,  // 6: combat.Combat.ListNpcs:input_type -> combat.ListNpcsRequest
+	3,  // 7: combat.Combat.SubmitLoss:input_type -> combat.SubmitLossRequest
+	5,  // 8: combat.Combat.SubmitWin:input_type -> combat.SubmitWinRequest
+	11, // 9: combat.Combat.Check:output_type -> health.HealthCheckResponse
+	2,  // 10: combat.Combat.ListNpcs:output_type -> combat.ListNpcsResponse
+	4,  // 11: combat.Combat.SubmitLoss:output_type -> combat.SubmitLossResponse
+	6,  // 12: combat.Combat.SubmitWin:output_type -> combat.SubmitWinResponse
+	9,  // [9:13] is the sub-list for method output_type
+	5,  // [5:9] is the sub-list for method input_type
+	5,  // [5:5] is the sub-list for extension type_name
+	5,  // [5:5] is the sub-list for extension extendee
+	0,  // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_combat_combat_proto_init() }

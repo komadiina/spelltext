@@ -13,7 +13,7 @@ import (
 
 func AddLoginPage(c *types.SpelltextClient) {
 	c.PageManager.RegisterFactory(constants.PAGE_LOGIN, func() tview.Primitive {
-		header1 := "> spelltext v0.3.0"
+		header1 := "> spelltext v0.5.7"
 		header2 := "> https://github.com/komadiina/spelltext"
 
 		username := tview.NewInputField().

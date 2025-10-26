@@ -10,4 +10,5 @@
 - armory/character: update `QuickInventoryTree` and `EquippedItems` on: **character change**, **item equip** - hard asf, cba, delay it
 - add minlevel item requirement (e.g. `items`.`level_req` => `... level_req int not null default 1, ...`)
 - system: loki + grafana for logging - **urgent**
+- qol: map unpacking of pbRepo objects via a function to []slice to scan(varargs...)
 - stress test script (per-service: methods that invoke db, and create stress test endpoints (foo grpc endpoints)) via `grpcurl`

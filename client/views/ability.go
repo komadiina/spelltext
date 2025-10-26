@@ -18,8 +18,6 @@ func RenderList(c *types.SpelltextClient, ab []*pbRepo.Ability, color string, pr
 		list.Clear()
 	}
 
-	c.Logger.Info(ab)
-
 	for index, ab := range ab {
 		list.AddItem(
 			fmt.Sprint("> ", prefixFunc(index), " ", utils.ToColorTag(color), ab.Name, `[""][white][""]`),
@@ -65,7 +63,7 @@ func AddAbilityPage(c *types.SpelltextClient) {
 		callback := func(a *pbRepo.Ability, _ int, newAbility bool) {
 			if err := functions.UpgradeAbility(c, a, newAbility); err != nil {
 				c.Logger.Error(err)
-				tvInfo.SetText("[red]oops... an error occurred.[::-] try again later.")
+				tvInfo.SetText("[red]oops... an error occurred.[::-] " + err.Error())
 			} else {
 				UpdateAvailTpTv(availTp, c)
 				if newAbility {

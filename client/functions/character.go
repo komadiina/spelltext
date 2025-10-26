@@ -63,8 +63,6 @@ func RefreshCharacter(char *pbRepo.Character, c *types.SpelltextClient) error {
 }
 
 func GetEquippedItems(c *types.SpelltextClient) []*pbRepo.ItemInstance {
-	c.Logger.Debugf("getting equipped items for character_id=%d", c.Storage.SelectedCharacter.GetCharacterId())
-
 	req := &pb.GetEquippedItemsRequest{
 		CharacterId: c.Storage.SelectedCharacter.GetCharacterId(),
 	}

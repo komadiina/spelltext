@@ -1191,6 +1191,118 @@ func (x *GetEquipSlotsResponse) GetSlots() []*repo.EquipSlot {
 	return nil
 }
 
+type SaveCombatWinProgressRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Character     *repo.Character        `protobuf:"bytes,1,opt,name=character,proto3" json:"character,omitempty"`
+	Npc           *repo.Npc              `protobuf:"bytes,2,opt,name=npc,proto3" json:"npc,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SaveCombatWinProgressRequest) Reset() {
+	*x = SaveCombatWinProgressRequest{}
+	mi := &file_char_char_proto_msgTypes[24]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SaveCombatWinProgressRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SaveCombatWinProgressRequest) ProtoMessage() {}
+
+func (x *SaveCombatWinProgressRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_char_char_proto_msgTypes[24]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SaveCombatWinProgressRequest.ProtoReflect.Descriptor instead.
+func (*SaveCombatWinProgressRequest) Descriptor() ([]byte, []int) {
+	return file_char_char_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *SaveCombatWinProgressRequest) GetCharacter() *repo.Character {
+	if x != nil {
+		return x.Character
+	}
+	return nil
+}
+
+func (x *SaveCombatWinProgressRequest) GetNpc() *repo.Npc {
+	if x != nil {
+		return x.Npc
+	}
+	return nil
+}
+
+type SaveCombatWinProgressResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Character     *repo.Character        `protobuf:"bytes,3,opt,name=character,proto3" json:"character,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SaveCombatWinProgressResponse) Reset() {
+	*x = SaveCombatWinProgressResponse{}
+	mi := &file_char_char_proto_msgTypes[25]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SaveCombatWinProgressResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SaveCombatWinProgressResponse) ProtoMessage() {}
+
+func (x *SaveCombatWinProgressResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_char_char_proto_msgTypes[25]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SaveCombatWinProgressResponse.ProtoReflect.Descriptor instead.
+func (*SaveCombatWinProgressResponse) Descriptor() ([]byte, []int) {
+	return file_char_char_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *SaveCombatWinProgressResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *SaveCombatWinProgressResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *SaveCombatWinProgressResponse) GetCharacter() *repo.Character {
+	if x != nil {
+		return x.Character
+	}
+	return nil
+}
+
 var File_char_char_proto protoreflect.FileDescriptor
 
 const file_char_char_proto_rawDesc = "" +
@@ -1261,7 +1373,14 @@ const file_char_char_proto_rawDesc = "" +
 	"\ritemInstances\x18\x01 \x03(\v2\x12.repo.ItemInstanceR\ritemInstances\"\x16\n" +
 	"\x14GetEquipSlotsRequest\">\n" +
 	"\x15GetEquipSlotsResponse\x12%\n" +
-	"\x05slots\x18\x01 \x03(\v2\x0f.repo.EquipSlotR\x05slots2\xef\a\n" +
+	"\x05slots\x18\x01 \x03(\v2\x0f.repo.EquipSlotR\x05slots\"j\n" +
+	"\x1cSaveCombatWinProgressRequest\x12-\n" +
+	"\tcharacter\x18\x01 \x01(\v2\x0f.repo.CharacterR\tcharacter\x12\x1b\n" +
+	"\x03npc\x18\x02 \x01(\v2\t.repo.NpcR\x03npc\"\x82\x01\n" +
+	"\x1dSaveCombatWinProgressResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12-\n" +
+	"\tcharacter\x18\x03 \x01(\v2\x0f.repo.CharacterR\tcharacter2\xd1\b\n" +
 	"\tCharacter\x12@\n" +
 	"\x05Check\x12\x1a.health.HealthCheckRequest\x1a\x1b.health.HealthCheckResponse\x12?\n" +
 	"\n" +
@@ -1276,7 +1395,8 @@ const file_char_char_proto_rawDesc = "" +
 	"\vToggleEquip\x12\x18.char.ToggleEquipRequest\x1a\x19.char.ToggleEquipResponse\x12<\n" +
 	"\tEquipItem\x12\x16.char.EquipItemRequest\x1a\x17.char.EquipItemResponse\x12B\n" +
 	"\vUnequipItem\x12\x18.char.UnequipItemRequest\x1a\x19.char.UnequipItemResponse\x12H\n" +
-	"\rGetEquipSlots\x12\x1a.char.GetEquipSlotsRequest\x1a\x1b.char.GetEquipSlotsResponseB6Z4github.com/komadiina/spelltext/proto/proto/char;charb\x06proto3"
+	"\rGetEquipSlots\x12\x1a.char.GetEquipSlotsRequest\x1a\x1b.char.GetEquipSlotsResponse\x12`\n" +
+	"\x15SaveCombatWinProgress\x12\".char.SaveCombatWinProgressRequest\x1a#.char.SaveCombatWinProgressResponseB6Z4github.com/komadiina/spelltext/proto/proto/char;charb\x06proto3"
 
 var (
 	file_char_char_proto_rawDescOnce sync.Once
@@ -1290,7 +1410,7 @@ func file_char_char_proto_rawDescGZIP() []byte {
 	return file_char_char_proto_rawDescData
 }
 
-var file_char_char_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
+var file_char_char_proto_msgTypes = make([]protoimpl.MessageInfo, 26)
 var file_char_char_proto_goTypes = []any{
 	(*ListHeroesRequest)(nil),                // 0: char.ListHeroesRequest
 	(*ListHeroesResponse)(nil),               // 1: char.ListHeroesResponse
@@ -1316,53 +1436,61 @@ var file_char_char_proto_goTypes = []any{
 	(*GetEquippedItemsResponse)(nil),         // 21: char.GetEquippedItemsResponse
 	(*GetEquipSlotsRequest)(nil),             // 22: char.GetEquipSlotsRequest
 	(*GetEquipSlotsResponse)(nil),            // 23: char.GetEquipSlotsResponse
-	(*repo.Hero)(nil),                        // 24: repo.Hero
-	(*repo.Character)(nil),                   // 25: repo.Character
-	(*repo.ItemInstance)(nil),                // 26: repo.ItemInstance
-	(*repo.EquipSlot)(nil),                   // 27: repo.EquipSlot
-	(*health.HealthCheckRequest)(nil),        // 28: health.HealthCheckRequest
-	(*health.HealthCheckResponse)(nil),       // 29: health.HealthCheckResponse
+	(*SaveCombatWinProgressRequest)(nil),     // 24: char.SaveCombatWinProgressRequest
+	(*SaveCombatWinProgressResponse)(nil),    // 25: char.SaveCombatWinProgressResponse
+	(*repo.Hero)(nil),                        // 26: repo.Hero
+	(*repo.Character)(nil),                   // 27: repo.Character
+	(*repo.ItemInstance)(nil),                // 28: repo.ItemInstance
+	(*repo.EquipSlot)(nil),                   // 29: repo.EquipSlot
+	(*repo.Npc)(nil),                         // 30: repo.Npc
+	(*health.HealthCheckRequest)(nil),        // 31: health.HealthCheckRequest
+	(*health.HealthCheckResponse)(nil),       // 32: health.HealthCheckResponse
 }
 var file_char_char_proto_depIdxs = []int32{
-	24, // 0: char.ListHeroesResponse.heroes:type_name -> repo.Hero
-	25, // 1: char.ListCharactersResponse.characters:type_name -> repo.Character
-	25, // 2: char.GetLastSelectedCharacterResponse.character:type_name -> repo.Character
-	25, // 3: char.GetCharacterResponse.character:type_name -> repo.Character
-	24, // 4: char.CreateCharacterRequest.hero:type_name -> repo.Hero
-	25, // 5: char.CreateCharacterResponse.character:type_name -> repo.Character
-	26, // 6: char.GetEquippedItemsResponse.itemInstances:type_name -> repo.ItemInstance
-	27, // 7: char.GetEquipSlotsResponse.slots:type_name -> repo.EquipSlot
-	28, // 8: char.Character.Check:input_type -> health.HealthCheckRequest
-	0,  // 9: char.Character.ListHeroes:input_type -> char.ListHeroesRequest
-	2,  // 10: char.Character.ListCharacters:input_type -> char.ListCharactersRequest
-	4,  // 11: char.Character.SetSelectedCharacter:input_type -> char.SetSelectedCharacterRequest
-	6,  // 12: char.Character.GetLastSelectedCharacter:input_type -> char.GetLastSelectedCharacterRequest
-	8,  // 13: char.Character.GetCharacter:input_type -> char.GetCharacterRequest
-	10, // 14: char.Character.CreateCharacter:input_type -> char.CreateCharacterRequest
-	12, // 15: char.Character.DeleteCharacter:input_type -> char.DeleteCharacterRequest
-	20, // 16: char.Character.GetEquippedItems:input_type -> char.GetEquippedItemsRequest
-	14, // 17: char.Character.ToggleEquip:input_type -> char.ToggleEquipRequest
-	16, // 18: char.Character.EquipItem:input_type -> char.EquipItemRequest
-	18, // 19: char.Character.UnequipItem:input_type -> char.UnequipItemRequest
-	22, // 20: char.Character.GetEquipSlots:input_type -> char.GetEquipSlotsRequest
-	29, // 21: char.Character.Check:output_type -> health.HealthCheckResponse
-	1,  // 22: char.Character.ListHeroes:output_type -> char.ListHeroesResponse
-	3,  // 23: char.Character.ListCharacters:output_type -> char.ListCharactersResponse
-	5,  // 24: char.Character.SetSelectedCharacter:output_type -> char.SetSelectedCharacterResponse
-	7,  // 25: char.Character.GetLastSelectedCharacter:output_type -> char.GetLastSelectedCharacterResponse
-	9,  // 26: char.Character.GetCharacter:output_type -> char.GetCharacterResponse
-	11, // 27: char.Character.CreateCharacter:output_type -> char.CreateCharacterResponse
-	13, // 28: char.Character.DeleteCharacter:output_type -> char.DeleteCharacterResponse
-	21, // 29: char.Character.GetEquippedItems:output_type -> char.GetEquippedItemsResponse
-	15, // 30: char.Character.ToggleEquip:output_type -> char.ToggleEquipResponse
-	17, // 31: char.Character.EquipItem:output_type -> char.EquipItemResponse
-	19, // 32: char.Character.UnequipItem:output_type -> char.UnequipItemResponse
-	23, // 33: char.Character.GetEquipSlots:output_type -> char.GetEquipSlotsResponse
-	21, // [21:34] is the sub-list for method output_type
-	8,  // [8:21] is the sub-list for method input_type
-	8,  // [8:8] is the sub-list for extension type_name
-	8,  // [8:8] is the sub-list for extension extendee
-	0,  // [0:8] is the sub-list for field type_name
+	26, // 0: char.ListHeroesResponse.heroes:type_name -> repo.Hero
+	27, // 1: char.ListCharactersResponse.characters:type_name -> repo.Character
+	27, // 2: char.GetLastSelectedCharacterResponse.character:type_name -> repo.Character
+	27, // 3: char.GetCharacterResponse.character:type_name -> repo.Character
+	26, // 4: char.CreateCharacterRequest.hero:type_name -> repo.Hero
+	27, // 5: char.CreateCharacterResponse.character:type_name -> repo.Character
+	28, // 6: char.GetEquippedItemsResponse.itemInstances:type_name -> repo.ItemInstance
+	29, // 7: char.GetEquipSlotsResponse.slots:type_name -> repo.EquipSlot
+	27, // 8: char.SaveCombatWinProgressRequest.character:type_name -> repo.Character
+	30, // 9: char.SaveCombatWinProgressRequest.npc:type_name -> repo.Npc
+	27, // 10: char.SaveCombatWinProgressResponse.character:type_name -> repo.Character
+	31, // 11: char.Character.Check:input_type -> health.HealthCheckRequest
+	0,  // 12: char.Character.ListHeroes:input_type -> char.ListHeroesRequest
+	2,  // 13: char.Character.ListCharacters:input_type -> char.ListCharactersRequest
+	4,  // 14: char.Character.SetSelectedCharacter:input_type -> char.SetSelectedCharacterRequest
+	6,  // 15: char.Character.GetLastSelectedCharacter:input_type -> char.GetLastSelectedCharacterRequest
+	8,  // 16: char.Character.GetCharacter:input_type -> char.GetCharacterRequest
+	10, // 17: char.Character.CreateCharacter:input_type -> char.CreateCharacterRequest
+	12, // 18: char.Character.DeleteCharacter:input_type -> char.DeleteCharacterRequest
+	20, // 19: char.Character.GetEquippedItems:input_type -> char.GetEquippedItemsRequest
+	14, // 20: char.Character.ToggleEquip:input_type -> char.ToggleEquipRequest
+	16, // 21: char.Character.EquipItem:input_type -> char.EquipItemRequest
+	18, // 22: char.Character.UnequipItem:input_type -> char.UnequipItemRequest
+	22, // 23: char.Character.GetEquipSlots:input_type -> char.GetEquipSlotsRequest
+	24, // 24: char.Character.SaveCombatWinProgress:input_type -> char.SaveCombatWinProgressRequest
+	32, // 25: char.Character.Check:output_type -> health.HealthCheckResponse
+	1,  // 26: char.Character.ListHeroes:output_type -> char.ListHeroesResponse
+	3,  // 27: char.Character.ListCharacters:output_type -> char.ListCharactersResponse
+	5,  // 28: char.Character.SetSelectedCharacter:output_type -> char.SetSelectedCharacterResponse
+	7,  // 29: char.Character.GetLastSelectedCharacter:output_type -> char.GetLastSelectedCharacterResponse
+	9,  // 30: char.Character.GetCharacter:output_type -> char.GetCharacterResponse
+	11, // 31: char.Character.CreateCharacter:output_type -> char.CreateCharacterResponse
+	13, // 32: char.Character.DeleteCharacter:output_type -> char.DeleteCharacterResponse
+	21, // 33: char.Character.GetEquippedItems:output_type -> char.GetEquippedItemsResponse
+	15, // 34: char.Character.ToggleEquip:output_type -> char.ToggleEquipResponse
+	17, // 35: char.Character.EquipItem:output_type -> char.EquipItemResponse
+	19, // 36: char.Character.UnequipItem:output_type -> char.UnequipItemResponse
+	23, // 37: char.Character.GetEquipSlots:output_type -> char.GetEquipSlotsResponse
+	25, // 38: char.Character.SaveCombatWinProgress:output_type -> char.SaveCombatWinProgressResponse
+	25, // [25:39] is the sub-list for method output_type
+	11, // [11:25] is the sub-list for method input_type
+	11, // [11:11] is the sub-list for extension type_name
+	11, // [11:11] is the sub-list for extension extendee
+	0,  // [0:11] is the sub-list for field type_name
 }
 
 func init() { file_char_char_proto_init() }
@@ -1376,7 +1504,7 @@ func file_char_char_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_char_char_proto_rawDesc), len(file_char_char_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   24,
+			NumMessages:   26,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -9,6 +9,7 @@ import (
 
 	"github.com/komadiina/spelltext/client/constants"
 	"github.com/komadiina/spelltext/client/types"
+	pbCombat "github.com/komadiina/spelltext/proto/combat"
 	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	"github.com/rivo/tview"
 )
@@ -159,8 +160,6 @@ func PlayerAttack(c *types.SpelltextClient, ab *pbRepo.Ability, fightState *type
 	lower, upper := float64(dmg)-(float64(dmg)*variation), float64(dmg)+(float64(dmg)*variation)
 	dmg = uint64(rand.Intn(int(upper)-int(lower)+1) + int(lower))
 
-	c.Logger.Info("", "lower", lower, "upper", upper, "dmg", dmg)
-
 	if fightState.NpcCurrentHealth <= int64(dmg) {
 		fightState.NpcCurrentHealth = 0
 	} else {
@@ -205,7 +204,18 @@ func CalculateNpcStats(npc *pbRepo.Npc) *types.EntityStats {
 }
 
 func SubmitLoss(c *types.SpelltextClient) {
-	
+	// TODO
 }
 
-func SubmitWin(c *types.SpelltextClient) {}
+func SubmitWin(c *types.SpelltextClient, npc *pbRepo.Npc) {
+	resp, err := c.Clients.CombatClient.SubmitWin(*c.Context, &pbCombat.SubmitWinRequest{
+		CharacterId: c.Storage.SelectedCharacter.CharacterId,
+		NpcId:       npc.Id,
+	})
+	if err != nil {
+		c.Logger.Error(err)
+		return
+	} else {
+		c.Storage.SelectedCharacter = resp.NewCharacter
+	}
+}

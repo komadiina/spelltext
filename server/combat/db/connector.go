@@ -7,10 +7,10 @@ import (
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/komadiina/spelltext/server/auth/server"
+	"github.com/komadiina/spelltext/server/combat/server"
 )
 
-func InitializePool(s *server.AuthService, context context.Context, conninfo string, backoff time.Duration, maxRetries int, boFormula func(time.Duration) time.Duration) error {
+func InitializePool(s *server.CombatService, context context.Context, conninfo string, backoff time.Duration, maxRetries int, boFormula func(time.Duration) time.Duration) error {
 	try := 1
 	for {
 		conn, err := pgx.Connect(context, conninfo)

@@ -9,6 +9,6 @@ import (
 
 func AddErrorPage(c *types.SpelltextClient) {
 	c.PageManager.RegisterFactory(constants.PAGE_ERROR, func() tview.Primitive {
-		return utils.GenerateErrorPage(c)
+		return utils.GenerateErrorPage(c, "")
 	}, nil, func() {})
 }
