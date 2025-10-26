@@ -161,86 +161,6 @@ func (x *HealthCheckResponse) GetStatus() HealthCheckResponse_ServingStatus {
 	return HealthCheckResponse_UNKNOWN
 }
 
-type HostnameRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *HostnameRequest) Reset() {
-	*x = HostnameRequest{}
-	mi := &file_health_health_proto_msgTypes[2]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *HostnameRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*HostnameRequest) ProtoMessage() {}
-
-func (x *HostnameRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_health_health_proto_msgTypes[2]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use HostnameRequest.ProtoReflect.Descriptor instead.
-func (*HostnameRequest) Descriptor() ([]byte, []int) {
-	return file_health_health_proto_rawDescGZIP(), []int{2}
-}
-
-type HostnameResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Hostname      string                 `protobuf:"bytes,1,opt,name=hostname,proto3" json:"hostname,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *HostnameResponse) Reset() {
-	*x = HostnameResponse{}
-	mi := &file_health_health_proto_msgTypes[3]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *HostnameResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*HostnameResponse) ProtoMessage() {}
-
-func (x *HostnameResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_health_health_proto_msgTypes[3]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use HostnameResponse.ProtoReflect.Descriptor instead.
-func (*HostnameResponse) Descriptor() ([]byte, []int) {
-	return file_health_health_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *HostnameResponse) GetHostname() string {
-	if x != nil {
-		return x.Hostname
-	}
-	return ""
-}
-
 var File_health_health_proto protoreflect.FileDescriptor
 
 const file_health_health_proto_rawDesc = "" +
@@ -254,10 +174,7 @@ const file_health_health_proto_rawDesc = "" +
 	"\aUNKNOWN\x10\x00\x12\v\n" +
 	"\aSERVING\x10\x01\x12\x0f\n" +
 	"\vNOT_SERVING\x10\x02\x12\x13\n" +
-	"\x0fSERVICE_UNKNOWN\x10\x03\"\x11\n" +
-	"\x0fHostnameRequest\".\n" +
-	"\x10HostnameResponse\x12\x1a\n" +
-	"\bhostname\x18\x01 \x01(\tR\bhostnameB4Z2github.com/komadiina/spelltext/proto/health;healthb\x06proto3"
+	"\x0fSERVICE_UNKNOWN\x10\x03B4Z2github.com/komadiina/spelltext/proto/health;healthb\x06proto3"
 
 var (
 	file_health_health_proto_rawDescOnce sync.Once
@@ -272,13 +189,11 @@ func file_health_health_proto_rawDescGZIP() []byte {
 }
 
 var file_health_health_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_health_health_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_health_health_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_health_health_proto_goTypes = []any{
 	(HealthCheckResponse_ServingStatus)(0), // 0: health.HealthCheckResponse.ServingStatus
 	(*HealthCheckRequest)(nil),             // 1: health.HealthCheckRequest
 	(*HealthCheckResponse)(nil),            // 2: health.HealthCheckResponse
-	(*HostnameRequest)(nil),                // 3: health.HostnameRequest
-	(*HostnameResponse)(nil),               // 4: health.HostnameResponse
 }
 var file_health_health_proto_depIdxs = []int32{
 	0, // 0: health.HealthCheckResponse.status:type_name -> health.HealthCheckResponse.ServingStatus
@@ -300,7 +215,7 @@ func file_health_health_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_health_health_proto_rawDesc), len(file_health_health_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   4,
+			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

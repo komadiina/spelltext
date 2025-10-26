@@ -41,9 +41,6 @@ message LeaveChatroomMessageResponse {
 }
 
 
-message PingRequest {}
-message PingResponse {}
-
 service Chat {
   rpc Check(health.HealthCheckRequest) returns (health.HealthCheckResponse);
   rpc SendChatMessage (SendChatMessageRequest) returns (SendChatMessageResponse);

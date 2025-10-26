@@ -7,7 +7,12 @@
 - ~~health check ping between service dependents~~
 - ~~final: proper database pre-seed, apply persistence~~
 - enemy level xp/damage scaling
-- armory/character: update `QuickInventoryTree` and `EquippedItems` on: **character change**, **item equip** - hard asf, cba, delay it
 - add minlevel item requirement (e.g. `items`.`level_req` => `... level_req int not null default 1, ...`)
 - system: loki + grafana for logging - **urgent**
+- qol: map unpacking of pbRepo objects via a function to []slice to scan(varargs...)
 - stress test script (per-service: methods that invoke db, and create stress test endpoints (foo grpc endpoints)) via `grpcurl`
+- bugfixes: 
+  - `UINT64_OVERFLOW` xp needed to level up (@client, @armory)
+  - gamba gold state out of date (@client, @gamba)
+  - update `QuickInventoryTree` and `EquippedItems` on: **character change**, **item equip**  
+    - hard asf, cba, delay it

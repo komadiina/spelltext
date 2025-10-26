@@ -8,68 +8,19 @@ import (
 	"time"
 
 	"github.com/charmbracelet/log"
-	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgxpool"
+	pbChar "github.com/komadiina/spelltext/proto/char"
 	pb "github.com/komadiina/spelltext/proto/combat"
 	"github.com/komadiina/spelltext/server/combat/config"
+	"github.com/komadiina/spelltext/server/combat/db"
+	"github.com/komadiina/spelltext/server/combat/health"
 	"github.com/komadiina/spelltext/server/combat/server"
+	"github.com/komadiina/spelltext/server/combat/services"
+	"github.com/komadiina/spelltext/shared"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/reflection"
 )
-
-const banner = `
-                _ _ _            _   
-               | | | |          | |  
- ___ _ __   ___| | | |_ _____  _| |_ 
-/ __| '_ \ / _ \ | | __/ _ \ \/ / __|
-\__ \ |_) |  __/ | | ||  __/>  <| |_ 
-|___/ .__/ \___|_|_|\__\___/_/\_\\__|
-    | |                              
-    |_|                              
-
-`
-
-func InitializePool(s *server.CombatService, context context.Context, conninfo string, backoff time.Duration, maxRetries int, boFormula func(time.Duration) time.Duration) error {
-	try := 1
-	for {
-		conn, err := pgx.Connect(context, conninfo)
-
-		if err != nil && try >= maxRetries {
-			// conn not established, max retries exceeded
-			s.Logger.Fatal(err)
-		} else if err == nil && try < maxRetries {
-			// conn established within maxRetries
-			s.Logger.Info("pgpool connection established, creating pool..")
-			conn.Close(context)
-
-			pool, err := pgxpool.New(context, fmt.Sprintf(
-				"postgres://%s:%s@%s:%d/%s?sslmode=%s",
-				s.Config.PgUser,
-				s.Config.PgPass,
-				s.Config.PgHost,
-				s.Config.PgPort,
-				s.Config.PgDbName,
-				s.Config.PgSSLMode,
-			))
-
-			if err != nil {
-				s.Logger.Fatal("unable to create pool", "reason", err)
-			} else {
-				s.Logger.Info("pgxpool (dpool, via pgpool-ii) initialized")
-			}
-
-			s.DbPool = pool
-
-			return nil
-		} else {
-			// conn not established, backoff
-			s.Logger.Warn("failed to establish database connection, backing off...", "reason", err, "backoff_seconds", backoff.Seconds())
-			time.Sleep(backoff)
-			backoff = boFormula(backoff)
-			try++
-		}
-	}
-}
 
 var version = os.Getenv("VERSION")
 
@@ -79,7 +30,7 @@ func main() {
 	logging.Init(log.InfoLevel, "combatserver", false)
 	logger := logging.Get("combatserver", false)
 
-	logger.Infof(`%s%sversion=%s`, banner, "\n", version)
+	logger.Infof(`%s%sversion=%s`, shared.BANNER, "\n", version)
 
 	logger.Info("loading config...", "CONFIG_FILE", os.Getenv("CONFIG_FILE"))
 	cfg, err := config.LoadConfig()
@@ -109,9 +60,41 @@ func main() {
 		cfg.PgDbName,
 		cfg.PgSSLMode,
 	)
-	err = InitializePool(&ss, ctx, conninfo, time.Second*5, 10, func(bo time.Duration) time.Duration {
+	err = db.InitializePool(&ss, ctx, conninfo, time.Second*5, 10, func(bo time.Duration) time.Duration {
 		return bo + time.Second*5
 	})
+
+	target := fmt.Sprintf("charserver:%d", cfg.CharacterServicePort)
+	clientConn, err := services.InitClientConn(
+		logger,
+		target,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		5,
+		10,
+	)
+	if err != nil {
+		logger.Fatal(err)
+	}
+
+	ss.Connections = &server.Connections{
+		Character: clientConn,
+	}
+
+	ss.Clients = &server.Clients{
+		Character: pbChar.NewCharacterClient(clientConn),
+	}
+
+	defer ss.Connections.Character.Close()
+
+	go health.InitMonitor(
+		&ss,
+		target,
+		ss.Clients.Character,
+		func(s *server.CombatService, conn *grpc.ClientConn) {
+			s.Clients.Character = pbChar.NewCharacterClient(conn)
+			ss.Logger.Infof("service is back up, healthy. service=%s", target)
+		}).
+		Run(ctx)
 
 	defer func() {
 		ss.Logger.Info("closing pgx dbconn pool...")
@@ -125,6 +108,7 @@ func main() {
 	pb.RegisterCombatServer(s, &ss)
 	logger.Info(fmt.Sprintf("%s v%s listening on %s:%d", "combatserver", version, "127.0.0.1", ss.Config.ServicePort))
 
+	reflection.Register(s)
 	if err := s.Serve(lis); err != nil {
 		logger.Error("failed to serve", "reason", err)
 		os.Exit(1)

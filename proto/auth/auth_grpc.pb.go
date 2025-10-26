@@ -8,6 +8,7 @@ package auth
 
 import (
 	context "context"
+	health "github.com/komadiina/spelltext/proto/health"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -19,7 +20,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Auth_Ping_FullMethodName     = "/auth.Auth/Ping"
+	Auth_Check_FullMethodName    = "/auth.Auth/Check"
 	Auth_Login_FullMethodName    = "/auth.Auth/Login"
 	Auth_Register_FullMethodName = "/auth.Auth/Register"
 )
@@ -28,7 +29,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthClient interface {
-	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
+	Check(ctx context.Context, in *health.HealthCheckRequest, opts ...grpc.CallOption) (*health.HealthCheckResponse, error)
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
 }
@@ -41,10 +42,10 @@ func NewAuthClient(cc grpc.ClientConnInterface) AuthClient {
 	return &authClient{cc}
 }
 
-func (c *authClient) Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error) {
+func (c *authClient) Check(ctx context.Context, in *health.HealthCheckRequest, opts ...grpc.CallOption) (*health.HealthCheckResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(PingResponse)
-	err := c.cc.Invoke(ctx, Auth_Ping_FullMethodName, in, out, cOpts...)
+	out := new(health.HealthCheckResponse)
+	err := c.cc.Invoke(ctx, Auth_Check_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +76,7 @@ func (c *authClient) Register(ctx context.Context, in *RegisterRequest, opts ...
 // All implementations must embed UnimplementedAuthServer
 // for forward compatibility.
 type AuthServer interface {
-	Ping(context.Context, *PingRequest) (*PingResponse, error)
+	Check(context.Context, *health.HealthCheckRequest) (*health.HealthCheckResponse, error)
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
 	Register(context.Context, *RegisterRequest) (*RegisterResponse, error)
 	mustEmbedUnimplementedAuthServer()
@@ -88,8 +89,8 @@ type AuthServer interface {
 // pointer dereference when methods are called.
 type UnimplementedAuthServer struct{}
 
-func (UnimplementedAuthServer) Ping(context.Context, *PingRequest) (*PingResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
+func (UnimplementedAuthServer) Check(context.Context, *health.HealthCheckRequest) (*health.HealthCheckResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Check not implemented")
 }
 func (UnimplementedAuthServer) Login(context.Context, *LoginRequest) (*LoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
@@ -118,20 +119,20 @@ func RegisterAuthServer(s grpc.ServiceRegistrar, srv AuthServer) {
 	s.RegisterService(&Auth_ServiceDesc, srv)
 }
 
-func _Auth_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PingRequest)
+func _Auth_Check_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(health.HealthCheckRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServer).Ping(ctx, in)
+		return srv.(AuthServer).Check(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Auth_Ping_FullMethodName,
+		FullMethod: Auth_Check_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServer).Ping(ctx, req.(*PingRequest))
+		return srv.(AuthServer).Check(ctx, req.(*health.HealthCheckRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -180,8 +181,8 @@ var Auth_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*AuthServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Ping",
-			Handler:    _Auth_Ping_Handler,
+			MethodName: "Check",
+			Handler:    _Auth_Check_Handler,
 		},
 		{
 			MethodName: "Login",

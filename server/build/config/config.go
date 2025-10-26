@@ -17,7 +17,7 @@ type Config struct {
 	HealthCheckInterval  int    `yaml:"healthCheckInterval" env:"HEALTH_CHECK_INTERVAL" env-default:"10"`
 	MaxReconnAttempts    int    `yaml:"maxReconnectAttempts" env:"MAX_RECONNECT_ATTEMPTS" env-default:"3"`
 	Backoff              int    `yaml:"backoff" env:"BACKOFF" env-default:"2"`
-	CharacterServicePort int    `yaml:"charserver.port" env:"CHARSERVER_PORT" env-default:"50054"`
+	CharacterServicePort int    `env-default:"50054"`
 }
 
 func LoadConfig() (*Config, error) {

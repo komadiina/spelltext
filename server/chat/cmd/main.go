@@ -11,6 +11,7 @@ import (
 	"github.com/komadiina/spelltext/server/chat/server"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 var version = os.Getenv("VERSION")
@@ -64,6 +65,7 @@ func main() {
 
 	logger.Infof("chatserver v%s listening on localhost:%d", version, cfg.Port)
 
+	reflection.Register(s)
 	if err := s.Serve(lis); err != nil {
 		logger.Error("failed to serve", "reason", err)
 		os.Exit(1)

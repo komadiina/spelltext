@@ -1,0 +1,108 @@
+{
+    "chatserver": {
+        "pkg": "chat",
+        "svc": "Chat",
+        "methods": [
+            {"method": "Check", "parameters": {}},
+            {
+                "method": "SendChatMessage",
+                "parameters": {"sender": "stress_test", "message": "hello"}
+            },
+            {"method": "JoinChatroom", "parameters": {"username": "stress_test_user"}},
+            {"method": "LeaveChatroom", "parameters": {"username": "stress_test_user"}}
+        ],
+        "target": "localhost:50051"
+    },
+    "storeserver": {
+        "pkg": "store",
+        "svc": "Store",
+        "methods": [
+            {"method": "Check", "parameters": {}},
+            {"method": "ListVendors", "parameters": {"noop": "noopnoopnoopnoopnoop"}},
+            {"method": "ListVendorItems", "parameters": {"vendor_id": 1}}
+        ],
+        "target": "localhost:50052"
+    },
+    "inventoryserver": {
+        "pkg": "inventory",
+        "svc": "Inventory",
+        "methods": [
+            {"method": "Check", "parameters": {}},
+            {
+                "method": "GetBalance",
+                "parameters": {"username": "oggnjen", "character": "Oggnjen"}
+            },
+            {"method": "ListBackpackItems", "parameters": {"character_id": 1}}
+        ],
+        "target": "localhost:50053"
+    },
+    "charserver": {
+        "pkg": "char",
+        "svc": "Character",
+        "methods": [
+            {"method": "Check", "parameters": {}},
+            {"method": "ListHeroes", "parameters": {}},
+            {"method": "ListCharacters", "parameters": {"username": "oggnjen"}},
+            {
+                "method": "SetSelectedCharacter",
+                "parameters": {"user_id": 1, "character_id": 1}
+            },
+            {"method": "GetCharacter", "parameters": {"character_id": 1}}
+        ],
+        "target": "localhost:50054"
+    },
+    "gambaserver": {
+        "pkg": "gamba",
+        "svc": "Gamba",
+        "methods": [
+            {"method": "Check", "parameters": {}},
+            {"method": "GetChests", "parameters": {}},
+            {"method": "GetChestDetails", "parameters": {"chest_id": 1}},
+            {"method": "OpenChest", "parameters": {"character_id": 1, "chest_id": 1}}
+        ],
+        "target": "localhost:50055"
+    },
+    "authserver": {
+        "pkg": "auth",
+        "svc": "Auth",
+        "methods": [
+            {"method": "Check", "parameters": {}},
+            {
+                "method": "Login",
+                "parameters": {"username": "oggnjen", "password": "oggnjen"}
+            }
+        ],
+        "target": "localhost:50056"
+    },
+    "combatserver": {
+        "pkg": "combat",
+        "svc": "Combat",
+        "methods": [
+            {"method": "Check", "parameters": {}},
+            {"method": "ListNpcs", "parameters": {"character_id": 1}},
+            {"method": "SubmitLoss", "parameters": {}},
+            {"method": "SubmitWin", "parameters": {"character_id": 1, "npc_id": 1}}
+        ],
+        "target": "localhost:50057"
+    },
+    "buildserver": {
+        "pkg": "build",
+        "svc": "Build",
+        "methods": [
+            {"method": "Check", "parameters": {}},
+            {
+                "method": "ListAbilities",
+                "parameters": {"character": {"character_id": 1}}
+            },
+            {
+                "method": "UpgradeAbility",
+                "parameters": {
+                    "character_id": 1,
+                    "ability_id": 1,
+                    "new_ability": false
+                }
+            }
+        ],
+        "target": "localhost:50058"
+    }
+}

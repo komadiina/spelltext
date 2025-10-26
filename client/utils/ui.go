@@ -86,7 +86,7 @@ func PaintText(color string, text string) string {
 	return fmt.Sprint(ToColorTag(color), text, "[::-]")
 }
 
-func GenerateErrorPage(c *types.SpelltextClient) tview.Primitive {
+func GenerateErrorPage(c *types.SpelltextClient, errorText string) tview.Primitive {
 	fl := tview.NewFlex().SetDirection(tview.FlexRow)
 	fl.SetBorder(true).SetTitle(" [::b]error[::-] ").SetBorderPadding(5, 5, 5, 5)
 
@@ -96,5 +96,8 @@ func GenerateErrorPage(c *types.SpelltextClient) tview.Primitive {
 			1, 1, false).
 		AddItem(
 			tview.NewTextView().SetText("an error occured. please try again later."),
+			1, 1, false).
+		AddItem(
+			tview.NewTextView().SetDynamicColors(true).SetText(fmt.Sprint("[::b][red]", errorText, `[::-][""][white]`)),
 			1, 1, false)
 }

@@ -33,6 +33,7 @@ const (
 	Character_EquipItem_FullMethodName                = "/char.Character/EquipItem"
 	Character_UnequipItem_FullMethodName              = "/char.Character/UnequipItem"
 	Character_GetEquipSlots_FullMethodName            = "/char.Character/GetEquipSlots"
+	Character_SaveCombatWinProgress_FullMethodName    = "/char.Character/SaveCombatWinProgress"
 )
 
 // CharacterClient is the client API for Character service.
@@ -52,6 +53,7 @@ type CharacterClient interface {
 	EquipItem(ctx context.Context, in *EquipItemRequest, opts ...grpc.CallOption) (*EquipItemResponse, error)
 	UnequipItem(ctx context.Context, in *UnequipItemRequest, opts ...grpc.CallOption) (*UnequipItemResponse, error)
 	GetEquipSlots(ctx context.Context, in *GetEquipSlotsRequest, opts ...grpc.CallOption) (*GetEquipSlotsResponse, error)
+	SaveCombatWinProgress(ctx context.Context, in *SaveCombatWinProgressRequest, opts ...grpc.CallOption) (*SaveCombatWinProgressResponse, error)
 }
 
 type characterClient struct {
@@ -192,6 +194,16 @@ func (c *characterClient) GetEquipSlots(ctx context.Context, in *GetEquipSlotsRe
 	return out, nil
 }
 
+func (c *characterClient) SaveCombatWinProgress(ctx context.Context, in *SaveCombatWinProgressRequest, opts ...grpc.CallOption) (*SaveCombatWinProgressResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SaveCombatWinProgressResponse)
+	err := c.cc.Invoke(ctx, Character_SaveCombatWinProgress_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CharacterServer is the server API for Character service.
 // All implementations must embed UnimplementedCharacterServer
 // for forward compatibility.
@@ -209,6 +221,7 @@ type CharacterServer interface {
 	EquipItem(context.Context, *EquipItemRequest) (*EquipItemResponse, error)
 	UnequipItem(context.Context, *UnequipItemRequest) (*UnequipItemResponse, error)
 	GetEquipSlots(context.Context, *GetEquipSlotsRequest) (*GetEquipSlotsResponse, error)
+	SaveCombatWinProgress(context.Context, *SaveCombatWinProgressRequest) (*SaveCombatWinProgressResponse, error)
 	mustEmbedUnimplementedCharacterServer()
 }
 
@@ -257,6 +270,9 @@ func (UnimplementedCharacterServer) UnequipItem(context.Context, *UnequipItemReq
 }
 func (UnimplementedCharacterServer) GetEquipSlots(context.Context, *GetEquipSlotsRequest) (*GetEquipSlotsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetEquipSlots not implemented")
+}
+func (UnimplementedCharacterServer) SaveCombatWinProgress(context.Context, *SaveCombatWinProgressRequest) (*SaveCombatWinProgressResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveCombatWinProgress not implemented")
 }
 func (UnimplementedCharacterServer) mustEmbedUnimplementedCharacterServer() {}
 func (UnimplementedCharacterServer) testEmbeddedByValue()                   {}
@@ -513,6 +529,24 @@ func _Character_GetEquipSlots_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Character_SaveCombatWinProgress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveCombatWinProgressRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CharacterServer).SaveCombatWinProgress(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Character_SaveCombatWinProgress_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CharacterServer).SaveCombatWinProgress(ctx, req.(*SaveCombatWinProgressRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Character_ServiceDesc is the grpc.ServiceDesc for Character service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -571,6 +605,10 @@ var Character_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetEquipSlots",
 			Handler:    _Character_GetEquipSlots_Handler,
+		},
+		{
+			MethodName: "SaveCombatWinProgress",
+			Handler:    _Character_SaveCombatWinProgress_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -156,8 +156,6 @@ func (s *StoreService) ListVendorItems(ctx context.Context, req *pb.StoreListVen
 }
 
 func (s *StoreService) BuyItems(ctx context.Context, req *pb.BuyItemRequest) (*pb.BuyItemResponse, error) {
-	s.Logger.Debugf("BuyItems(%+v)", req)
-
 	start := time.Now()
 
 	errResp := &pb.BuyItemResponse{Success: false, Message: "error ocurred"}
@@ -220,6 +218,7 @@ func (s *StoreService) BuyItems(ctx context.Context, req *pb.BuyItemRequest) (*p
 		sum += item.ItemTemplate.GetGoldPrice()
 	}
 
+	// TODO: disable upon stress testing
 	if sum > c.Gold {
 		s.Logger.Debugf("character %s overbought attempt, gold_amount=%d, character_gold=%d", c.CharacterName, sum, c.Gold)
 		return &pb.BuyItemResponse{Success: false, Message: "not enough gold"}, fmt.Errorf("overbuy attempt")

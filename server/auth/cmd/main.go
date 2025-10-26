@@ -15,22 +15,12 @@ import (
 	"github.com/komadiina/spelltext/server/auth/health"
 	"github.com/komadiina/spelltext/server/auth/server"
 	"github.com/komadiina/spelltext/server/auth/services"
+	"github.com/komadiina/spelltext/shared"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/reflection"
 )
-
-const banner = `
-                _ _ _            _   
-               | | | |          | |  
- ___ _ __   ___| | | |_ _____  _| |_ 
-/ __| '_ \ / _ \ | | __/ _ \ \/ / __|
-\__ \ |_) |  __/ | | ||  __/>  <| |_ 
-|___/ .__/ \___|_|_|\__\___/_/\_\\__|
-    | |                              
-    |_|                              
-
-`
 
 var version = os.Getenv("VERSION")
 
@@ -40,7 +30,7 @@ func main() {
 	logging.Init(log.InfoLevel, "authserver", false)
 	logger := logging.Get("authserver", false)
 
-	logger.Infof("%s\n%s", banner, version)
+	logger.Infof("%s\n%s", shared.BANNER, version)
 
 	logger.Info("loading config...", "CONFIG_FILE", os.Getenv("CONFIG_FILE"))
 	cfg, err := config.LoadConfig()
@@ -114,6 +104,7 @@ func main() {
 	pb.RegisterAuthServer(s, &ss)
 	logger.Info(fmt.Sprintf("%s v%s listening on %s:%d", "authserver", version, "127.0.0.1", ss.Config.ServicePort))
 
+	reflection.Register(s)
 	if err := s.Serve(lis); err != nil {
 		logger.Error("failed to serve", "reason", err)
 		os.Exit(1)

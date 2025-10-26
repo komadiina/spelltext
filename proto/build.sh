@@ -1,0 +1,1 @@
+protoc -I. -I$(dirname "$(which protoc)")/../include --go_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. $(cat ./files)

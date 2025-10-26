@@ -2,11 +2,13 @@ package health
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/komadiina/spelltext/server/build/server"
 	health "github.com/komadiina/spelltext/utils"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/connectivity"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
@@ -16,30 +18,45 @@ func InitMonitor(
 	dest health.HealthCheckable,
 	onReconnect func(*server.BuildService, *grpc.ClientConn),
 ) *health.HealthMonitor {
+	s.Logger.Infof("initializing health monitor for %s", target)
+
 	return &health.HealthMonitor{
 		Checker:    dest,
 		Logger:     s.Logger,
 		Interval:   time.Duration(s.Config.HealthCheckInterval) * time.Second,
 		RetryLimit: s.Config.MaxReconnAttempts,
 		Reconnect: func(ctx context.Context) error { // could reuse InitClientConn somehow, to accept onConnect(), instead of onReconnect()
-			try := 1
 			backoff := s.Config.Backoff
+
+			bo := func() {
+				time.Sleep(time.Duration(backoff) * time.Second)
+				backoff *= 2
+			}
+
 			for {
-				s.Logger.Infof("attempting to reconnect #%d to %s", try, target)
-				conn, err := grpc.NewClient(target, grpc.WithTransportCredentials(insecure.NewCredentials()))
+				select {
+				case <-ctx.Done():
+					return errors.New("context canceled")
+				default:
+					conn, err := grpc.NewClient(target, grpc.WithTransportCredentials(insecure.NewCredentials()))
+					if err != nil {
+						s.Logger.Warnf("dial error: %v", err)
+						bo()
+					}
 
-				if err != nil && try >= s.Config.MaxReconnAttempts {
-					return err
-				} else if err == nil && try <= s.Config.MaxReconnAttempts {
-					s.Logger.Infof("reconnected to %s successfully", target)
-					onReconnect(s, conn)
-					return nil
-				} else {
-					s.Logger.Warnf("unable to connect (%s), backing off..., backoff=%ds", err, backoff)
+					if conn.GetState() != connectivity.Ready {
+						s.Logger.Infof("attempting to reconnect to %s", target)
+						conn.Connect()
+					}
 
-					backoff *= 3
-					time.Sleep(time.Duration(backoff) * time.Second)
-					try++
+					// wait for statechange
+					time.Sleep(500 * time.Millisecond)
+					if conn.GetState() == connectivity.Ready {
+						onReconnect(s, conn)
+						return nil
+					}
+
+					bo()
 				}
 			}
 		},

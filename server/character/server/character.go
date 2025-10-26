@@ -13,6 +13,7 @@ import (
 	pbHealth "github.com/komadiina/spelltext/proto/health"
 	pbRepo "github.com/komadiina/spelltext/proto/repo"
 	"github.com/komadiina/spelltext/server/character/config"
+	"github.com/komadiina/spelltext/server/character/functions"
 	monitor "github.com/komadiina/spelltext/utils"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 )
@@ -640,4 +641,80 @@ func (s *CharacterService) GetEquipSlots(ctx context.Context, req *pb.GetEquipSl
 	}
 
 	return &pb.GetEquipSlotsResponse{Slots: equipSlots}, nil
+}
+
+func (s *CharacterService) SaveCombatWinProgress(ctx context.Context, req *pb.SaveCombatWinProgressRequest) (*pb.SaveCombatWinProgressResponse, error) {
+	char := req.Character
+	char = functions.AddXp(req.Character, req.Npc.NpcTemplate.BaseXpReward)
+
+	// write char to db
+	sql, args, err := sq.
+		Update("characters").
+		Set("exp", char.Experience).
+		Set("level", char.Level).
+		Set("points_health", char.PointsHealth).
+		Set("points_power", char.PointsPower).
+		Set("points_strength", char.PointsStrength).
+		Set("points_spellpower", char.PointsSpellpower).
+		Where(sq.Eq{"character_id": char.CharacterId}).
+		PlaceholderFormat(sq.Dollar).
+		ToSql()
+	if err != nil {
+		s.Logger.Error(err)
+		return nil, err
+	}
+
+	_, err = s.DbPool.Exec(ctx, sql, args...)
+	if err != nil {
+		s.Logger.Error(err)
+		return nil, err
+	}
+
+	sql, _, err = sq.
+		Select("c.*, h.*").
+		From("characters AS c").
+		InnerJoin("heroes AS h ON h.id = c.hero_id").
+		Where("c.character_id = $1").
+		Limit(1).
+		ToSql()
+
+	row := s.DbPool.QueryRow(ctx, sql, char.CharacterId)
+
+	char.Hero = &pbRepo.Hero{}
+	err = row.Scan(
+		&char.CharacterId,
+		&char.UserId,
+		&char.CharacterName,
+		&char.HeroId,
+		&char.Level,
+		&char.Experience,
+		&char.Gold,
+		&char.Tokens,
+		&char.PointsHealth,
+		&char.PointsPower,
+		&char.PointsStrength,
+		&char.PointsSpellpower,
+		&char.UnspentPoints,
+		&char.Hero.Id,
+		&char.Hero.Name,
+		&char.Hero.BaseHealth,
+		&char.Hero.BasePower,
+		&char.Hero.BaseStrength,
+		&char.Hero.BaseSpellpower,
+		&char.Hero.HealthPerLevel,
+		&char.Hero.PowerPerLevel,
+		&char.Hero.StrengthPerLevel,
+		&char.Hero.SpellpowerPerLevel,
+	)
+
+	if err != nil {
+		s.Logger.Error(err)
+		return nil, err
+	}
+
+	return &pb.SaveCombatWinProgressResponse{
+		Success:   true,
+		Message:   "character update saved",
+		Character: char,
+	}, nil
 }

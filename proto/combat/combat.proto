@@ -39,8 +39,8 @@ message SubmitWinResponse {
     optional repo.Character new_character = 2; // if level_up==true, client updates the selectedCharacter to this value
 
     // rewards, serves as information for client
-    repeated repo.Item gold_reward = 3;
-    repeated repo.Item xp_reward = 4;
+    uint64 gold_reward = 3;
+    uint64 xp_reward = 4;
     repeated repo.Item item_reward = 5;
 }
 

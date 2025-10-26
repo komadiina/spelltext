@@ -15,6 +15,7 @@ import (
 	"github.com/komadiina/spelltext/shared"
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 var version = os.Getenv("VERSION")
@@ -71,6 +72,7 @@ func main() {
 	pb.RegisterInventoryServer(s, &ss)
 	logger.Info(fmt.Sprintf("%s v%s listening on %s:%d", "inventoryserver", "0.3.0", "127.0.0.1", ss.Config.ServicePort))
 
+	reflection.Register(s)
 	if err := s.Serve(lis); err != nil {
 		logger.Error("failed to serve", "reason", err)
 		os.Exit(1)

@@ -7,6 +7,7 @@ import (
 	"github.com/komadiina/spelltext/server/auth/server"
 	health "github.com/komadiina/spelltext/utils"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/connectivity"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
@@ -27,20 +28,37 @@ func InitMonitor(
 			for {
 				s.Logger.Infof("attempting to reconnect #%d to %s", try, target)
 				conn, err := grpc.NewClient(target, grpc.WithTransportCredentials(insecure.NewCredentials()))
+				if err != nil {
+					if try >= s.Config.MaxReconnAttempts {
+						s.Logger.Warnf("unable to connect to %s (%s), giving up", target, err)
+						return err
+					}
+					s.Logger.Warnf("dial error: %v, backing off %ds", err, backoff)
+					time.Sleep(time.Duration(backoff) * time.Second)
+					backoff *= 2
+					try++
+				}
 
-				if err != nil && try >= s.Config.MaxReconnAttempts {
-					return err
-				} else if err == nil && try <= s.Config.MaxReconnAttempts {
+				// Wait until connection is ready or timeout
+				waitCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
+				for conn.GetState() != connectivity.Ready {
+					if !conn.WaitForStateChange(waitCtx, conn.GetState()) {
+						break
+					}
+				}
+				cancel()
+
+				if conn.GetState() == connectivity.Ready {
 					s.Logger.Infof("reconnected to %s successfully", target)
 					onReconnect(s, conn)
 					return nil
-				} else {
-					s.Logger.Warnf("unable to connect (%s), backing off..., backoff=%ds", err, backoff)
-
-					backoff *= 3
-					time.Sleep(time.Duration(backoff) * time.Second)
-					try++
 				}
+
+				s.Logger.Warnf("connection not ready, retrying..., backoff=%ds", backoff)
+				_ = conn.Close()
+				time.Sleep(time.Duration(backoff) * time.Second)
+				backoff *= 2
+				try++
 			}
 		},
 	}

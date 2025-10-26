@@ -143,8 +143,9 @@ func AddFightPage(c *types.SpelltextClient) {
 
 					if c.Storage.Ministate.FightState.NpcCurrentHealth == 0 {
 						functions.AddToCombatLog(combatLog, "you won! wow... congrats.")
+						functions.AddToCombatLog(combatLog, fmt.Sprintf("you gain: [blue]%d xp[::-][white]", npc.NpcTemplate.BaseXpReward))
 						finished = true
-						functions.SubmitWin(c)
+						functions.SubmitWin(c, npc)
 						return
 					}
 
@@ -201,6 +202,10 @@ func AddFightPage(c *types.SpelltextClient) {
 		plAbList.SetChangedFunc(func(index int, mainText, secondaryText string, shortcut rune) {
 			abilityDetails.SetText(functions.GetSpellDetails(playerAbilities[index]))
 		})
+
+		if len(playerAbilities) == 0 {
+			return utils.GenerateErrorPage(c, "no abilities unlocked/available.")
+		}
 
 		abilityDetails.SetText(functions.GetSpellDetailsShort(playerAbilities[0]))
 

@@ -394,78 +394,6 @@ func (x *LeaveChatroomMessageResponse) GetSuccess() bool {
 	return false
 }
 
-type PingRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *PingRequest) Reset() {
-	*x = PingRequest{}
-	mi := &file_chat_chat_proto_msgTypes[7]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *PingRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*PingRequest) ProtoMessage() {}
-
-func (x *PingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_chat_chat_proto_msgTypes[7]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use PingRequest.ProtoReflect.Descriptor instead.
-func (*PingRequest) Descriptor() ([]byte, []int) {
-	return file_chat_chat_proto_rawDescGZIP(), []int{7}
-}
-
-type PingResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *PingResponse) Reset() {
-	*x = PingResponse{}
-	mi := &file_chat_chat_proto_msgTypes[8]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *PingResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*PingResponse) ProtoMessage() {}
-
-func (x *PingResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_chat_chat_proto_msgTypes[8]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use PingResponse.ProtoReflect.Descriptor instead.
-func (*PingResponse) Descriptor() ([]byte, []int) {
-	return file_chat_chat_proto_rawDescGZIP(), []int{8}
-}
-
 var File_chat_chat_proto protoreflect.FileDescriptor
 
 const file_chat_chat_proto_rawDesc = "" +
@@ -492,9 +420,7 @@ const file_chat_chat_proto_rawDesc = "" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\"T\n" +
 	"\x1cLeaveChatroomMessageResponse\x12\x1a\n" +
 	"\busername\x18\x01 \x01(\tR\busername\x12\x18\n" +
-	"\asuccess\x18\x02 \x01(\bR\asuccess\"\r\n" +
-	"\vPingRequest\"\x0e\n" +
-	"\fPingResponse2\xc5\x02\n" +
+	"\asuccess\x18\x02 \x01(\bR\asuccess2\xc5\x02\n" +
 	"\x04Chat\x12@\n" +
 	"\x05Check\x12\x1a.health.HealthCheckRequest\x1a\x1b.health.HealthCheckResponse\x12N\n" +
 	"\x0fSendChatMessage\x12\x1c.chat.SendChatMessageRequest\x1a\x1d.chat.SendChatMessageResponse\x12S\n" +
@@ -513,7 +439,7 @@ func file_chat_chat_proto_rawDescGZIP() []byte {
 	return file_chat_chat_proto_rawDescData
 }
 
-var file_chat_chat_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_chat_chat_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_chat_chat_proto_goTypes = []any{
 	(*ChatMessage)(nil),                  // 0: chat.ChatMessage
 	(*SendChatMessageRequest)(nil),       // 1: chat.SendChatMessageRequest
@@ -522,25 +448,23 @@ var file_chat_chat_proto_goTypes = []any{
 	(*JoinChatroomMessageResponse)(nil),  // 4: chat.JoinChatroomMessageResponse
 	(*LeaveChatroomMessageRequest)(nil),  // 5: chat.LeaveChatroomMessageRequest
 	(*LeaveChatroomMessageResponse)(nil), // 6: chat.LeaveChatroomMessageResponse
-	(*PingRequest)(nil),                  // 7: chat.PingRequest
-	(*PingResponse)(nil),                 // 8: chat.PingResponse
-	(*health.HealthCheckRequest)(nil),    // 9: health.HealthCheckRequest
-	(*health.HealthCheckResponse)(nil),   // 10: health.HealthCheckResponse
+	(*health.HealthCheckRequest)(nil),    // 7: health.HealthCheckRequest
+	(*health.HealthCheckResponse)(nil),   // 8: health.HealthCheckResponse
 }
 var file_chat_chat_proto_depIdxs = []int32{
-	9,  // 0: chat.Chat.Check:input_type -> health.HealthCheckRequest
-	1,  // 1: chat.Chat.SendChatMessage:input_type -> chat.SendChatMessageRequest
-	3,  // 2: chat.Chat.JoinChatroom:input_type -> chat.JoinChatroomMessageRequest
-	5,  // 3: chat.Chat.LeaveChatroom:input_type -> chat.LeaveChatroomMessageRequest
-	10, // 4: chat.Chat.Check:output_type -> health.HealthCheckResponse
-	2,  // 5: chat.Chat.SendChatMessage:output_type -> chat.SendChatMessageResponse
-	4,  // 6: chat.Chat.JoinChatroom:output_type -> chat.JoinChatroomMessageResponse
-	6,  // 7: chat.Chat.LeaveChatroom:output_type -> chat.LeaveChatroomMessageResponse
-	4,  // [4:8] is the sub-list for method output_type
-	0,  // [0:4] is the sub-list for method input_type
-	0,  // [0:0] is the sub-list for extension type_name
-	0,  // [0:0] is the sub-list for extension extendee
-	0,  // [0:0] is the sub-list for field type_name
+	7, // 0: chat.Chat.Check:input_type -> health.HealthCheckRequest
+	1, // 1: chat.Chat.SendChatMessage:input_type -> chat.SendChatMessageRequest
+	3, // 2: chat.Chat.JoinChatroom:input_type -> chat.JoinChatroomMessageRequest
+	5, // 3: chat.Chat.LeaveChatroom:input_type -> chat.LeaveChatroomMessageRequest
+	8, // 4: chat.Chat.Check:output_type -> health.HealthCheckResponse
+	2, // 5: chat.Chat.SendChatMessage:output_type -> chat.SendChatMessageResponse
+	4, // 6: chat.Chat.JoinChatroom:output_type -> chat.JoinChatroomMessageResponse
+	6, // 7: chat.Chat.LeaveChatroom:output_type -> chat.LeaveChatroomMessageResponse
+	4, // [4:8] is the sub-list for method output_type
+	0, // [0:4] is the sub-list for method input_type
+	0, // [0:0] is the sub-list for extension type_name
+	0, // [0:0] is the sub-list for extension extendee
+	0, // [0:0] is the sub-list for field type_name
 }
 
 func init() { file_chat_chat_proto_init() }
@@ -554,7 +478,7 @@ func file_chat_chat_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_chat_chat_proto_rawDesc), len(file_chat_chat_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   9,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

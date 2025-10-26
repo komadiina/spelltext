@@ -113,6 +113,16 @@ message GetEquipSlotsResponse {
     repeated repo.EquipSlot slots = 1;
 }
 
+message SaveCombatWinProgressRequest {
+    repo.Character character = 1;
+    repo.Npc npc = 2;
+}
+
+message SaveCombatWinProgressResponse {
+    bool success    = 1;
+    string message  = 2;
+    repo.Character character = 3;
+}
 
 service Character {
     rpc Check                    (health.HealthCheckRequest)        returns (health.HealthCheckResponse);
@@ -128,4 +138,5 @@ service Character {
     rpc EquipItem                (EquipItemRequest)                 returns (EquipItemResponse);
     rpc UnequipItem              (UnequipItemRequest)               returns (UnequipItemResponse);
     rpc GetEquipSlots            (GetEquipSlotsRequest)             returns (GetEquipSlotsResponse);
+    rpc SaveCombatWinProgress    (SaveCombatWinProgressRequest)     returns (SaveCombatWinProgressResponse);
 }

@@ -14,10 +14,10 @@ type Config struct {
 	PgPort               int    `yaml:"pgPort" env:"PG_PORT" env-default:"5432"`
 	PgDbName             string `yaml:"pgDbName" env:"PG_DB_NAME" env-default:"spelltext"`
 	PgSSLMode            string `yaml:"pgSslMode" env:"PG_SSL_MODE" env-default:"disable"`
-	InventoryServicePort int    `yaml:"inventoryserver.port" env:"INVENTORYSERVER_PORT" env-default:"50053"`
 	HealthCheckInterval  int    `yaml:"healthCheckInterval" env:"HEALTH_CHECK_INTERVAL" env-default:"10"`
 	MaxReconnAttempts    int    `yaml:"maxReconnectAttempts" env:"MAX_RECONNECT_ATTEMPTS" env-default:"3"`
 	Backoff              int    `yaml:"backoff" env:"BACKOFF" env-default:"2"`
+	InventoryServicePort int    `env-default:"50053"`
 }
 
 func LoadConfig() (*Config, error) {

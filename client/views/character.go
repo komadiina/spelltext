@@ -13,7 +13,6 @@ import (
 	"github.com/komadiina/spelltext/client/utils"
 	pb "github.com/komadiina/spelltext/proto/char"
 	pbRepo "github.com/komadiina/spelltext/proto/repo"
-	stUtils "github.com/komadiina/spelltext/utils"
 	"github.com/rivo/tview"
 )
 
@@ -40,7 +39,7 @@ var detailsPane *tview.Flex = nil
 
 func (d *CharacterDetailsView) Update(c *pbRepo.Character) {
 	d.Name.SetText(fmt.Sprintf("name: %s", c.CharacterName))
-	d.Level.SetText(fmt.Sprintf(`level: [blue]%d[""]`, c.Level))
+	d.Level.SetText(fmt.Sprintf(`level: [blue]%d[::-][white] (%d xp needed to level up)`, c.Level, constants.XP_CAP(c.Level)-c.Experience))
 	d.Class.SetText(fmt.Sprintf(`class: %s`, c.Hero.Name))
 	d.Currency.SetText(fmt.Sprintf(`[yellow]%dg[""] | [orange]%dt[""]`, c.Gold, c.Tokens))
 }
@@ -101,7 +100,6 @@ func RenderCharactersList(
 	details.Update(stored[0])
 
 	characters.SetChangedFunc(func(index int, mainText, secondaryText string, shortcut rune) {
-		c.Logger.Info(stored)
 		details.Update(stored[index])
 	})
 
@@ -350,12 +348,9 @@ func AddCharacterPage(c *types.SpelltextClient) {
 
 		var uid uint64 = 1 // TODO
 		chars, err := functions.GetCharacters(uid, c)
-		c.Logger.Debug(stUtils.Map(chars.Characters, func(char *pbRepo.Character) string {
-			return fmt.Sprintf("cname=%s hid=%d hname=%s", char.CharacterName, char.HeroId, char.Hero.Name)
-		}))
 		if err != nil {
 			c.Logger.Error(err)
-			return utils.GenerateErrorPage(c)
+			return utils.GenerateErrorPage(c, err.Error())
 		}
 
 		charSelected := c.Storage.SelectedCharacter
