@@ -15,10 +15,3 @@ message HealthCheckResponse {
   }
   ServingStatus status = 1;
 }
-
-message HostnameRequest {
-}
-
-message HostnameResponse {
-  string hostname = 1;
-}

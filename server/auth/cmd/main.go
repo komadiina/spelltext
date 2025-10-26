@@ -19,6 +19,7 @@ import (
 	"github.com/komadiina/spelltext/utils/singleton/logging"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/reflection"
 )
 
 var version = os.Getenv("VERSION")
@@ -78,7 +79,6 @@ func main() {
 		}).
 		Run(ctx)
 
-
 	conninfo := fmt.Sprintf(
 		"postgres://%s:%s@%s:%d/%s?sslmode=%s",
 		cfg.PgUser,
@@ -104,6 +104,7 @@ func main() {
 	pb.RegisterAuthServer(s, &ss)
 	logger.Info(fmt.Sprintf("%s v%s listening on %s:%d", "authserver", version, "127.0.0.1", ss.Config.ServicePort))
 
+	reflection.Register(s)
 	if err := s.Serve(lis); err != nil {
 		logger.Error("failed to serve", "reason", err)
 		os.Exit(1)

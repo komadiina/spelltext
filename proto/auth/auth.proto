@@ -3,6 +3,7 @@ package auth;
 option go_package = "github.com/komadiina/spelltext/proto/proto/auth;auth";
 
 import "repo/repo.proto";
+import "health/health.proto";
 
 message LoginRequest {
     string username     = 1;
@@ -27,11 +28,9 @@ message RegisterResponse {
     repo.User user  = 2;
 }
 
-message PingRequest {}
-message PingResponse {}
 
 service Auth {
-    rpc Ping(PingRequest) returns (PingResponse);
+    rpc Check(health.HealthCheckRequest) returns (health.HealthCheckResponse);
     rpc Login(LoginRequest) returns (LoginResponse);
     rpc Register(RegisterRequest) returns (RegisterResponse);
 }
