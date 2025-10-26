@@ -15,6 +15,7 @@ requirements:
   - [kubernetes](#kubernetes)
   - [example - accessing pods/servers](#example---accessing-podsservers)
   - [example - cleaning up](#example---cleaning-up)
+- [logs (grafana/promtail/loki)](#logs-grafanapromtailloki)
 
 # client
 (*as of 25th sept.*): to run a single client, simply run:
@@ -26,6 +27,7 @@ $ go run client.go --username=$CLIENT_USERNAME
 ```
 
 # server
+
 ## configuration
 the spelltext server apps provide a way to be configured via the YAML configuration file, found [here](../config.yml). if you wish to have two separate configurations (e.g. `config.dev.yml`, `config.prod.yml`), you can do so as such:
 1) create your configuration file (e.g. `config.new.yml`):
@@ -118,4 +120,24 @@ $ kubectl delete pv <pv-name>
 # terminate the nats port-forward terminal
 # terminate the minikube tunnel terminal
 $ minikube stop
+```
+
+# logs (grafana/promtail/loki)
+grafana is configured to be accessed via `NodePort` by default, however you will still need to access it somehow (*using minikube*):
+```sh
+$ kubectl get svc
+# NAME                                          TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
+# spelltext-grafana                             NodePort       10.100.152.148   <none>        80:31934/TCP        5m39s
+
+$ minikube tunnel
+$ minikube service spelltext-grafana --namespace=spelltext
+
+# get grafana auth credentials:
+$ kubectl get secret
+# NAME                                 TYPE                 DATA   AGE
+# spelltext-grafana                    Opaque               3      6m58s
+
+$ kubectl get secret spelltext-grafana -o jsonpath="{.data.admin-user}" | base64 --decode # should always be 'admin'
+
+$ kubectl get secret spelltext-grafana -o jsonpath="{.data.admin-password}" | base64 --decode
 ```

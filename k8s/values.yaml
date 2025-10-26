@@ -111,9 +111,9 @@ postgresql-ha:
       initialDelaySeconds: 15
 
 # grafana/loki-stack
-grafana-loki-stack:
-  enabled: true
 loki-stack:
+  enabled: true
+
   test_pod:
     enabled: true
     image: bats/bats:1.8.2
@@ -143,7 +143,7 @@ loki-stack:
       logLevel: info
       serverPort: 3101
       clients:
-        - url: http://{{ .Release.Name }}:3100/loki/api/v1/push
+        - url: http://{{ .Release.Name }}-loki:3100/loki/api/v1/push
 
   fluent-bit:
     enabled: false
@@ -158,48 +158,17 @@ loki-stack:
         maxLines: 1000
     image:
       tag: 10.3.3
+    service:
+      type: NodePort
 
   prometheus:
-    enabled: true
-    isDefault: false
-    url: http://{{ include "prometheus.fullname" .}}:{{ .Values.prometheus.server.service.servicePort }}{{ .Values.prometheus.server.prefixURL }}
-    datasource:
-      jsonData: "{}"
+    enabled: false
 
   filebeat:
     enabled: false
 
   logstash:
-    enabled: true
-    image: grafana/logstash-output-loki
-    imageTag: 1.0.1
-    filters:
-      main: |-
-        filter {
-          if [kubernetes] {
-            mutate {
-              add_field => {
-                "container_name" => "%{[kubernetes][container][name]}"
-                "namespace" => "%{[kubernetes][namespace]}"
-                "pod" => "%{[kubernetes][pod][name]}"
-              }
-              replace => { "host" => "%{[kubernetes][node][name]}"}
-            }
-          }
-          mutate {
-            remove_field => ["tags"]
-          }
-        }
-    outputs:
-      main: |-
-        output {
-          loki {
-            url => "http://loki:3100/loki/api/v1/push"
-            #username => "test"
-            #password => "test"
-          }
-          # stdout { codec => rubydebug }
-        }
+    enabled: false
 
   # proxy is currently only used by loki test pod
   # Note: If http_proxy/https_proxy are set, then no_proxy should include the
