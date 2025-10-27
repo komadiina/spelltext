@@ -87,7 +87,7 @@ class GRPCMetrics:
         heaviest_methods = self.get_heaviest_methods(max_times, averages)
 
         return {
-            "counts": counts,th
+            "counts": counts,
             "averages": averages,
             "max_times": max_times,
             "heaviest_methods": heaviest_methods,

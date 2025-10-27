@@ -1,6 +1,6 @@
 postgres:
-  host: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
-  # host: postgres
+  # host: spelltext-postgresql-ha-pgpool.spelltext.svc.cluster.local
+  host: postgres
   port: 5432
 
 chatserver:
