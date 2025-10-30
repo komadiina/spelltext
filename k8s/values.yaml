@@ -106,9 +106,9 @@ postgresql-ha:
         psql -U postgres -d postgres -c "ALTER SYSTEM SET wal_level = logical;"
         psql -U postgres -d postgres -c "SELECT pg_reload_conf();"
     livenessProbe:
-      initialDelaySeconds: 15
+      initialDelaySeconds: 60
     readinessProbe:
-      initialDelaySeconds: 15
+      initialDelaySeconds: 60
 
 # grafana/loki-stack
 loki-stack:
